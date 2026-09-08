@@ -1,0 +1,16 @@
+.DS_Store
+*.log
+.env
+.build/
+DerivedData*/
+*.xcresult
+xcuserdata/
+build/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.idea/
+.vscode/
+*.swp
