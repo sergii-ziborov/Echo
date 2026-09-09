@@ -38,35 +38,39 @@ struct GameView: View {
                         session.togglePause()
                         model.audio.play(.tap)
                     }
-                    .padding(.horizontal, 14)
-                    .padding(.top, 4)
+                    .padding(.horizontal, 12)
 
                     Spacer()
 
                     if let banner = session.banner {
                         Text(banner.uppercased())
-                            .font(.system(size: 15, weight: .semibold))
-                            .tracking(3)
+                            .font(.system(size: 13, weight: .semibold))
+                            .tracking(2)
                             .foregroundStyle(.white)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 6)
                             .background(.ultraThinMaterial, in: Capsule())
                             .allowsHitTesting(false)
                             .padding(.bottom, 8)
                     }
 
-                    InventoryBar(session: session) { kind in
-                        useItem(kind)
+                    HStack(alignment: .bottom) {
+                        InventoryBar(session: session) { kind in
+                            useItem(kind)
+                        }
+                        Spacer(minLength: 0)
                     }
-                    .padding(.horizontal, 14)
-                    .padding(.bottom, 8)
+                    .padding(.horizontal, 12)
 
-                    NextEchoMeter(session: session)
-                        .padding(.horizontal, 18)
-                        .padding(.bottom, 8)
+                    if !session.hasStarted {
+                        Text("Drag to move")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .padding(.top, 6)
+                    }
                 }
-                .padding(.top, geo.safeAreaInsets.top)
-                .padding(.bottom, max(geo.safeAreaInsets.bottom, 6))
+                .padding(.top, (geo.safeAreaInsets.top > 20 ? geo.safeAreaInsets.top : 62) + 4)
+                .padding(.bottom, max(geo.safeAreaInsets.bottom, 10))
 
                 if case .paused = session.phase {
                     PauseView(
@@ -213,7 +217,7 @@ struct HUDBar: View {
     var onPause: () -> Void
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
             HUDChip(icon: "sparkle", tint: EchoTheme.cyan) {
                 Text("\(session.sparksCollected)/\(session.sparksTotal)")
             }
@@ -240,21 +244,12 @@ struct HUDBar: View {
                     Text(String(format: "%.0f", session.effects.magnetRemaining))
                 }
             }
-            Spacer()
-            VStack(spacing: 1) {
-                Text(session.daily ? "DAILY" : "Level \(session.level.number)")
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(EchoTheme.muted)
-                Text(session.level.name)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-            Spacer()
+            Spacer(minLength: 8)
             Button(action: onPause) {
                 Image(systemName: "pause.fill")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.white)
-                    .frame(width: 44, height: 44)
+                    .frame(width: 36, height: 36)
                     .background(.ultraThinMaterial, in: Circle())
             }
             .buttonStyle(.plain)
@@ -276,8 +271,8 @@ struct HUDChip<Content: View>: View {
                 .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundStyle(.white)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 9)
+        .padding(.horizontal, 9)
+        .padding(.vertical, 6)
         .background(.ultraThinMaterial, in: Capsule())
         .overlay(Capsule().stroke(tint.opacity(0.35), lineWidth: 1))
     }
@@ -297,15 +292,16 @@ struct InventoryBar: View {
                     Button {
                         onUse(kind)
                     } label: {
-                        VStack(spacing: 3) {
-                            Image(systemName: kind.icon)
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(tint)
+                        VStack(spacing: 2) {
+                            Image(kind.assetName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 26, height: 26)
                             Text("\(model.progress.count(kind))")
-                                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                                .font(.system(size: 11, weight: .semibold, design: .rounded))
                                 .foregroundStyle(.white)
                         }
-                        .frame(width: 52, height: 48)
+                        .frame(width: 46, height: 44)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                         .overlay(
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
@@ -322,56 +318,4 @@ struct InventoryBar: View {
     }
 }
 
-struct NextEchoMeter: View {
-    var session: GameSession
 
-    var body: some View {
-        VStack(spacing: 8) {
-            if let threat = session.threat, threat.willCollide {
-                Text("Echo \(threat.echoIndex + 1) closing in")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(EchoTheme.danger)
-            } else if session.warning {
-                Text("Echo appearing")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(EchoTheme.magenta)
-            } else if session.nextEchoIn == nil {
-                Text("Four echoes fill the arena")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(EchoTheme.muted)
-            } else {
-                Text("Next echo")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(EchoTheme.muted)
-            }
-
-            GeometryReader { geo in
-                let remaining = session.nextEchoIn ?? 0
-                let interval = session.level.echoInterval
-                let progress = session.nextEchoIn == nil ? 1.0 : max(0, min(1, 1 - remaining / interval))
-                ZStack(alignment: .leading) {
-                    Capsule().fill(Color.white.opacity(0.12))
-                    Capsule()
-                        .fill(session.warning ? EchoTheme.magenta : EchoTheme.cyan)
-                        .frame(width: geo.size.width * progress)
-                        .shadow(color: (session.warning ? EchoTheme.magenta : EchoTheme.cyan).opacity(0.7), radius: 10)
-                }
-            }
-            .frame(height: 10)
-
-            if let remaining = session.nextEchoIn {
-                Text(String(format: "%.1f", remaining))
-                    .font(.system(size: 28, weight: .semibold, design: .rounded))
-                    .monospacedDigit()
-                    .foregroundStyle(.white)
-                    .shadow(color: EchoTheme.cyan.opacity(0.6), radius: 10)
-            }
-            Text(session.effects.canDash ? "Double-tap to dash" : "Dash cooling down")
-                .font(.system(size: 11, weight: .medium))
-                .foregroundStyle(EchoTheme.muted)
-        }
-        .padding(14)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .animation(.easeInOut(duration: 0.2), value: session.warning)
-    }
-}

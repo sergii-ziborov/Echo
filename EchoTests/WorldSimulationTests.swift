@@ -176,6 +176,8 @@ final class WorldSimulationTests: XCTestCase {
 
     func testDashEntersCooldown() {
         let sim = WorldSimulation(level: LevelCatalog.prototype)
+        advance(sim, seconds: 0.4, target: Vec2(x: 500, y: 220))
+        XCTAssertTrue(sim.hasStarted)
         XCTAssertTrue(sim.tryDash())
         XCTAssertTrue(sim.effects.isSurging)
         XCTAssertFalse(sim.tryDash())
@@ -191,9 +193,18 @@ final class WorldSimulationTests: XCTestCase {
         XCTAssertTrue(sim.effects.isSurging)
     }
 
-    func testCatalogHasTwelvePlayableMaps() {
-        XCTAssertEqual(LevelCatalog.playable.count, 12)
-        XCTAssertEqual(Set(LevelCatalog.playable.map(\.number)).count, 12)
+    func testCatalogHasTwentyPlayableMaps() {
+        XCTAssertEqual(LevelCatalog.playable.count, 20)
+        XCTAssertEqual(Set(LevelCatalog.playable.map(\.number)).count, 20)
+    }
+
+    func testClockStaysFrozenUntilFirstMove() {
+        let sim = WorldSimulation(level: LevelCatalog.prototype)
+        advance(sim, seconds: 9, target: sim.level.playerStart)
+        XCTAssertFalse(sim.hasStarted)
+        XCTAssertEqual(sim.echoCount, 0)
+        XCTAssertEqual(sim.time, 0, accuracy: 0.001)
+        XCTAssertEqual(sim.phase, .playing)
     }
 
     func testDailyKeepsACenterSpark() {

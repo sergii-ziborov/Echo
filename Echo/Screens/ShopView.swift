@@ -65,9 +65,10 @@ struct ShopView: View {
         return HStack(spacing: 14) {
             ZStack {
                 Circle().fill(tint.opacity(0.18))
-                Image(systemName: kind.icon)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(tint)
+                Image(kind.assetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 34, height: 34)
             }
             .frame(width: 48, height: 48)
 

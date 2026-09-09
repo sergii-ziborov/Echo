@@ -14,7 +14,8 @@ final class GameScene: SKScene {
     private var exitNode: SKNode!
     private var lastTapAt: TimeInterval = 0
     private var threatLine: SKShapeNode!
-    private var warningRing: SKShapeNode!
+    private var spawnBeacon: SKNode!
+    private var ambienceNode: SKNode!
     private var lastTime: TimeInterval = 0
     private var trailAcc: TimeInterval = 0
     private var trailBudget = 0
@@ -46,12 +47,16 @@ final class GameScene: SKScene {
         lastTime = 0
         trailAcc = 0
         trailBudget = 0
+        ambienceNode = SKNode()
+        ambienceNode.zPosition = 1.5
+        addChild(ambienceNode)
         buildArena()
         buildAmbient()
         buildExit()
         buildSparks()
         buildBonuses()
         buildFields()
+        buildSpawnBeacon()
         buildPlayer()
         threatLine = SKShapeNode()
         threatLine.strokeColor = UIColor(red: 1, green: 0.45, blue: 0.6, alpha: 0.85)
@@ -60,15 +65,8 @@ final class GameScene: SKScene {
         threatLine.lineCap = .round
         threatLine.zPosition = 8
         addChild(threatLine)
-        warningRing = SKShapeNode(circleOfRadius: 22)
-        warningRing.strokeColor = UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1)
-        warningRing.lineWidth = 2
-        warningRing.glowWidth = 4
-        warningRing.fillColor = .clear
-        warningRing.zPosition = 9
-        warningRing.isHidden = true
-        addChild(warningRing)
         syncNodes()
+        drawSpawnBeacon()
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -93,12 +91,20 @@ final class GameScene: SKScene {
         let events = session.sim.step(dt: dt, target: session.inputTarget)
         session.handle(events: events, autoReplay: session.autoReplay)
         if !events.isEmpty { onEvents?(events) }
+        let live = session.hasStarted
+        ambienceNode.speed = live ? 1 : 0
+        exitNode.speed = live ? 1 : 0
+        spawnBeacon.speed = live ? 1 : 0
+        sparkNodes.values.forEach { $0.speed = live ? 1 : 0 }
+        bonusNodes.values.forEach { $0.speed = live ? 1 : 0 }
         syncNodes()
-        dropTrails(dt: dt)
-        drawThreat()
-        drawWarning()
-        updateSparkTimers()
-        pulsePlayer()
+        drawSpawnBeacon()
+        if live {
+            dropTrails(dt: dt)
+            drawThreat()
+            updateSparkTimers()
+            pulsePlayer()
+        }
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -239,7 +245,7 @@ final class GameScene: SKScene {
                     y: CGFloat.random(in: 0...size.height)
                 ), duration: 0),
             ])))
-            addChild(mote)
+            ambienceNode.addChild(mote)
             _ = i
         }
     }
@@ -348,29 +354,19 @@ final class GameScene: SKScene {
             root.position = scenePoint(bonus.position)
             root.zPosition = 7
             let glow = SKSpriteNode(texture: GlowTextures.blob)
-            glow.size = CGSize(width: 36, height: 36)
+            glow.size = CGSize(width: 32, height: 32)
             glow.blendMode = .add
             glow.color = Self.color(for: bonus.kind)
             glow.colorBlendFactor = 0.7
-            glow.alpha = 0.55
-            let gem = SKShapeNode(circleOfRadius: 11)
-            gem.fillColor = Self.color(for: bonus.kind).withAlphaComponent(0.9)
-            gem.strokeColor = UIColor.white.withAlphaComponent(0.85)
-            gem.lineWidth = 1.6
-            gem.glowWidth = 6
+            glow.alpha = 0.4
+            let gem = SKSpriteNode(texture: GlowTextures.bonus(bonus.kind))
+            gem.size = CGSize(width: 36, height: 36)
             gem.run(.repeatForever(.sequence([
-                .scale(to: 1.18, duration: 0.5),
-                .scale(to: 0.9, duration: 0.5),
+                .scale(to: 1.12, duration: 0.55),
+                .scale(to: 0.92, duration: 0.55),
             ])))
-            let label = SKLabelNode(text: Self.glyph(for: bonus.kind))
-            label.fontName = "AvenirNext-Bold"
-            label.fontSize = 11
-            label.fontColor = .white
-            label.verticalAlignmentMode = .center
-            label.position = CGPoint(x: 0, y: -28)
             root.addChild(glow)
             root.addChild(gem)
-            root.addChild(label)
             addChild(root)
             bonusNodes[bonus.id] = root
         }
@@ -392,6 +388,49 @@ final class GameScene: SKScene {
         root.addChild(body)
         addChild(root)
         playerNode = root
+    }
+
+    private func buildSpawnBeacon() {
+        let root = SKNode()
+        root.zPosition = 9
+        root.position = scenePoint(session.level.playerStart)
+
+        let glow = SKSpriteNode(texture: GlowTextures.spawnRing)
+        glow.size = CGSize(width: 72, height: 72)
+        glow.blendMode = .add
+        glow.alpha = 0.55
+        glow.name = "glow"
+        glow.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: 7.5)))
+
+        let ring = SKShapeNode(circleOfRadius: 26)
+        ring.strokeColor = UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 0.95)
+        ring.lineWidth = 2.4
+        ring.glowWidth = 5
+        ring.fillColor = UIColor(red: 0.45, green: 0.2, blue: 0.7, alpha: 0.12)
+        ring.name = "ring"
+
+        let arc = SKShapeNode()
+        arc.strokeColor = UIColor(red: 0.55, green: 0.85, blue: 1, alpha: 1)
+        arc.lineWidth = 3.4
+        arc.glowWidth = 4
+        arc.lineCap = .round
+        arc.fillColor = .clear
+        arc.zRotation = .pi / 2
+        arc.name = "arc"
+
+        let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
+        label.fontSize = 15
+        label.fontColor = .white
+        label.verticalAlignmentMode = .center
+        label.horizontalAlignmentMode = .center
+        label.name = "label"
+
+        root.addChild(glow)
+        root.addChild(ring)
+        root.addChild(arc)
+        root.addChild(label)
+        addChild(root)
+        spawnBeacon = root
     }
 
     private func echoNode() -> SKNode {
@@ -529,15 +568,48 @@ final class GameScene: SKScene {
         threatLine.path = path
     }
 
-    private func drawWarning() {
-        guard session.warning, session.echoCount < session.maxEchoes else {
-            warningRing.isHidden = true
+    private func drawSpawnBeacon() {
+        spawnBeacon.position = scenePoint(session.level.playerStart)
+        let glow = spawnBeacon.childNode(withName: "glow") as? SKSpriteNode
+        let ring = spawnBeacon.childNode(withName: "ring") as? SKShapeNode
+        let arc = spawnBeacon.childNode(withName: "arc") as? SKShapeNode
+        let label = spawnBeacon.childNode(withName: "label") as? SKLabelNode
+
+        if !session.hasStarted {
+            spawnBeacon.alpha = 0.7
+            spawnBeacon.setScale(1)
+            glow?.alpha = 0.35
+            label?.text = ""
+            arc?.path = nil
+            ring?.strokeColor = UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 0.7)
             return
         }
-        warningRing.isHidden = false
-        warningRing.position = scenePoint(session.level.playerStart)
-        let pulse = 1.0 + 0.18 * sin(CACurrentMediaTime() * 9)
-        warningRing.setScale(pulse)
+
+        spawnBeacon.alpha = 1
+        if let remaining = session.nextEchoIn {
+            let interval = max(session.level.echoInterval, 0.01)
+            let frac = max(0, min(1, 1 - remaining / interval))
+            label?.text = String(format: "%.0f", remaining)
+            arc?.path = Self.arc(radius: 26, fraction: frac)
+            if session.warning {
+                let pulse = 1.0 + 0.12 * sin(CACurrentMediaTime() * 10)
+                spawnBeacon.setScale(pulse)
+                glow?.alpha = 0.9
+                ring?.strokeColor = UIColor(red: 0.95, green: 0.45, blue: 1, alpha: 1)
+                arc?.strokeColor = UIColor(red: 1, green: 0.55, blue: 0.95, alpha: 1)
+            } else {
+                spawnBeacon.setScale(1)
+                glow?.alpha = 0.55
+                ring?.strokeColor = UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 0.95)
+                arc?.strokeColor = UIColor(red: 0.55, green: 0.85, blue: 1, alpha: 1)
+            }
+        } else {
+            label?.text = ""
+            arc?.path = Self.arc(radius: 26, fraction: 1)
+            arc?.strokeColor = UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 0.35)
+            spawnBeacon.setScale(1)
+            glow?.alpha = 0.25
+        }
     }
 
     private func updateSparkTimers() {
@@ -619,16 +691,6 @@ final class GameScene: SKScene {
         case .surge: UIColor(red: 1, green: 0.82, blue: 0.28, alpha: 1)
         case .pulse: UIColor(red: 0.85, green: 0.4, blue: 1, alpha: 1)
         case .magnet: UIColor(red: 1, green: 0.45, blue: 0.7, alpha: 1)
-        }
-    }
-
-    private static func glyph(for kind: BonusKind) -> String {
-        switch kind {
-        case .shield: "SHIELD"
-        case .freeze: "FREEZE"
-        case .surge: "SURGE"
-        case .pulse: "PULSE"
-        case .magnet: "MAGNET"
         }
     }
 

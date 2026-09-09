@@ -6,7 +6,8 @@ struct WorldsView: View {
     var body: some View {
         ZStack {
             ScreenBackground()
-            VStack(spacing: 18) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 18) {
                 HStack {
                     IconCircle(system: "chevron.left") { model.goHome() }
                     Spacer()
@@ -55,7 +56,7 @@ struct WorldsView: View {
                             Text("A BRIGHTER YOU")
                                 .font(.system(size: 12, weight: .semibold))
                                 .tracking(1.5)
-                            Text("\(model.progress.totalStars) / 36")
+                            Text("\(model.progress.totalStars) / \(LevelCatalog.playable.count * 3)")
                                 .foregroundStyle(EchoTheme.muted)
                                 .font(.system(size: 13))
                         }
@@ -65,9 +66,10 @@ struct WorldsView: View {
                     }
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 8)
-            .padding(.bottom, 16)
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .padding(.bottom, 16)
+            }
         }
     }
 }

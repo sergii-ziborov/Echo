@@ -70,6 +70,7 @@ final class WorldSimulation {
     private(set) var deathCause: DeathCause?
     private(set) var result: SessionResult?
     private(set) var inSlowField = false
+    private(set) var hasStarted = false
 
     var echoCount: Int { echoes.count }
     var sparksCollected: Int { sparks.filter(\.collected).count }
@@ -133,6 +134,7 @@ final class WorldSimulation {
         deathCause = nil
         result = nil
         inSlowField = false
+        hasStarted = false
         distanceAcc = 0
         warnedFor = -1
         snapshotAcc = 0
@@ -143,7 +145,7 @@ final class WorldSimulation {
 
     @discardableResult
     func tryDash() -> Bool {
-        guard phase == .playing, effects.canDash else { return false }
+        guard phase == .playing, hasStarted, effects.canDash else { return false }
         effects.surgeRemaining = max(effects.surgeRemaining, config.dashDuration)
         effects.dashCooldown = config.dashCooldown
         return true
@@ -162,6 +164,16 @@ final class WorldSimulation {
         let dt = min(max(rawDt, 0), 1.0 / 20.0)
         guard dt > 0 else { return [] }
 
+        movePlayer(dt: dt, target: target)
+        if !hasStarted {
+            if playerPosition.distance(to: level.playerStart) > config.inputDeadzone {
+                hasStarted = true
+            } else {
+                recorder.record(time: 0, position: playerPosition)
+                return []
+            }
+        }
+
         time += dt
         tickEffects(dt: dt)
         let echoScale: TimeInterval = effects.isFrozen ? 0 : 1
@@ -170,7 +182,6 @@ final class WorldSimulation {
         events.append(contentsOf: tickTimers(dt: dt))
         updateOrbits()
 
-        movePlayer(dt: dt, target: target)
         recorder.record(time: time, position: playerPosition)
         applyMagnet(dt: dt)
 

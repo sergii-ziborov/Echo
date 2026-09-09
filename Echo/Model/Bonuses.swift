@@ -57,6 +57,16 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         }
     }
 
+    var assetName: String {
+        switch self {
+        case .shield: "BonusShield"
+        case .freeze: "BonusFreeze"
+        case .surge: "BonusSurge"
+        case .pulse: "BonusPulse"
+        case .magnet: "BonusMagnet"
+        }
+    }
+
     var tint: (r: Double, g: Double, b: Double) {
         switch self {
         case .shield: (0.40, 1.00, 0.65)

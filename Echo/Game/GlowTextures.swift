@@ -5,8 +5,17 @@ import UIKit
 enum GlowTextures {
     static let player: SKTexture = named("PlayerOrb") ?? orb(color: UIColor(red: 0.45, green: 0.9, blue: 1, alpha: 1), size: 256)
     static let echo: SKTexture = named("EchoOrb") ?? orb(color: UIColor(red: 0.75, green: 0.35, blue: 1, alpha: 1), size: 256)
-    static let spark: SKTexture = named("SparkOrb") ?? orb(color: UIColor(red: 0.4, green: 0.9, blue: 1, alpha: 1), size: 192)
+    static let spark: SKTexture = named("SparkGem") ?? named("SparkOrb") ?? orb(color: UIColor(red: 0.4, green: 0.9, blue: 1, alpha: 1), size: 192)
     static let blob: SKTexture = named("GlowBlob") ?? orb(color: UIColor(red: 0.4, green: 0.9, blue: 1, alpha: 1), size: 128)
+    static let spawnRing: SKTexture = named("SpawnRing") ?? orb(color: UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1), size: 160)
+
+    static func bonus(_ kind: BonusKind) -> SKTexture {
+        named(kind.assetName) ?? orb(color: color(for: kind), size: 160)
+    }
+
+    static func color(for kind: BonusKind) -> UIColor {
+        UIColor(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b, alpha: 1)
+    }
 
     static func named(_ name: String) -> SKTexture? {
         guard let image = UIImage(named: name) else { return nil }

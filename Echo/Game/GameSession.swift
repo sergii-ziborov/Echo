@@ -33,6 +33,7 @@ final class GameSession {
     var effects = ActiveEffects()
     var inSlowField = false
     var banner: String?
+    var hasStarted = false
 
     var sparksTotal: Int { level.sparkCount }
     var maxEchoes: Int { level.maxEchoes }
@@ -131,5 +132,6 @@ final class GameSession {
         moves = sim.moves
         effects = sim.effects
         inSlowField = sim.inSlowField
+        hasStarted = sim.hasStarted
     }
 }
