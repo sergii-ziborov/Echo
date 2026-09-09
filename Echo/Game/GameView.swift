@@ -145,6 +145,13 @@ struct GameView: View {
             if !session.level.movers.isEmpty {
                 offerHint(.asteroid)
             }
+            if !session.level.gates.isEmpty {
+                offerHint(.gate)
+            }
+            if model.progress.consume(.ward) {
+                _ = session.sim.activate(.ward)
+                session.banner = "Ward"
+            }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase != .active, session.phase == .playing {
@@ -209,9 +216,9 @@ struct GameView: View {
                 if kind == .calm {
                     scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.55, green: 0.82, blue: 1, alpha: 1))
                 }
-            case .timeCollision:
+            case .timeCollision(let at):
                 model.audio.haptic(.rigid)
-                scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.9, green: 0.4, blue: 1, alpha: 1))
+                scene.burst(at: at, color: UIColor(red: 0.9, green: 0.4, blue: 1, alpha: 1))
                 offerHint(.collision)
             case .died:
                 model.audio.play(.death)
@@ -407,7 +414,7 @@ struct InventoryBar: View {
     var onUse: (BonusKind) -> Void
 
     var body: some View {
-        let owned = BonusKind.allCases.filter { model.progress.count($0) > 0 }
+        let owned = BonusKind.allCases.filter { $0.useFromBar && model.progress.count($0) > 0 }
         if !owned.isEmpty, session.phase == .playing || session.phase == .paused {
             HStack(spacing: 8) {
                 ForEach(owned, id: \.self) { kind in

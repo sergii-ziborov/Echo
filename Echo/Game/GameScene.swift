@@ -18,6 +18,8 @@ final class GameScene: SKScene {
     private var ambienceNode: SKNode!
     private var moverNodes: [Int: SKNode] = [:]
     private var riftNodes: [Int: SKNode] = [:]
+    private var gateNodes: [Int: SKNode] = [:]
+    private var scarNodes: [Int: SKNode] = [:]
     private var frostOverlay: SKSpriteNode!
     private var lastTime: TimeInterval = 0
     private var trailAcc: TimeInterval = 0
@@ -49,6 +51,8 @@ final class GameScene: SKScene {
         bonusNodes.removeAll()
         moverNodes.removeAll()
         riftNodes.removeAll()
+        gateNodes.removeAll()
+        scarNodes.removeAll()
         lastTime = 0
         backgroundColor = session.level.theme.sky.uiColor
         trailAcc = 0
@@ -64,8 +68,9 @@ final class GameScene: SKScene {
         buildFields()
         buildMovers()
         buildRifts()
+        buildGates()
         buildSpawnBeacon()
-        frostOverlay = SKSpriteNode(color: UIColor(red: 0.45, green: 0.75, blue: 1, alpha: 0.16), size: size)
+        frostOverlay = SKSpriteNode(color: UIColor(red: 0.55, green: 0.82, blue: 1, alpha: 0.22), size: size)
         frostOverlay.position = CGPoint(x: size.width / 2, y: size.height / 2)
         frostOverlay.zPosition = 20
         frostOverlay.blendMode = .add
@@ -110,9 +115,13 @@ final class GameScene: SKScene {
         ambienceNode.speed = live ? 1 : 0
         exitNode.speed = live ? 1 : 0
         spawnBeacon.speed = live ? 1 : 0
-        sparkNodes.values.forEach { $0.speed = live ? 1 : 0 }
-        bonusNodes.values.forEach { $0.speed = live ? 1 : 0 }
-        moverNodes.values.forEach { $0.speed = live ? 1 : 0 }
+        let frozen = session.sim.effects.isFrozen
+        let spinning: CGFloat = (live && !frozen) ? 1 : 0
+        sparkNodes.values.forEach { $0.speed = spinning }
+        bonusNodes.values.forEach { $0.speed = spinning }
+        moverNodes.values.forEach { $0.speed = spinning }
+        echoNodes.forEach { $0.speed = spinning }
+        riftNodes.values.forEach { $0.speed = spinning }
         syncNodes()
         drawSpawnBeacon()
         if live {
@@ -487,6 +496,87 @@ final class GameScene: SKScene {
         }
     }
 
+    private func buildGates() {
+        let theme = session.level.theme
+        for gate in session.sim.gates {
+            let rect = mapped(gate.area)
+            let node = SKShapeNode(rect: rect, cornerRadius: 10)
+            node.fillColor = theme.wallStroke.uiColor.withAlphaComponent(0.35)
+            node.strokeColor = theme.wallStroke.uiColor
+            node.lineWidth = 1.5
+            node.glowWidth = 5
+            node.zPosition = 2.6
+            addChild(node)
+            gateNodes[gate.id] = node
+        }
+    }
+
+    private func syncGates() {
+        for gate in session.sim.gates {
+            guard let node = gateNodes[gate.id] else { continue }
+            node.alpha = gate.solid ? 0.95 : 0.12
+        }
+    }
+
+    private func syncScars() {
+        let live = Set(session.sim.scars.map(\.id))
+        for (id, node) in scarNodes where !live.contains(id) {
+            node.removeFromParent()
+            scarNodes.removeValue(forKey: id)
+        }
+        for scar in session.sim.scars {
+            let node: SKNode
+            if let existing = scarNodes[scar.id] {
+                node = existing
+            } else {
+                let root = SKNode()
+                root.zPosition = 9
+                let glow = SKSpriteNode(texture: GlowTextures.blob)
+                let s = CGFloat(scar.radius) * worldScale * 2.6
+                glow.size = CGSize(width: s, height: s)
+                glow.blendMode = .add
+                glow.color = UIColor(red: 0.95, green: 0.4, blue: 1, alpha: 1)
+                glow.colorBlendFactor = 0.85
+                glow.alpha = 0.8
+                let ring = SKShapeNode(circleOfRadius: CGFloat(scar.radius) * worldScale)
+                ring.strokeColor = UIColor(red: 1, green: 0.45, blue: 0.85, alpha: 1)
+                ring.lineWidth = 2
+                ring.glowWidth = 6
+                ring.fillColor = UIColor(red: 0.7, green: 0.2, blue: 0.6, alpha: 0.18)
+                root.addChild(glow)
+                root.addChild(ring)
+                addChild(root)
+                scarNodes[scar.id] = root
+                node = root
+            }
+            node.position = scenePoint(scar.position)
+            node.alpha = CGFloat(min(1, scar.remaining / 0.8))
+        }
+    }
+
+    private func syncFrostCrown() {
+        let existing = playerNode.childNode(withName: "frost")
+        if session.sim.effects.isFrozen {
+            if existing == nil {
+                let frost = SKNode()
+                frost.name = "frost"
+                frost.zPosition = 2
+                for i in 0..<6 {
+                    let shard = SKShapeNode(rectOf: CGSize(width: 3, height: 16), cornerRadius: 1)
+                    shard.fillColor = UIColor(red: 0.75, green: 0.92, blue: 1, alpha: 0.9)
+                    shard.strokeColor = .clear
+                    let angle = CGFloat(i) / 6 * .pi * 2
+                    shard.position = CGPoint(x: cos(angle) * 18, y: sin(angle) * 18)
+                    shard.zRotation = angle
+                    frost.addChild(shard)
+                }
+                playerNode.addChild(frost)
+            }
+        } else {
+            existing?.removeFromParent()
+        }
+    }
+
     private func buildPlayer() {
         let root = SKNode()
         root.zPosition = 14
@@ -604,8 +694,11 @@ final class GameScene: SKScene {
         }
         frostOverlay?.alpha = session.sim.effects.isFrozen ? 1 : 0
         for echo in echoNodes {
-            echo.alpha = session.sim.effects.isFrozen ? 0.45 : 1
+            echo.alpha = session.sim.effects.isFrozen ? 0.4 : 1
         }
+        syncGates()
+        syncScars()
+        syncFrostCrown()
         exitNode.position = scenePoint(session.level.exit)
         refreshExit()
         if let halo = playerNode.childNode(withName: "halo") as? SKSpriteNode {

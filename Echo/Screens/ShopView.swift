@@ -45,7 +45,7 @@ struct ShopView: View {
                         .fill(Color.white.opacity(0.06))
                 )
 
-                Text("Stock Freeze, Shield, Phase, Chrono. Pulse and Magnet only drop in the arena.")
+                Text("Stock Freeze, Shield, Phase, Chrono and tap them in a run. Ward spends itself at the start. Pulse and Magnet only drop in the arena.")
                     .font(.system(size: 13))
                     .foregroundStyle(EchoTheme.muted)
                     .frame(maxWidth: .infinity, alignment: .leading)

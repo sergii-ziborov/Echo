@@ -36,7 +36,7 @@ enum SimEvent: Equatable, Sendable {
     case exitOpened
     case riftOpened(id: Int)
     case riftEntered(kind: RiftKind)
-    case timeCollision
+    case timeCollision(at: Vec2)
     case died(DeathCause)
     case won(SessionResult)
 }
@@ -65,6 +65,8 @@ final class WorldSimulation {
     private(set) var bonuses: [BonusState]
     private(set) var movers: [MoverState]
     private(set) var rifts: [RiftState]
+    private(set) var gates: [TimeGateState]
+    private(set) var scars: [CollisionScar] = []
     private(set) var effects = ActiveEffects()
     private(set) var exitOpen = false
     private(set) var moves = 0
@@ -119,6 +121,7 @@ final class WorldSimulation {
         self.bonuses = Self.makeBonuses(level.bonuses)
         self.movers = Self.makeMovers(level.movers)
         self.rifts = Self.makeRifts(level.rifts)
+        self.gates = Self.makeGates(level.gates)
         recorder.record(time: 0, position: level.playerStart)
         captureSnapshot()
     }
@@ -134,6 +137,8 @@ final class WorldSimulation {
         bonuses = Self.makeBonuses(level.bonuses)
         movers = Self.makeMovers(level.movers)
         rifts = Self.makeRifts(level.rifts)
+        gates = Self.makeGates(level.gates)
+        scars = []
         effects = ActiveEffects()
         exitOpen = false
         moves = 0
@@ -204,10 +209,12 @@ final class WorldSimulation {
         events.append(contentsOf: collectSparks())
         events.append(contentsOf: collectBonuses())
         events.append(contentsOf: tickRifts())
+        tickGates()
+        tickScars(dt: dt)
         events.append(contentsOf: detectTimeCollision())
         refreshThreats()
 
-        if effects.iFrames <= 0, !effects.isPhasing, let death = collideEchoes() ?? collideMovers() ?? collideRifts() {
+        if effects.iFrames <= 0, !effects.isPhasing, let death = collideEchoes() ?? collideMovers() ?? collideRifts() ?? collideScars() {
             if effects.shieldCharges > 0 {
                 effects.shieldCharges -= 1
                 effects.iFrames = 0.55
@@ -364,7 +371,7 @@ final class WorldSimulation {
     private func tickRifts() -> [SimEvent] {
         var events: [SimEvent] = []
         for i in rifts.indices {
-            let open = rifts[i].isOpen(at: time)
+            let open = rifts[i].isOpen(at: playbackTime)
             if open, !rifts[i].open {
                 rifts[i].usedThisCycle = false
                 events.append(.riftOpened(id: rifts[i].id))
@@ -381,6 +388,34 @@ final class WorldSimulation {
             }
         }
         return events
+    }
+
+    private static func makeGates(_ spawns: [TimeGateSpawn]) -> [TimeGateState] {
+        spawns.map {
+            TimeGateState(id: $0.id, area: $0.area, period: $0.period, openFor: $0.openFor, phase: $0.phase)
+        }
+    }
+
+    private func tickGates() {
+        for i in gates.indices {
+            gates[i].solid = gates[i].isSolid(at: playbackTime)
+        }
+    }
+
+    private func tickScars(dt: TimeInterval) {
+        for i in scars.indices {
+            scars[i].remaining -= dt
+        }
+        scars.removeAll { $0.remaining <= 0 }
+    }
+
+    private func collideScars() -> DeathCause? {
+        for scar in scars {
+            if playerPosition.distance(to: scar.position) < config.playerRadius + scar.radius - config.collisionSlop {
+                return .collision
+            }
+        }
+        return nil
     }
 
     private func collideRifts() -> DeathCause? {
@@ -401,8 +436,10 @@ final class WorldSimulation {
         for i in 0..<echoes.count {
             for j in (i + 1)..<echoes.count {
                 if echoes[i].distance(to: echoes[j]) < config.echoRadius * 2.2 {
-                    collisionCooldown = 2.4
-                    return [.timeCollision]
+                    collisionCooldown = 3.2
+                    let mid = echoes[i].lerp(echoes[j], 0.5)
+                    scars.append(CollisionScar(id: scars.count + 17, position: mid, radius: 34, remaining: 2.8))
+                    return [.timeCollision(at: mid)]
                 }
             }
         }
@@ -506,6 +543,8 @@ final class WorldSimulation {
             effects.iFrames = max(effects.iFrames, kind.duration)
         case .chrono:
             pulseDelay += 3.6
+        case .ward:
+            effects.shieldCharges += 1
         }
     }
 
@@ -601,6 +640,9 @@ final class WorldSimulation {
         var p = position
         for wall in level.walls {
             p = CircleMath.resolve(center: p, radius: radius, box: wall)
+        }
+        for gate in gates where gate.solid {
+            p = CircleMath.resolve(center: p, radius: radius, box: gate.area)
         }
         return clampToArena(p, radius: radius)
     }

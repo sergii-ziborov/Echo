@@ -44,7 +44,7 @@ final class AppModel {
             screen = .shop
         } else if args.contains("-shot-play") {
             progress.markTutorialSeen()
-            screen = .playing(PlayRequest(levelID: LevelCatalog.prototype.id, daily: false))
+            screen = .playing(PlayRequest(levelID: LevelCatalog.level(number: 21)?.id ?? LevelCatalog.prototype.id, daily: false))
         }
     }
 

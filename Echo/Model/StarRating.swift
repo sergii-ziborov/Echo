@@ -29,11 +29,12 @@ enum DeathCause: Equatable, Sendable {
     case echo(index: Int, delay: TimeInterval)
     case asteroid
     case rift
+    case collision
 
     var echoIndex: Int? {
         switch self {
         case .echo(let index, _): index
-        case .asteroid, .rift: nil
+        case .asteroid, .rift, .collision: nil
         }
     }
 
@@ -47,6 +48,8 @@ enum DeathCause: Equatable, Sendable {
             return "An asteroid cut your line"
         case .rift:
             return "You stepped into a collapsing rift"
+        case .collision:
+            return "A time collision left a scar"
         }
     }
 }

@@ -208,6 +208,14 @@ final class WorldSimulationTests: XCTestCase {
         XCTAssertEqual(sim.deathCause, .asteroid)
     }
 
+    func testTimeGateBlocksThenOpens() {
+        var level = LevelCatalog.prototype
+        level.gates = [TimeGateSpawn(id: 0, area: AABB(x: 400, y: 180, width: 200, height: 40), period: 4, openFor: 1, phase: 1)]
+        let sim = WorldSimulation(level: level)
+        advance(sim, seconds: 0.6, target: Vec2(x: 500, y: 800))
+        XCTAssertLessThan(sim.playerPosition.y, 240)
+    }
+
     func testCalmRiftFreezesOnEnter() {
         var level = LevelCatalog.prototype
         level.rifts = [RiftSpawn(id: 0, kind: .calm, position: Vec2(x: 500, y: 220), period: 4, openFor: 3.5)]

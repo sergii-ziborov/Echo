@@ -22,6 +22,7 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
     var fields: [SlowField]
     var movers: [MoverSpawn]
     var rifts: [RiftSpawn]
+    var gates: [TimeGateSpawn]
     var theme: ArenaTheme
     var echoInterval: TimeInterval
     var maxEchoes: Int
@@ -77,6 +78,15 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
                 kind: $0.kind,
                 position: Vec2(x: $0.position.x, y: $0.position.y * sy),
                 radius: $0.radius,
+                period: $0.period,
+                openFor: $0.openFor,
+                phase: $0.phase
+            )
+        }
+        copy.gates = gates.map {
+            TimeGateSpawn(
+                id: $0.id,
+                area: AABB(minX: $0.area.minX, minY: $0.area.minY * sy, maxX: $0.area.maxX, maxY: $0.area.maxY * sy),
                 period: $0.period,
                 openFor: $0.openFor,
                 phase: $0.phase
@@ -289,6 +299,9 @@ enum LevelCatalog {
             bonuses: [
                 BonusSpawn(id: 0, kind: .shield, position: Vec2(x: 500, y: 300)),
                 BonusSpawn(id: 1, kind: .surge, position: Vec2(x: 500, y: 700)),
+            ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .calm, position: Vec2(x: 300, y: 500), period: 8, openFor: 3.2, phase: 1.0),
             ]
         ),
         make(
@@ -316,6 +329,9 @@ enum LevelCatalog {
             bonuses: [
                 BonusSpawn(id: 0, kind: .magnet, position: Vec2(x: 500, y: 820)),
                 BonusSpawn(id: 1, kind: .freeze, position: Vec2(x: 160, y: 500)),
+            ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .calm, position: Vec2(x: 500, y: 700), period: 7.5, openFor: 2.8),
             ]
         ),
         make(
@@ -409,6 +425,9 @@ enum LevelCatalog {
             bonuses: [
                 BonusSpawn(id: 0, kind: .surge, position: Vec2(x: 180, y: 180)),
                 BonusSpawn(id: 1, kind: .magnet, position: Vec2(x: 820, y: 820)),
+            ],
+            gates: [
+                TimeGateSpawn(id: 0, area: AABB(x: 460, y: 420, width: 80, height: 160), period: 5.2, openFor: 2.3),
             ]
         ),
         make(
@@ -438,6 +457,9 @@ enum LevelCatalog {
                 BonusSpawn(id: 0, kind: .freeze, position: Vec2(x: 500, y: 360)),
                 BonusSpawn(id: 1, kind: .shield, position: Vec2(x: 500, y: 600)),
                 BonusSpawn(id: 2, kind: .pulse, position: Vec2(x: 500, y: 820)),
+            ],
+            gates: [
+                TimeGateSpawn(id: 0, area: AABB(x: 80, y: 460, width: 180, height: 48), period: 4.8, openFor: 2.1, phase: 0.8),
             ]
         ),
         make(
@@ -1226,6 +1248,7 @@ enum LevelCatalog {
         fields: [SlowField] = [],
         movers: [MoverSpawn] = [],
         rifts: [RiftSpawn] = [],
+        gates: [TimeGateSpawn] = [],
         theme: ArenaTheme? = nil
     ) -> LevelDefinition {
         LevelDefinition(
@@ -1243,6 +1266,7 @@ enum LevelCatalog {
             fields: fields,
             movers: movers,
             rifts: rifts,
+            gates: gates,
             theme: theme ?? .forLevel(number),
             echoInterval: echoInterval,
             maxEchoes: maxEchoes,

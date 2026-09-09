@@ -8,6 +8,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
     case magnet
     case phase
     case chrono
+    case ward
 
     var title: String {
         switch self {
@@ -18,6 +19,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: "Magnet"
         case .phase: "Phase"
         case .chrono: "Chrono"
+        case .ward: "Ward"
         }
     }
 
@@ -30,6 +32,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: "Pull nearby sparks — arena only"
         case .phase: "Walk through copies for a moment"
         case .chrono: "Push the next echo further out"
+        case .ward: "Auto-shield at the start of a run — not used from the bar"
         }
     }
 
@@ -42,6 +45,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: 5.0
         case .phase: 2.4
         case .chrono: 0
+        case .ward: 0
         }
     }
 
@@ -54,13 +58,21 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .freeze: 80
         case .phase: 90
         case .chrono: 85
+        case .ward: 75
         }
     }
 
-    /// Shop stock you can save and fire later. Arena pickups still apply instantly.
+    /// Shop stock you tap in a run. Ward is bought and spent automatically.
     var canBuy: Bool {
         switch self {
         case .pulse, .magnet: false
+        default: true
+        }
+    }
+
+    var useFromBar: Bool {
+        switch self {
+        case .ward, .pulse, .magnet: false
         default: true
         }
     }
@@ -74,6 +86,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: "magnet"
         case .phase: "sparkles"
         case .chrono: "clock.arrow.circlepath"
+        case .ward: "lock.shield.fill"
         }
     }
 
@@ -86,6 +99,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: "BonusMagnet"
         case .phase: "BonusShield"
         case .chrono: "BonusFreeze"
+        case .ward: "BonusShield"
         }
     }
 
@@ -98,6 +112,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: (1.00, 0.45, 0.70)
         case .phase: (0.85, 0.95, 1.00)
         case .chrono: (0.70, 0.55, 1.00)
+        case .ward: (0.55, 0.90, 0.70)
         }
     }
 }
@@ -183,6 +198,7 @@ enum EncounterHint: String, Equatable, Sendable {
     case freeze
     case phase
     case collision
+    case gate
 
     var title: String {
         switch self {
@@ -192,6 +208,7 @@ enum EncounterHint: String, Equatable, Sendable {
         case .freeze: "Freeze"
         case .phase: "Phase"
         case .collision: "Time collision"
+        case .gate: "Time gates"
         }
     }
 
@@ -208,7 +225,39 @@ enum EncounterHint: String, Equatable, Sendable {
         case .phase:
             "You pass through copies for a moment. Spend it on a bad line, not a pretty one."
         case .collision:
-            "Two pasts occupied the same beat. That crack will show up in later worlds as a real hazard."
+            "Two pasts occupied the same beat. The scar they leave is lethal for a few seconds."
+        case .gate:
+            "These bars vanish and return on a clock. Freeze holds them too."
         }
     }
+}
+
+struct TimeGateSpawn: Equatable, Sendable, Identifiable {
+    var id: Int
+    var area: AABB
+    var period: TimeInterval = 5.5
+    var openFor: TimeInterval = 2.4
+    var phase: TimeInterval = 0
+}
+
+struct TimeGateState: Equatable, Sendable, Identifiable {
+    var id: Int
+    var area: AABB
+    var period: TimeInterval
+    var openFor: TimeInterval
+    var phase: TimeInterval
+    var solid: Bool = true
+
+    func isSolid(at time: TimeInterval) -> Bool {
+        guard period > 0 else { return true }
+        let t = (time + phase).truncatingRemainder(dividingBy: period)
+        return t >= openFor
+    }
+}
+
+struct CollisionScar: Equatable, Sendable, Identifiable {
+    var id: Int
+    var position: Vec2
+    var radius: Double
+    var remaining: TimeInterval
 }

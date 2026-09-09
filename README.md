@@ -22,11 +22,12 @@ Thirty maps in World 1 *Awakening*. Play continues from the next unbeaten level.
 - **Echoes** — up to five copies. Double-tap to dash.
 - **Asteroids** — bounce, patrol, or orbit. Freeze stops them too.
 - **Time rifts** — open and close. A calm tear skips time. A collapsing one is a collision.
-- **Time collisions** — two pasts occupying the same beat. The crack is a warning; later maps make it lethal.
-- **Shop** — stock Shield, Freeze, Surge, Phase, Chrono, and extra lives with points from clears. Pulse and Magnet only drop in the arena; you cannot bank those.
+- **Time gates** — bars that vanish and return on a clock. Freeze holds them too.
+- **Time collisions** — when two copies occupy the same beat they leave a lethal scar for a few seconds.
+- **Shop** — stock Shield, Freeze, Surge, Phase, Chrono and tap them in a run. Ward spends itself as a starting shield. Pulse and Magnet only drop in the arena.
 - **Lives** — three to start, five max. Continue after a crash spends one. Three stars restore one.
 
-The first time you meet an echo, a rock, a rift, freeze, phase, or a time collision, a short card explains it.
+The first time you meet an echo, a rock, a rift, a gate, freeze, phase, or a time collision, a short card explains it. Freeze tints the arena and crystals the orb. This is the shipping game, not a prototype.
 
 ## Requirements
 
