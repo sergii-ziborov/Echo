@@ -30,6 +30,43 @@ final class ProgressStoreTests: XCTestCase {
         XCTAssertEqual(store.progress(for: "test").stars, 3)
     }
 
+    func testStartsWithThreeLives() {
+        let store = makeStore()
+        XCTAssertEqual(store.lives, ProgressStore.startingLives)
+    }
+
+    func testBuyAndSpendLife() {
+        let store = makeStore()
+        store.addShards(ProgressStore.lifePrice)
+        XCTAssertTrue(store.buyLife())
+        XCTAssertEqual(store.lives, 4)
+        XCTAssertEqual(store.points, 0)
+        XCTAssertTrue(store.spendLife())
+        XCTAssertEqual(store.lives, 3)
+    }
+
+    func testCannotBuyLifeWithoutPoints() {
+        let store = makeStore()
+        XCTAssertFalse(store.buyLife())
+        XCTAssertEqual(store.lives, 3)
+    }
+
+    func testThreeStarWinGrantsALife() {
+        let store = makeStore()
+        let result = SessionResult(time: 10, moves: 10, stars: 3, sparks: 6, echoesFaced: 1, bonuses: 0)
+        store.recordWin(levelID: "test", result: result)
+        XCTAssertEqual(store.lives, 4)
+    }
+
+    func testLivesCapAtFive() {
+        let store = makeStore()
+        store.addLife(10)
+        XCTAssertEqual(store.lives, ProgressStore.maxLives)
+        store.addShards(ProgressStore.lifePrice * 2)
+        XCTAssertFalse(store.buyLife())
+        XCTAssertEqual(store.lives, ProgressStore.maxLives)
+    }
+
     func testInventoryCapsAtNine() {
         let store = makeStore()
         store.addShards(BonusKind.pulse.price * 12)

@@ -34,7 +34,7 @@ struct ResultsView: View {
                     Text("+\(result.points) points")
                         .font(.system(size: 15, weight: .semibold))
                     Spacer()
-                    Text("Spend in the shop")
+                    Text(result.stars >= 3 ? "3 stars: +1 life" : "Spend in the shop")
                         .font(.system(size: 12))
                         .foregroundStyle(EchoTheme.muted)
                 }

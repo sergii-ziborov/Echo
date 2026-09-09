@@ -2,7 +2,9 @@ import SwiftUI
 
 struct DeathView: View {
     var cause: DeathCause
-    var onRestart: () -> Void
+    var lives: Int
+    var onContinue: () -> Void
+    var onShop: () -> Void
     var onMenu: () -> Void
 
     var body: some View {
@@ -18,12 +20,25 @@ struct DeathView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 8)
 
-                Text("The replay showed the last seconds of your path meeting its copy. Instant restart — try a wider line.")
+                HStack(spacing: 6) {
+                    Image(systemName: "heart.fill")
+                        .foregroundStyle(lives > 0 ? EchoTheme.danger : EchoTheme.muted)
+                    Text("\(lives) life\(lives == 1 ? "" : "s")")
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
+                }
+
+                Text(lives > 0
+                     ? "Spend a life to try this arena again."
+                     : "No lives left. Buy more in the shop, or leave to the menu.")
                     .font(.system(size: 13))
                     .foregroundStyle(EchoTheme.muted)
                     .multilineTextAlignment(.center)
 
-                PrimaryButton(title: "Restart", systemImage: "arrow.counterclockwise", action: onRestart)
+                if lives > 0 {
+                    PrimaryButton(title: "Continue", systemImage: "heart.fill", action: onContinue)
+                } else {
+                    PrimaryButton(title: "Shop", systemImage: "bag.fill", action: onShop)
+                }
                 GhostButton(title: "Main Menu", action: onMenu)
             }
             .padding(26)

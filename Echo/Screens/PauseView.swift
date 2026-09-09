@@ -2,8 +2,10 @@ import SwiftUI
 
 struct PauseView: View {
     var levelName: String
+    var lives: Int
     var onResume: () -> Void
     var onRestart: () -> Void
+    var onShop: () -> Void
     var onSettings: () -> Void
     var onMenu: () -> Void
 
@@ -18,10 +20,18 @@ struct PauseView: View {
                     .font(.system(size: 36, weight: .ultraLight))
                     .tracking(8)
                     .foregroundStyle(.white)
-                    .padding(.bottom, 8)
+
+                HStack(spacing: 6) {
+                    Image(systemName: "heart.fill")
+                        .foregroundStyle(EchoTheme.danger)
+                    Text("\(lives)")
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                }
+                .padding(.bottom, 4)
 
                 PrimaryButton(title: "Resume", systemImage: "play.fill", action: onResume)
                 SecondaryButton(title: "Restart", systemImage: "arrow.counterclockwise", action: onRestart)
+                SecondaryButton(title: "Shop", systemImage: "bag.fill", action: onShop)
                 SecondaryButton(title: "Settings", systemImage: "gearshape", action: onSettings)
                 GhostButton(title: "Main Menu", action: onMenu)
             }

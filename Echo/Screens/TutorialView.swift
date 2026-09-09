@@ -45,8 +45,8 @@ struct TutorialView: View {
 
                 TutorialRow(
                     index: 4,
-                    title: "Bonuses, shop, dash.",
-                    detail: "Pick up shield, freeze and surge in the arena — or buy them with points and tap the bar. Double-tap to dash."
+                    title: "Pause, shop, lives.",
+                    detail: "Pause anytime. Buy freeze, dash, shield and extra lives. A life continues a crash."
                 ) {
                     HexGlyph()
                 }

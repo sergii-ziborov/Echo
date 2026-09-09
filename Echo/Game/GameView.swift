@@ -8,6 +8,8 @@ struct GameView: View {
 
     @State private var session: GameSession
     @State private var scene: GameScene
+    @State private var overlay: InRunOverlay = .none
+    @Environment(\.scenePhase) private var scenePhase
 
     init(request: PlayRequest) {
         self.request = request
@@ -72,12 +74,14 @@ struct GameView: View {
                 .padding(.top, (geo.safeAreaInsets.top > 20 ? geo.safeAreaInsets.top : 62) + 4)
                 .padding(.bottom, max(geo.safeAreaInsets.bottom, 10))
 
-                if case .paused = session.phase {
+                if case .paused = session.phase, overlay == .none {
                     PauseView(
                         levelName: session.level.name,
+                        lives: model.progress.lives,
                         onResume: { session.togglePause() },
                         onRestart: restart,
-                        onSettings: { model.openSettings() },
+                        onShop: { overlay = .shop },
+                        onSettings: { overlay = .settings },
                         onMenu: { model.goHome() }
                     )
                 }
@@ -94,12 +98,22 @@ struct GameView: View {
                     )
                 }
 
-                if case .dead(let cause) = session.phase {
+                if case .dead(let cause) = session.phase, overlay == .none {
                     DeathView(
                         cause: cause,
-                        onRestart: restart,
+                        lives: model.progress.lives,
+                        onContinue: continueRun,
+                        onShop: { overlay = .shop },
                         onMenu: { model.goHome() }
                     )
+                }
+
+                if overlay == .shop {
+                    ShopView(onBack: { overlay = .none })
+                }
+
+                if overlay == .settings {
+                    SettingsView(onBack: { overlay = .none })
                 }
 
                 if session.phase == .replaying {
@@ -121,6 +135,11 @@ struct GameView: View {
             session.autoReplay = model.progress.autoReplayEnabled
             model.audio.setHapticsEnabled(model.progress.hapticsEnabled)
             model.audio.enabled = model.progress.soundEnabled
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active, session.phase == .playing {
+                session.togglePause()
+            }
         }
         .onChange(of: session.banner) { _, new in
             guard new != nil else { return }
@@ -182,8 +201,21 @@ struct GameView: View {
 
     private func restart() {
         model.audio.play(.tap)
+        overlay = .none
         session.restart()
         scene.rebuild()
+    }
+
+    private func continueRun() {
+        guard model.progress.spendLife() else {
+            overlay = .shop
+            return
+        }
+        model.audio.play(.tap)
+        overlay = .none
+        session.restart()
+        scene.rebuild()
+        session.banner = "Life spent"
     }
 
     private func useItem(_ kind: BonusKind) {
@@ -212,7 +244,14 @@ struct GameView: View {
     }
 }
 
+private enum InRunOverlay {
+    case none
+    case shop
+    case settings
+}
+
 struct HUDBar: View {
+    @Environment(AppModel.self) private var model
     var session: GameSession
     var onPause: () -> Void
 
@@ -223,6 +262,9 @@ struct HUDBar: View {
             }
             HUDChip(icon: "circle.dotted", tint: EchoTheme.magenta) {
                 Text("\(session.echoCount)/\(session.maxEchoes)")
+            }
+            HUDChip(icon: "heart.fill", tint: EchoTheme.danger) {
+                Text("\(model.progress.lives)")
             }
             if session.effects.shieldCharges > 0 {
                 HUDChip(icon: "shield.fill", tint: Color.green) {

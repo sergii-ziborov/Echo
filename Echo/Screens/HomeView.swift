@@ -13,6 +13,8 @@ struct HomeView: View {
                         IconCircle(system: "bag.fill") { model.openShop() }
                         Spacer()
                         HStack(spacing: 14) {
+                            Label("\(model.progress.lives)", systemImage: "heart.fill")
+                                .foregroundStyle(EchoTheme.danger)
                             Label("\(model.progress.totalStars)", systemImage: "star.fill")
                                 .foregroundStyle(EchoTheme.gold)
                             Label("\(model.progress.points)", systemImage: "diamond.fill")

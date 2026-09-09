@@ -2,13 +2,14 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
+    var onBack: (() -> Void)? = nil
 
     var body: some View {
         ZStack {
             ScreenBackground()
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
-                    IconCircle(system: "chevron.left") { model.goHome() }
+                    IconCircle(system: "chevron.left") { goBack() }
                     Spacer()
                     Text("SETTINGS")
                         .font(.system(size: 14, weight: .semibold))
@@ -47,6 +48,14 @@ struct SettingsView: View {
         }
         .onChange(of: model.progress.autoReplayEnabled) {
             model.progress.persistSettings()
+        }
+    }
+
+    private func goBack() {
+        if let onBack {
+            onBack()
+        } else {
+            model.goHome()
         }
     }
 

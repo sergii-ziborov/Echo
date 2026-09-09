@@ -11,10 +11,14 @@ struct LevelProgress: Equatable, Sendable, Codable {
 final class ProgressStore {
     private let defaults: UserDefaults
     static let maxOwned = 9
+    static let maxLives = 5
+    static let startingLives = 3
+    static let lifePrice = 100
 
     private let starsKey = "echo.progress.stars"
     private let shardsKey = "echo.progress.shards"
     private let inventoryKey = "echo.progress.inventory"
+    private let livesKey = "echo.progress.lives"
     private let lastLevelKey = "echo.progress.lastLevel"
     private let tutorialKey = "echo.progress.tutorialSeen"
     private let dailyKey = "echo.progress.lastDaily"
@@ -25,6 +29,7 @@ final class ProgressStore {
     private(set) var starsByLevel: [String: LevelProgress]
     private(set) var shards: Int
     private(set) var inventory: [String: Int]
+    private(set) var lives: Int
     private(set) var lastLevelID: String
     var hasSeenTutorial: Bool
     private(set) var lastDailyKey: String?
@@ -47,6 +52,7 @@ final class ProgressStore {
         } else {
             inventory = [:]
         }
+        lives = defaults.object(forKey: livesKey) as? Int ?? Self.startingLives
         lastLevelID = defaults.string(forKey: lastLevelKey) ?? LevelCatalog.prototype.id
         hasSeenTutorial = defaults.bool(forKey: tutorialKey)
         lastDailyKey = defaults.string(forKey: dailyKey)
@@ -86,6 +92,7 @@ final class ProgressStore {
         starsByLevel[levelID] = current
         lastLevelID = levelID
         if awardsShard { shards += result.points }
+        if result.stars >= 3 { addLife(1) }
         persist()
     }
 
@@ -131,6 +138,35 @@ final class ProgressStore {
         persist()
     }
 
+    var canBuyLife: Bool {
+        shards >= Self.lifePrice && lives < Self.maxLives
+    }
+
+    @discardableResult
+    func addLife(_ amount: Int = 1) -> Int {
+        let before = lives
+        lives = min(Self.maxLives, lives + max(0, amount))
+        persist()
+        return lives - before
+    }
+
+    @discardableResult
+    func spendLife() -> Bool {
+        guard lives > 0 else { return false }
+        lives -= 1
+        persist()
+        return true
+    }
+
+    @discardableResult
+    func buyLife() -> Bool {
+        guard canBuyLife else { return false }
+        shards -= Self.lifePrice
+        lives += 1
+        persist()
+        return true
+    }
+
     func markTutorialSeen() {
         hasSeenTutorial = true
         defaults.set(true, forKey: tutorialKey)
@@ -156,5 +192,6 @@ final class ProgressStore {
             defaults.set(data, forKey: inventoryKey)
         }
         defaults.set(lastLevelID, forKey: lastLevelKey)
+        defaults.set(lives, forKey: livesKey)
     }
 }
