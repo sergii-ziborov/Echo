@@ -25,6 +25,7 @@ final class ProgressStore {
     private let soundKey = "echo.settings.sound"
     private let hapticsKey = "echo.settings.haptics"
     private let replayKey = "echo.settings.autoReplay"
+    private let hintsKey = "echo.progress.hints"
 
     private(set) var starsByLevel: [String: LevelProgress]
     private(set) var shards: Int
@@ -36,6 +37,7 @@ final class ProgressStore {
     var soundEnabled: Bool
     var hapticsEnabled: Bool
     var autoReplayEnabled: Bool
+    private(set) var seenHints: Set<String>
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -59,6 +61,27 @@ final class ProgressStore {
         soundEnabled = defaults.object(forKey: soundKey) as? Bool ?? true
         hapticsEnabled = defaults.object(forKey: hapticsKey) as? Bool ?? true
         autoReplayEnabled = defaults.object(forKey: replayKey) as? Bool ?? true
+        if let data = defaults.data(forKey: hintsKey),
+           let decoded = try? JSONDecoder().decode([String].self, from: data) {
+            seenHints = Set(decoded)
+        } else {
+            seenHints = []
+        }
+    }
+
+    func continueLevel() -> LevelDefinition {
+        if let next = LevelCatalog.playable.first(where: { isUnlocked($0) && progress(for: $0.id).stars == 0 }) {
+            return next
+        }
+        return LevelCatalog.playable.last(where: { isUnlocked($0) }) ?? LevelCatalog.prototype
+    }
+
+    @discardableResult
+    func markHint(_ key: String) -> Bool {
+        guard !seenHints.contains(key) else { return false }
+        seenHints.insert(key)
+        persist()
+        return true
     }
 
     var totalStars: Int {
@@ -90,7 +113,9 @@ final class ProgressStore {
             current.bestMoves = result.moves
         }
         starsByLevel[levelID] = current
-        lastLevelID = levelID
+        if !levelID.hasPrefix("daily") {
+            lastLevelID = levelID
+        }
         if awardsShard { shards += result.points }
         if result.stars >= 3 { addLife(1) }
         persist()
@@ -108,7 +133,7 @@ final class ProgressStore {
     }
 
     func canBuy(_ kind: BonusKind) -> Bool {
-        shards >= kind.price && count(kind) < Self.maxOwned
+        kind.canBuy && shards >= kind.price && count(kind) < Self.maxOwned
     }
 
     @discardableResult
@@ -193,5 +218,8 @@ final class ProgressStore {
         }
         defaults.set(lastLevelID, forKey: lastLevelKey)
         defaults.set(lives, forKey: livesKey)
+        if let data = try? JSONEncoder().encode(Array(seenHints)) {
+            defaults.set(data, forKey: hintsKey)
+        }
     }
 }

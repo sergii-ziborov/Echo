@@ -17,6 +17,8 @@ final class GameScene: SKScene {
     private var spawnBeacon: SKNode!
     private var ambienceNode: SKNode!
     private var moverNodes: [Int: SKNode] = [:]
+    private var riftNodes: [Int: SKNode] = [:]
+    private var frostOverlay: SKSpriteNode!
     private var lastTime: TimeInterval = 0
     private var trailAcc: TimeInterval = 0
     private var trailBudget = 0
@@ -46,6 +48,7 @@ final class GameScene: SKScene {
         sparkNodes.removeAll()
         bonusNodes.removeAll()
         moverNodes.removeAll()
+        riftNodes.removeAll()
         lastTime = 0
         backgroundColor = session.level.theme.sky.uiColor
         trailAcc = 0
@@ -60,7 +63,15 @@ final class GameScene: SKScene {
         buildBonuses()
         buildFields()
         buildMovers()
+        buildRifts()
         buildSpawnBeacon()
+        frostOverlay = SKSpriteNode(color: UIColor(red: 0.45, green: 0.75, blue: 1, alpha: 0.16), size: size)
+        frostOverlay.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        frostOverlay.zPosition = 20
+        frostOverlay.blendMode = .add
+        frostOverlay.alpha = 0
+        frostOverlay.isUserInteractionEnabled = false
+        addChild(frostOverlay)
         buildPlayer()
         threatLine = SKShapeNode()
         threatLine.strokeColor = UIColor(red: 1, green: 0.45, blue: 0.6, alpha: 0.85)
@@ -245,7 +256,7 @@ final class GameScene: SKScene {
             ambienceNode.addChild(nebula)
             _ = i
         }
-        for i in 0..<16 {
+        for _ in 0..<16 {
             let mote = SKSpriteNode(texture: GlowTextures.blob)
             let s = CGFloat.random(in: 8...24)
             mote.size = CGSize(width: s, height: s)
@@ -444,6 +455,38 @@ final class GameScene: SKScene {
         }
     }
 
+    private func buildRifts() {
+        for rift in session.sim.rifts {
+            let root = SKNode()
+            root.zPosition = 8
+            root.position = scenePoint(rift.position)
+            let color: UIColor = rift.kind == .calm
+                ? UIColor(red: 0.55, green: 0.82, blue: 1, alpha: 1)
+                : UIColor(red: 1, green: 0.35, blue: 0.55, alpha: 1)
+            let glow = SKSpriteNode(texture: GlowTextures.blob)
+            let s = CGFloat(rift.radius) * worldScale * 2.4
+            glow.size = CGSize(width: s, height: s)
+            glow.blendMode = .add
+            glow.color = color
+            glow.colorBlendFactor = 0.8
+            glow.alpha = 0.7
+            glow.run(.repeatForever(.sequence([
+                .scale(to: 1.12, duration: 0.7),
+                .scale(to: 0.88, duration: 0.7),
+            ])))
+            let ring = SKShapeNode(circleOfRadius: CGFloat(rift.radius) * worldScale)
+            ring.strokeColor = color
+            ring.lineWidth = 2
+            ring.glowWidth = 6
+            ring.fillColor = color.withAlphaComponent(0.08)
+            ring.run(.repeatForever(.rotate(byAngle: .pi, duration: 5)))
+            root.addChild(glow)
+            root.addChild(ring)
+            addChild(root)
+            riftNodes[rift.id] = root
+        }
+    }
+
     private func buildPlayer() {
         let root = SKNode()
         root.zPosition = 14
@@ -553,10 +596,23 @@ final class GameScene: SKScene {
         for mover in session.sim.movers {
             moverNodes[mover.id]?.position = scenePoint(mover.position)
         }
+        for rift in session.sim.rifts {
+            guard let node = riftNodes[rift.id] else { continue }
+            node.position = scenePoint(rift.position)
+            node.alpha = rift.open ? 1 : 0.22
+            node.setScale(rift.open ? 1 : 0.72)
+        }
+        frostOverlay?.alpha = session.sim.effects.isFrozen ? 1 : 0
+        for echo in echoNodes {
+            echo.alpha = session.sim.effects.isFrozen ? 0.45 : 1
+        }
         exitNode.position = scenePoint(session.level.exit)
         refreshExit()
         if let halo = playerNode.childNode(withName: "halo") as? SKSpriteNode {
-            if session.sim.effects.shieldCharges > 0 {
+            if session.sim.effects.isPhasing {
+                halo.color = UIColor.white
+                halo.colorBlendFactor = 0.7
+            } else if session.sim.effects.shieldCharges > 0 {
                 halo.color = UIColor(red: 0.45, green: 1, blue: 0.7, alpha: 1)
                 halo.colorBlendFactor = 0.55
             } else if session.sim.effects.isSurging {
@@ -775,13 +831,7 @@ final class GameScene: SKScene {
     }
 
     private static func color(for kind: BonusKind) -> UIColor {
-        switch kind {
-        case .shield: UIColor(red: 0.4, green: 1, blue: 0.65, alpha: 1)
-        case .freeze: UIColor(red: 0.55, green: 0.82, blue: 1, alpha: 1)
-        case .surge: UIColor(red: 1, green: 0.82, blue: 0.28, alpha: 1)
-        case .pulse: UIColor(red: 0.85, green: 0.4, blue: 1, alpha: 1)
-        case .magnet: UIColor(red: 1, green: 0.45, blue: 0.7, alpha: 1)
-        }
+        GlowTextures.color(for: kind)
     }
 
     private var worldScale: CGFloat {

@@ -21,6 +21,7 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
     var bonuses: [BonusSpawn]
     var fields: [SlowField]
     var movers: [MoverSpawn]
+    var rifts: [RiftSpawn]
     var theme: ArenaTheme
     var echoInterval: TimeInterval
     var maxEchoes: Int
@@ -70,6 +71,17 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
             )
         }
         copy.movers = movers.map { $0.scaled(sy: sy) }
+        copy.rifts = rifts.map {
+            RiftSpawn(
+                id: $0.id,
+                kind: $0.kind,
+                position: Vec2(x: $0.position.x, y: $0.position.y * sy),
+                radius: $0.radius,
+                period: $0.period,
+                openFor: $0.openFor,
+                phase: $0.phase
+            )
+        }
         return copy.sanitized()
     }
 
@@ -818,6 +830,9 @@ enum LevelCatalog {
                 MoverSpawn.bounce(id: 0, at: Vec2(x: 700, y: 360), velocity: Vec2(x: -80, y: 60)),
                 MoverSpawn.bounce(id: 1, at: Vec2(x: 300, y: 720), velocity: Vec2(x: 55, y: -75), radius: 18),
             ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .calm, position: Vec2(x: 500, y: 320), period: 8, openFor: 3.0),
+            ],
             theme: .dust
         ),
         make(
@@ -880,6 +895,9 @@ enum LevelCatalog {
                 MoverSpawn.orbit(id: 0, center: Vec2(x: 500, y: 500), radius: 170, period: 7.5, size: 22),
                 MoverSpawn.orbit(id: 1, center: Vec2(x: 500, y: 500), radius: 250, period: 11, phase: 2.4, size: 16),
             ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .calm, position: Vec2(x: 180, y: 500), period: 7.5, openFor: 2.6, phase: 1.5),
+            ],
             theme: .ice
         ),
         make(
@@ -912,6 +930,9 @@ enum LevelCatalog {
             movers: [
                 MoverSpawn.patrol(id: 0, from: Vec2(x: 160, y: 400), to: Vec2(x: 840, y: 400)),
                 MoverSpawn.patrol(id: 1, from: Vec2(x: 160, y: 620), to: Vec2(x: 840, y: 620)),
+            ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .collision, position: Vec2(x: 500, y: 300), period: 6.5, openFor: 2.2),
             ],
             theme: .ion
         ),
@@ -1013,6 +1034,9 @@ enum LevelCatalog {
             movers: [
                 MoverSpawn.orbit(id: 0, center: Vec2(x: 500, y: 500), radius: 140, period: 6.5, size: 20),
                 MoverSpawn.bounce(id: 1, at: Vec2(x: 180, y: 300), velocity: Vec2(x: 0, y: 95), radius: 16),
+            ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .calm, position: Vec2(x: 500, y: 720), period: 6.8, openFor: 2.8),
             ],
             theme: .ice
         ),
@@ -1117,6 +1141,10 @@ enum LevelCatalog {
                 MoverSpawn.orbit(id: 1, center: Vec2(x: 500, y: 500), radius: 190, period: 8.5, phase: 0.6, size: 20),
                 MoverSpawn.patrol(id: 2, from: Vec2(x: 160, y: 860), to: Vec2(x: 840, y: 140), radius: 16),
             ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .collision, position: Vec2(x: 500, y: 720), period: 7.2, openFor: 2.4, phase: 1.0),
+                RiftSpawn(id: 1, kind: .calm, position: Vec2(x: 240, y: 240), period: 8, openFor: 3.0),
+            ],
             theme: .ember
         ),
     ]
@@ -1197,6 +1225,7 @@ enum LevelCatalog {
         bonuses: [BonusSpawn] = [],
         fields: [SlowField] = [],
         movers: [MoverSpawn] = [],
+        rifts: [RiftSpawn] = [],
         theme: ArenaTheme? = nil
     ) -> LevelDefinition {
         LevelDefinition(
@@ -1213,6 +1242,7 @@ enum LevelCatalog {
             bonuses: bonuses,
             fields: fields,
             movers: movers,
+            rifts: rifts,
             theme: theme ?? .forLevel(number),
             echoInterval: echoInterval,
             maxEchoes: maxEchoes,

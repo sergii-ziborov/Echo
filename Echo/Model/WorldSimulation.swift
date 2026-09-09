@@ -34,6 +34,9 @@ enum SimEvent: Equatable, Sendable {
     case echoWillSpawn(index: Int, in: TimeInterval)
     case echoSpawned(index: Int)
     case exitOpened
+    case riftOpened(id: Int)
+    case riftEntered(kind: RiftKind)
+    case timeCollision
     case died(DeathCause)
     case won(SessionResult)
 }
@@ -61,6 +64,7 @@ final class WorldSimulation {
     private(set) var sparks: [SparkState]
     private(set) var bonuses: [BonusState]
     private(set) var movers: [MoverState]
+    private(set) var rifts: [RiftState]
     private(set) var effects = ActiveEffects()
     private(set) var exitOpen = false
     private(set) var moves = 0
@@ -105,6 +109,7 @@ final class WorldSimulation {
     private var warnedFor = -1
     private var snapshotAcc = 0.0
     private var pulseDelay: TimeInterval = 0
+    private var collisionCooldown: TimeInterval = 0
 
     init(level: LevelDefinition, config: SimConfig = SimConfig()) {
         self.level = level
@@ -113,6 +118,7 @@ final class WorldSimulation {
         self.sparks = Self.makeSparks(level.sparks)
         self.bonuses = Self.makeBonuses(level.bonuses)
         self.movers = Self.makeMovers(level.movers)
+        self.rifts = Self.makeRifts(level.rifts)
         recorder.record(time: 0, position: level.playerStart)
         captureSnapshot()
     }
@@ -127,6 +133,7 @@ final class WorldSimulation {
         sparks = Self.makeSparks(level.sparks)
         bonuses = Self.makeBonuses(level.bonuses)
         movers = Self.makeMovers(level.movers)
+        rifts = Self.makeRifts(level.rifts)
         effects = ActiveEffects()
         exitOpen = false
         moves = 0
@@ -142,6 +149,7 @@ final class WorldSimulation {
         warnedFor = -1
         snapshotAcc = 0
         pulseDelay = 0
+        collisionCooldown = 0
         recorder.record(time: 0, position: level.playerStart)
         captureSnapshot()
     }
@@ -195,9 +203,11 @@ final class WorldSimulation {
         refreshEchoPositions()
         events.append(contentsOf: collectSparks())
         events.append(contentsOf: collectBonuses())
+        events.append(contentsOf: tickRifts())
+        events.append(contentsOf: detectTimeCollision())
         refreshThreats()
 
-        if effects.iFrames <= 0, let death = collideEchoes() ?? collideMovers() {
+        if effects.iFrames <= 0, !effects.isPhasing, let death = collideEchoes() ?? collideMovers() ?? collideRifts() {
             if effects.shieldCharges > 0 {
                 effects.shieldCharges -= 1
                 effects.iFrames = 0.55
@@ -255,6 +265,10 @@ final class WorldSimulation {
         if effects.freezeRemaining > 0 { effects.freezeRemaining = max(0, effects.freezeRemaining - dt) }
         if effects.surgeRemaining > 0 { effects.surgeRemaining = max(0, effects.surgeRemaining - dt) }
         if effects.magnetRemaining > 0 { effects.magnetRemaining = max(0, effects.magnetRemaining - dt) }
+        if effects.phaseRemaining > 0 {
+            effects.phaseRemaining = max(0, effects.phaseRemaining - dt)
+            effects.iFrames = max(effects.iFrames, effects.phaseRemaining)
+        }
         if effects.dashCooldown > 0 { effects.dashCooldown = max(0, effects.dashCooldown - dt) }
         if effects.iFrames > 0 { effects.iFrames = max(0, effects.iFrames - dt) }
         inSlowField = level.fields.contains { $0.area.contains(playerPosition) }
@@ -331,6 +345,68 @@ final class WorldSimulation {
 
     private static func makeBonuses(_ spawns: [BonusSpawn]) -> [BonusState] {
         spawns.map { BonusState(id: $0.id, kind: $0.kind, position: $0.position, collected: false) }
+    }
+
+    private static func makeRifts(_ spawns: [RiftSpawn]) -> [RiftState] {
+        spawns.map {
+            RiftState(
+                id: $0.id,
+                kind: $0.kind,
+                position: $0.position,
+                radius: $0.radius,
+                period: $0.period,
+                openFor: $0.openFor,
+                phase: $0.phase
+            )
+        }
+    }
+
+    private func tickRifts() -> [SimEvent] {
+        var events: [SimEvent] = []
+        for i in rifts.indices {
+            let open = rifts[i].isOpen(at: time)
+            if open, !rifts[i].open {
+                rifts[i].usedThisCycle = false
+                events.append(.riftOpened(id: rifts[i].id))
+            }
+            if !open { rifts[i].usedThisCycle = false }
+            rifts[i].open = open
+            guard open, !rifts[i].usedThisCycle else { continue }
+            if playerPosition.distance(to: rifts[i].position) < config.playerRadius + rifts[i].radius {
+                rifts[i].usedThisCycle = true
+                events.append(.riftEntered(kind: rifts[i].kind))
+                if rifts[i].kind == .calm {
+                    effects.freezeRemaining = max(effects.freezeRemaining, 1.6)
+                }
+            }
+        }
+        return events
+    }
+
+    private func collideRifts() -> DeathCause? {
+        for rift in rifts where rift.open && rift.kind == .collision {
+            if playerPosition.distance(to: rift.position) < config.playerRadius + rift.radius * 0.72 {
+                return .rift
+            }
+        }
+        return nil
+    }
+
+    private func detectTimeCollision() -> [SimEvent] {
+        if collisionCooldown > 0 {
+            collisionCooldown = max(0, collisionCooldown - 1.0 / 60.0)
+            return []
+        }
+        guard echoes.count >= 2 else { return [] }
+        for i in 0..<echoes.count {
+            for j in (i + 1)..<echoes.count {
+                if echoes[i].distance(to: echoes[j]) < config.echoRadius * 2.2 {
+                    collisionCooldown = 2.4
+                    return [.timeCollision]
+                }
+            }
+        }
+        return []
     }
 
     private static func makeMovers(_ spawns: [MoverSpawn]) -> [MoverState] {
@@ -425,6 +501,11 @@ final class WorldSimulation {
             pulseDelay += 2.4
         case .magnet:
             effects.magnetRemaining += kind.duration
+        case .phase:
+            effects.phaseRemaining += kind.duration
+            effects.iFrames = max(effects.iFrames, kind.duration)
+        case .chrono:
+            pulseDelay += 3.6
         }
     }
 

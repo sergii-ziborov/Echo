@@ -9,6 +9,7 @@ struct GameView: View {
     @State private var session: GameSession
     @State private var scene: GameScene
     @State private var overlay: InRunOverlay = .none
+    @State private var hint: EncounterHint?
     @Environment(\.scenePhase) private var scenePhase
 
     init(request: PlayRequest) {
@@ -116,6 +117,12 @@ struct GameView: View {
                     SettingsView(onBack: { overlay = .none })
                 }
 
+                if let hint {
+                    EncounterCard(hint: hint) {
+                        dismissHint()
+                    }
+                }
+
                 if session.phase == .replaying {
                     VStack {
                         Spacer()
@@ -135,6 +142,9 @@ struct GameView: View {
             session.autoReplay = model.progress.autoReplayEnabled
             model.audio.setHapticsEnabled(model.progress.hapticsEnabled)
             model.audio.enabled = model.progress.soundEnabled
+            if !session.level.movers.isEmpty {
+                offerHint(.asteroid)
+            }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase != .active, session.phase == .playing {
@@ -174,7 +184,8 @@ struct GameView: View {
                 model.audio.play(.collect)
                 model.audio.haptic(.medium)
                 scene.burst(at: session.sim.playerPosition, color: UIColor(red: 1, green: 0.85, blue: 0.4, alpha: 1))
-                _ = kind
+                if kind == .freeze { offerHint(.freeze) }
+                if kind == .phase { offerHint(.phase) }
             case .shieldBroke:
                 model.audio.haptic(.rigid)
                 scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.4, green: 1, blue: 0.65, alpha: 1))
@@ -187,8 +198,21 @@ struct GameView: View {
                 model.audio.play(.spawn)
                 model.audio.haptic(.rigid)
                 scene.burst(at: session.level.playerStart, color: UIColor(red: 0.75, green: 0.4, blue: 1, alpha: 1))
+                offerHint(.echo)
             case .exitOpened:
                 model.audio.haptic(.soft)
+            case .riftOpened:
+                model.audio.haptic(.soft)
+                offerHint(.rift)
+            case .riftEntered(let kind):
+                model.audio.play(.collect)
+                if kind == .calm {
+                    scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.55, green: 0.82, blue: 1, alpha: 1))
+                }
+            case .timeCollision:
+                model.audio.haptic(.rigid)
+                scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.9, green: 0.4, blue: 1, alpha: 1))
+                offerHint(.collision)
             case .died:
                 model.audio.play(.death)
                 model.audio.notify(.error)
@@ -225,8 +249,25 @@ struct GameView: View {
             model.audio.play(.collect)
             model.audio.haptic(.medium)
             scene.burst(at: session.sim.playerPosition, color: UIColor(red: 1, green: 0.85, blue: 0.4, alpha: 1))
+            if kind == .freeze { offerHint(.freeze) }
+            if kind == .phase { offerHint(.phase) }
         } else {
             model.progress.refund(kind)
+        }
+    }
+
+    private func offerHint(_ value: EncounterHint) {
+        guard hint == nil, model.progress.markHint(value.rawValue) else { return }
+        hint = value
+        if session.phase == .playing {
+            session.togglePause()
+        }
+    }
+
+    private func dismissHint() {
+        hint = nil
+        if session.phase == .paused {
+            session.togglePause()
         }
     }
 
@@ -240,6 +281,41 @@ struct GameView: View {
             model.play(level: next, daily: false)
         } else {
             model.goHome()
+        }
+    }
+}
+
+private struct EncounterCard: View {
+    var hint: EncounterHint
+    var onDismiss: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.55).ignoresSafeArea()
+            VStack(spacing: 14) {
+                Text("FIRST CONTACT")
+                    .font(.system(size: 11, weight: .semibold))
+                    .tracking(3)
+                    .foregroundStyle(EchoTheme.muted)
+                Text(hint.title)
+                    .font(.system(size: 26, weight: .ultraLight))
+                    .tracking(1)
+                Text(hint.detail)
+                    .font(.system(size: 15))
+                    .foregroundStyle(EchoTheme.muted)
+                    .multilineTextAlignment(.center)
+                PrimaryButton(title: "Got it", systemImage: "checkmark", action: onDismiss)
+            }
+            .padding(26)
+            .background(
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .fill(EchoTheme.navy.opacity(0.96))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .stroke(Color.white.opacity(0.10), lineWidth: 1)
+            )
+            .padding(.horizontal, 28)
         }
     }
 }
@@ -284,6 +360,11 @@ struct HUDBar: View {
             if session.effects.isMagnet {
                 HUDChip(icon: "magnet", tint: EchoTheme.magenta) {
                     Text(String(format: "%.0f", session.effects.magnetRemaining))
+                }
+            }
+            if session.effects.isPhasing {
+                HUDChip(icon: "sparkles", tint: Color.white) {
+                    Text(String(format: "%.0f", session.effects.phaseRemaining))
                 }
             }
             Spacer(minLength: 8)

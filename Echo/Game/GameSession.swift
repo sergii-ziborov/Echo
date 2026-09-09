@@ -86,6 +86,12 @@ final class GameSession {
                 break
             case .exitOpened:
                 exitOpen = true
+            case .riftOpened:
+                banner = "Rift"
+            case .riftEntered(let kind):
+                banner = kind == .calm ? "Time skip" : "Rift"
+            case .timeCollision:
+                banner = "Time collision"
             case .died(let cause):
                 deathCause = cause
                 replaySnapshots = sim.snapshots

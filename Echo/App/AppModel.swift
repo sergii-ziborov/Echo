@@ -24,11 +24,28 @@ final class AppModel {
     let audio = SoundPlayer()
 
     var continueLevel: LevelDefinition {
-        LevelCatalog.level(id: progress.lastLevelID) ?? LevelCatalog.prototype
+        progress.continueLevel()
     }
 
     func appear() {
         audio.enabled = progress.soundEnabled
+        applyLaunchArgs()
+    }
+
+    private func applyLaunchArgs() {
+        let args = ProcessInfo.processInfo.arguments
+        if args.contains("-shot-splash") {
+            screen = .splash
+        } else if args.contains("-shot-home") {
+            progress.markTutorialSeen()
+            screen = .home
+        } else if args.contains("-shot-shop") {
+            progress.markTutorialSeen()
+            screen = .shop
+        } else if args.contains("-shot-play") {
+            progress.markTutorialSeen()
+            screen = .playing(PlayRequest(levelID: LevelCatalog.prototype.id, daily: false))
+        }
     }
 
     func tapSplash() {

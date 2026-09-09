@@ -21,6 +21,16 @@ final class ProgressStoreTests: XCTestCase {
         XCTAssertEqual(store.points, 0)
     }
 
+    func testContinuePicksNextUnbeatenLevel() {
+        let store = makeStore()
+        XCTAssertEqual(store.continueLevel().number, 1)
+        let win = SessionResult(time: 10, moves: 10, stars: 1, sparks: 6, echoesFaced: 1, bonuses: 0)
+        store.recordWin(levelID: LevelCatalog.prototype.id, result: win)
+        XCTAssertEqual(store.continueLevel().number, 2)
+        store.recordWin(levelID: "daily-2026-09-09", result: win)
+        XCTAssertEqual(store.continueLevel().number, 2)
+    }
+
     func testWinAwardsPointsFromStars() {
         let store = makeStore()
         let result = SessionResult(time: 10, moves: 10, stars: 3, sparks: 6, echoesFaced: 1, bonuses: 2)
@@ -69,12 +79,12 @@ final class ProgressStoreTests: XCTestCase {
 
     func testInventoryCapsAtNine() {
         let store = makeStore()
-        store.addShards(BonusKind.pulse.price * 12)
+        store.addShards(BonusKind.freeze.price * 12)
         for _ in 0..<ProgressStore.maxOwned {
-            XCTAssertTrue(store.buy(.pulse))
+            XCTAssertTrue(store.buy(.freeze))
         }
-        XCTAssertFalse(store.buy(.pulse))
-        XCTAssertEqual(store.count(.pulse), ProgressStore.maxOwned)
+        XCTAssertFalse(store.buy(.freeze))
+        XCTAssertEqual(store.count(.freeze), ProgressStore.maxOwned)
     }
 
     private func makeStore() -> ProgressStore {

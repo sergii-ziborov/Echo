@@ -45,7 +45,7 @@ struct ShopView: View {
                         .fill(Color.white.opacity(0.06))
                 )
 
-                Text("Finish levels to earn points. Lives let you continue after a crash.")
+                Text("Stock Freeze, Shield, Phase, Chrono. Pulse and Magnet only drop in the arena.")
                     .font(.system(size: 13))
                     .foregroundStyle(EchoTheme.muted)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -53,7 +53,7 @@ struct ShopView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 12) {
                         extraLifeRow
-                        ForEach(BonusKind.allCases, id: \.self) { kind in
+                        ForEach(BonusKind.allCases.filter(\.canBuy), id: \.self) { kind in
                             shopRow(kind)
                         }
                     }

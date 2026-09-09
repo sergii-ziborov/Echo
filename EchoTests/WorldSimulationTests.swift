@@ -208,6 +208,14 @@ final class WorldSimulationTests: XCTestCase {
         XCTAssertEqual(sim.deathCause, .asteroid)
     }
 
+    func testCalmRiftFreezesOnEnter() {
+        var level = LevelCatalog.prototype
+        level.rifts = [RiftSpawn(id: 0, kind: .calm, position: Vec2(x: 500, y: 220), period: 4, openFor: 3.5)]
+        let sim = WorldSimulation(level: level)
+        advance(sim, seconds: 1.0, target: Vec2(x: 500, y: 220))
+        XCTAssertTrue(sim.effects.isFrozen)
+    }
+
     func testFreezePausesAsteroids() {
         var level = LevelCatalog.prototype
         level.bonuses = [BonusSpawn(id: 0, kind: .freeze, position: Vec2(x: 500, y: 200))]

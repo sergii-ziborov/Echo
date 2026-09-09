@@ -48,6 +48,9 @@ struct HomeView: View {
                                     .foregroundStyle(EchoTheme.muted)
                                 Text("Level \(model.continueLevel.number)")
                                     .font(.system(size: 20, weight: .semibold))
+                                Text(model.continueLevel.name)
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundStyle(EchoTheme.muted)
                                 EchoMark(size: 56, spinning: false)
                                     .frame(maxWidth: .infinity)
                             }
