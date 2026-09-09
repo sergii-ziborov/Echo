@@ -78,7 +78,7 @@ struct GameView: View {
                 if case .paused = session.phase, overlay == .none {
                     PauseView(
                         levelName: session.level.name,
-                        lives: model.progress.lives,
+                        rewindCharges: session.sim.rewindCharges,
                         onResume: { session.togglePause() },
                         onRestart: restart,
                         onShop: { overlay = .shop },
@@ -88,12 +88,15 @@ struct GameView: View {
                 }
 
                 if case .won(let result) = session.phase {
+                    let seals = LevelCatalog.seals(for: session.level.number)
                     ResultsView(
                         levelName: session.level.name,
                         result: result,
+                        controlSeal: seals.control,
+                        paradoxSeal: seals.paradox,
                         bestTime: model.progress.progress(for: resultKey).bestTime,
                         bestMoves: model.progress.progress(for: resultKey).bestMoves,
-                        onReplay: restart,
+                        onWatch: { session.startBallet(result) },
                         onNext: nextLevel,
                         onMenu: { model.goHome() }
                     )
@@ -102,9 +105,9 @@ struct GameView: View {
                 if case .dead(let cause) = session.phase, overlay == .none {
                     DeathView(
                         cause: cause,
-                        lives: model.progress.lives,
-                        onContinue: continueRun,
-                        onShop: { overlay = .shop },
+                        rewindCharges: session.sim.rewindCharges,
+                        onRewind: paradoxRewind,
+                        onRestart: restart,
                         onMenu: { model.goHome() }
                     )
                 }
@@ -131,6 +134,18 @@ struct GameView: View {
                             .tracking(4)
                             .foregroundStyle(EchoTheme.magenta)
                             .padding(.bottom, 96)
+                    }
+                    .allowsHitTesting(false)
+                }
+
+                if case .ballet = session.phase {
+                    VStack {
+                        Text("TEMPORAL REPLAY")
+                            .font(.system(size: 13, weight: .semibold))
+                            .tracking(4)
+                            .foregroundStyle(EchoTheme.cyan)
+                            .padding(.top, 28)
+                        Spacer()
                     }
                     .allowsHitTesting(false)
                 }
@@ -170,7 +185,7 @@ struct GameView: View {
     }
 
     private var resultKey: String {
-        request.daily ? "daily" : session.level.id
+        session.level.id
     }
 
     private func handle(_ events: [SimEvent]) {
@@ -237,16 +252,14 @@ struct GameView: View {
         scene.rebuild()
     }
 
-    private func continueRun() {
-        guard model.progress.spendLife() else {
-            overlay = .shop
-            return
-        }
+    private func paradoxRewind() {
         model.audio.play(.tap)
         overlay = .none
-        session.restart()
-        scene.rebuild()
-        session.banner = "Life spent"
+        if session.paradoxRewind() {
+            scene.rebuild()
+        } else {
+            restart()
+        }
     }
 
     private func useItem(_ kind: BonusKind) {
@@ -334,7 +347,6 @@ private enum InRunOverlay {
 }
 
 struct HUDBar: View {
-    @Environment(AppModel.self) private var model
     var session: GameSession
     var onPause: () -> Void
 
@@ -346,8 +358,8 @@ struct HUDBar: View {
             HUDChip(icon: "circle.dotted", tint: EchoTheme.magenta) {
                 Text("\(session.echoCount)/\(session.maxEchoes)")
             }
-            HUDChip(icon: "heart.fill", tint: EchoTheme.danger) {
-                Text("\(model.progress.lives)")
+            HUDChip(icon: "clock.arrow.circlepath", tint: EchoTheme.cyan) {
+                Text("\(session.sim.rewindCharges)")
             }
             if session.effects.shieldCharges > 0 {
                 HUDChip(icon: "shield.fill", tint: Color.green) {

@@ -151,7 +151,7 @@ struct PressStyle: ButtonStyle {
 }
 
 struct Wordmark: View {
-    var subtitle: String = "EVERY MOVE CREATES A NEW YOU"
+    var subtitle: String = "YOU SURVIVE THE TIMELINE YOU CREATED"
 
     var body: some View {
         VStack(spacing: 10) {

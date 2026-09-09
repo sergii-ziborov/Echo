@@ -3,29 +3,41 @@ import SwiftUI
 struct ResultsView: View {
     var levelName: String
     var result: SessionResult
+    var controlSeal: SealKind
+    var paradoxSeal: SealKind
     var bestTime: TimeInterval?
     var bestMoves: Int?
-    var onReplay: () -> Void
+    var onWatch: () -> Void
     var onNext: () -> Void
     var onMenu: () -> Void
 
     var body: some View {
         ZStack {
             Color.black.opacity(0.55).ignoresSafeArea()
-            VStack(spacing: 18) {
+            VStack(spacing: 16) {
                 Text(levelName)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(EchoTheme.muted)
-                Text("COMPLETE")
-                    .font(.system(size: 32, weight: .ultraLight))
-                    .tracking(6)
-                StarRow(filled: result.stars, size: 36)
-                    .padding(.vertical, 4)
+                Text("STABLE TIMELINE")
+                    .font(.system(size: 26, weight: .ultraLight))
+                    .tracking(4)
 
-                VStack(spacing: 10) {
+                VStack(spacing: 8) {
                     ResultLine(icon: "timer", title: "Time", value: format(result.time), best: bestTime.map(format))
-                    ResultLine(icon: "arrow.triangle.swap", title: "Moves", value: "\(result.moves)", best: bestMoves.map(String.init))
-                    ResultLine(icon: "gift.fill", title: "Bonuses", value: "\(result.bonuses)", best: nil)
+                    ResultLine(icon: "circle.dotted", title: "Echoes survived", value: "\(result.echoesFaced)", best: nil)
+                    ResultLine(
+                        icon: "waveform.path.ecg",
+                        title: "Closest paradox",
+                        value: result.closest.isFinite ? String(format: "%.2f", result.closest) : "—",
+                        best: nil
+                    )
+                    ResultLine(icon: "bolt.horizontal", title: "Scars created", value: "\(result.scars)", best: nil)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    SealRow(title: "CLEAR", detail: "Complete", met: true)
+                    SealRow(title: "CONTROL", detail: controlSeal.label, met: result.control)
+                    SealRow(title: "PARADOX", detail: paradoxSeal.label, met: result.paradox)
                 }
 
                 HStack(spacing: 10) {
@@ -34,16 +46,16 @@ struct ResultsView: View {
                     Text("+\(result.points) points")
                         .font(.system(size: 15, weight: .semibold))
                     Spacer()
-                    Text(result.stars >= 3 ? "3 stars: +1 life" : "Spend in the shop")
-                        .font(.system(size: 12))
+                    Text(format(result.time))
+                        .font(.system(size: 12, design: .monospaced))
                         .foregroundStyle(EchoTheme.muted)
                 }
                 .padding(12)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.white.opacity(0.05)))
 
                 HStack(spacing: 12) {
-                    SecondaryButton(title: "Replay", systemImage: "arrow.counterclockwise", action: onReplay)
-                    PrimaryButton(title: "Next", systemImage: "play.fill", action: onNext)
+                    SecondaryButton(title: "Watch", systemImage: "play.fill", action: onWatch)
+                    PrimaryButton(title: "Next", systemImage: "arrow.right", action: onNext)
                 }
 
                 Button("Main Menu", action: onMenu)
@@ -65,6 +77,26 @@ struct ResultsView: View {
 
     private func format(_ time: TimeInterval) -> String {
         String(format: "%.2fs", time)
+    }
+}
+
+private struct SealRow: View {
+    var title: String
+    var detail: String
+    var met: Bool
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: met ? "checkmark.circle.fill" : "circle")
+                .foregroundStyle(met ? EchoTheme.cyan : EchoTheme.muted)
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+                .tracking(1.2)
+            Spacer()
+            Text(detail)
+                .font(.system(size: 13))
+                .foregroundStyle(EchoTheme.muted)
+        }
     }
 }
 

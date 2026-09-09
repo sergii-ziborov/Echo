@@ -10,12 +10,10 @@ struct HomeView: View {
                 VStack(spacing: 22) {
                     HStack {
                         IconCircle(system: "gearshape") { model.openSettings() }
-                        IconCircle(system: "bag.fill") { model.openShop() }
+                        IconCircle(system: "hexagon.fill") { model.openShop() }
                         Spacer()
                         HStack(spacing: 14) {
-                            Label("\(model.progress.lives)", systemImage: "heart.fill")
-                                .foregroundStyle(EchoTheme.danger)
-                            Label("\(model.progress.totalStars)", systemImage: "star.fill")
+                            Label("\(model.progress.totalStars)", systemImage: "checkmark.seal.fill")
                                 .foregroundStyle(EchoTheme.gold)
                             Label("\(model.progress.points)", systemImage: "diamond.fill")
                                 .foregroundStyle(EchoTheme.magenta)
@@ -32,10 +30,10 @@ struct HomeView: View {
                         SecondaryButton(title: "Daily", systemImage: "calendar") {
                             model.openDaily()
                         }
-                        SecondaryButton(title: "Levels", systemImage: "square.grid.2x2") {
+                        SecondaryButton(title: "Acts", systemImage: "square.grid.2x2") {
                             model.openWorlds()
                         }
-                        SecondaryButton(title: "Shop", systemImage: "bag.fill") {
+                        SecondaryButton(title: "Lab", systemImage: "hexagon.fill") {
                             model.openShop()
                         }
                     }
@@ -46,7 +44,7 @@ struct HomeView: View {
                                 Text("Continue")
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundStyle(EchoTheme.muted)
-                                Text("Level \(model.continueLevel.number)")
+                                Text("\(Act.containing(level: model.continueLevel.number).title) \(model.continueLevel.number)")
                                     .font(.system(size: 20, weight: .semibold))
                                 Text(model.continueLevel.name)
                                     .font(.system(size: 13, weight: .medium))
@@ -60,10 +58,10 @@ struct HomeView: View {
 
                         PanelCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Shop")
+                                Text("Lab")
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundStyle(EchoTheme.muted)
-                                Image(systemName: "bag.fill")
+                                Image(systemName: "hexagon.fill")
                                     .font(.system(size: 28))
                                     .foregroundStyle(EchoTheme.gold)
                                 Text("\(model.progress.points) pts")
@@ -77,7 +75,7 @@ struct HomeView: View {
                         .onTapGesture { model.openShop() }
                     }
 
-                    Text("Your past is part of the puzzle.")
+                    Text("You don't cooperate with your past. You survive it.")
                         .font(.system(size: 14, weight: .regular, design: .serif))
                         .italic()
                         .foregroundStyle(EchoTheme.muted)
@@ -92,7 +90,7 @@ struct HomeView: View {
 
     private var ownedSummary: String {
         let total = BonusKind.allCases.reduce(0) { $0 + model.progress.count($1) }
-        if total == 0 { return "Buy freeze, dash, shield" }
+        if total == 0 { return "Freeze, Phase, Shift" }
         return "\(total) item\(total == 1 ? "" : "s") ready"
     }
 }

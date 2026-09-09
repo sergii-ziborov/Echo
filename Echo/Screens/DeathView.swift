@@ -2,42 +2,36 @@ import SwiftUI
 
 struct DeathView: View {
     var cause: DeathCause
-    var lives: Int
-    var onContinue: () -> Void
-    var onShop: () -> Void
+    var rewindCharges: Int
+    var onRewind: () -> Void
+    var onRestart: () -> Void
     var onMenu: () -> Void
 
     var body: some View {
         ZStack {
             Color.black.opacity(0.45).ignoresSafeArea()
             VStack(spacing: 16) {
-                Text("COLLISION")
-                    .font(.system(size: 28, weight: .ultraLight))
-                    .tracking(6)
+                Text("TIMELINE BROKEN")
+                    .font(.system(size: 22, weight: .ultraLight))
+                    .tracking(4)
                 Text(cause.headline)
                     .font(.system(size: 15))
                     .foregroundStyle(EchoTheme.muted)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 8)
 
-                HStack(spacing: 6) {
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(lives > 0 ? EchoTheme.danger : EchoTheme.muted)
-                    Text("\(lives) life\(lives == 1 ? "" : "s")")
-                        .font(.system(size: 15, weight: .semibold, design: .rounded))
-                }
-
-                Text(lives > 0
-                     ? "Spend a life to try this arena again."
-                     : "No lives left. Buy more in the shop, or leave to the menu.")
-                    .font(.system(size: 13))
-                    .foregroundStyle(EchoTheme.muted)
-                    .multilineTextAlignment(.center)
-
-                if lives > 0 {
-                    PrimaryButton(title: "Continue", systemImage: "heart.fill", action: onContinue)
+                if rewindCharges > 0 {
+                    Text("The failed branch stays as an unstable echo.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(EchoTheme.muted)
+                        .multilineTextAlignment(.center)
+                    PrimaryButton(title: "REWIND 3.0s", systemImage: "clock.arrow.circlepath", action: onRewind)
+                    GhostButton(title: "Restart", action: onRestart)
                 } else {
-                    PrimaryButton(title: "Shop", systemImage: "bag.fill", action: onShop)
+                    Text("No rewind left on this timeline.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(EchoTheme.muted)
+                    PrimaryButton(title: "Restart", systemImage: "arrow.counterclockwise", action: onRestart)
                 }
                 GhostButton(title: "Main Menu", action: onMenu)
             }

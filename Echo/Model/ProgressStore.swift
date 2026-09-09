@@ -117,7 +117,6 @@ final class ProgressStore {
             lastLevelID = levelID
         }
         if awardsShard { shards += result.points }
-        if result.stars >= 3 { addLife(1) }
         persist()
     }
 

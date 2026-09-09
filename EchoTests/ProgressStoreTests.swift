@@ -40,41 +40,23 @@ final class ProgressStoreTests: XCTestCase {
         XCTAssertEqual(store.progress(for: "test").stars, 3)
     }
 
-    func testStartsWithThreeLives() {
+    func testDailyFirstClearAwardsPointsOnce() {
         let store = makeStore()
-        XCTAssertEqual(store.lives, ProgressStore.startingLives)
+        let result = SessionResult(time: 10, moves: 10, stars: 2, sparks: 6, echoesFaced: 1, bonuses: 0)
+        store.recordWin(levelID: "daily-2026-09-09", result: result, awardsShard: true)
+        XCTAssertEqual(store.points, result.points)
+        store.recordWin(levelID: "daily-2026-09-09", result: result, awardsShard: false)
+        XCTAssertEqual(store.points, result.points)
+        XCTAssertEqual(store.progress(for: "daily-2026-09-09").stars, 2)
     }
 
-    func testBuyAndSpendLife() {
+    func testDailyProgressDoesNotReplaceContinueLevel() {
         let store = makeStore()
-        store.addShards(ProgressStore.lifePrice)
-        XCTAssertTrue(store.buyLife())
-        XCTAssertEqual(store.lives, 4)
-        XCTAssertEqual(store.points, 0)
-        XCTAssertTrue(store.spendLife())
-        XCTAssertEqual(store.lives, 3)
-    }
-
-    func testCannotBuyLifeWithoutPoints() {
-        let store = makeStore()
-        XCTAssertFalse(store.buyLife())
-        XCTAssertEqual(store.lives, 3)
-    }
-
-    func testThreeStarWinGrantsALife() {
-        let store = makeStore()
-        let result = SessionResult(time: 10, moves: 10, stars: 3, sparks: 6, echoesFaced: 1, bonuses: 0)
-        store.recordWin(levelID: "test", result: result)
-        XCTAssertEqual(store.lives, 4)
-    }
-
-    func testLivesCapAtFive() {
-        let store = makeStore()
-        store.addLife(10)
-        XCTAssertEqual(store.lives, ProgressStore.maxLives)
-        store.addShards(ProgressStore.lifePrice * 2)
-        XCTAssertFalse(store.buyLife())
-        XCTAssertEqual(store.lives, ProgressStore.maxLives)
+        let win = SessionResult(time: 10, moves: 10, stars: 1, sparks: 6, echoesFaced: 1, bonuses: 0)
+        store.recordWin(levelID: LevelCatalog.prototype.id, result: win)
+        store.recordWin(levelID: "daily-2026-09-09", result: win)
+        XCTAssertEqual(store.continueLevel().number, 2)
+        XCTAssertNotEqual(store.lastLevelID, "daily-2026-09-09")
     }
 
     func testInventoryCapsAtNine() {

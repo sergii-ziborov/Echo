@@ -7,68 +7,73 @@ struct WorldsView: View {
         ZStack {
             ScreenBackground()
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 18) {
-                HStack {
-                    IconCircle(system: "chevron.left") { model.goHome() }
-                    Spacer()
-                    Text("WORLDS")
-                        .font(.system(size: 14, weight: .semibold))
-                        .tracking(3)
-                        .foregroundStyle(EchoTheme.muted)
-                    Spacer()
-                    Color.clear.frame(width: 40, height: 40)
-                }
-
-                HStack(spacing: 8) {
-                    ForEach(1...5, id: \.self) { i in
-                        Text("\(i)")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(i == 1 ? .white : EchoTheme.muted)
-                            .frame(width: 36, height: 36)
-                            .background(
-                                Capsule().fill(i == 1 ? EchoTheme.primaryBlue : Color.white.opacity(0.06))
-                            )
-                    }
-                }
-
-                VStack(spacing: 4) {
-                    Text("1. \(LevelCatalog.worldName.uppercased())")
-                        .font(.system(size: 18, weight: .semibold))
-                    Text(LevelCatalog.worldTagline)
-                        .font(.system(size: 13))
-                        .foregroundStyle(EchoTheme.muted)
-                }
-
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
-                    ForEach(LevelCatalog.all) { level in
-                        LevelCell(level: level, progress: model.progress.progress(for: level.id), unlocked: model.progress.isUnlocked(level)) {
-                            model.play(level: level, daily: false)
-                        }
-                    }
-                }
-
-                Spacer()
-
-                PanelCard {
+                VStack(spacing: 22) {
                     HStack {
-                        EchoMark(size: 52, spinning: false)
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("A BRIGHTER YOU")
-                                .font(.system(size: 12, weight: .semibold))
-                                .tracking(1.5)
-                            Text("\(model.progress.totalStars) / \(LevelCatalog.playable.count * 3)")
-                                .foregroundStyle(EchoTheme.muted)
-                                .font(.system(size: 13))
-                        }
+                        IconCircle(system: "chevron.left") { model.goHome() }
                         Spacer()
-                        Image(systemName: "star.fill")
-                            .foregroundStyle(EchoTheme.gold)
+                        Text("TIMELINE")
+                            .font(.system(size: 14, weight: .semibold))
+                            .tracking(3)
+                            .foregroundStyle(EchoTheme.muted)
+                        Spacer()
+                        Color.clear.frame(width: 40, height: 40)
+                    }
+
+                    ForEach(Act.allCases, id: \.rawValue) { act in
+                        actBlock(act)
+                    }
+
+                    PanelCard {
+                        HStack {
+                            EchoMark(size: 52, spinning: false)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("SEALS")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .tracking(1.5)
+                                Text("\(model.progress.totalStars) / \(LevelCatalog.playable.count * 3)")
+                                    .foregroundStyle(EchoTheme.muted)
+                                    .font(.system(size: 13))
+                            }
+                            Spacer()
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundStyle(EchoTheme.gold)
+                        }
                     }
                 }
-            }
                 .padding(.horizontal, 20)
                 .padding(.top, 8)
                 .padding(.bottom, 16)
+            }
+        }
+    }
+
+    private func actBlock(_ act: Act) -> some View {
+        let levels = LevelCatalog.playable.filter { act.range.contains($0.number) }
+        let cleared = levels.filter { model.progress.progress(for: $0.id).stars > 0 }.count
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("\(act.rawValue). \(act.title)")
+                    .font(.system(size: 16, weight: .semibold))
+                    .tracking(1.4)
+                Spacer()
+                Text("\(cleared)/\(levels.count)")
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(EchoTheme.muted)
+            }
+            Text(act.blurb)
+                .font(.system(size: 13))
+                .foregroundStyle(EchoTheme.muted)
+
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 10) {
+                ForEach(levels) { level in
+                    LevelCell(
+                        level: level,
+                        progress: model.progress.progress(for: level.id),
+                        unlocked: model.progress.isUnlocked(level)
+                    ) {
+                        model.play(level: level, daily: false)
+                    }
+                }
             }
         }
     }
@@ -82,16 +87,20 @@ private struct LevelCell: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
+            VStack(spacing: 6) {
                 if unlocked {
                     Text("\(level.number)")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
-                    HStack(spacing: 2) {
+                    Text(level.name)
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundStyle(EchoTheme.muted)
+                        .lineLimit(1)
+                    HStack(spacing: 3) {
                         ForEach(0..<3, id: \.self) { i in
-                            Image(systemName: "star.fill")
+                            Image(systemName: i < progress.stars ? "checkmark.seal.fill" : "seal")
                                 .font(.system(size: 8))
-                                .foregroundStyle(i < progress.stars ? EchoTheme.gold : EchoTheme.goldDim.opacity(0.4))
+                                .foregroundStyle(i < progress.stars ? EchoTheme.cyan : EchoTheme.muted.opacity(0.5))
                         }
                     }
                 } else {
@@ -101,7 +110,7 @@ private struct LevelCell: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 72)
+            .frame(height: 78)
             .background(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(Color.white.opacity(unlocked ? 0.08 : 0.04))
@@ -113,6 +122,6 @@ private struct LevelCell: View {
         }
         .buttonStyle(PressStyle())
         .disabled(!unlocked)
-        .accessibilityLabel(unlocked ? "Level \(level.number)" : "Locked level \(level.number)")
+        .accessibilityLabel(unlocked ? "\(level.name), level \(level.number)" : "Locked level \(level.number)")
     }
 }

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct PauseView: View {
     var levelName: String
-    var lives: Int
+    var rewindCharges: Int
     var onResume: () -> Void
     var onRestart: () -> Void
     var onShop: () -> Void
@@ -22,9 +22,9 @@ struct PauseView: View {
                     .foregroundStyle(.white)
 
                 HStack(spacing: 6) {
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(EchoTheme.danger)
-                    Text("\(lives)")
+                    Image(systemName: "clock.arrow.circlepath")
+                        .foregroundStyle(EchoTheme.cyan)
+                    Text("\(rewindCharges) rewind")
                         .font(.system(size: 16, weight: .semibold, design: .rounded))
                 }
                 .padding(.bottom, 4)

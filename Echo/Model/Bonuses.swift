@@ -18,7 +18,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .pulse: "Pulse"
         case .magnet: "Magnet"
         case .phase: "Phase"
-        case .chrono: "Chrono"
+        case .chrono: "Shift"
         case .ward: "Ward"
         }
     }
@@ -32,7 +32,7 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: "Pull nearby sparks — arena only"
         case .phase: "Walk through copies for a moment"
         case .chrono: "Push the next echo further out"
-        case .ward: "Auto-shield at the start of a run — not used from the bar"
+        case .ward: "Starting shield — easy-mode, not used from the bar"
         }
     }
 
@@ -62,18 +62,18 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         }
     }
 
-    /// Shop stock you tap in a run. Ward is bought and spent automatically.
+    /// Shop stock you tap in a run. Surge, Pulse, Magnet stay arena-only. Ward is easy-mode leftover stock.
     var canBuy: Bool {
         switch self {
-        case .pulse, .magnet: false
-        default: true
+        case .shield, .freeze, .phase, .chrono: true
+        default: false
         }
     }
 
     var useFromBar: Bool {
         switch self {
-        case .ward, .pulse, .magnet: false
-        default: true
+        case .shield, .freeze, .phase, .chrono, .surge: true
+        default: false
         }
     }
 

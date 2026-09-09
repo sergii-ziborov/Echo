@@ -45,8 +45,8 @@ struct TutorialView: View {
 
                 TutorialRow(
                     index: 4,
-                    title: "Pause, shop, lives.",
-                    detail: "Pause anytime. Buy freeze, dash, shield and extra lives. A life continues a crash."
+                    title: "Rewind the present.",
+                    detail: "A crash can roll time back three seconds. The failed branch stays as an unstable echo."
                 ) {
                     HexGlyph()
                 }

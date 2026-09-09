@@ -5,6 +5,7 @@ enum GamePhase: Equatable {
     case playing
     case paused
     case replaying
+    case ballet(SessionResult)
     case dead(DeathCause)
     case won(SessionResult)
 }
@@ -34,6 +35,8 @@ final class GameSession {
     var inSlowField = false
     var banner: String?
     var hasStarted = false
+    var balletClock: TimeInterval = 0
+    var balletDuration: TimeInterval = 0
 
     var sparksTotal: Int { level.sparkCount }
     var maxEchoes: Int { level.maxEchoes }
@@ -52,7 +55,21 @@ final class GameSession {
         replaySnapshots = []
         replayIndex = 0
         deathCause = nil
+        balletClock = 0
+        balletDuration = 0
         publish()
+    }
+
+    @discardableResult
+    func paradoxRewind() -> Bool {
+        guard sim.rewind() else { return false }
+        phase = .playing
+        deathCause = nil
+        replaySnapshots = []
+        replayIndex = 0
+        banner = "Paradox"
+        publish()
+        return true
     }
 
     func togglePause() {
@@ -65,7 +82,7 @@ final class GameSession {
 
     @discardableResult
     func useBonus(_ kind: BonusKind) -> Bool {
-        guard phase == .playing, sim.activate(kind) else { return false }
+        guard phase == .playing, sim.activate(kind, fromShop: true) else { return false }
         banner = kind.title
         publish()
         return true
@@ -102,10 +119,31 @@ final class GameSession {
                     phase = .dead(cause)
                 }
             case .won(let result):
-                phase = .won(result)
+                startBallet(result)
             }
         }
         publish()
+    }
+
+    func startBallet(_ result: SessionResult) {
+        balletClock = 0
+        balletDuration = min(4.0, max(2.2, result.time / 7))
+        phase = .ballet(result)
+    }
+
+    func advanceBallet(dt: TimeInterval) -> Bool {
+        guard case .ballet(let result) = phase else { return false }
+        balletClock += dt
+        if balletClock >= balletDuration {
+            phase = .won(result)
+            return true
+        }
+        return false
+    }
+
+    var balletPlaybackTime: TimeInterval {
+        guard case .ballet(let result) = phase, balletDuration > 0 else { return 0 }
+        return min(result.time, (balletClock / balletDuration) * result.time)
     }
 
     func advanceReplay(dt: TimeInterval) -> Bool {

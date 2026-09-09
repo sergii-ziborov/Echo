@@ -53,4 +53,14 @@ struct PathRecorder: Equatable, Sendable {
         }
         return points
     }
+
+    func slice(from start: TimeInterval, to end: TimeInterval) -> [PathSample] {
+        samples.filter { $0.time >= start && $0.time <= end }.map {
+            PathSample(time: $0.time - start, position: $0.position)
+        }
+    }
+
+    mutating func truncate(after time: TimeInterval) {
+        samples.removeAll { $0.time > time }
+    }
 }

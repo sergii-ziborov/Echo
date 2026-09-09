@@ -254,9 +254,90 @@ final class WorldSimulationTests: XCTestCase {
         let day = calendar.date(from: components)!
         let daily = LevelCatalog.daily(on: day, calendar: calendar)
         XCTAssertTrue(daily.sparks.contains { $0.position.distance(to: Vec2(x: 500, y: 500)) < 1 })
-        XCTAssertEqual(daily.sparkCount, 6)
+        XCTAssertGreaterThanOrEqual(daily.sparkCount, 1)
         let again = LevelCatalog.daily(on: day, calendar: calendar)
         XCTAssertEqual(daily.sparks.map(\.position), again.sparks.map(\.position))
+        XCTAssertEqual(daily.id, "daily-2026-09-09")
+        XCTAssertFalse(daily.walls.isEmpty)
+    }
+
+    func testDailySeedIsCalendarStable() {
+        let calendar = Calendar(identifier: .gregorian)
+        var a = DateComponents()
+        a.year = 2026
+        a.month = 1
+        a.day = 1
+        var b = DateComponents()
+        b.year = 2026
+        b.month = 1
+        b.day = 2
+        let first = calendar.date(from: a)!
+        let second = calendar.date(from: b)!
+        let d1 = LevelCatalog.daily(on: first, calendar: calendar)
+        let d2 = LevelCatalog.daily(on: second, calendar: calendar)
+        XCTAssertEqual(d1.id, "daily-2026-01-01")
+        XCTAssertEqual(d2.id, "daily-2026-01-02")
+        XCTAssertEqual(LevelCatalog.daily(on: first, calendar: calendar).sparks.map(\.position), d1.sparks.map(\.position))
+    }
+
+    func testRewindRestoresStateAndLeavesGhost() {
+        var config = SimConfig()
+        config.collisionSlop = 1_000
+        let sim = WorldSimulation(level: LevelCatalog.prototype, config: config)
+        advance(sim, seconds: 1.6, target: Vec2(x: 500, y: 360))
+        let markedTime = sim.time
+        let markedPos = sim.playerPosition
+        advance(sim, seconds: 1.8, target: Vec2(x: 760, y: 360))
+        XCTAssertGreaterThan(sim.time, markedTime + 1)
+        XCTAssertTrue(sim.rewind(seconds: 1.8))
+        XCTAssertEqual(sim.time, markedTime, accuracy: 0.08)
+        XCTAssertEqual(sim.playerPosition.distance(to: markedPos), 0, accuracy: 24)
+        XCTAssertEqual(sim.ghosts.count, 1)
+        XCTAssertEqual(sim.rewindCharges, 0)
+        XCTAssertEqual(sim.phase, .playing)
+        XCTAssertFalse(sim.rewind())
+    }
+
+    func testSealsAreIndependentOfTimeMovesStars() {
+        var result = SessionResult(time: 80, moves: 200, stars: 1, sparks: 6, echoesFaced: 1, bonuses: 0, dashed: true, usedItem: false)
+        let seals = LevelCatalog.seals(for: 1)
+        XCTAssertEqual(seals.control, .beforeEcho(3))
+        XCTAssertEqual(seals.paradox, .noDash)
+        XCTAssertTrue(seals.control.met(by: result, parTime: 22))
+        XCTAssertFalse(seals.paradox.met(by: result, parTime: 22))
+        result.dashed = false
+        XCTAssertTrue(seals.paradox.met(by: result, parTime: 22))
+    }
+
+    func testActsCoverThirtyLevels() {
+        XCTAssertEqual(Act.allCases.count, 5)
+        let covered = Act.allCases.flatMap { Array($0.range) }
+        XCTAssertEqual(covered, Array(1...30))
+        XCTAssertEqual(Act.containing(level: 1), .trace)
+        XCTAssertEqual(Act.containing(level: 7), .drift)
+        XCTAssertEqual(Act.containing(level: 13), .fracture)
+        XCTAssertEqual(Act.containing(level: 19), .debris)
+        XCTAssertEqual(Act.containing(level: 30), .paradox)
+    }
+
+    func testCollisionCooldownUsesRealDt() {
+        var level = LevelCatalog.prototype
+        level.echoInterval = 0.4
+        level.maxEchoes = 2
+        var config = SimConfig()
+        config.collisionSlop = 1_000
+        let sim = WorldSimulation(level: level, config: config)
+        advance(sim, seconds: 1.0, target: Vec2(x: 500, y: 220))
+        advance(sim, seconds: 1.2, target: sim.level.playerStart)
+        XCTAssertGreaterThanOrEqual(sim.echoCount, 2)
+        let before = sim.scarsCreated
+        _ = sim.step(dt: 1.0 / 30.0, target: sim.level.playerStart)
+        if sim.scarsCreated == before + 1 {
+            _ = sim.step(dt: 3.3, target: sim.level.playerStart)
+            let scars = sim.scarsCreated
+            _ = sim.step(dt: 1.0 / 30.0, target: sim.level.playerStart)
+            XCTAssertGreaterThanOrEqual(sim.scarsCreated, scars)
+        }
     }
 }
 

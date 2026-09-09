@@ -78,6 +78,13 @@ final class WorldSimulation {
     private(set) var result: SessionResult?
     private(set) var inSlowField = false
     private(set) var hasStarted = false
+    private(set) var ghosts: [ParadoxGhost] = []
+    private(set) var dashed = false
+    private(set) var usedItem = false
+    private(set) var scarsCreated = 0
+    private(set) var riftsUsed = 0
+    private(set) var closestApproach = Double.infinity
+    private(set) var rewindCharges = 1
 
     var echoCount: Int { echoes.count }
     var sparksCollected: Int { sparks.filter(\.collected).count }
@@ -150,6 +157,13 @@ final class WorldSimulation {
         result = nil
         inSlowField = false
         hasStarted = false
+        ghosts = []
+        dashed = false
+        usedItem = false
+        scarsCreated = 0
+        riftsUsed = 0
+        closestApproach = .infinity
+        rewindCharges = 1
         distanceAcc = 0
         warnedFor = -1
         snapshotAcc = 0
@@ -160,17 +174,66 @@ final class WorldSimulation {
     }
 
     @discardableResult
+    func rewind(seconds: TimeInterval = 3) -> Bool {
+        guard rewindCharges > 0, !snapshots.isEmpty else { return false }
+        let target = max(0, time - seconds)
+        guard let snap = snapshots.last(where: { $0.time <= target }) ?? snapshots.first else { return false }
+        let tail = recorder.slice(from: snap.time, to: time)
+        restore(snap)
+        if !tail.isEmpty {
+            ghosts.append(ParadoxGhost(samples: tail, bornAt: time))
+        }
+        rewindCharges -= 1
+        deathCause = nil
+        phase = .playing
+        effects.iFrames = max(effects.iFrames, 0.7)
+        return true
+    }
+
+    private func restore(_ snap: WorldSnapshot) {
+        time = snap.time
+        playbackTime = snap.playbackTime
+        playerPosition = snap.player
+        lastVelocity = snap.lastVelocity
+        echoes = snap.echoes
+        sparks = snap.sparks
+        bonuses = snap.bonuses
+        movers = snap.movers
+        rifts = snap.rifts
+        gates = snap.gates
+        scars = snap.scars
+        effects = snap.effects
+        exitOpen = snap.exitOpen
+        moves = snap.moves
+        bonusesCollected = snap.bonusesCollected
+        hasStarted = snap.hasStarted
+        recorder = snap.recorder
+        pulseDelay = snap.pulseDelay
+        warnedFor = snap.warnedFor
+        distanceAcc = snap.distanceAcc
+        ghosts = snap.ghosts
+        dashed = snap.dashed
+        usedItem = snap.usedItem
+        scarsCreated = snap.scarsCreated
+        riftsUsed = snap.riftsUsed
+        closestApproach = snap.closestApproach
+        snapshots.removeAll { $0.time > snap.time }
+    }
+
+    @discardableResult
     func tryDash() -> Bool {
         guard phase == .playing, hasStarted, effects.canDash else { return false }
         effects.surgeRemaining = max(effects.surgeRemaining, config.dashDuration)
         effects.dashCooldown = config.dashCooldown
+        dashed = true
         return true
     }
 
     @discardableResult
-    func activate(_ kind: BonusKind) -> Bool {
+    func activate(_ kind: BonusKind, fromShop: Bool = false) -> Bool {
         guard phase == .playing else { return false }
         apply(kind)
+        if fromShop { usedItem = true }
         return true
     }
 
@@ -211,10 +274,12 @@ final class WorldSimulation {
         events.append(contentsOf: tickRifts())
         tickGates()
         tickScars(dt: dt)
-        events.append(contentsOf: detectTimeCollision())
+        events.append(contentsOf: detectTimeCollision(dt: dt))
+        refreshGhosts()
         refreshThreats()
+        trackClosest()
 
-        if effects.iFrames <= 0, !effects.isPhasing, let death = collideEchoes() ?? collideMovers() ?? collideRifts() ?? collideScars() {
+        if effects.iFrames <= 0, !effects.isPhasing, let death = collideEchoes() ?? collideMovers() ?? collideRifts() ?? collideScars() ?? collideGhosts() {
             if effects.shieldCharges > 0 {
                 effects.shieldCharges -= 1
                 effects.iFrames = 0.55
@@ -229,23 +294,23 @@ final class WorldSimulation {
         }
 
         if exitOpen, playerPosition.distance(to: level.exit) < config.playerRadius + config.exitRadius {
-            var stars = StarRating.stars(
+            var session = SessionResult(
                 time: time,
                 moves: moves,
-                parTime: level.parTime,
-                parMoves: level.parMoves
-            )
-            if !bonuses.isEmpty, bonusesCollected == bonuses.count {
-                stars = min(3, stars + 1)
-            }
-            let session = SessionResult(
-                time: time,
-                moves: moves,
-                stars: stars,
+                stars: 1,
                 sparks: sparks.count,
                 echoesFaced: echoCount,
-                bonuses: bonusesCollected
+                bonuses: bonusesCollected,
+                dashed: dashed,
+                usedItem: usedItem,
+                scars: scarsCreated,
+                riftsUsed: riftsUsed,
+                closest: closestApproach
             )
+            let seals = LevelCatalog.seals(for: level.number)
+            session.control = seals.control.met(by: session, parTime: level.parTime)
+            session.paradox = seals.paradox.met(by: session, parTime: level.parTime)
+            session.stars = 1 + (session.control ? 1 : 0) + (session.paradox ? 1 : 0)
             phase = .won
             result = session
             events.append(.won(session))
@@ -382,6 +447,7 @@ final class WorldSimulation {
             if playerPosition.distance(to: rifts[i].position) < config.playerRadius + rifts[i].radius {
                 rifts[i].usedThisCycle = true
                 events.append(.riftEntered(kind: rifts[i].kind))
+                riftsUsed += 1
                 if rifts[i].kind == .calm {
                     effects.freezeRemaining = max(effects.freezeRemaining, 1.6)
                 }
@@ -427,9 +493,9 @@ final class WorldSimulation {
         return nil
     }
 
-    private func detectTimeCollision() -> [SimEvent] {
+    private func detectTimeCollision(dt: TimeInterval) -> [SimEvent] {
         if collisionCooldown > 0 {
-            collisionCooldown = max(0, collisionCooldown - 1.0 / 60.0)
+            collisionCooldown = max(0, collisionCooldown - dt)
             return []
         }
         guard echoes.count >= 2 else { return [] }
@@ -439,6 +505,7 @@ final class WorldSimulation {
                     collisionCooldown = 3.2
                     let mid = echoes[i].lerp(echoes[j], 0.5)
                     scars.append(CollisionScar(id: scars.count + 17, position: mid, radius: 34, remaining: 2.8))
+                    scarsCreated += 1
                     return [.timeCollision(at: mid)]
                 }
             }
@@ -651,15 +718,61 @@ final class WorldSimulation {
         snapshots.append(
             WorldSnapshot(
                 time: time,
+                playbackTime: playbackTime,
                 player: playerPosition,
+                lastVelocity: lastVelocity,
                 echoes: echoes,
-                sparkCollected: sparks.map(\.collected),
-                exitOpen: exitOpen
+                sparks: sparks,
+                bonuses: bonuses,
+                movers: movers,
+                rifts: rifts,
+                gates: gates,
+                scars: scars,
+                effects: effects,
+                exitOpen: exitOpen,
+                moves: moves,
+                bonusesCollected: bonusesCollected,
+                hasStarted: hasStarted,
+                recorder: recorder,
+                pulseDelay: pulseDelay,
+                warnedFor: warnedFor,
+                distanceAcc: distanceAcc,
+                ghosts: ghosts,
+                dashed: dashed,
+                usedItem: usedItem,
+                scarsCreated: scarsCreated,
+                riftsUsed: riftsUsed,
+                closestApproach: closestApproach
             )
         )
         let keep = Int(config.snapshotWindow * config.snapshotHz) + 8
         if snapshots.count > keep {
             snapshots.removeFirst(snapshots.count - keep)
+        }
+    }
+
+    private func refreshGhosts() {
+        ghosts.removeAll { !$0.isAlive(at: time) }
+    }
+
+    private func collideGhosts() -> DeathCause? {
+        let limit = config.playerRadius + config.echoRadius - config.collisionSlop
+        for ghost in ghosts {
+            if let point = ghost.position(at: time), playerPosition.distance(to: point) < limit {
+                return .ghost
+            }
+        }
+        return nil
+    }
+
+    private func trackClosest() {
+        for echo in echoes {
+            closestApproach = min(closestApproach, playerPosition.distance(to: echo))
+        }
+        for ghost in ghosts {
+            if let point = ghost.position(at: time) {
+                closestApproach = min(closestApproach, playerPosition.distance(to: point))
+            }
         }
     }
 }

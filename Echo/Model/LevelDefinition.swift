@@ -183,7 +183,43 @@ enum LayoutSafety {
 
 enum LevelCatalog {
     static let worldName = "Awakening"
-    static let worldTagline = "Where every path leaves a trace."
+    static let worldTagline = "You don't cooperate with your past. You survive it."
+
+    static func seals(for number: Int) -> (control: SealKind, paradox: SealKind) {
+        switch number {
+        case 1: (.beforeEcho(3), .noDash)
+        case 2: (.noDash, .parTime)
+        case 3: (.maxEchoes(3), .parTime)
+        case 4: (.useRift, .noShop)
+        case 5: (.beforeEcho(4), .parTime)
+        case 6: (.noDash, .maxEchoes(3))
+        case 7: (.noShop, .parTime)
+        case 8: (.maxEchoes(3), .noDash)
+        case 9: (.parTime, .noShop)
+        case 10: (.beforeEcho(4), .noDash)
+        case 11: (.maxEchoes(3), .parTime)
+        case 12: (.noShop, .avoidScar)
+        case 13: (.useRift, .parTime)
+        case 14: (.causeScar, .noShop)
+        case 15: (.avoidScar, .parTime)
+        case 16: (.useRift, .noDash)
+        case 17: (.useRift, .parTime)
+        case 18: (.causeScar, .noShop)
+        case 19: (.noShop, .parTime)
+        case 20: (.avoidScar, .noDash)
+        case 21: (.maxEchoes(4), .parTime)
+        case 22: (.noShop, .avoidScar)
+        case 23: (.noDash, .parTime)
+        case 24: (.avoidScar, .maxEchoes(4))
+        case 25: (.causeScar, .parTime)
+        case 26: (.noShop, .maxEchoes(4))
+        case 27: (.avoidScar, .parTime)
+        case 28: (.causeScar, .noDash)
+        case 29: (.useRift, .noShop)
+        case 30: (.noShop, .parTime)
+        default: (.parTime, .noDash)
+        }
+    }
 
     static let all: [LevelDefinition] = playable
 
@@ -1173,48 +1209,28 @@ enum LevelCatalog {
 
     static func daily(on day: Date = Date(), calendar: Calendar = .current) -> LevelDefinition {
         let start = calendar.startOfDay(for: day)
-        var hasher = Hasher()
-        hasher.combine(calendar.component(.year, from: start))
-        hasher.combine(calendar.component(.month, from: start))
-        hasher.combine(calendar.component(.day, from: start))
-        let seed = hasher.finalize()
-        var rng = SplitMix64(seed: UInt64(bitPattern: Int64(seed)))
+        let year = calendar.component(.year, from: start)
+        let month = calendar.component(.month, from: start)
+        let dayNum = calendar.component(.day, from: start)
+        let seed = UInt64(year) * 10_000 + UInt64(month) * 100 + UInt64(dayNum)
+        var rng = SplitMix64(seed: seed)
 
-        var level = prototype
+        let templates = [1, 3, 8, 13, 16, 21, 25, 30]
+        let pick = templates[Int(rng.next() % UInt64(templates.count))]
+        var level = playable.first { $0.number == pick } ?? prototype
+        let templateName = level.name
         level.id = "daily-\(Self.dayKey(start, calendar: calendar))"
-        level.name = "Daily Challenge"
-        level.subtitle = "Complete the challenge to earn a special reward."
-        level.echoInterval = 7.5
-        level.parTime = 24
-        level.parMoves = 40
+        level.name = "Daily Rift"
+        level.subtitle = "\(templateName) · \(Act.containing(level: pick).title)"
 
-        let candidates: [Vec2] = [
-            Vec2(x: 500, y: 500),
-            Vec2(x: 220, y: 500),
-            Vec2(x: 780, y: 500),
-            Vec2(x: 500, y: 780),
-            Vec2(x: 500, y: 220),
-            Vec2(x: 340, y: 340),
-            Vec2(x: 660, y: 660),
-            Vec2(x: 340, y: 660),
-            Vec2(x: 660, y: 340),
-            Vec2(x: 220, y: 780),
-            Vec2(x: 780, y: 220),
-        ]
-        let picked = Array(candidates.shuffled(using: &rng).prefix(6))
-        level.sparks = picked.enumerated().map { SparkSpawn(id: $0.offset, position: $0.element) }
-        // The center spark stays — otherwise the outer ring becomes a winning strategy.
+        let positions = level.sparks.map(\.position).shuffled(using: &rng)
+        for i in level.sparks.indices {
+            level.sparks[i].position = positions[i]
+        }
         if !level.sparks.contains(where: { $0.position.distance(to: Vec2(x: 500, y: 500)) < 1 }) {
             level.sparks[0].position = Vec2(x: 500, y: 500)
         }
-        for i in level.sparks.indices where i == 1 || i == 3 || i == 5 {
-            level.sparks[i].timer = [12, 10, 15][min(i / 2, 2)]
-        }
-        level.theme = ArenaTheme.forLevel((seed & 0x7fff_ffff) % 6 + 1)
-        level.bonuses = [
-            BonusSpawn(id: 0, kind: .shield, position: Vec2(x: 160, y: 820)),
-            BonusSpawn(id: 1, kind: .surge, position: Vec2(x: 840, y: 180)),
-        ]
+        level.theme = ArenaTheme.forLevel(Int(rng.next() % 6) + 1)
         return level.sanitized()
     }
 

@@ -109,9 +109,15 @@ final class AppModel {
     }
 
     func recordWin(levelID: String, result: SessionResult, daily: Bool) {
-        progress.recordWin(levelID: daily ? "daily" : levelID, result: result, awardsShard: true)
         if daily {
-            progress.markDailyComplete(LevelCatalog.dayKey(Date()))
+            let key = LevelCatalog.dayKey(Date())
+            let firstClear = progress.lastDailyKey != key
+            progress.recordWin(levelID: levelID, result: result, awardsShard: firstClear)
+            if firstClear {
+                progress.markDailyComplete(key)
+            }
+        } else {
+            progress.recordWin(levelID: levelID, result: result, awardsShard: true)
         }
         audio.play(.win)
     }

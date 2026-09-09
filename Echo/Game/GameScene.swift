@@ -20,6 +20,7 @@ final class GameScene: SKScene {
     private var riftNodes: [Int: SKNode] = [:]
     private var gateNodes: [Int: SKNode] = [:]
     private var scarNodes: [Int: SKNode] = [:]
+    private var ghostNodes: [SKNode] = []
     private var frostOverlay: SKSpriteNode!
     private var lastTime: TimeInterval = 0
     private var trailAcc: TimeInterval = 0
@@ -53,6 +54,7 @@ final class GameScene: SKScene {
         riftNodes.removeAll()
         gateNodes.removeAll()
         scarNodes.removeAll()
+        ghostNodes.removeAll()
         lastTime = 0
         backgroundColor = session.level.theme.sky.uiColor
         trailAcc = 0
@@ -103,6 +105,11 @@ final class GameScene: SKScene {
         case .replaying:
             _ = session.advanceReplay(dt: dt)
             renderReplay()
+            return
+        case .ballet:
+            _ = session.advanceBallet(dt: dt)
+            renderBallet()
+            dropTrails(dt: dt)
             return
         case .playing:
             break
@@ -673,9 +680,13 @@ final class GameScene: SKScene {
             node.run(.scale(to: 1, duration: 0.28))
             shockwave(at: node.position, color: UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1), start: 10, end: 90)
         }
+        while echoNodes.count > session.sim.echoCount {
+            echoNodes.removeLast().removeFromParent()
+        }
         for (i, echo) in session.sim.echoes.enumerated() {
             echoNodes[i].position = scenePoint(echo)
         }
+        syncGhosts()
         for spark in session.sim.sparks {
             sparkNodes[spark.id]?.isHidden = spark.collected
             sparkNodes[spark.id]?.position = scenePoint(spark.position)
@@ -729,8 +740,62 @@ final class GameScene: SKScene {
             addChild(node)
             echoNodes.append(node)
         }
+        while echoNodes.count > snap.echoes.count {
+            echoNodes.removeLast().removeFromParent()
+        }
         for (i, echo) in snap.echoes.enumerated() {
             echoNodes[i].position = scenePoint(echo)
+        }
+    }
+
+    private func renderBallet() {
+        let t = session.balletPlaybackTime
+        let recorder = session.sim.recorder
+        if let p = recorder.position(at: t) {
+            playerNode.position = scenePoint(p)
+        }
+        let echoes = session.sim.result?.echoesFaced ?? session.sim.echoCount
+        while echoNodes.count < echoes {
+            let node = echoNode()
+            addChild(node)
+            echoNodes.append(node)
+        }
+        for i in 0..<echoes {
+            let delay = Double(i + 1) * session.level.echoInterval
+            if t >= delay, let p = recorder.position(at: t - delay) {
+                echoNodes[i].isHidden = false
+                echoNodes[i].position = scenePoint(p)
+            } else if let p = recorder.position(at: 0) {
+                echoNodes[i].isHidden = false
+                echoNodes[i].position = scenePoint(p)
+                echoNodes[i].alpha = 0.35
+            }
+        }
+    }
+
+    private func syncGhosts() {
+        let live = session.sim.ghosts
+        while ghostNodes.count < live.count {
+            let node = echoNode()
+            node.alpha = 0.7
+            if let halo = node.childNode(withName: "halo") as? SKSpriteNode {
+                halo.color = UIColor(red: 1, green: 0.35, blue: 0.45, alpha: 1)
+                halo.colorBlendFactor = 0.8
+            }
+            addChild(node)
+            ghostNodes.append(node)
+        }
+        while ghostNodes.count > live.count {
+            ghostNodes.removeLast().removeFromParent()
+        }
+        for (i, ghost) in live.enumerated() {
+            if let p = ghost.position(at: session.sim.time) {
+                ghostNodes[i].isHidden = false
+                ghostNodes[i].position = scenePoint(p)
+                ghostNodes[i].alpha = 0.45 + 0.35 * abs(sin(CACurrentMediaTime() * 8))
+            } else {
+                ghostNodes[i].isHidden = true
+            }
         }
     }
 
@@ -790,6 +855,9 @@ final class GameScene: SKScene {
         path.move(to: scenePoint(first))
         for p in points.dropFirst() { path.addLine(to: scenePoint(p)) }
         threatLine.path = path
+        let near = max(8, min(90, threat.distance))
+        threatLine.lineWidth = CGFloat(3.8 - near / 40)
+        threatLine.alpha = CGFloat(max(0.35, 1.1 - near / 70))
     }
 
     private func drawSpawnBeacon() {
