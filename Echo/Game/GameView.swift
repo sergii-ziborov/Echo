@@ -1,5 +1,6 @@
 import SpriteKit
 import SwiftUI
+import UIKit
 
 struct GameView: View {
     @Environment(AppModel.self) private var model
@@ -10,49 +11,62 @@ struct GameView: View {
 
     init(request: PlayRequest) {
         self.request = request
-        let level: LevelDefinition
+        let raw: LevelDefinition
         if request.daily {
-            level = LevelCatalog.daily()
+            raw = LevelCatalog.daily()
         } else {
-            level = LevelCatalog.level(id: request.levelID) ?? LevelCatalog.prototype
+            raw = LevelCatalog.level(id: request.levelID) ?? LevelCatalog.prototype
         }
+        let bounds = UIScreen.main.bounds.size
+        let aspect = Double(bounds.height / max(bounds.width, 1))
+        let level = raw.fitted(aspect: aspect)
         let session = GameSession(level: level, daily: request.daily)
         _session = State(initialValue: session)
-        _scene = State(initialValue: GameScene(session: session, size: CGSize(width: 1000, height: 1000)))
+        _scene = State(initialValue: GameScene(session: session, size: bounds))
     }
 
     var body: some View {
         GeometryReader { geo in
-            let top = geo.safeAreaInsets.top + 8
-            let bottom = max(geo.safeAreaInsets.bottom, 12) + 72
-            let side = min(geo.size.width - 16, geo.size.height - top - bottom)
             ZStack {
-                LinearGradient.screenBackground.ignoresSafeArea()
+                SpriteView(scene: scene, options: [.ignoresSiblingOrder])
+                    .ignoresSafeArea()
+                    .onAppear { scene.resize(to: geo.size) }
+                    .onChange(of: geo.size) { _, size in scene.resize(to: size) }
+
                 VStack(spacing: 0) {
                     HUDBar(session: session) {
                         session.togglePause()
                         model.audio.play(.tap)
                     }
-                    .padding(.horizontal, 18)
-                    .padding(.top, 6)
+                    .padding(.horizontal, 14)
+                    .padding(.top, 4)
 
-                    Spacer(minLength: 8)
+                    Spacer()
 
-                    SpriteView(scene: scene, options: [.ignoresSiblingOrder])
-                        .frame(width: side, height: side)
-                        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                                .stroke(Color.white.opacity(0.08), lineWidth: 1)
-                        )
-                        .shadow(color: EchoTheme.cyan.opacity(0.12), radius: 24)
+                    if let banner = session.banner {
+                        Text(banner.uppercased())
+                            .font(.system(size: 15, weight: .semibold))
+                            .tracking(3)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(.ultraThinMaterial, in: Capsule())
+                            .allowsHitTesting(false)
+                            .padding(.bottom, 8)
+                    }
 
-                    Spacer(minLength: 8)
+                    InventoryBar(session: session) { kind in
+                        useItem(kind)
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.bottom, 8)
 
                     NextEchoMeter(session: session)
-                        .padding(.horizontal, 22)
-                        .padding(.bottom, 10)
+                        .padding(.horizontal, 18)
+                        .padding(.bottom, 8)
                 }
+                .padding(.top, geo.safeAreaInsets.top)
+                .padding(.bottom, max(geo.safeAreaInsets.bottom, 6))
 
                 if case .paused = session.phase {
                     PauseView(
@@ -88,22 +102,30 @@ struct GameView: View {
                     VStack {
                         Spacer()
                         Text("YOUR PAST")
-                            .font(.system(size: 13, weight: .semibold))
-                            .tracking(3)
+                            .font(.system(size: 15, weight: .semibold))
+                            .tracking(4)
                             .foregroundStyle(EchoTheme.magenta)
-                            .padding(.bottom, 110)
+                            .padding(.bottom, 96)
                     }
                     .allowsHitTesting(false)
                 }
             }
         }
+        .ignoresSafeArea()
         .onAppear {
-            scene.onEvents = { events in
-                handle(events)
-            }
+            scene.onEvents = { events in handle(events) }
             session.autoReplay = model.progress.autoReplayEnabled
             model.audio.setHapticsEnabled(model.progress.hapticsEnabled)
             model.audio.enabled = model.progress.soundEnabled
+        }
+        .onChange(of: session.banner) { _, new in
+            guard new != nil else { return }
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(1200))
+                if session.banner == new {
+                    session.banner = nil
+                }
+            }
         }
     }
 
@@ -118,8 +140,23 @@ struct GameView: View {
                 model.audio.play(.collect)
                 model.audio.haptic(.light)
                 if let spark = session.sim.sparks.first(where: { $0.id == id }) {
-                    scene.burst(at: spark.position, color: UIColor(red: 0.5, green: 0.9, blue: 1, alpha: 1))
+                    scene.burst(at: spark.position, color: UIColor(red: 0.5, green: 0.95, blue: 1, alpha: 1))
                 }
+            case .sparkTimerExpired(let id):
+                model.audio.haptic(.soft)
+                if let spark = session.sim.sparks.first(where: { $0.id == id }) {
+                    scene.timerPop(at: spark.position)
+                }
+            case .bonusCollected(let kind):
+                model.audio.play(.collect)
+                model.audio.haptic(.medium)
+                scene.burst(at: session.sim.playerPosition, color: UIColor(red: 1, green: 0.85, blue: 0.4, alpha: 1))
+                _ = kind
+            case .shieldBroke:
+                model.audio.haptic(.rigid)
+                scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.4, green: 1, blue: 0.65, alpha: 1))
+            case .dashed:
+                break
             case .echoWillSpawn:
                 model.audio.play(.warn)
                 model.audio.haptic(.medium)
@@ -145,6 +182,18 @@ struct GameView: View {
         scene.rebuild()
     }
 
+    private func useItem(_ kind: BonusKind) {
+        guard session.phase == .playing else { return }
+        guard model.progress.consume(kind) else { return }
+        if session.useBonus(kind) {
+            model.audio.play(.collect)
+            model.audio.haptic(.medium)
+            scene.burst(at: session.sim.playerPosition, color: UIColor(red: 1, green: 0.85, blue: 0.4, alpha: 1))
+        } else {
+            model.progress.refund(kind)
+        }
+    }
+
     private func nextLevel() {
         model.audio.play(.tap)
         if request.daily {
@@ -165,16 +214,36 @@ struct HUDBar: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            HUDChip(icon: "circle.hexagongrid.fill", tint: EchoTheme.cyan) {
+            HUDChip(icon: "sparkle", tint: EchoTheme.cyan) {
                 Text("\(session.sparksCollected)/\(session.sparksTotal)")
             }
             HUDChip(icon: "circle.dotted", tint: EchoTheme.magenta) {
                 Text("\(session.echoCount)/\(session.maxEchoes)")
             }
+            if session.effects.shieldCharges > 0 {
+                HUDChip(icon: "shield.fill", tint: Color.green) {
+                    Text("\(session.effects.shieldCharges)")
+                }
+            }
+            if session.effects.isFrozen {
+                HUDChip(icon: "snowflake", tint: EchoTheme.cyan) {
+                    Text(String(format: "%.0f", session.effects.freezeRemaining))
+                }
+            }
+            if session.effects.isSurging {
+                HUDChip(icon: "bolt.fill", tint: EchoTheme.gold) {
+                    Text(String(format: "%.0f", session.effects.surgeRemaining))
+                }
+            }
+            if session.effects.isMagnet {
+                HUDChip(icon: "magnet", tint: EchoTheme.magenta) {
+                    Text(String(format: "%.0f", session.effects.magnetRemaining))
+                }
+            }
             Spacer()
-            VStack(spacing: 2) {
+            VStack(spacing: 1) {
                 Text(session.daily ? "DAILY" : "Level \(session.level.number)")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(EchoTheme.muted)
                 Text(session.level.name)
                     .font(.system(size: 16, weight: .semibold))
@@ -185,14 +254,12 @@ struct HUDBar: View {
                 Image(systemName: "pause.fill")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(.white)
-                    .frame(width: 42, height: 42)
-                    .background(Circle().fill(Color.white.opacity(0.08)))
-                    .overlay(Circle().stroke(Color.white.opacity(0.12), lineWidth: 1))
+                    .frame(width: 44, height: 44)
+                    .background(.ultraThinMaterial, in: Circle())
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Pause")
         }
-        .padding(.top, 4)
     }
 }
 
@@ -206,13 +273,52 @@ struct HUDChip<Content: View>: View {
             Image(systemName: icon)
                 .foregroundStyle(tint)
             content
-                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundStyle(.white)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .background(Capsule().fill(Color.white.opacity(0.06)))
-        .overlay(Capsule().stroke(tint.opacity(0.25), lineWidth: 1))
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
+        .background(.ultraThinMaterial, in: Capsule())
+        .overlay(Capsule().stroke(tint.opacity(0.35), lineWidth: 1))
+    }
+}
+
+struct InventoryBar: View {
+    @Environment(AppModel.self) private var model
+    var session: GameSession
+    var onUse: (BonusKind) -> Void
+
+    var body: some View {
+        let owned = BonusKind.allCases.filter { model.progress.count($0) > 0 }
+        if !owned.isEmpty, session.phase == .playing || session.phase == .paused {
+            HStack(spacing: 8) {
+                ForEach(owned, id: \.self) { kind in
+                    let tint = Color(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b)
+                    Button {
+                        onUse(kind)
+                    } label: {
+                        VStack(spacing: 3) {
+                            Image(systemName: kind.icon)
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(tint)
+                            Text("\(model.progress.count(kind))")
+                                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                                .foregroundStyle(.white)
+                        }
+                        .frame(width: 52, height: 48)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(tint.opacity(0.45), lineWidth: 1)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(session.phase != .playing)
+                    .accessibilityLabel("Use \(kind.title), \(model.progress.count(kind)) owned")
+                }
+                Spacer()
+            }
+        }
     }
 }
 
@@ -223,20 +329,19 @@ struct NextEchoMeter: View {
         VStack(spacing: 8) {
             if let threat = session.threat, threat.willCollide {
                 Text("Echo \(threat.echoIndex + 1) closing in")
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(EchoTheme.danger)
-                    .transition(.opacity)
             } else if session.warning {
-                Text("Echo appearing at your origin")
-                    .font(.system(size: 12, weight: .semibold))
+                Text("Echo appearing")
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(EchoTheme.magenta)
             } else if session.nextEchoIn == nil {
                 Text("Four echoes fill the arena")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(EchoTheme.muted)
             } else {
                 Text("Next echo")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(EchoTheme.muted)
             }
 
@@ -245,21 +350,28 @@ struct NextEchoMeter: View {
                 let interval = session.level.echoInterval
                 let progress = session.nextEchoIn == nil ? 1.0 : max(0, min(1, 1 - remaining / interval))
                 ZStack(alignment: .leading) {
-                    Capsule().fill(Color.white.opacity(0.08))
+                    Capsule().fill(Color.white.opacity(0.12))
                     Capsule()
                         .fill(session.warning ? EchoTheme.magenta : EchoTheme.cyan)
                         .frame(width: geo.size.width * progress)
-                        .shadow(color: (session.warning ? EchoTheme.magenta : EchoTheme.cyan).opacity(0.6), radius: 8)
+                        .shadow(color: (session.warning ? EchoTheme.magenta : EchoTheme.cyan).opacity(0.7), radius: 10)
                 }
             }
-            .frame(height: 8)
+            .frame(height: 10)
 
             if let remaining = session.nextEchoIn {
-                Text(String(format: "%.1fs", remaining))
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.8))
+                Text(String(format: "%.1f", remaining))
+                    .font(.system(size: 28, weight: .semibold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(.white)
+                    .shadow(color: EchoTheme.cyan.opacity(0.6), radius: 10)
             }
+            Text(session.effects.canDash ? "Double-tap to dash" : "Dash cooling down")
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(EchoTheme.muted)
         }
+        .padding(14)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         .animation(.easeInOut(duration: 0.2), value: session.warning)
     }
 }

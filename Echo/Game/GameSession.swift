@@ -30,6 +30,9 @@ final class GameSession {
     var replayIndex = 0
     var deathCause: DeathCause?
     var autoReplay = true
+    var effects = ActiveEffects()
+    var inSlowField = false
+    var banner: String?
 
     var sparksTotal: Int { level.sparkCount }
     var maxEchoes: Int { level.maxEchoes }
@@ -59,11 +62,23 @@ final class GameSession {
         }
     }
 
+    @discardableResult
+    func useBonus(_ kind: BonusKind) -> Bool {
+        guard phase == .playing, sim.activate(kind) else { return false }
+        banner = kind.title
+        publish()
+        return true
+    }
+
     func handle(events: [SimEvent], autoReplay: Bool) {
         for event in events {
             switch event {
-            case .sparkCollected:
+            case .sparkCollected, .sparkTimerExpired, .dashed:
                 break
+            case .bonusCollected(let kind):
+                banner = kind.title
+            case .shieldBroke:
+                banner = "Shield broke"
             case .echoWillSpawn:
                 break
             case .echoSpawned:
@@ -114,5 +129,7 @@ final class GameSession {
         exitOpen = sim.exitOpen
         elapsed = sim.time
         moves = sim.moves
+        effects = sim.effects
+        inSlowField = sim.inSlowField
     }
 }

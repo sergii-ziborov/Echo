@@ -23,6 +23,8 @@ struct RootView: View {
                     .id(request.levelID + (request.daily ? "-daily" : ""))
             case .settings:
                 SettingsView()
+            case .shop:
+                ShopView()
             }
         }
         .animation(.easeInOut(duration: 0.28), value: screenKey)
@@ -38,6 +40,7 @@ struct RootView: View {
         case .tutorial: "tutorial"
         case .playing(let r): "play-\(r.levelID)"
         case .settings: "settings"
+        case .shop: "shop"
         }
     }
 }

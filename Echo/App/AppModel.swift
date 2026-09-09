@@ -8,6 +8,7 @@ enum Screen: Equatable {
     case tutorial(thenPlay: PlayRequest?)
     case playing(PlayRequest)
     case settings
+    case shop
 }
 
 struct PlayRequest: Equatable {
@@ -58,6 +59,11 @@ final class AppModel {
     func openSettings() {
         audio.play(.tap)
         screen = .settings
+    }
+
+    func openShop() {
+        audio.play(.tap)
+        screen = .shop
     }
 
     func play(level: LevelDefinition, daily: Bool) {

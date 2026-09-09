@@ -6,6 +6,10 @@ enum StarRating {
         if time <= parTime * 1.35 || moves <= Int(Double(parMoves) * 1.35) { return 2 }
         return 1
     }
+
+    static func points(stars: Int, bonuses: Int) -> Int {
+        max(0, stars) * 50 + max(0, bonuses) * 20 + 10
+    }
 }
 
 struct SessionResult: Equatable, Sendable {
@@ -14,6 +18,11 @@ struct SessionResult: Equatable, Sendable {
     var stars: Int
     var sparks: Int
     var echoesFaced: Int
+    var bonuses: Int = 0
+
+    var points: Int {
+        StarRating.points(stars: stars, bonuses: bonuses)
+    }
 }
 
 enum DeathCause: Equatable, Sendable {

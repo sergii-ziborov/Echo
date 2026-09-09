@@ -73,6 +73,10 @@ struct AABB: Equatable, Sendable {
     func intersectsCircle(center: Vec2, radius: Double) -> Bool {
         closestPoint(to: center).distance(to: center) < radius
     }
+
+    func expanded(_ pad: Double) -> AABB {
+        AABB(minX: minX - pad, minY: minY - pad, maxX: maxX + pad, maxY: maxY + pad)
+    }
 }
 
 enum CircleMath {

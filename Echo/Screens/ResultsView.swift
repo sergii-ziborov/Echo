@@ -25,15 +25,16 @@ struct ResultsView: View {
                 VStack(spacing: 10) {
                     ResultLine(icon: "timer", title: "Time", value: format(result.time), best: bestTime.map(format))
                     ResultLine(icon: "arrow.triangle.swap", title: "Moves", value: "\(result.moves)", best: bestMoves.map(String.init))
+                    ResultLine(icon: "gift.fill", title: "Bonuses", value: "\(result.bonuses)", best: nil)
                 }
 
                 HStack(spacing: 10) {
                     Image(systemName: "diamond.fill")
                         .foregroundStyle(EchoTheme.magenta)
-                    Text("+1 Shard")
+                    Text("+\(result.points) points")
                         .font(.system(size: 15, weight: .semibold))
                     Spacer()
-                    Text("Collect 9 more for a reward")
+                    Text("Spend in the shop")
                         .font(.system(size: 12))
                         .foregroundStyle(EchoTheme.muted)
                 }

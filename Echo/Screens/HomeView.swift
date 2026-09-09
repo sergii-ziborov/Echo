@@ -10,11 +10,12 @@ struct HomeView: View {
                 VStack(spacing: 22) {
                     HStack {
                         IconCircle(system: "gearshape") { model.openSettings() }
+                        IconCircle(system: "bag.fill") { model.openShop() }
                         Spacer()
                         HStack(spacing: 14) {
                             Label("\(model.progress.totalStars)", systemImage: "star.fill")
                                 .foregroundStyle(EchoTheme.gold)
-                            Label("\(model.progress.shards)", systemImage: "diamond.fill")
+                            Label("\(model.progress.points)", systemImage: "diamond.fill")
                                 .foregroundStyle(EchoTheme.magenta)
                         }
                         .font(.system(size: 15, weight: .semibold))
@@ -26,11 +27,14 @@ struct HomeView: View {
                     PrimaryButton(title: "Play") { model.playPrimary() }
 
                     HStack(spacing: 12) {
-                        SecondaryButton(title: "Daily Challenge", systemImage: "calendar") {
+                        SecondaryButton(title: "Daily", systemImage: "calendar") {
                             model.openDaily()
                         }
                         SecondaryButton(title: "Levels", systemImage: "square.grid.2x2") {
                             model.openWorlds()
+                        }
+                        SecondaryButton(title: "Shop", systemImage: "bag.fill") {
+                            model.openShop()
                         }
                     }
 
@@ -51,20 +55,21 @@ struct HomeView: View {
 
                         PanelCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Next Reward")
+                                Text("Shop")
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundStyle(EchoTheme.muted)
-                                Image(systemName: "star.fill")
+                                Image(systemName: "bag.fill")
                                     .font(.system(size: 28))
                                     .foregroundStyle(EchoTheme.gold)
-                                ProgressView(value: shardProgress)
-                                    .tint(EchoTheme.cyan)
-                                Text("\(model.progress.shards % 10)/10")
+                                Text("\(model.progress.points) pts")
+                                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                Text(ownedSummary)
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundStyle(EchoTheme.muted)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
+                        .onTapGesture { model.openShop() }
                     }
 
                     Text("Your past is part of the puzzle.")
@@ -80,7 +85,9 @@ struct HomeView: View {
         }
     }
 
-    private var shardProgress: Double {
-        Double(model.progress.shards % 10) / 10.0
+    private var ownedSummary: String {
+        let total = BonusKind.allCases.reduce(0) { $0 + model.progress.count($1) }
+        if total == 0 { return "Buy freeze, dash, shield" }
+        return "\(total) item\(total == 1 ? "" : "s") ready"
     }
 }

@@ -43,6 +43,14 @@ struct TutorialView: View {
                     DangerGlyph()
                 }
 
+                TutorialRow(
+                    index: 4,
+                    title: "Bonuses, shop, dash.",
+                    detail: "Pick up shield, freeze and surge in the arena — or buy them with points and tap the bar. Double-tap to dash."
+                ) {
+                    HexGlyph()
+                }
+
                 Spacer()
                 PrimaryButton(title: "Got It", systemImage: "checkmark") { onDone() }
             }

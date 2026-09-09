@@ -25,6 +25,13 @@ final class StarRatingTests: XCTestCase {
         XCTAssertEqual(StarRating.stars(time: 20, moves: 30, parTime: 22, parMoves: 38), 3)
     }
 
+    func testPointsScaleWithStarsAndBonuses() {
+        XCTAssertEqual(StarRating.points(stars: 3, bonuses: 2), 200)
+        XCTAssertEqual(StarRating.points(stars: 1, bonuses: 0), 60)
+        let result = SessionResult(time: 12, moves: 20, stars: 2, sparks: 6, echoesFaced: 1, bonuses: 1)
+        XCTAssertEqual(result.points, 130)
+    }
+
     func testSlowRunGivesOneStar() {
         XCTAssertEqual(StarRating.stars(time: 80, moves: 200, parTime: 22, parMoves: 38), 1)
     }
@@ -103,12 +110,15 @@ final class WorldSimulationTests: XCTestCase {
         config.collisionSlop = 1_000
         let sim = WorldSimulation(level: LevelCatalog.prototype, config: config)
         XCTAssertFalse(sim.exitOpen)
-        // Collect only by standing on each spark in order, skipping the rest of the loop.
-        for spark in sim.level.sparks.dropLast() {
-            advance(sim, seconds: 4, target: spark.position)
-            XCTAssertFalse(sim.exitOpen)
+        for spark in sim.level.sparks {
+            if sim.sparksRemaining <= 1 { break }
+            advance(sim, seconds: 5, target: spark.position)
         }
-        advance(sim, seconds: 4, target: sim.level.sparks.last!.position)
+        XCTAssertEqual(sim.sparksRemaining, 1)
+        XCTAssertFalse(sim.exitOpen)
+        if let last = sim.sparks.first(where: { !$0.collected }) {
+            advance(sim, seconds: 5, target: last.position)
+        }
         XCTAssertTrue(sim.exitOpen)
         advance(sim, seconds: 4, target: sim.level.exit)
         XCTAssertEqual(sim.phase, .won)
@@ -126,6 +136,64 @@ final class WorldSimulationTests: XCTestCase {
         XCTAssertEqual(level.exit, Vec2(x: 500, y: 500))
         XCTAssertEqual(level.maxEchoes, 4)
         XCTAssertEqual(level.sparkCount, 6)
+    }
+
+    func testSparksAreNotEmbeddedInWalls() {
+        for level in LevelCatalog.playable {
+            for spark in level.sparks {
+                XCTAssertTrue(
+                    LayoutSafety.isClear(spark.position, walls: level.walls, clearance: 28),
+                    "spark \(spark.id) in \(level.name) sits inside a wall at \(spark.position)"
+                )
+            }
+            XCTAssertTrue(
+                LayoutSafety.isClear(level.exit, walls: level.walls, clearance: 28),
+                "exit in \(level.name) sits inside a wall"
+            )
+        }
+    }
+
+    func testShieldPickup() {
+        var level = LevelCatalog.prototype
+        level.bonuses = [BonusSpawn(id: 0, kind: .shield, position: Vec2(x: 500, y: 200))]
+        let sim = WorldSimulation(level: level)
+        advance(sim, seconds: 1.0, target: Vec2(x: 500, y: 200))
+        XCTAssertEqual(sim.effects.shieldCharges, 1)
+        XCTAssertEqual(sim.bonusesCollected, 1)
+        XCTAssertEqual(sim.phase, .playing)
+    }
+
+    func testFreezePausesEchoPlayback() {
+        var level = LevelCatalog.prototype
+        level.bonuses = [BonusSpawn(id: 0, kind: .freeze, position: Vec2(x: 700, y: 140))]
+        let sim = WorldSimulation(level: level)
+        advance(sim, seconds: 1.0, target: Vec2(x: 700, y: 140))
+        XCTAssertTrue(sim.effects.isFrozen)
+        let playback = sim.playbackTime
+        advance(sim, seconds: 1.0, target: Vec2(x: 800, y: 140))
+        XCTAssertEqual(sim.playbackTime, playback, accuracy: 0.05)
+    }
+
+    func testDashEntersCooldown() {
+        let sim = WorldSimulation(level: LevelCatalog.prototype)
+        XCTAssertTrue(sim.tryDash())
+        XCTAssertTrue(sim.effects.isSurging)
+        XCTAssertFalse(sim.tryDash())
+    }
+
+    func testActivateAppliesShopBonus() {
+        let sim = WorldSimulation(level: LevelCatalog.prototype)
+        XCTAssertTrue(sim.activate(.freeze))
+        XCTAssertTrue(sim.effects.isFrozen)
+        XCTAssertTrue(sim.activate(.shield))
+        XCTAssertEqual(sim.effects.shieldCharges, 1)
+        XCTAssertTrue(sim.activate(.surge))
+        XCTAssertTrue(sim.effects.isSurging)
+    }
+
+    func testCatalogHasTwelvePlayableMaps() {
+        XCTAssertEqual(LevelCatalog.playable.count, 12)
+        XCTAssertEqual(Set(LevelCatalog.playable.map(\.number)).count, 12)
     }
 
     func testDailyKeepsACenterSpark() {
