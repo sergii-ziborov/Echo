@@ -27,10 +27,12 @@ struct SessionResult: Equatable, Sendable {
 
 enum DeathCause: Equatable, Sendable {
     case echo(index: Int, delay: TimeInterval)
+    case asteroid
 
     var echoIndex: Int? {
         switch self {
         case .echo(let index, _): index
+        case .asteroid: nil
         }
     }
 
@@ -40,6 +42,8 @@ enum DeathCause: Equatable, Sendable {
             let seconds = Int(delay.rounded())
             return "You met echo \(index + 1)"
                 + " — your path from \(seconds)s ago"
+        case .asteroid:
+            return "An asteroid cut your line"
         }
     }
 }

@@ -16,6 +16,7 @@ final class GameScene: SKScene {
     private var threatLine: SKShapeNode!
     private var spawnBeacon: SKNode!
     private var ambienceNode: SKNode!
+    private var moverNodes: [Int: SKNode] = [:]
     private var lastTime: TimeInterval = 0
     private var trailAcc: TimeInterval = 0
     private var trailBudget = 0
@@ -24,7 +25,7 @@ final class GameScene: SKScene {
         self.session = session
         super.init(size: size)
         scaleMode = .resizeFill
-        backgroundColor = UIColor(red: 0.015, green: 0.04, blue: 0.11, alpha: 1)
+        backgroundColor = session.level.theme.sky.uiColor
         anchorPoint = .zero
     }
 
@@ -44,7 +45,9 @@ final class GameScene: SKScene {
         echoNodes.removeAll()
         sparkNodes.removeAll()
         bonusNodes.removeAll()
+        moverNodes.removeAll()
         lastTime = 0
+        backgroundColor = session.level.theme.sky.uiColor
         trailAcc = 0
         trailBudget = 0
         ambienceNode = SKNode()
@@ -56,6 +59,7 @@ final class GameScene: SKScene {
         buildSparks()
         buildBonuses()
         buildFields()
+        buildMovers()
         buildSpawnBeacon()
         buildPlayer()
         threatLine = SKShapeNode()
@@ -97,6 +101,7 @@ final class GameScene: SKScene {
         spawnBeacon.speed = live ? 1 : 0
         sparkNodes.values.forEach { $0.speed = live ? 1 : 0 }
         bonusNodes.values.forEach { $0.speed = live ? 1 : 0 }
+        moverNodes.values.forEach { $0.speed = live ? 1 : 0 }
         syncNodes()
         drawSpawnBeacon()
         if live {
@@ -183,15 +188,16 @@ final class GameScene: SKScene {
             path.move(to: CGPoint(x: 0, y: y))
             path.addLine(to: CGPoint(x: w, y: y))
         }
+        let theme = session.level.theme
         grid.path = path
-        grid.strokeColor = UIColor.white.withAlphaComponent(0.055)
+        grid.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.10)
         grid.lineWidth = 1
         grid.zPosition = 0
         addChild(grid)
 
         let border = SKShapeNode(rectOf: CGSize(width: w - 10, height: h - 10), cornerRadius: 8)
         border.position = CGPoint(x: w / 2, y: h / 2)
-        border.strokeColor = UIColor(red: 0.3, green: 0.65, blue: 1, alpha: 0.35)
+        border.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.40)
         border.lineWidth = 2
         border.glowWidth = 8
         border.fillColor = .clear
@@ -201,15 +207,15 @@ final class GameScene: SKScene {
         for wall in session.level.walls {
             let rect = mapped(wall)
             let node = SKShapeNode(rect: rect, cornerRadius: 14)
-            node.fillColor = UIColor(red: 0.07, green: 0.14, blue: 0.3, alpha: 0.96)
-            node.strokeColor = UIColor(red: 0.4, green: 0.75, blue: 1, alpha: 0.55)
+            node.fillColor = theme.wallFill.uiColor.withAlphaComponent(0.96)
+            node.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.55)
             node.lineWidth = 2
             node.glowWidth = 6
             node.zPosition = 2
             addChild(node)
             let inner = SKShapeNode(rect: rect.insetBy(dx: 5, dy: 5), cornerRadius: 10)
             inner.fillColor = .clear
-            inner.strokeColor = UIColor(red: 0.55, green: 0.85, blue: 1, alpha: 0.18)
+            inner.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.18)
             inner.lineWidth = 1
             inner.zPosition = 2.1
             addChild(inner)
@@ -217,12 +223,36 @@ final class GameScene: SKScene {
     }
 
     private func buildAmbient() {
-        for i in 0..<18 {
+        let theme = session.level.theme
+        let tint = theme.nebula.uiColor
+        for i in 0..<5 {
+            let nebula = SKSpriteNode(texture: GlowTextures.blob)
+            let s = CGFloat.random(in: 160...280)
+            nebula.size = CGSize(width: s, height: s)
+            nebula.alpha = CGFloat.random(in: 0.10...0.20)
+            nebula.blendMode = .add
+            nebula.color = tint
+            nebula.colorBlendFactor = 0.85
+            nebula.position = CGPoint(
+                x: CGFloat.random(in: 0...size.width),
+                y: CGFloat.random(in: 0...size.height)
+            )
+            nebula.zPosition = 0.4
+            nebula.run(.repeatForever(.sequence([
+                .moveBy(x: CGFloat.random(in: -50...50), y: CGFloat.random(in: -30...40), duration: TimeInterval.random(in: 10...16)),
+                .moveBy(x: CGFloat.random(in: -50...50), y: CGFloat.random(in: -40...30), duration: TimeInterval.random(in: 10...16)),
+            ])))
+            ambienceNode.addChild(nebula)
+            _ = i
+        }
+        for i in 0..<16 {
             let mote = SKSpriteNode(texture: GlowTextures.blob)
-            let s = CGFloat.random(in: 10...28)
+            let s = CGFloat.random(in: 8...24)
             mote.size = CGSize(width: s, height: s)
-            mote.alpha = CGFloat.random(in: 0.08...0.22)
+            mote.alpha = CGFloat.random(in: 0.10...0.28)
             mote.blendMode = .add
+            mote.color = tint
+            mote.colorBlendFactor = 0.55
             mote.position = CGPoint(
                 x: CGFloat.random(in: 0...size.width),
                 y: CGFloat.random(in: 0...size.height)
@@ -246,7 +276,24 @@ final class GameScene: SKScene {
                 ), duration: 0),
             ])))
             ambienceNode.addChild(mote)
-            _ = i
+        }
+        for i in 0..<8 {
+            let rock = Self.asteroidShape(radius: CGFloat.random(in: 7...14), seed: i + 11)
+            rock.fillColor = theme.wallFill.uiColor.withAlphaComponent(0.55)
+            rock.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.25)
+            rock.lineWidth = 1
+            rock.alpha = 0.45
+            rock.position = CGPoint(
+                x: CGFloat.random(in: 0...size.width),
+                y: CGFloat.random(in: 0...size.height)
+            )
+            rock.zPosition = 1.2
+            rock.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: TimeInterval.random(in: 14...28))))
+            rock.run(.repeatForever(.sequence([
+                .moveBy(x: CGFloat.random(in: -80...80), y: CGFloat.random(in: 40...120), duration: TimeInterval.random(in: 9...16)),
+                .moveBy(x: CGFloat.random(in: -80...80), y: CGFloat.random(in: -60...40), duration: TimeInterval.random(in: 9...16)),
+            ])))
+            ambienceNode.addChild(rock)
         }
     }
 
@@ -372,6 +419,31 @@ final class GameScene: SKScene {
         }
     }
 
+    private func buildMovers() {
+        for mover in session.sim.movers {
+            let root = SKNode()
+            root.zPosition = 10
+            root.position = scenePoint(mover.position)
+            let glow = SKSpriteNode(texture: GlowTextures.blob)
+            let glowSize = CGFloat(mover.radius) * worldScale * 3.2
+            glow.size = CGSize(width: glowSize, height: glowSize)
+            glow.blendMode = .add
+            glow.color = UIColor(red: 1, green: 0.55, blue: 0.28, alpha: 1)
+            glow.colorBlendFactor = 0.7
+            glow.alpha = 0.45
+            let rock = Self.asteroidShape(radius: CGFloat(mover.radius) * worldScale, seed: mover.id + 3)
+            rock.fillColor = UIColor(red: 0.45, green: 0.28, blue: 0.18, alpha: 0.95)
+            rock.strokeColor = UIColor(red: 1, green: 0.72, blue: 0.40, alpha: 0.7)
+            rock.lineWidth = 1.4
+            rock.glowWidth = 3
+            rock.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: TimeInterval.random(in: 5...9))))
+            root.addChild(glow)
+            root.addChild(rock)
+            addChild(root)
+            moverNodes[mover.id] = root
+        }
+    }
+
     private func buildPlayer() {
         let root = SKNode()
         root.zPosition = 14
@@ -477,6 +549,9 @@ final class GameScene: SKScene {
         }
         for bonus in session.sim.bonuses {
             bonusNodes[bonus.id]?.isHidden = bonus.collected
+        }
+        for mover in session.sim.movers {
+            moverNodes[mover.id]?.position = scenePoint(mover.position)
         }
         exitNode.position = scenePoint(session.level.exit)
         refreshExit()
@@ -677,6 +752,21 @@ final class GameScene: SKScene {
         ]))
     }
 
+    private static func asteroidShape(radius: CGFloat, seed: Int) -> SKShapeNode {
+        let path = CGMutablePath()
+        let count = 8
+        for i in 0..<count {
+            let jitter = 0.72 + 0.28 * sin(Double(seed * 13 + i * 19))
+            let angle = (Double(i) / Double(count)) * .pi * 2
+            let p = CGPoint(x: cos(angle) * Double(radius) * jitter, y: sin(angle) * Double(radius) * jitter)
+            if i == 0 { path.move(to: p) } else { path.addLine(to: p) }
+        }
+        path.closeSubpath()
+        let node = SKShapeNode(path: path)
+        node.lineJoin = .round
+        return node
+    }
+
     private static func arc(radius: CGFloat, fraction: Double) -> CGPath {
         let path = CGMutablePath()
         let end = CGFloat(fraction) * .pi * 2
@@ -714,4 +804,8 @@ final class GameScene: SKScene {
     private func world(_ p: CGPoint) -> Vec2 {
         Vec2(x: Double(p.x / worldScale), y: Double(p.y / worldScale))
     }
+}
+
+private extension RGB {
+    var uiColor: UIColor { UIColor(red: r, green: g, blue: b, alpha: 1) }
 }

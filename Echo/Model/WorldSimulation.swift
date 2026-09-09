@@ -60,6 +60,7 @@ final class WorldSimulation {
     private(set) var echoes: [Vec2] = []
     private(set) var sparks: [SparkState]
     private(set) var bonuses: [BonusState]
+    private(set) var movers: [MoverState]
     private(set) var effects = ActiveEffects()
     private(set) var exitOpen = false
     private(set) var moves = 0
@@ -111,6 +112,7 @@ final class WorldSimulation {
         self.playerPosition = level.playerStart
         self.sparks = Self.makeSparks(level.sparks)
         self.bonuses = Self.makeBonuses(level.bonuses)
+        self.movers = Self.makeMovers(level.movers)
         recorder.record(time: 0, position: level.playerStart)
         captureSnapshot()
     }
@@ -124,6 +126,7 @@ final class WorldSimulation {
         echoes = []
         sparks = Self.makeSparks(level.sparks)
         bonuses = Self.makeBonuses(level.bonuses)
+        movers = Self.makeMovers(level.movers)
         effects = ActiveEffects()
         exitOpen = false
         moves = 0
@@ -181,6 +184,9 @@ final class WorldSimulation {
         var events: [SimEvent] = []
         events.append(contentsOf: tickTimers(dt: dt))
         updateOrbits()
+        if !effects.isFrozen {
+            stepMovers(dt: dt)
+        }
 
         recorder.record(time: time, position: playerPosition)
         applyMagnet(dt: dt)
@@ -191,7 +197,7 @@ final class WorldSimulation {
         events.append(contentsOf: collectBonuses())
         refreshThreats()
 
-        if effects.iFrames <= 0, let death = collideEchoes() {
+        if effects.iFrames <= 0, let death = collideEchoes() ?? collideMovers() {
             if effects.shieldCharges > 0 {
                 effects.shieldCharges -= 1
                 effects.iFrames = 0.55
@@ -327,6 +333,19 @@ final class WorldSimulation {
         spawns.map { BonusState(id: $0.id, kind: $0.kind, position: $0.position, collected: false) }
     }
 
+    private static func makeMovers(_ spawns: [MoverSpawn]) -> [MoverState] {
+        spawns.map {
+            MoverState(
+                id: $0.id,
+                kind: $0.kind,
+                position: $0.position,
+                velocity: $0.velocity,
+                radius: $0.radius,
+                path: $0.path
+            )
+        }
+    }
+
     private func updateOrbits() {
         for i in sparks.indices where !sparks[i].collected {
             guard let orbit = sparks[i].orbit, orbit.period > 0 else { continue }
@@ -407,6 +426,51 @@ final class WorldSimulation {
         case .magnet:
             effects.magnetRemaining += kind.duration
         }
+    }
+
+    private func stepMovers(dt: TimeInterval) {
+        for i in movers.indices {
+            switch movers[i].path {
+            case .bounce:
+                var next = movers[i].position + movers[i].velocity * dt
+                let clamped = clampToArena(next, radius: movers[i].radius)
+                if abs(clamped.x - next.x) > 0.01 { movers[i].velocity.x *= -1 }
+                if abs(clamped.y - next.y) > 0.01 { movers[i].velocity.y *= -1 }
+                next = clamped
+                let resolved = resolveWalls(next, radius: movers[i].radius)
+                if abs(resolved.x - next.x) > 0.01 { movers[i].velocity.x *= -1 }
+                if abs(resolved.y - next.y) > 0.01 { movers[i].velocity.y *= -1 }
+                movers[i].position = resolved
+            case .patrol(let a, let b):
+                let span = max(a.distance(to: b), 1)
+                let speed = 90.0 / span
+                movers[i].patrolT += dt * speed * movers[i].patrolDir
+                if movers[i].patrolT >= 1 {
+                    movers[i].patrolT = 1
+                    movers[i].patrolDir = -1
+                } else if movers[i].patrolT <= 0 {
+                    movers[i].patrolT = 0
+                    movers[i].patrolDir = 1
+                }
+                movers[i].position = a.lerp(b, movers[i].patrolT)
+            case .orbit(let center, let radius, let period, let phase):
+                let angle = phase + (time / max(period, 0.1)) * (.pi * 2)
+                movers[i].position = Vec2(
+                    x: center.x + cos(angle) * radius,
+                    y: center.y + sin(angle) * radius
+                )
+            }
+        }
+    }
+
+    private func collideMovers() -> DeathCause? {
+        for mover in movers {
+            let limit = config.playerRadius + mover.radius - config.collisionSlop
+            if playerPosition.distance(to: mover.position) < limit {
+                return .asteroid
+            }
+        }
+        return nil
     }
 
     private func collideEchoes() -> DeathCause? {

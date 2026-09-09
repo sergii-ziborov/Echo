@@ -10,6 +10,7 @@
 		0066D2A7440F91182D26A9B7 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317CEA84CEFEC321605E4E19 /* ResultsView.swift */; };
 		09DD77556486AEB8D27A1ED3 /* win.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7667BFF4E65A6C68B48445A8 /* win.wav */; };
 		149CDF0EFDC9E5A7219E41E4 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9316344FADD352606B5AE442 /* SplashView.swift */; };
+		1E8142FB60B4D6D8CEB48509 /* Movers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF10EFCCC6F9570530D15060 /* Movers.swift */; };
 		236F4DB96CAE5D156F9A173E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 97696FFCBF8755B6D306340E /* PrivacyInfo.xcprivacy */; };
 		2491EBDCC8C9B099179FC773 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D051D9171E87765A0433A968 /* SettingsView.swift */; };
 		2FC86C21AFF68DBBE9F0DFC2 /* ProgressStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB823B97411EAC5AA6F83B81 /* ProgressStoreTests.swift */; };
@@ -96,6 +97,7 @@
 		DF74137B0385C0F008759FA0 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		E535E3F797B7DD5BF9B9305F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		E9F584D422044F8474ED7824 /* EchoTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = EchoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF10EFCCC6F9570530D15060 /* Movers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -104,6 +106,7 @@
 			children = (
 				7D992A3072475D2690BF2DCE /* Bonuses.swift */,
 				5726589867C67424F0120417 /* LevelDefinition.swift */,
+				EF10EFCCC6F9570530D15060 /* Movers.swift */,
 				64FBC74196D2FC98FA13BAAE /* PathRecorder.swift */,
 				793DD49C0C6CAE669C214B73 /* ProgressStore.swift */,
 				917433345C17CA86C86BBDD1 /* StarRating.swift */,
@@ -344,6 +347,7 @@
 				9C5852C22A9054A2CD131133 /* GlowTextures.swift in Sources */,
 				F58F2C950FC9A2639A20A197 /* HomeView.swift in Sources */,
 				4C83C18ECE874C1CC9F6FC37 /* LevelDefinition.swift in Sources */,
+				1E8142FB60B4D6D8CEB48509 /* Movers.swift in Sources */,
 				CBC10E0A95E225D9474F10FE /* PathRecorder.swift in Sources */,
 				7BDC667613034BCEB0A4BF78 /* PauseView.swift in Sources */,
 				9BD0E627B3E1931B7C6DC125 /* ProgressStore.swift in Sources */,

@@ -193,9 +193,31 @@ final class WorldSimulationTests: XCTestCase {
         XCTAssertTrue(sim.effects.isSurging)
     }
 
-    func testCatalogHasTwentyPlayableMaps() {
-        XCTAssertEqual(LevelCatalog.playable.count, 20)
-        XCTAssertEqual(Set(LevelCatalog.playable.map(\.number)).count, 20)
+    func testCatalogHasThirtyPlayableMaps() {
+        XCTAssertEqual(LevelCatalog.playable.count, 30)
+        XCTAssertEqual(Set(LevelCatalog.playable.map(\.number)).count, 30)
+        XCTAssertEqual(Set(LevelCatalog.playable.map(\.theme)).count, ArenaTheme.allCases.count)
+    }
+
+    func testAsteroidKillsOnContact() {
+        var level = LevelCatalog.prototype
+        level.movers = [MoverSpawn.bounce(id: 0, at: Vec2(x: 500, y: 200), velocity: Vec2(x: 0, y: 0), radius: 28)]
+        let sim = WorldSimulation(level: level)
+        advance(sim, seconds: 1.2, target: Vec2(x: 500, y: 200))
+        XCTAssertEqual(sim.phase, .dead)
+        XCTAssertEqual(sim.deathCause, .asteroid)
+    }
+
+    func testFreezePausesAsteroids() {
+        var level = LevelCatalog.prototype
+        level.bonuses = [BonusSpawn(id: 0, kind: .freeze, position: Vec2(x: 500, y: 200))]
+        level.movers = [MoverSpawn.bounce(id: 0, at: Vec2(x: 800, y: 400), velocity: Vec2(x: 90, y: 0), radius: 18)]
+        let sim = WorldSimulation(level: level)
+        advance(sim, seconds: 0.8, target: Vec2(x: 500, y: 200))
+        XCTAssertTrue(sim.effects.isFrozen)
+        let parked = sim.movers[0].position
+        advance(sim, seconds: 0.8, target: Vec2(x: 520, y: 200))
+        XCTAssertEqual(sim.movers[0].position.x, parked.x, accuracy: 0.5)
     }
 
     func testClockStaysFrozenUntilFirstMove() {
