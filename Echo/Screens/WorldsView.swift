@@ -25,13 +25,18 @@ struct WorldsView: View {
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 10)
 
-                TabView(selection: $selectedActID) {
-                    ForEach(Act.allCases, id: \.rawValue) { act in
-                        actPage(act)
-                            .tag(act.rawValue)
-                    }
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
+                actPage(selectedAct)
+                    .id(selectedActID)
+                    .transition(.opacity.combined(with: .scale(scale: 0.985)))
+                    .contentShape(Rectangle())
+                    .simultaneousGesture(
+                        DragGesture(minimumDistance: 28)
+                            .onEnded { value in
+                                guard abs(value.translation.width) > abs(value.translation.height),
+                                      abs(value.translation.width) > 52 else { return }
+                                moveAct(by: value.translation.width < 0 ? 1 : -1)
+                            }
+                    )
                 .opacity(appeared ? 1 : 0)
             }
             .frame(maxWidth: 660)
@@ -56,7 +61,10 @@ struct WorldsView: View {
 
     private var header: some View {
         HStack(spacing: 11) {
-            IconCircle(system: "chevron.left") { model.goHome() }
+            IconCircle(system: "chevron.left") {
+                model.audio.play(.tap)
+                model.goHome()
+            }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("TIMELINE ATLAS")
@@ -85,42 +93,51 @@ struct WorldsView: View {
     }
 
     private var actSelector: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 4) {
-                ForEach(Act.allCases, id: \.rawValue) { act in
-                let selected = act == selectedAct
-                Button {
-                    withAnimation(.spring(response: 0.38, dampingFraction: 0.82)) {
-                        selectedActID = act.rawValue
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 4) {
+                    ForEach(Act.allCases, id: \.rawValue) { act in
+                        let selected = act == selectedAct
+                        Button {
+                            selectAct(act)
+                            model.audio.play(.select)
+                        } label: {
+                            VStack(spacing: 3) {
+                                Image(systemName: act.atlasIcon)
+                                    .font(.system(size: 12, weight: .bold))
+                                Text(String(format: "%02d", act.rawValue))
+                                    .font(.system(size: 8, weight: .black, design: .rounded))
+                            }
+                            .foregroundStyle(selected ? .white : EchoTheme.muted)
+                            .frame(width: 48)
+                            .frame(height: 45)
+                            .background(
+                                selected
+                                    ? AnyShapeStyle(LinearGradient(colors: [act.atlasTint, act.atlasTint.opacity(0.58)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    : AnyShapeStyle(Color.clear),
+                                in: RoundedRectangle(cornerRadius: 13, style: .continuous)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 13, style: .continuous)
+                                    .stroke(selected ? act.atlasTint.opacity(0.72) : Color.clear, lineWidth: 1)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .id(act.rawValue)
+                        .accessibilityLabel("Region \(act.rawValue), \(act.atlasRegion)")
+                        .accessibilityAddTraits(selected ? .isSelected : [])
                     }
-                    model.audio.play(.tap)
-                } label: {
-                    VStack(spacing: 3) {
-                        Image(systemName: act.atlasIcon)
-                            .font(.system(size: 12, weight: .bold))
-                        Text(String(format: "%02d", act.rawValue))
-                            .font(.system(size: 8, weight: .black, design: .rounded))
-                    }
-                    .foregroundStyle(selected ? .white : EchoTheme.muted)
-                    .frame(width: 48)
-                    .frame(height: 45)
-                    .background(
-                        selected
-                            ? AnyShapeStyle(LinearGradient(colors: [act.atlasTint, act.atlasTint.opacity(0.58)], startPoint: .topLeading, endPoint: .bottomTrailing))
-                            : AnyShapeStyle(Color.clear),
-                        in: RoundedRectangle(cornerRadius: 13, style: .continuous)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 13, style: .continuous)
-                            .stroke(selected ? act.atlasTint.opacity(0.72) : Color.clear, lineWidth: 1)
-                    )
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Region \(act.rawValue), \(act.atlasRegion)")
-                .accessibilityAddTraits(selected ? .isSelected : [])
+                .padding(4)
+            }
+            .onAppear {
+                proxy.scrollTo(selectedActID, anchor: .center)
+            }
+            .onChange(of: selectedActID) { _, actID in
+                withAnimation(.easeOut(duration: reduceMotion ? 0.01 : 0.24)) {
+                    proxy.scrollTo(actID, anchor: .center)
                 }
             }
-            .padding(4)
         }
         .background(Color.white.opacity(0.055), in: RoundedRectangle(cornerRadius: 17, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 17, style: .continuous).stroke(Color.white.opacity(0.07), lineWidth: 1))
@@ -151,7 +168,7 @@ struct WorldsView: View {
                         withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
                             selectedLevelNumber = level.number
                         }
-                        model.audio.play(.tap)
+                        model.audio.play(.select)
                     }
                 )
 
@@ -205,6 +222,22 @@ struct WorldsView: View {
     private func selectRecommendedLevel(in act: Act) {
         selectedLevelNumber = recommendedLevel(in: act).number
     }
+
+    private func selectAct(_ act: Act) {
+        guard act.rawValue != selectedActID else { return }
+        withAnimation(.spring(response: 0.34, dampingFraction: 0.86)) {
+            selectedActID = act.rawValue
+        }
+    }
+
+    private func moveAct(by offset: Int) {
+        let acts = Act.allCases
+        guard let index = acts.firstIndex(of: selectedAct) else { return }
+        let next = min(max(0, index + offset), acts.count - 1)
+        guard next != index else { return }
+        selectAct(acts[next])
+        model.audio.play(.select)
+    }
 }
 
 private struct ActHeroCard: View {
@@ -215,73 +248,87 @@ private struct ActHeroCard: View {
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Text(String(format: "%02d", act.rawValue))
-                .font(.system(size: 108, weight: .black, design: .rounded))
-                .foregroundStyle(act.atlasTint.opacity(0.055))
-                .offset(x: 10, y: -23)
+            Image(act.atlasCoverAsset)
+                .resizable()
+                .scaledToFill()
+                .overlay {
+                    LinearGradient(
+                        colors: [EchoTheme.navyDeep.opacity(0.18), EchoTheme.navyDeep.opacity(0.72), EchoTheme.navyDeep.opacity(0.94)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                }
+                .opacity(0.82)
                 .accessibilityHidden(true)
 
-            HStack(spacing: 13) {
-                AtlasRegionGlyph(act: act, reduceMotion: reduceMotion)
-                    .frame(width: 82, height: 82)
+            Text(String(format: "%02d", act.rawValue))
+                .font(.system(size: 94, weight: .black, design: .rounded))
+                .foregroundStyle(act.atlasTint.opacity(0.07))
+                .offset(x: 4, y: -18)
+                .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("REGION \(String(format: "%02d", act.rawValue)) · \(act.title)")
-                        .font(.system(size: 9, weight: .black, design: .rounded))
-                        .tracking(1.2)
-                        .foregroundStyle(act.atlasTint)
-                    Text(act.atlasRegion)
-                        .font(.system(size: 22, weight: .black, design: .rounded))
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.76)
-                    Text(act.blurb)
-                        .font(.system(size: 11, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.white.opacity(0.62))
-                        .lineLimit(2)
+            VStack(spacing: 11) {
+                HStack(spacing: 12) {
+                    AtlasRegionGlyph(act: act, reduceMotion: reduceMotion)
+                        .frame(width: 72, height: 72)
 
-                    HStack(spacing: 5) {
-                        ForEach(act.atlasTraits, id: \.self) { trait in
-                            Text(trait)
-                                .font(.system(size: 7, weight: .black, design: .rounded))
-                                .tracking(0.6)
-                                .foregroundStyle(Color.white.opacity(0.76))
-                                .padding(.horizontal, 7)
-                                .frame(height: 20)
-                                .background(act.atlasTint.opacity(0.10), in: Capsule())
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("REGION \(String(format: "%02d", act.rawValue)) · \(act.title)")
+                            .font(.system(size: 9, weight: .black, design: .rounded))
+                            .tracking(1.2)
+                            .foregroundStyle(act.atlasTint)
+                        Text(act.atlasRegion)
+                            .font(.system(size: 22, weight: .black, design: .rounded))
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.72)
+                        Text(act.blurb)
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundStyle(Color.white.opacity(0.68))
+                            .lineLimit(1)
+
+                        HStack(spacing: 5) {
+                            ForEach(act.atlasTraits, id: \.self) { trait in
+                                Text(trait)
+                                    .font(.system(size: 7, weight: .black, design: .rounded))
+                                    .tracking(0.6)
+                                    .foregroundStyle(Color.white.opacity(0.82))
+                                    .padding(.horizontal, 7)
+                                    .frame(height: 19)
+                                    .background(act.atlasTint.opacity(0.14), in: Capsule())
+                            }
                         }
                     }
+                    .layoutPriority(1)
+
+                    Spacer(minLength: 0)
                 }
-                .layoutPriority(1)
 
-                Spacer(minLength: 0)
-            }
-
-            VStack(spacing: 5) {
-                HStack {
-                    Text("REGION MASTERY")
-                    Spacer()
-                    Text("\(cleared)/\(act.range.count) · \(stars)/\(act.range.count * 3)")
-                }
-                .font(.system(size: 8, weight: .bold, design: .rounded))
-                .tracking(0.8)
-                .foregroundStyle(EchoTheme.muted)
-
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        Capsule().fill(Color.white.opacity(0.07))
-                        Capsule()
-                            .fill(LinearGradient(colors: [act.atlasTint, EchoTheme.cyanBright], startPoint: .leading, endPoint: .trailing))
-                            .frame(width: geometry.size.width * CGFloat(cleared) / CGFloat(act.range.count))
-                            .shadow(color: act.atlasTint.opacity(0.5), radius: 4)
+                VStack(spacing: 5) {
+                    HStack {
+                        Text("REGION MASTERY")
+                        Spacer()
+                        Text("\(cleared)/\(act.range.count) · \(stars)/\(act.range.count * 3)")
                     }
+                    .font(.system(size: 8, weight: .bold, design: .rounded))
+                    .tracking(0.8)
+                    .foregroundStyle(Color.white.opacity(0.62))
+
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            Capsule().fill(Color.white.opacity(0.10))
+                            Capsule()
+                                .fill(LinearGradient(colors: [act.atlasTint, EchoTheme.cyanBright], startPoint: .leading, endPoint: .trailing))
+                                .frame(width: geometry.size.width * CGFloat(cleared) / CGFloat(act.range.count))
+                                .shadow(color: act.atlasTint.opacity(0.5), radius: 4)
+                        }
+                    }
+                    .frame(height: 5)
                 }
-                .frame(height: 5)
             }
-            .frame(maxHeight: .infinity, alignment: .bottom)
+            .padding(16)
         }
-        .frame(height: 142)
-        .padding(16)
+        .frame(height: 164)
         .background(
             LinearGradient(
                 colors: [EchoTheme.panel.opacity(0.98), act.atlasTint.opacity(0.12)],
@@ -297,6 +344,7 @@ private struct ActHeroCard: View {
                     lineWidth: 1
                 )
         )
+        .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
     }
 }
 
@@ -783,6 +831,17 @@ private enum AtlasRouteLayout {
 }
 
 private extension Act {
+    var atlasCoverAsset: String {
+        switch self {
+        case .trace, .drift: "ActOriginCover"
+        case .fracture, .debris, .paradox: "ActFractureCover"
+        case .singularity, .rift, .gravity: "ActSingularityCover"
+        case .mirage: "ActMirageCover"
+        case .confection: "CandyTimeline"
+        case .eternity: "ActEternityCover"
+        }
+    }
+
     var atlasRegion: String {
         switch self {
         case .trace: "ORIGIN GRID"

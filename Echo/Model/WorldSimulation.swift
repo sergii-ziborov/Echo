@@ -109,7 +109,7 @@ final class WorldSimulation {
 
     var nextEchoAt: TimeInterval? {
         guard echoCount < level.maxEchoes else { return nil }
-        return Double(echoCount + 1) * level.echoInterval + pulseDelay
+        return Double(echoCount + 1) * level.echoInterval + tuning.echoDelayBonus + pulseDelay
     }
 
     var nextEchoIn: TimeInterval? {
@@ -128,6 +128,12 @@ final class WorldSimulation {
         if inSlowField { speed *= 0.52 }
         if reality == .candy { speed *= 1.12 }
         return speed
+    }
+
+    var timelineScale: Double {
+        if effects.isFrozen { return 0 }
+        if effects.isAnchored { return tuning.anchorTimeScale }
+        return 1
     }
 
     private var distanceAcc = 0.0
@@ -157,7 +163,9 @@ final class WorldSimulation {
         guard !hasStarted else { return }
         self.tuning = tuning
         rewindCharges = tuning.rewindCharges
-        effects.shieldCharges = tuning.startsShielded ? max(1, effects.shieldCharges) : effects.shieldCharges
+        effects.shieldCharges = tuning.startsShielded
+            ? max(tuning.shieldChargesPerUse, effects.shieldCharges)
+            : effects.shieldCharges
         snapshots.removeAll()
         captureSnapshot()
     }
@@ -198,7 +206,7 @@ final class WorldSimulation {
         rifts = Self.makeRifts(level.rifts)
         gates = Self.makeGates(level.gates)
         scars = []
-        effects = ActiveEffects(shieldCharges: tuning.startsShielded ? 1 : 0)
+        effects = ActiveEffects(shieldCharges: tuning.startsShielded ? tuning.shieldChargesPerUse : 0)
         exitOpen = false
         moves = 0
         bonusesCollected = 0
@@ -290,7 +298,7 @@ final class WorldSimulation {
     @discardableResult
     func tryDash() -> Bool {
         guard phase == .playing, hasStarted, effects.canDash else { return false }
-        effects.surgeRemaining = max(effects.surgeRemaining, config.dashDuration)
+        effects.surgeRemaining = max(effects.surgeRemaining, config.dashDuration + tuning.dashDurationBonus)
         effects.dashCooldown = config.dashCooldown * tuning.dashCooldownMultiplier
         dashed = true
         return true
@@ -322,17 +330,20 @@ final class WorldSimulation {
 
         time += dt
         let wasFrozen = effects.isFrozen
+        let wasAnchored = effects.isAnchored
         tickEffects(dt: dt)
         let timeIsFrozen = wasFrozen || effects.isFrozen
-        let echoScale: TimeInterval = timeIsFrozen ? 0 : 1
-        playbackTime += dt * echoScale
+        let timeIsAnchored = wasAnchored || effects.isAnchored
+        let temporalScale: TimeInterval = timeIsFrozen ? 0 : timeIsAnchored ? tuning.anchorTimeScale : 1
+        let temporalDt = dt * temporalScale
+        playbackTime += temporalDt
         var events: [SimEvent] = []
-        events.append(contentsOf: tickTimers(dt: timeIsFrozen ? 0 : dt))
-        tickResonance(dt: timeIsFrozen ? 0 : dt)
+        events.append(contentsOf: tickTimers(dt: temporalDt))
+        tickResonance(dt: temporalDt)
         updateOrbits()
-        if !timeIsFrozen {
-            events.append(contentsOf: stepMovers(dt: dt))
-            applyGravityWells(dt: dt)
+        if temporalDt > 0 {
+            events.append(contentsOf: stepMovers(dt: temporalDt))
+            applyGravityWells(dt: temporalDt)
         }
 
         recorder.record(time: time, position: playerPosition)
@@ -345,8 +356,8 @@ final class WorldSimulation {
         events.append(contentsOf: tickRifts())
         tickGates()
         events.append(contentsOf: tickLasers())
-        tickScars(dt: dt)
-        events.append(contentsOf: detectTimeCollision(dt: dt))
+        tickScars(dt: temporalDt)
+        events.append(contentsOf: detectTimeCollision(dt: temporalDt))
         refreshGhosts()
         refreshThreats()
         trackClosest()
@@ -417,6 +428,8 @@ final class WorldSimulation {
             effects.phaseRemaining = max(0, effects.phaseRemaining - dt)
             effects.iFrames = max(effects.iFrames, effects.phaseRemaining)
         }
+        if effects.anchorRemaining > 0 { effects.anchorRemaining = max(0, effects.anchorRemaining - dt) }
+        if effects.prismRemaining > 0 { effects.prismRemaining = max(0, effects.prismRemaining - dt) }
         if effects.dashCooldown > 0 { effects.dashCooldown = max(0, effects.dashCooldown - dt) }
         if effects.iFrames > 0 { effects.iFrames = max(0, effects.iFrames - dt) }
         if riftTravelCooldown > 0 { riftTravelCooldown = max(0, riftTravelCooldown - dt) }
@@ -750,7 +763,7 @@ final class WorldSimulation {
     private func collectSparks() -> [SimEvent] {
         var events: [SimEvent] = []
         for i in sparks.indices where !sparks[i].collected {
-            if playerPosition.distance(to: sparks[i].position) < config.playerRadius + config.sparkRadius {
+            if playerPosition.distance(to: sparks[i].position) < config.playerRadius + config.sparkRadius + tuning.pickupRadiusBonus {
                 let securedCharge = sparks[i].timerDuration != nil && !sparks[i].timedOut
                 sparks[i].collected = true
                 let remaining = sparksRemaining
@@ -762,7 +775,7 @@ final class WorldSimulation {
                     events.append(.resonance(chain: resonanceChain, window: resonanceWindow))
                 }
                 if securedCharge {
-                    let reward = 1.5 + tuning.freezeBonus * 0.25
+                    let reward = 1.5 + tuning.freezeBonus * 0.25 + tuning.crystalRewardBonus
                     effects.freezeRemaining += reward
                     timedSparksSecured += 1
                     events.append(.timeCrystalSecured(id: sparks[i].id, freeze: reward))
@@ -792,23 +805,62 @@ final class WorldSimulation {
     private func apply(_ kind: BonusKind) {
         switch kind {
         case .shield:
-            effects.shieldCharges += 1
+            effects.shieldCharges += tuning.shieldChargesPerUse
         case .freeze:
-            effects.freezeRemaining += kind.duration + tuning.freezeBonus
+            effects.freezeRemaining += (kind.duration + tuning.freezeBonus) * tuning.timedEffectMultiplier
         case .surge:
-            effects.surgeRemaining += kind.duration
+            effects.surgeRemaining += (kind.duration + tuning.surgeBonus) * tuning.timedEffectMultiplier
         case .pulse:
-            pulseDelay += 2.4
+            pulseDelay += 2.4 + tuning.pulseDelayBonus
         case .magnet:
-            effects.magnetRemaining += kind.duration
+            effects.magnetRemaining += kind.duration * tuning.timedEffectMultiplier
         case .phase:
-            effects.phaseRemaining += kind.duration
-            effects.iFrames = max(effects.iFrames, kind.duration)
+            let duration = (kind.duration + tuning.phaseBonus) * tuning.timedEffectMultiplier
+            effects.phaseRemaining += duration
+            effects.iFrames = max(effects.iFrames, duration)
         case .chrono:
-            pulseDelay += 3.6
+            pulseDelay += 3.6 + tuning.chronoDelayBonus
+        case .anchor:
+            effects.anchorRemaining += (kind.duration + tuning.anchorBonus) * tuning.timedEffectMultiplier
+        case .repulse:
+            applyRepulse()
+        case .prism:
+            effects.prismRemaining += (kind.duration + tuning.prismBonus) * tuning.timedEffectMultiplier
+        case .blink:
+            applyBlink()
         case .ward:
-            effects.shieldCharges += 1
+            effects.shieldCharges += tuning.shieldChargesPerUse
         }
+    }
+
+    private func applyRepulse() {
+        let radius = tuning.repulseRadius
+        for index in movers.indices {
+            let delta = movers[index].position - playerPosition
+            guard delta.length <= radius + movers[index].radius else { continue }
+            let direction = delta.length > 1 ? delta.normalized() : Vec2(x: 1, y: 0)
+            if movers[index].material.isBreakable {
+                movers[index].hitsRemaining = 0
+                movers[index].fractureRemaining = 0
+            } else {
+                movers[index].path = .bounce
+                movers[index].velocity = direction * max(300, movers[index].velocity.length)
+                let pushed = movers[index].position + direction * 34
+                movers[index].position = clampToArena(pushed, radius: movers[index].radius)
+            }
+        }
+        scars.removeAll { $0.position.distance(to: playerPosition) <= radius }
+        pulseDelay += 0.7
+        effects.iFrames = max(effects.iFrames, 0.25)
+    }
+
+    private func applyBlink() {
+        let fallback = level.exit - playerPosition
+        let direction = lastVelocity.length > 1 ? lastVelocity.normalized() : fallback.normalized()
+        guard direction.length > 0 else { return }
+        let destination = playerPosition + direction * tuning.blinkDistance
+        playerPosition = resolveWalls(clampToArena(destination, radius: config.playerRadius), radius: config.playerRadius)
+        effects.iFrames = max(effects.iFrames, 0.45)
     }
 
     private func stepMovers(dt: TimeInterval) -> [SimEvent] {
@@ -838,7 +890,7 @@ final class WorldSimulation {
                 movers[i].position = a.lerp(b, movers[i].patrolT)
             case .orbit(let center, let radius, let period, let phase):
                 impacted = false
-                let angle = phase + (time / max(period, 0.1)) * (.pi * 2)
+                let angle = phase + (playbackTime / max(period, 0.1)) * (.pi * 2)
                 movers[i].position = Vec2(
                     x: center.x + cos(angle) * radius,
                     y: center.y + sin(angle) * radius
@@ -926,7 +978,7 @@ final class WorldSimulation {
     }
 
     private func collideLasers() -> DeathCause? {
-        guard !effects.isFrozen else { return nil }
+        guard !effects.isFrozen, !effects.isPrismatic else { return nil }
         for laser in lasers where laser.phase == .firing {
             let limit = config.playerRadius + laser.beamWidth / 2 - config.collisionSlop
             if playerPosition.distance(toSegmentFrom: laser.start, to: laser.end) < limit {

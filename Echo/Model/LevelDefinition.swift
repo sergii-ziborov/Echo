@@ -1770,6 +1770,25 @@ enum LevelCatalog {
             lasers.append(.sweeping(id: 2, center: Vec2(x: 500, y: 500), length: 860, from: 0, to: .pi, sweepDuration: 5.2, beamWidth: 15, period: 9.2, chargeFor: 1.8, activeFor: 1.2))
         }
 
+        let featuredBonus: BonusKind = switch act {
+        case .singularity: slot.isMultiple(of: 2) ? .prism : .anchor
+        case .rift: slot.isMultiple(of: 2) ? .blink : .phase
+        case .gravity: slot.isMultiple(of: 2) ? .repulse : .anchor
+        case .mirage: slot.isMultiple(of: 2) ? .prism : .blink
+        case .confection: slot.isMultiple(of: 2) ? .surge : .magnet
+        case .eternity: [.anchor, .repulse, .prism, .blink][slot % 4]
+        default: slot.isMultiple(of: 2) ? .freeze : .phase
+        }
+        let supportBonus: BonusKind = switch act {
+        case .singularity: .chrono
+        case .rift: .pulse
+        case .gravity: .surge
+        case .mirage: .phase
+        case .confection: .pulse
+        case .eternity: [.chrono, .freeze, .shield][slot % 3]
+        default: .shield
+        }
+
         return make(
             number: number,
             name: names[number - 37],
@@ -1784,8 +1803,8 @@ enum LevelCatalog {
             parMoves: 82 + slot * 3,
             playerSpeed: act == .confection ? 345 : 330,
             bonuses: [
-                BonusSpawn(id: 0, kind: slot.isMultiple(of: 2) ? .freeze : .phase, position: Vec2(x: 500, y: 92)),
-                BonusSpawn(id: 1, kind: act == .gravity ? .surge : .shield, position: Vec2(x: 500, y: 908)),
+                BonusSpawn(id: 0, kind: featuredBonus, position: Vec2(x: 500, y: 92)),
+                BonusSpawn(id: 1, kind: supportBonus, position: Vec2(x: 500, y: 908)),
             ],
             fields: slot == 2 || act == .mirage
                 ? [SlowField(id: 0, area: AABB(x: 405, y: 405, width: 190, height: 190))]

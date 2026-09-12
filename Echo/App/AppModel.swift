@@ -31,6 +31,8 @@ final class AppModel {
 
     func appear() {
         audio.enabled = progress.soundEnabled
+        audio.setMasterVolume(progress.soundVolume)
+        audio.setHapticsEnabled(progress.hapticsEnabled)
         applyLaunchArgs()
     }
 
@@ -44,7 +46,17 @@ final class AppModel {
         } else if args.contains("-shot-worlds") {
             progress.markTutorialSeen()
             screen = .worlds
-        } else if args.contains("-shot-shop") {
+        } else if args.contains("-shot-daily") {
+            progress.markTutorialSeen()
+            screen = .daily
+        } else if args.contains("-shot-shop")
+            || args.contains("-shot-research")
+            || args.contains("-shot-research-detail")
+            || args.contains("-shot-tech-surge")
+            || args.contains("-shot-tech-magnet")
+            || args.contains("-shot-tech-loadout")
+            || args.contains("-shot-tech-temporal")
+            || args.contains("-shot-ability") {
             progress.markTutorialSeen()
             screen = .shop
         } else if args.contains("-shot-wiki") {
@@ -53,6 +65,18 @@ final class AppModel {
         } else if args.contains("-shot-settings") {
             progress.markTutorialSeen()
             screen = .settings
+        } else if args.contains("-shot-vfx-freeze")
+            || args.contains("-shot-vfx-surge")
+            || args.contains("-shot-vfx-shield") {
+            progress.markTutorialSeen()
+            for hint in [
+                EncounterHint.echo, .asteroid, .rift, .freeze, .phase, .collision, .gate,
+                .laser, .timeCrystal, .resonance, .blackHole, .realityShift, .surge,
+                .pulse, .magnet, .chrono, .anchor, .repulse, .prism, .blink,
+            ] {
+                _ = progress.markHint(hint.rawValue)
+            }
+            screen = .playing(PlayRequest(levelID: LevelCatalog.level(number: 21)?.id ?? LevelCatalog.prototype.id, daily: false))
         } else if args.contains("-shot-rift") || args.contains("-shot-gravity") || args.contains("-shot-candy") || args.contains("-shot-fracture") {
             progress.markTutorialSeen()
             for hint in [EncounterHint.echo, .asteroid, .rift, .laser, .timeCrystal, .blackHole, .realityShift] {
@@ -85,12 +109,12 @@ final class AppModel {
     }
 
     func tapSplash() {
-        audio.play(.tap)
+        audio.play(.confirm)
         screen = .home
     }
 
     func playPrimary() {
-        audio.play(.tap)
+        audio.play(.confirm)
         let request = PlayRequest(levelID: continueLevel.id, daily: false, difficultyCycle: progress.difficultyCycle)
         if progress.hasSeenTutorial {
             screen = .playing(request)
@@ -100,33 +124,33 @@ final class AppModel {
     }
 
     func openWorlds() {
-        audio.play(.tap)
+        audio.play(.select)
         screen = .worlds
     }
 
     func openDaily() {
-        audio.play(.tap)
+        audio.play(.select)
         screen = .daily
     }
 
     func openWiki() {
-        audio.play(.tap)
+        audio.play(.select)
         screen = .wiki
     }
 
     func openSettings() {
-        audio.play(.tap)
+        audio.play(.select)
         screen = .settings
     }
 
     func openShop() {
-        audio.play(.tap)
+        audio.play(.select)
         screen = .shop
     }
 
     func play(level: LevelDefinition, daily: Bool) {
-        audio.play(.tap)
         guard progress.isUnlocked(level) || daily else { return }
+        audio.play(.confirm)
         let request = PlayRequest(
             levelID: daily ? LevelCatalog.daily().id : level.id,
             daily: daily,
@@ -141,7 +165,7 @@ final class AppModel {
 
     func finishTutorial(then request: PlayRequest?) {
         progress.markTutorialSeen()
-        audio.play(.tap)
+        audio.play(request == nil ? .tap : .confirm)
         if let request {
             screen = .playing(request)
         } else {

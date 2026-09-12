@@ -10,7 +10,7 @@ struct LevelProgress: Equatable, Sendable, Codable {
 @Observable
 final class ProgressStore {
     private let defaults: UserDefaults
-    static let maxOwned = 9
+    static let maxOwned = 15
     static let maxLives = 5
     static let startingLives = 3
     static let lifePrice = 100
@@ -23,6 +23,7 @@ final class ProgressStore {
     private let tutorialKey = "echo.progress.tutorialSeen"
     private let dailyKey = "echo.progress.lastDaily"
     private let soundKey = "echo.settings.sound"
+    private let soundVolumeKey = "echo.settings.soundVolume"
     private let hapticsKey = "echo.settings.haptics"
     private let replayKey = "echo.settings.autoReplay"
     private let hintsKey = "echo.progress.hints"
@@ -39,6 +40,7 @@ final class ProgressStore {
     var hasSeenTutorial: Bool
     private(set) var lastDailyKey: String?
     var soundEnabled: Bool
+    var soundVolume: Double
     var hapticsEnabled: Bool
     var autoReplayEnabled: Bool
     private(set) var seenHints: Set<String>
@@ -67,6 +69,11 @@ final class ProgressStore {
         hasSeenTutorial = defaults.bool(forKey: tutorialKey)
         lastDailyKey = defaults.string(forKey: dailyKey)
         soundEnabled = defaults.object(forKey: soundKey) as? Bool ?? true
+        if let savedVolume = defaults.object(forKey: soundVolumeKey) as? NSNumber {
+            soundVolume = min(1, max(0, savedVolume.doubleValue))
+        } else {
+            soundVolume = 0.82
+        }
         hapticsEnabled = defaults.object(forKey: hapticsKey) as? Bool ?? true
         autoReplayEnabled = defaults.object(forKey: replayKey) as? Bool ?? true
         if let data = defaults.data(forKey: hintsKey),
@@ -204,7 +211,7 @@ final class ProgressStore {
     }
 
     var skillSlotCount: Int {
-        min(5, 2 + upgradeLevel(.slots))
+        min(6, 2 + upgradeLevel(.slots))
     }
 
     var equippedSkills: [BonusKind] {
@@ -215,17 +222,22 @@ final class ProgressStore {
         BonusKind.allCases.filter { $0.canBuy && isSkillUnlocked($0) }.count
     }
 
+    func skillPrice(_ kind: BonusKind) -> Int {
+        let discount = min(0.25, Double(upgradeLevel(.fabricator)) * 0.05)
+        return max(1, Int((Double(kind.price) * (1 - discount)).rounded()))
+    }
+
     func canBuy(_ kind: BonusKind) -> Bool {
         kind.canBuy
             && isSkillUnlocked(kind)
-            && shards >= kind.price
+            && shards >= skillPrice(kind)
             && count(kind) < inventoryCapacity
     }
 
     @discardableResult
     func buy(_ kind: BonusKind) -> Bool {
         guard canBuy(kind) else { return false }
-        shards -= kind.price
+        shards -= skillPrice(kind)
         inventory[kind.rawValue] = count(kind) + 1
         if !equippedSkillIDs.contains(kind.rawValue), equippedSkillIDs.count < skillSlotCount {
             equippedSkillIDs.append(kind.rawValue)
@@ -261,6 +273,10 @@ final class ProgressStore {
         case .magnet: upgradeLevel(.magnetism) >= 1
         case .phase: upgradeLevel(.phaseResearch) >= 1
         case .chrono: upgradeLevel(.chronoResearch) >= 1
+        case .anchor: upgradeLevel(.anchorResearch) >= 1
+        case .repulse: upgradeLevel(.repulseResearch) >= 1
+        case .prism: upgradeLevel(.prismResearch) >= 1
+        case .blink: upgradeLevel(.blinkResearch) >= 1
         case .ward: false
         }
     }
@@ -273,6 +289,10 @@ final class ProgressStore {
         case .magnet: "Research Magnetic Field I"
         case .phase: "Research Phase Theory"
         case .chrono: "Research Chrono Theory"
+        case .anchor: "Research World Anchor I"
+        case .repulse: "Research Repulse Core I"
+        case .prism: "Research Prism Shell I"
+        case .blink: "Research Blink Drive I"
         case .ward: "Arena-only"
         }
     }
@@ -332,16 +352,31 @@ final class ProgressStore {
         let rewindLevel = upgradeLevel(.rewind)
         let aegisLevel = upgradeLevel(.aegis)
         return PlayerTuning(
-            speedMultiplier: 1 + Double(upgradeLevel(.velocity)) * 0.05,
-            dashCooldownMultiplier: max(0.55, 1 - Double(upgradeLevel(.dashCapacitor)) * 0.12),
-            cooldownMultiplier: max(0.55, 1 - Double(upgradeLevel(.recharge)) * 0.09),
-            freezeBonus: Double(upgradeLevel(.cryostasis)) * 0.7,
-            magnetRadiusMultiplier: 1 + Double(upgradeLevel(.magnetism)) * 0.18,
-            shieldGraceBonus: Double(aegisLevel) * 0.22,
-            startsShielded: aegisLevel >= 3,
-            laserWarningBonus: Double(upgradeLevel(.beamForecast)) * 0.22,
-            rewindSeconds: 3 + Double(rewindLevel) * 0.5,
-            rewindCharges: rewindLevel >= 2 ? 2 : 1
+            speedMultiplier: 1 + Double(upgradeLevel(.velocity)) * 0.04,
+            pickupRadiusBonus: Double(upgradeLevel(.sparkSense)) * 3.5,
+            dashCooldownMultiplier: max(0.42, 1 - Double(upgradeLevel(.dashCapacitor)) * 0.09),
+            dashDurationBonus: Double(upgradeLevel(.dashImpulse)) * 0.09,
+            cooldownMultiplier: max(0.46, 1 - Double(upgradeLevel(.recharge)) * 0.08),
+            timedEffectMultiplier: 1 + Double(upgradeLevel(.fieldAmplifier)) * 0.04,
+            surgeBonus: Double(upgradeLevel(.surgeMastery)) * 0.45,
+            freezeBonus: Double(upgradeLevel(.cryostasis)) * 0.55,
+            magnetRadiusMultiplier: 1 + Double(upgradeLevel(.magnetism)) * 0.14,
+            shieldGraceBonus: Double(aegisLevel) * 0.18 + Double(upgradeLevel(.shieldLattice)) * 0.12,
+            startsShielded: aegisLevel >= 5,
+            shieldChargesPerUse: upgradeLevel(.shieldLattice) >= 5 ? 2 : 1,
+            laserWarningBonus: Double(upgradeLevel(.beamForecast)) * 0.18,
+            echoDelayBonus: Double(upgradeLevel(.echoForecast)) * 0.45,
+            crystalRewardBonus: Double(upgradeLevel(.crystalMemory)) * 0.30,
+            rewindSeconds: 3 + Double(rewindLevel) * 0.45,
+            rewindCharges: rewindLevel >= 5 ? 3 : rewindLevel >= 2 ? 2 : 1,
+            anchorTimeScale: max(0.24, 0.44 - Double(upgradeLevel(.anchorResearch)) * 0.05),
+            anchorBonus: Double(upgradeLevel(.anchorResearch)) * 0.35,
+            repulseRadius: 160 + Double(upgradeLevel(.repulseResearch)) * 24,
+            prismBonus: Double(upgradeLevel(.prismResearch)) * 0.5,
+            blinkDistance: 165 + Double(upgradeLevel(.blinkResearch)) * 28,
+            phaseBonus: Double(max(0, upgradeLevel(.phaseResearch) - 1)) * 0.45,
+            chronoDelayBonus: Double(max(0, upgradeLevel(.chronoResearch) - 1)) * 0.65,
+            pulseDelayBonus: Double(max(0, upgradeLevel(.chronoResearch) - 1)) * 0.40
         )
     }
 
@@ -386,6 +421,7 @@ final class ProgressStore {
 
     func persistSettings() {
         defaults.set(soundEnabled, forKey: soundKey)
+        defaults.set(soundVolume, forKey: soundVolumeKey)
         defaults.set(hapticsEnabled, forKey: hapticsKey)
         defaults.set(autoReplayEnabled, forKey: replayKey)
     }

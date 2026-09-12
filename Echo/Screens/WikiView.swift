@@ -104,34 +104,42 @@ struct WikiView: View {
     }
 
     private var sectionPicker: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(WikiSection.allCases) { item in
-                    Button {
-                        model.audio.play(.tap)
-                        withAnimation(.easeOut(duration: 0.2)) {
-                            section = item
-                        }
-                    } label: {
-                        HStack(spacing: 7) {
-                            Image(systemName: item.icon)
-                                .font(.system(size: 11, weight: .bold))
-                            Text(item.title)
-                                .font(.system(size: 11, weight: .bold, design: .rounded))
-                        }
-                        .foregroundStyle(section == item ? EchoTheme.navyDeep : Color.white.opacity(0.72))
-                        .padding(.horizontal, 13)
-                        .frame(height: 36)
-                        .background(section == item ? item.tint : EchoTheme.panel, in: Capsule())
-                        .overlay(
-                            Capsule()
-                                .stroke(section == item ? Color.clear : EchoTheme.panelStroke, lineWidth: 1)
-                        )
+        HStack(spacing: 5) {
+            ForEach(WikiSection.allCases) { item in
+                Button {
+                    model.audio.play(.select)
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        section = item
                     }
-                    .buttonStyle(.plain)
+                } label: {
+                    VStack(spacing: 3) {
+                        Image(systemName: item.icon)
+                            .font(.system(size: 11, weight: .bold))
+                        Text(item.title.uppercased())
+                            .font(.system(size: 7, weight: .black, design: .rounded))
+                            .tracking(0.35)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.75)
+                    }
+                    .foregroundStyle(section == item ? EchoTheme.navyDeep : Color.white.opacity(0.68))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 47)
+                    .background(
+                        section == item ? AnyShapeStyle(item.tint) : AnyShapeStyle(EchoTheme.panel),
+                        in: RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .stroke(section == item ? item.tint.opacity(0.7) : EchoTheme.panelStroke, lineWidth: 1)
+                    )
                 }
+                .buttonStyle(.plain)
+                .accessibilityLabel(item.title)
+                .accessibilityAddTraits(section == item ? .isSelected : [])
             }
         }
+        .padding(4)
+        .background(Color.white.opacity(0.035), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     @ViewBuilder
@@ -230,7 +238,11 @@ struct WikiView: View {
             WikiEntry(icon: "shield.fill", eyebrow: "DEFENSE · 7 SEC COOLDOWN", title: "Shield", detail: "Absorbs one collision and shatters with a clear flash instead of fracturing the current run.", facts: ["One impact per charge", "Does not erase the obstacle"], tint: .green),
             WikiEntry(icon: "magnet.fill", eyebrow: "COLLECTION · 5 SEC · 10 SEC COOLDOWN", title: "Magnet", detail: "Pulls nearby sparks and timed crystals into your path, making risky clusters safer to collect.", facts: ["Range grows through research", "Does not pull hazards"], tint: .pink),
             WikiEntry(icon: "sparkles", eyebrow: "INTANGIBILITY · 2.4 SEC · 12 SEC COOLDOWN", title: "Phase", detail: "Lets you pass through Echoes for a short window. Solid arena borders and walls still contain you.", facts: ["The player turns translucent", "Pickups remain usable"], tint: EchoTheme.cyanBright),
-            WikiEntry(icon: "clock.arrow.circlepath", eyebrow: "TIME · 13 SEC COOLDOWN", title: "Shift", detail: "Pushes the next Echo farther out, buying room for a final spark or an exit run without changing steering.", facts: ["Combines well with Surge", "Unlocked through Chrono Theory"], tint: EchoTheme.violet)
+            WikiEntry(icon: "clock.arrow.circlepath", eyebrow: "TIME · 13 SEC COOLDOWN", title: "Shift", detail: "Pushes the next Echo farther out, buying room for a final spark or an exit run without changing steering.", facts: ["Combines well with Surge", "Unlocked through Chrono Theory"], tint: EchoTheme.violet),
+            WikiEntry(icon: "hourglass.bottomhalf.filled", eyebrow: "WORLD CONTROL · 5 SEC · 14 SEC COOLDOWN", title: "Anchor", detail: "Slows Echo playback, rocks, gravity, gates, lasers, rifts and countdowns while your own movement remains at full speed.", facts: ["Different from Freeze: danger still moves", "World Anchor improves strength and duration"], tint: EchoTheme.cyan),
+            WikiEntry(icon: "burst.fill", eyebrow: "CLEARANCE · INSTANT · 12 SEC COOLDOWN", title: "Repulse", detail: "Sends a radial shockwave through the arena. Brittle asteroids shatter, alloy is hurled away, and nearby collision scars collapse.", facts: ["Creates an emergency safe circle", "Repulse Core increases its radius"], tint: EchoTheme.magenta),
+            WikiEntry(icon: "triangle.fill", eyebrow: "REFRACTION · 4.5 SEC · 13 SEC COOLDOWN", title: "Prism", detail: "Wraps the player in a rotating prism that makes every firing laser harmless for the duration.", facts: ["The beam changes color while refracted", "Other collisions remain dangerous"], tint: .green),
+            WikiEntry(icon: "arrow.forward.to.line.compact", eyebrow: "SPATIAL · INSTANT · 10 SEC COOLDOWN", title: "Blink", detail: "Teleports forward along the most recent movement direction and safely skips the line between both points.", facts: ["Face the destination before tapping", "Blink Drive increases jump distance"], tint: EchoTheme.violet)
         ]
     }
 

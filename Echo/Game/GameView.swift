@@ -9,7 +9,7 @@ struct GameView: View {
     @State private var session: GameSession
     @State private var scene: GameScene
     @State private var overlay: InRunOverlay = .none
-    @State private var hint: EncounterHint?
+    @State private var hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
     @Environment(\.scenePhase) private var scenePhase
 
     init(request: PlayRequest) {
@@ -32,6 +32,8 @@ struct GameView: View {
 
     var body: some View {
         GeometryReader { geo in
+            let interfaceTopInset = geo.safeAreaInsets.top > 20 ? geo.safeAreaInsets.top : 62
+
             ZStack {
                 SpriteView(scene: scene, options: [.ignoresSiblingOrder])
                     .ignoresSafeArea()
@@ -87,7 +89,7 @@ struct GameView: View {
                             .padding(.top, 6)
                     }
                 }
-                .padding(.top, (geo.safeAreaInsets.top > 20 ? geo.safeAreaInsets.top : 62) + 4)
+                .padding(.top, interfaceTopInset + 4)
                 .padding(.bottom, max(geo.safeAreaInsets.bottom, 10))
 
                 if case .paused = session.phase, overlay == .none {
@@ -95,7 +97,7 @@ struct GameView: View {
                         levelName: session.level.name,
                         rewindCharges: session.sim.rewindCharges,
                         onResume: { session.togglePause() },
-                        onRestart: restart,
+                        onRestart: { restart() },
                         onShop: { overlay = .shop },
                         onSettings: { overlay = .settings },
                         onMenu: { model.goHome() }
@@ -126,13 +128,16 @@ struct GameView: View {
                         rewindCharges: session.sim.rewindCharges,
                         rewindSeconds: session.tuning.rewindSeconds,
                         onRewind: paradoxRewind,
-                        onRestart: restart,
+                        onRestart: { restart() },
                         onMenu: { model.goHome() }
                     )
                 }
 
                 if overlay == .shop {
-                    ShopView(onBack: { overlay = .none })
+                    ShopView(
+                        onBack: { overlay = .none },
+                        hostTopInset: interfaceTopInset
+                    )
                 }
 
                 if overlay == .settings {
@@ -189,6 +194,13 @@ struct GameView: View {
             if ProcessInfo.processInfo.arguments.contains("-shot-candy") {
                 session.sim.debugEnterReality(.candy)
             }
+            let args = ProcessInfo.processInfo.arguments
+            let previewKind: BonusKind? = args.contains("-shot-vfx-freeze")
+                ? .freeze
+                : (args.contains("-shot-vfx-surge") ? .surge : (args.contains("-shot-vfx-shield") ? .shield : nil))
+            if let previewKind, session.useBonus(previewKind) {
+                scene.abilityEffect(kind: previewKind, at: session.sim.playerPosition)
+            }
             if ProcessInfo.processInfo.arguments.contains("-shot-active") {
                 session.inputTarget = Vec2(x: 500, y: 300)
                 for kind in [BonusKind.shield, .freeze, .surge, .magnet, .phase] {
@@ -223,44 +235,53 @@ struct GameView: View {
         for event in events {
             switch event {
             case .sparkCollected(let id, _):
-                model.audio.play(.collect)
                 model.audio.haptic(.light)
                 if let spark = session.sim.sparks.first(where: { $0.id == id }) {
+                    model.audio.play(.collect, pan: audioPan(for: spark.position))
                     scene.burst(at: spark.position, color: UIColor(red: 0.5, green: 0.95, blue: 1, alpha: 1))
+                } else {
+                    model.audio.play(.collect)
                 }
             case .resonance(let chain, _):
+                model.audio.play(.resonance, volume: min(1.2, 0.74 + Float(chain) * 0.055))
                 model.audio.haptic(chain >= 4 ? .rigid : .soft)
                 scene.resonanceEffect(chain: chain, at: session.sim.playerPosition)
                 if chain == 2 { offerHint(.resonance) }
             case .timeCrystalSecured:
+                model.audio.play(.crystal)
                 model.audio.haptic(.medium)
                 scene.abilityEffect(kind: .freeze, at: session.sim.playerPosition)
             case .sparkTimerExpired(let id):
+                model.audio.play(.timerExpired)
                 model.audio.haptic(.soft)
                 if let spark = session.sim.sparks.first(where: { $0.id == id }) {
                     scene.timerPop(at: spark.position)
                 }
             case .bonusCollected(let kind):
-                model.audio.play(.collect)
+                model.audio.playAbility(kind)
                 model.audio.haptic(.medium)
                 scene.abilityEffect(kind: kind, at: session.sim.playerPosition)
-                if kind == .freeze { offerHint(.freeze) }
-                if kind == .phase { offerHint(.phase) }
+                offerAbilityHint(kind)
             case .shieldBroke:
+                model.audio.play(.shieldBreak)
                 model.audio.haptic(.rigid)
                 scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.4, green: 1, blue: 0.65, alpha: 1))
             case .dashed:
-                break
+                model.audio.play(.dash)
+                model.audio.haptic(.light)
             case .laserCharging:
-                model.audio.play(.warn)
+                model.audio.play(.laserCharge)
                 model.audio.haptic(.soft)
             case .laserFired(let id):
+                model.audio.play(.laserFire)
                 model.audio.haptic(.rigid)
                 scene.laserDischarge(id: id)
             case .asteroidImpacted(let id, let material, let position):
+                model.audio.play(.asteroidImpact, volume: material == .alloy ? 1.15 : 0.88, pan: audioPan(for: position))
                 model.audio.haptic(material == .alloy ? .rigid : .soft)
                 scene.asteroidImpact(id: id, material: material, at: position)
             case .asteroidShattered(let id, let material, let position):
+                model.audio.play(.asteroidShatter, pan: audioPan(for: position))
                 model.audio.haptic(.medium)
                 scene.asteroidShatter(id: id, material: material, at: position)
             case .echoWillSpawn:
@@ -272,12 +293,14 @@ struct GameView: View {
                 scene.burst(at: session.level.playerStart, color: UIColor(red: 0.75, green: 0.4, blue: 1, alpha: 1))
                 offerHint(.echo)
             case .exitOpened:
+                model.audio.play(.exitOpen)
                 model.audio.haptic(.soft)
             case .riftOpened:
+                model.audio.play(.riftOpen)
                 model.audio.haptic(.soft)
                 offerHint(.rift)
             case .riftEntered(let kind):
-                model.audio.play(.collect)
+                model.audio.play(kind == .calm ? .freeze : .riftEnter)
                 if kind == .calm {
                     scene.abilityEffect(kind: .freeze, at: session.sim.playerPosition)
                 } else if kind == .warp || kind == .candy {
@@ -285,6 +308,7 @@ struct GameView: View {
                     offerHint(.realityShift)
                 }
             case .timeCollision(let at):
+                model.audio.play(.timeCollision, pan: audioPan(for: at))
                 model.audio.haptic(.rigid)
                 scene.burst(at: at, color: UIColor(red: 0.9, green: 0.4, blue: 1, alpha: 1))
                 offerHint(.collision)
@@ -298,20 +322,21 @@ struct GameView: View {
         }
     }
 
-    private func restart() {
-        model.audio.play(.tap)
+    private func restart(playSound: Bool = true) {
+        if playSound { model.audio.play(.tap) }
         overlay = .none
         session.restart()
         scene.rebuild()
     }
 
     private func paradoxRewind() {
-        model.audio.play(.tap)
         overlay = .none
         if session.paradoxRewind() {
+            model.audio.play(.rewind)
             scene.rebuild()
         } else {
-            restart()
+            model.audio.play(.denied)
+            restart(playSound: false)
         }
     }
 
@@ -319,16 +344,15 @@ struct GameView: View {
         guard session.phase == .playing else { return }
         guard session.cooldownRemaining(for: kind) <= 0 else {
             session.banner = String(format: "Recharging %.1fs", session.cooldownRemaining(for: kind))
-            model.audio.play(.tap)
+            model.audio.play(.denied)
             return
         }
         guard model.progress.consume(kind) else { return }
         if session.useBonus(kind) {
-            model.audio.play(.collect)
+            model.audio.playAbility(kind)
             model.audio.haptic(.medium)
             scene.abilityEffect(kind: kind, at: session.sim.playerPosition)
-            if kind == .freeze { offerHint(.freeze) }
-            if kind == .phase { offerHint(.phase) }
+            offerAbilityHint(kind)
         } else {
             model.progress.refund(kind)
         }
@@ -340,6 +364,28 @@ struct GameView: View {
         if session.phase == .playing {
             session.togglePause()
         }
+    }
+
+    private func offerAbilityHint(_ kind: BonusKind) {
+        let value: EncounterHint? = switch kind {
+        case .shield, .ward: nil
+        case .freeze: .freeze
+        case .surge: .surge
+        case .pulse: .pulse
+        case .magnet: .magnet
+        case .phase: .phase
+        case .chrono: .chrono
+        case .anchor: .anchor
+        case .repulse: .repulse
+        case .prism: .prism
+        case .blink: .blink
+        }
+        if let value { offerHint(value) }
+    }
+
+    private func audioPan(for position: Vec2) -> Float {
+        let normalized = position.x / max(1, session.level.worldWidth)
+        return Float((normalized * 2 - 1) * 0.62)
     }
 
     private func dismissHint() {
@@ -375,21 +421,32 @@ private struct EncounterCard: View {
     var body: some View {
         ZStack {
             Color.black.opacity(0.55).ignoresSafeArea()
-            VStack(spacing: 14) {
-                Text("FIRST CONTACT")
-                    .font(.system(size: 11, weight: .semibold))
+            VStack(spacing: 12) {
+                HStack {
+                    Label("FIRST CONTACT", systemImage: "play.rectangle.fill")
+                    Spacer()
+                    Text("WATCH THE LOOP")
+                }
+                    .font(.system(size: 9, weight: .black, design: .rounded))
                     .tracking(3)
                     .foregroundStyle(EchoTheme.muted)
                 Text(hint.title)
-                    .font(.system(size: 26, weight: .ultraLight))
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
                     .tracking(1)
+                MechanicDemoView(scenario: MechanicDemoScenario(hint: hint), height: 162)
+                Text(hint.action)
+                    .font(.system(size: 11, weight: .black, design: .rounded))
+                    .tracking(1.1)
+                    .foregroundStyle(EchoTheme.cyan)
                 Text(hint.detail)
-                    .font(.system(size: 15))
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
                     .foregroundStyle(EchoTheme.muted)
                     .multilineTextAlignment(.center)
-                PrimaryButton(title: "Got it", systemImage: "checkmark", action: onDismiss)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
+                PrimaryButton(title: "Try it", systemImage: "play.fill", action: onDismiss)
             }
-            .padding(26)
+            .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 28, style: .continuous)
                     .fill(EchoTheme.navy.opacity(0.96))
@@ -398,7 +455,7 @@ private struct EncounterCard: View {
                 RoundedRectangle(cornerRadius: 28, style: .continuous)
                     .stroke(Color.white.opacity(0.10), lineWidth: 1)
             )
-            .padding(.horizontal, 28)
+            .padding(.horizontal, 22)
         }
     }
 }
@@ -494,6 +551,22 @@ struct HUDBar: View {
                                 accessibilityText: "Phase, \(seconds(session.effects.phaseRemaining)) remaining"
                             )
                         }
+                        if session.effects.isAnchored {
+                            HUDEffectBadge(
+                                icon: "hourglass.bottomhalf.filled",
+                                value: seconds(session.effects.anchorRemaining),
+                                tint: EchoTheme.cyan,
+                                accessibilityText: "Anchor, \(seconds(session.effects.anchorRemaining)) remaining"
+                            )
+                        }
+                        if session.effects.isPrismatic {
+                            HUDEffectBadge(
+                                icon: "triangle.fill",
+                                value: seconds(session.effects.prismRemaining),
+                                tint: .green,
+                                accessibilityText: "Prism, \(seconds(session.effects.prismRemaining)) remaining"
+                            )
+                        }
                         if session.resonanceChain >= 2 {
                             HUDEffectBadge(
                                 icon: "link",
@@ -531,6 +604,8 @@ struct HUDBar: View {
             || session.effects.isSurging
             || session.effects.isMagnet
             || session.effects.isPhasing
+            || session.effects.isAnchored
+            || session.effects.isPrismatic
             || session.resonanceChain >= 2
             || session.reality != .normal
     }
@@ -606,58 +681,57 @@ struct InventoryBar: View {
     var body: some View {
         let equipped = model.progress.equippedSkills
         if session.phase == .playing || session.phase == .paused {
-            HStack(spacing: 8) {
-                ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
-                    if equipped.indices.contains(index) {
-                        let kind = equipped[index]
-                        let tint = Color(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b)
-                        let cooldown = session.cooldownRemaining(for: kind)
-                        let stock = model.progress.count(kind)
-                        Button {
-                            onUse(kind)
-                        } label: {
-                            ZStack {
-                                VStack(spacing: 1) {
-                                    Image(kind.assetName)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 25, height: 25)
-                                    Text("×\(stock)")
-                                        .font(.system(size: 10, weight: .semibold, design: .rounded))
-                                        .foregroundStyle(stock > 0 ? .white : EchoTheme.muted)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
+                        if equipped.indices.contains(index) {
+                            let kind = equipped[index]
+                            let tint = Color(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b)
+                            let cooldown = session.cooldownRemaining(for: kind)
+                            let stock = model.progress.count(kind)
+                            Button {
+                                onUse(kind)
+                            } label: {
+                                ZStack {
+                                    VStack(spacing: 0) {
+                                        AbilityIconView(kind: kind, size: 31)
+                                        Text("×\(stock)")
+                                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                                            .foregroundStyle(stock > 0 ? .white : EchoTheme.muted)
+                                    }
+                                    if cooldown > 0 {
+                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                            .fill(Color.black.opacity(0.66))
+                                        Text(String(format: "%.1f", cooldown))
+                                            .font(.system(size: 12, weight: .bold, design: .monospaced))
+                                            .foregroundStyle(.white)
+                                    }
                                 }
-                                if cooldown > 0 {
-                                    RoundedRectangle(cornerRadius: 13, style: .continuous)
-                                        .fill(Color.black.opacity(0.58))
-                                    Text(String(format: "%.1f", cooldown))
-                                        .font(.system(size: 11, weight: .bold, design: .monospaced))
-                                        .foregroundStyle(.white)
-                                }
+                                .frame(width: 53, height: 53)
+                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                        .stroke(tint.opacity(stock > 0 ? 0.65 : 0.20), lineWidth: 1)
+                                )
                             }
-                            .frame(width: 46, height: 46)
-                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .stroke(tint.opacity(stock > 0 ? 0.55 : 0.20), lineWidth: 1)
-                            )
+                            .buttonStyle(.plain)
+                            .disabled(session.phase != .playing || stock == 0 || cooldown > 0)
+                            .accessibilityLabel("Use \(kind.title), \(stock) owned")
+                        } else {
+                            Image(systemName: "plus")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(EchoTheme.muted.opacity(0.65))
+                                .frame(width: 53, height: 53)
+                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                        .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                                )
                         }
-                        .buttonStyle(.plain)
-                        .disabled(session.phase != .playing || stock == 0 || cooldown > 0)
-                        .accessibilityLabel("Use \(kind.title), \(stock) owned")
-                    } else {
-                        Image(systemName: "plus")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(EchoTheme.muted.opacity(0.65))
-                            .frame(width: 46, height: 46)
-                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
-                            )
                     }
                 }
-                Spacer()
             }
+            .frame(maxWidth: 370, alignment: .leading)
         }
     }
 }

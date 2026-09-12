@@ -1,16 +1,34 @@
 import SwiftUI
 
 struct ShopView: View {
+    private static var screenshotUpgrade: UpgradeKind {
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-shot-tech-surge") { return .surgeMastery }
+        if arguments.contains("-shot-tech-magnet") { return .magnetism }
+        if arguments.contains("-shot-tech-loadout") { return .shieldLattice }
+        if arguments.contains("-shot-tech-temporal") { return .beamForecast }
+        return .velocity
+    }
+
     @Environment(AppModel.self) private var model
     var onBack: (() -> Void)? = nil
+    var hostTopInset: CGFloat = 0
 
     @State private var section: LabSection = ProcessInfo.processInfo.arguments.contains("-shot-research")
+        || ProcessInfo.processInfo.arguments.contains("-shot-research-detail")
         ? .research
         : .loadout
     @State private var flash: String?
-    @State private var selectedUpgrade: UpgradeKind = .velocity
+    @State private var selectedUpgrade: UpgradeKind = ShopView.screenshotUpgrade
     @State private var inspectedUpgrade: UpgradeKind? = ProcessInfo.processInfo.arguments.contains("-shot-research-detail")
-        ? .velocity
+        || ProcessInfo.processInfo.arguments.contains("-shot-tech-surge")
+        || ProcessInfo.processInfo.arguments.contains("-shot-tech-magnet")
+        || ProcessInfo.processInfo.arguments.contains("-shot-tech-loadout")
+        || ProcessInfo.processInfo.arguments.contains("-shot-tech-temporal")
+        ? ShopView.screenshotUpgrade
+        : nil
+    @State private var inspectedSkill: BonusKind? = ProcessInfo.processInfo.arguments.contains("-shot-ability")
+        ? .freeze
         : nil
 
     var body: some View {
@@ -34,11 +52,18 @@ struct ShopView: View {
                 }
             }
             .padding(.horizontal, 18)
-            .padding(.top, 8)
+            .padding(.top, hostTopInset + 8)
         }
         .sheet(item: $inspectedUpgrade) { kind in
             researchInspector(kind)
-                .presentationDetents([.height(410)])
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+                .presentationCornerRadius(30)
+                .presentationBackground(EchoTheme.navyDeep)
+        }
+        .sheet(item: $inspectedSkill) { kind in
+            abilityInspector(kind)
+                .presentationDetents([.height(570)])
                 .presentationDragIndicator(.hidden)
                 .presentationCornerRadius(30)
                 .presentationBackground(EchoTheme.navyDeep)
@@ -113,6 +138,7 @@ struct ShopView: View {
         HStack(spacing: 4) {
             ForEach(LabSection.allCases, id: \.rawValue) { item in
                 Button {
+                    model.audio.play(.select)
                     withAnimation(.easeOut(duration: 0.18)) { section = item }
                 } label: {
                     Label(item.rawValue, systemImage: item.icon)
@@ -146,9 +172,12 @@ struct ShopView: View {
                         .foregroundStyle(EchoTheme.cyan)
                 }
 
-                HStack(spacing: 8) {
-                    ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
-                        loadoutSlot(index)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
+                            loadoutSlot(index)
+                                .frame(width: 58)
+                        }
                     }
                 }
 
@@ -183,10 +212,7 @@ struct ShopView: View {
             let kind = equipped[index]
             let tint = color(kind.tint)
             VStack(spacing: 4) {
-                Image(kind.assetName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 29, height: 29)
+                AbilityIconView(kind: kind, size: 31)
                 Text(kind.title.uppercased())
                     .font(.system(size: 7, weight: .bold))
                     .lineLimit(1)
@@ -231,10 +257,7 @@ struct ShopView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15, style: .continuous)
                         .fill(tint.opacity(unlocked ? 0.17 : 0.06))
-                    Image(kind.assetName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 38, height: 38)
+                    AbilityIconView(kind: kind, size: 42)
                         .saturation(unlocked ? 1 : 0)
                         .opacity(unlocked ? 1 : 0.35)
                 }
@@ -262,6 +285,23 @@ struct ShopView: View {
                 Spacer(minLength: 0)
             }
 
+            Button {
+                guard unlocked else { return }
+                model.audio.play(.select)
+                inspectedSkill = kind
+            } label: {
+                Label(unlocked ? "ANIMATED DEMO · TAP TO WATCH" : "DEMO LOCKED", systemImage: unlocked ? "play.rectangle.fill" : "lock.fill")
+                    .font(.system(size: 10, weight: .black, design: .rounded))
+                    .tracking(0.8)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 36)
+                    .foregroundStyle(unlocked ? tint : EchoTheme.muted)
+                    .background(tint.opacity(unlocked ? 0.10 : 0.035), in: Capsule())
+                    .overlay(Capsule().stroke(tint.opacity(unlocked ? 0.26 : 0.07), lineWidth: 1))
+            }
+            .buttonStyle(PressStyle())
+            .disabled(!unlocked)
+
             HStack(spacing: 9) {
                 Button {
                     toggle(kind)
@@ -281,7 +321,7 @@ struct ShopView: View {
                 } label: {
                     HStack(spacing: 5) {
                         Image(systemName: "diamond.fill")
-                        Text(full ? "FULL" : "\(kind.price)")
+                        Text(full ? "FULL" : "\(model.progress.skillPrice(kind))")
                     }
                     .font(.system(size: 11, weight: .bold, design: .rounded))
                     .frame(maxWidth: .infinity)
@@ -302,6 +342,108 @@ struct ShopView: View {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .stroke(unlocked ? tint.opacity(0.20) : Color.white.opacity(0.06), lineWidth: 1)
         )
+    }
+
+    private func abilityInspector(_ kind: BonusKind) -> some View {
+        let tint = color(kind.tint)
+        return ZStack {
+            LinearGradient.screenBackground
+                .ignoresSafeArea()
+
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 13) {
+                    Capsule()
+                        .fill(Color.white.opacity(0.22))
+                        .frame(width: 38, height: 4)
+                        .padding(.top, 10)
+
+                    HStack(spacing: 11) {
+                        AbilityIconView(kind: kind, size: 48)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("ABILITY TRAINING")
+                                .font(.system(size: 9, weight: .black, design: .rounded))
+                                .tracking(1.6)
+                                .foregroundStyle(tint)
+                            Text(kind.title)
+                                .font(.system(size: 24, weight: .black, design: .rounded))
+                            Text(kind.command)
+                                .font(.system(size: 9, weight: .black, design: .rounded))
+                                .tracking(0.8)
+                                .foregroundStyle(EchoTheme.cyan)
+                        }
+                        Spacer()
+                        Button { inspectedSkill = nil } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundStyle(.white)
+                                .frame(width: 34, height: 34)
+                                .background(Color.white.opacity(0.08), in: Circle())
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    MechanicDemoView(scenario: MechanicDemoScenario(bonus: kind), height: 188)
+
+                    HStack(spacing: 8) {
+                        abilityStep("1", "SEE", icon: "eye.fill", tint: EchoTheme.cyan)
+                        Image(systemName: "chevron.right").foregroundStyle(EchoTheme.muted.opacity(0.55))
+                        abilityStep("2", "TAP", icon: "hand.tap.fill", tint: tint)
+                        Image(systemName: "chevron.right").foregroundStyle(EchoTheme.muted.opacity(0.55))
+                        abilityStep("3", "MOVE", icon: "location.fill", tint: EchoTheme.gold)
+                    }
+
+                    VStack(alignment: .leading, spacing: 7) {
+                        Text(kind.detail)
+                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.white)
+                        Label(kind.bestUse, systemImage: "lightbulb.fill")
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundStyle(EchoTheme.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        HStack(spacing: 8) {
+                            abilityStat(icon: "timer", value: kind.duration > 0 ? String(format: "%.1fs", kind.duration) : "INSTANT", title: "EFFECT", tint: tint)
+                            abilityStat(icon: "arrow.clockwise", value: "\(Int(kind.cooldown))s", title: "COOLDOWN", tint: EchoTheme.cyan)
+                        }
+                    }
+                    .padding(13)
+                    .background(Color.white.opacity(0.045), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                }
+                .padding(.horizontal, 18)
+                .padding(.bottom, 18)
+            }
+        }
+    }
+
+    private func abilityStep(_ number: String, _ title: String, icon: String, tint: Color) -> some View {
+        HStack(spacing: 6) {
+            ZStack {
+                Circle().fill(tint.opacity(0.13))
+                Image(systemName: icon)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(tint)
+            }
+            .frame(width: 27, height: 27)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(number).font(.system(size: 7, weight: .black, design: .rounded)).foregroundStyle(tint)
+                Text(title).font(.system(size: 8, weight: .black, design: .rounded))
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func abilityStat(icon: String, value: String, title: String, tint: Color) -> some View {
+        HStack(spacing: 7) {
+            Image(systemName: icon).foregroundStyle(tint)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(value).font(.system(size: 11, weight: .bold, design: .rounded))
+                Text(title).font(.system(size: 7, weight: .bold, design: .rounded)).foregroundStyle(EchoTheme.muted)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 10)
+        .frame(maxWidth: .infinity, minHeight: 38)
+        .background(tint.opacity(0.08), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     private var researchSection: some View {
@@ -343,10 +485,10 @@ struct ShopView: View {
                 Text("TIMELINE MATRIX")
                     .font(.system(size: 13, weight: .bold))
                     .tracking(1.8)
-                Text("Permanent research · \(earned) of \(total) ranks synchronized")
+                Text("\(total)-rank journey · \(earned) synchronized")
                     .font(.system(size: 11))
                     .foregroundStyle(EchoTheme.muted)
-                Text("Glowing nodes are ready to upgrade now.")
+                Text("Tap any glowing node; every rank changes play.")
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(EchoTheme.cyan.opacity(0.82))
             }
@@ -491,7 +633,7 @@ struct ShopView: View {
                 }
             }
         }
-        .frame(height: 730)
+        .frame(height: 1_080)
         .background(
             ZStack {
                 RoundedRectangle(cornerRadius: 26, style: .continuous)
@@ -546,14 +688,14 @@ struct ShopView: View {
 
         return Button {
             guard available else {
-                model.audio.play(.tap)
+                model.audio.play(.denied)
                 show(model.progress.upgradeRequirement(kind) ?? "Complete the previous node first")
                 return
             }
             withAnimation(.spring(response: 0.28, dampingFraction: 0.76)) {
                 selectedUpgrade = kind
             }
-            model.audio.play(.tap)
+            model.audio.play(.select)
             inspectedUpgrade = kind
         } label: {
             VStack(spacing: 4) {
@@ -689,7 +831,7 @@ struct ShopView: View {
                         .foregroundStyle(EchoTheme.muted)
                 }
                 Spacer()
-                HStack(spacing: 4) {
+                HStack(spacing: 3) {
                     ForEach(0..<kind.maxLevel, id: \.self) { rank in
                         Capsule()
                             .fill(rank < level ? tint : Color.white.opacity(0.10))
@@ -789,44 +931,102 @@ struct ShopView: View {
     }
 
     private func researchInspector(_ kind: UpgradeKind) -> some View {
-        ZStack {
+        let level = model.progress.upgradeLevel(kind)
+        let current = researchEffect(kind, level: level)
+        let next = level == kind.maxLevel ? "Fully synchronized" : researchEffect(kind, level: level + 1)
+        let tint = color(kind.branch.tint)
+
+        return ZStack {
             LinearGradient.screenBackground
                 .ignoresSafeArea()
 
-            VStack(spacing: 13) {
-                Capsule()
-                    .fill(Color.white.opacity(0.22))
-                    .frame(width: 38, height: 4)
-                    .padding(.top, 10)
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 13) {
+                    Capsule()
+                        .fill(Color.white.opacity(0.22))
+                        .frame(width: 38, height: 4)
+                        .padding(.top, 10)
 
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("UPGRADE NODE")
-                            .font(.system(size: 11, weight: .black, design: .rounded))
-                            .tracking(1.8)
-                        Text("Changes apply permanently and immediately")
-                            .font(.system(size: 10, weight: .medium))
-                            .foregroundStyle(EchoTheme.muted)
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("TECHNOLOGY PREVIEW")
+                                .font(.system(size: 11, weight: .black, design: .rounded))
+                                .tracking(1.8)
+                            Text("Guided before → after · permanent upgrade")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundStyle(EchoTheme.muted)
+                        }
+                        Spacer()
+                        Button {
+                            inspectedUpgrade = nil
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundStyle(.white)
+                                .frame(width: 38, height: 38)
+                                .background(Color.white.opacity(0.08), in: Circle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Close upgrade details")
                     }
-                    Spacer()
-                    Button {
-                        inspectedUpgrade = nil
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(.white)
-                            .frame(width: 34, height: 34)
-                            .background(Color.white.opacity(0.08), in: Circle())
+
+                    TechnologyPreviewView(
+                        kind: kind,
+                        level: level,
+                        currentValue: current,
+                        nextValue: next,
+                        height: 236
+                    )
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        explanationRow(
+                            icon: "gearshape.2.fill",
+                            eyebrow: "WHAT CHANGES",
+                            text: kind.detail,
+                            tint: tint
+                        )
+                        Divider()
+                            .overlay(Color.white.opacity(0.08))
+                        explanationRow(
+                            icon: "scope",
+                            eyebrow: "WHEN YOU WILL FEEL IT",
+                            text: kind.useCase,
+                            tint: EchoTheme.gold
+                        )
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Close upgrade details")
+                    .padding(14)
+                    .background(Color.white.opacity(0.045), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(Color.white.opacity(0.07), lineWidth: 1)
+                    )
+
+                    selectedResearchCard(kind)
                 }
-
-                selectedResearchCard(kind)
-
-                Spacer(minLength: 4)
+                .padding(.horizontal, 18)
+                .padding(.bottom, 24)
             }
-            .padding(.horizontal, 18)
+        }
+    }
+
+    private func explanationRow(icon: String, eyebrow: String, text: String, tint: Color) -> some View {
+        HStack(alignment: .top, spacing: 11) {
+            Image(systemName: icon)
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(tint)
+                .frame(width: 30, height: 30)
+                .background(tint.opacity(0.12), in: Circle())
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(eyebrow)
+                    .font(.system(size: 8, weight: .black, design: .rounded))
+                    .tracking(1.2)
+                    .foregroundStyle(tint)
+                Text(text)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.88))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
     }
 
@@ -882,49 +1082,88 @@ struct ShopView: View {
     private func researchEffect(_ kind: UpgradeKind, level: Int) -> String {
         switch kind {
         case .velocity:
-            return level == 0 ? "Base movement speed" : "+\(level * 5)% movement speed"
+            return level == 0 ? "Base movement speed" : "+\(level * 4)% movement speed"
+        case .sparkSense:
+            return level == 0 ? "Base pickup radius" : "+\(level * 4) spark reach"
         case .dashCapacitor:
-            return level == 0 ? "2.6s dash cooldown" : "−\(level * 12)% dash cooldown"
+            return level == 0 ? "2.6s dash cooldown" : "−\(level * 9)% dash cooldown"
+        case .surgeMastery:
+            return level == 0 ? "4.0s Surge" : String(format: "%.2fs Surge", BonusKind.surge.duration + Double(level) * 0.45)
+        case .dashImpulse:
+            return level == 0 ? "1.15s dash" : String(format: "%.2fs dash", 1.15 + Double(level) * 0.09)
         case .slots:
-            return "\(2 + level) active skill slots"
+            return "\(min(6, 2 + level)) active skill slots"
         case .reserves:
             return "\(min(ProgressStore.maxOwned, 3 + level * 2)) charges per skill"
+        case .fabricator:
+            return level == 0 ? "Standard skill prices" : "−\(level * 5)% skill prices"
         case .aegis:
             if level == 0 { return "Base shield recovery" }
-            if level >= 3 { return "+0.7s grace · starts shielded" }
-            return String(format: "+%.1fs shield grace", Double(level) * 0.22)
+            if level >= 5 { return "+0.9s grace · starts shielded" }
+            return String(format: "+%.1fs shield grace", Double(level) * 0.18)
+        case .shieldLattice:
+            if level == 0 { return "Single-layer shield" }
+            if level >= 5 { return "+0.6s grace · 2 layers" }
+            return String(format: "+%.2fs shield grace", Double(level) * 0.12)
+        case .fieldAmplifier:
+            return level == 0 ? "Base effect durations" : "+\(level * 4)% timed effects"
         case .recharge:
-            return level == 0 ? "Base cooldown" : "−\(level * 9)% skill cooldown"
+            return level == 0 ? "Base cooldown" : "−\(level * 8)% skill cooldown"
         case .beamForecast:
-            return level == 0 ? "Base beam warning" : String(format: "+%.2fs beam warning", Double(level) * 0.22)
+            return level == 0 ? "Base beam warning" : String(format: "+%.2fs beam warning", Double(level) * 0.18)
         case .cryostasis:
-            return String(format: "%.1fs Freeze duration", BonusKind.freeze.duration + Double(level) * 0.7)
+            return String(format: "%.1fs Freeze duration", BonusKind.freeze.duration + Double(level) * 0.55)
+        case .echoForecast:
+            return level == 0 ? "Standard echo schedule" : String(format: "+%.2fs before echoes", Double(level) * 0.45)
+        case .crystalMemory:
+            return level == 0 ? "+1.5s crystal Freeze" : String(format: "+%.1fs crystal Freeze", 1.5 + Double(level) * 0.30)
         case .magnetism:
-            return level == 0 ? "Magnet locked" : "Magnet · +\(level * 18)% radius"
+            return level == 0 ? "Magnet locked" : "Magnet · +\(level * 14)% radius"
         case .phaseResearch:
-            return level == 0 ? "Phase locked" : "Phase skill unlocked"
+            return level == 0 ? "Phase locked" : String(format: "Phase · %.1fs", BonusKind.phase.duration + Double(max(0, level - 1)) * 0.45)
         case .chronoResearch:
-            return level == 0 ? "Shift & Pulse locked" : "Shift & Pulse unlocked"
+            return level == 0 ? "Shift & Pulse locked" : String(format: "Shift · +%.1fs", 3.6 + Double(max(0, level - 1)) * 0.65)
         case .rewind:
-            let seconds = 3 + Double(level) * 0.5
-            return String(format: "%.1fs rewind%@", seconds, level >= 2 ? " · 2 charges" : "")
+            let seconds = 3 + Double(level) * 0.45
+            let charges = level >= 5 ? 3 : level >= 2 ? 2 : 1
+            return String(format: "%.1fs rewind · %d charge%@", seconds, charges, charges == 1 ? "" : "s")
+        case .anchorResearch:
+            return level == 0 ? "Anchor locked" : String(format: "Anchor · %d%% world · %.1fs", max(24, 44 - level * 5), BonusKind.anchor.duration + Double(level) * 0.35)
+        case .repulseResearch:
+            return level == 0 ? "Repulse locked" : "Repulse · \(160 + level * 24) radius"
+        case .prismResearch:
+            return level == 0 ? "Prism locked" : String(format: "Prism · %.1fs", BonusKind.prism.duration + Double(level) * 0.5)
+        case .blinkResearch:
+            return level == 0 ? "Blink locked" : "Blink · \(165 + level * 28) distance"
         }
     }
 
     private func nodeTitle(_ kind: UpgradeKind) -> String {
         switch kind {
         case .velocity: "VECTOR DRIVE"
+        case .sparkSense: "SPARK SENSE"
         case .dashCapacitor: "DASH CAPACITOR"
+        case .surgeMastery: "STORM RUNNER"
+        case .dashImpulse: "KINETIC IMPULSE"
         case .slots: "SLOT MATRIX"
         case .reserves: "RESERVES"
+        case .fabricator: "NANO FABRICATOR"
         case .aegis: "AEGIS PROTOCOL"
+        case .shieldLattice: "SHIELD LATTICE"
+        case .fieldAmplifier: "FIELD AMPLIFIER"
         case .recharge: "FAST CYCLE"
         case .beamForecast: "BEAM FORECAST"
         case .cryostasis: "CRYOSTASIS"
+        case .echoForecast: "ECHO FORECAST"
+        case .crystalMemory: "CRYSTAL MEMORY"
         case .magnetism: "MAGNETIC FIELD"
         case .phaseResearch: "PHASE THEORY"
         case .chronoResearch: "CHRONO THEORY"
         case .rewind: "LONG REWIND"
+        case .anchorResearch: "WORLD ANCHOR"
+        case .repulseResearch: "REPULSE CORE"
+        case .prismResearch: "PRISM SHELL"
+        case .blinkResearch: "BLINK DRIVE"
         }
     }
 
@@ -937,6 +1176,7 @@ struct ShopView: View {
     }
 
     private func goBack() {
+        model.audio.play(.tap)
         if let onBack {
             onBack()
         } else {
@@ -946,11 +1186,11 @@ struct ShopView: View {
 
     private func buy(_ kind: BonusKind) {
         if model.progress.buy(kind) {
-            model.audio.play(.collect)
+            model.audio.play(.confirm)
             model.audio.haptic(.medium)
             show("+1 \(kind.title)")
         } else {
-            model.audio.play(.tap)
+            model.audio.play(.denied)
             show(model.progress.isSkillUnlocked(kind) ? "Need points" : model.progress.skillUnlockHint(kind))
         }
     }
@@ -958,21 +1198,24 @@ struct ShopView: View {
     private func toggle(_ kind: BonusKind) {
         let wasEquipped = model.progress.equippedSkills.contains(kind)
         if model.progress.toggleEquipped(kind) {
-            model.audio.play(.tap)
+            model.audio.play(.select)
             show(wasEquipped ? "\(kind.title) removed" : "\(kind.title) equipped")
         } else {
+            model.audio.play(.denied)
             show("All skill slots are full")
         }
     }
 
     private func upgrade(_ kind: UpgradeKind) {
         if model.progress.buyUpgrade(kind) {
-            model.audio.play(.collect)
+            model.audio.play(.confirm)
             model.audio.haptic(.medium)
             show("\(kind.title) upgraded")
         } else if let requirement = model.progress.upgradeRequirement(kind) {
+            model.audio.play(.denied)
             show(requirement)
         } else {
+            model.audio.play(.denied)
             show("Need more points")
         }
     }
@@ -1016,6 +1259,8 @@ private struct ResearchTreeLayout {
         switch kind {
         case .velocity:
             CGPoint(x: size.width * 0.16, y: 158)
+        case .sparkSense:
+            CGPoint(x: size.width * 0.16, y: 252)
         case .slots:
             CGPoint(x: size.width * 0.50, y: 252)
         case .recharge:
@@ -1027,17 +1272,39 @@ private struct ResearchTreeLayout {
         case .beamForecast:
             CGPoint(x: size.width * 0.84, y: 356)
         case .magnetism:
-            CGPoint(x: size.width * 0.16, y: 460)
+            CGPoint(x: size.width * 0.16, y: 444)
         case .aegis:
-            CGPoint(x: size.width * 0.50, y: 460)
+            CGPoint(x: size.width * 0.50, y: 444)
         case .cryostasis:
-            CGPoint(x: size.width * 0.84, y: 460)
+            CGPoint(x: size.width * 0.84, y: 444)
+        case .repulseResearch:
+            CGPoint(x: size.width * 0.16, y: 536)
         case .phaseResearch:
-            CGPoint(x: size.width * 0.50, y: 564)
+            CGPoint(x: size.width * 0.50, y: 536)
+        case .anchorResearch:
+            CGPoint(x: size.width * 0.84, y: 536)
+        case .blinkResearch:
+            CGPoint(x: size.width * 0.16, y: 630)
+        case .prismResearch:
+            CGPoint(x: size.width * 0.50, y: 630)
         case .chronoResearch:
-            CGPoint(x: size.width * 0.84, y: 564)
+            CGPoint(x: size.width * 0.84, y: 630)
         case .rewind:
-            CGPoint(x: size.width * 0.84, y: 674)
+            CGPoint(x: size.width * 0.84, y: 730)
+        case .surgeMastery:
+            CGPoint(x: size.width * 0.16, y: 730)
+        case .dashImpulse:
+            CGPoint(x: size.width * 0.16, y: 830)
+        case .fabricator:
+            CGPoint(x: size.width * 0.50, y: 730)
+        case .shieldLattice:
+            CGPoint(x: size.width * 0.50, y: 830)
+        case .fieldAmplifier:
+            CGPoint(x: size.width * 0.50, y: 930)
+        case .echoForecast:
+            CGPoint(x: size.width * 0.84, y: 830)
+        case .crystalMemory:
+            CGPoint(x: size.width * 0.84, y: 930)
         }
     }
 }

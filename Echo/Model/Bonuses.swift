@@ -1,6 +1,6 @@
 import Foundation
 
-enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
+enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable, Identifiable {
     case shield
     case freeze
     case surge
@@ -8,7 +8,13 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
     case magnet
     case phase
     case chrono
+    case anchor
+    case repulse
+    case prism
+    case blink
     case ward
+
+    var id: String { rawValue }
 
     var title: String {
         switch self {
@@ -19,20 +25,62 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: "Magnet"
         case .phase: "Phase"
         case .chrono: "Shift"
+        case .anchor: "Anchor"
+        case .repulse: "Repulse"
+        case .prism: "Prism"
+        case .blink: "Blink"
         case .ward: "Ward"
         }
     }
 
     var detail: String {
         switch self {
-        case .shield: "Survive one echo or rock"
-        case .freeze: "Echoes and rocks pause"
-        case .surge: "Burst of speed"
-        case .pulse: "Delay the next copy — arena only"
-        case .magnet: "Pull nearby sparks — arena only"
-        case .phase: "Walk through copies for a moment"
-        case .chrono: "Push the next echo further out"
+        case .shield: "Block the next collision."
+        case .freeze: "Stop every hazard; you keep moving."
+        case .surge: "Move much faster and trail lightning."
+        case .pulse: "Delay the next echo with a time wave."
+        case .magnet: "Pull every nearby spark toward you."
+        case .phase: "Pass safely through echoes and debris."
+        case .chrono: "Push the next echo far into the future."
+        case .anchor: "Slow the whole timeline; you stay fast."
+        case .repulse: "Blast rocks and scars away from you."
+        case .prism: "Bend lasers around you for a moment."
+        case .blink: "Jump forward through a dangerous line."
         case .ward: "Starting shield — easy-mode, not used from the bar"
+        }
+    }
+
+    var command: String {
+        switch self {
+        case .shield: "TAP BEFORE IMPACT"
+        case .freeze: "TAP · HAZARDS STOP"
+        case .surge: "TAP · ESCAPE FAST"
+        case .pulse: "TAP BEFORE ECHO SPAWNS"
+        case .magnet: "TAP NEAR MANY SPARKS"
+        case .phase: "TAP · CROSS THROUGH DANGER"
+        case .chrono: "TAP · BUY MORE TIME"
+        case .anchor: "TAP · OUTRUN THE WORLD"
+        case .repulse: "TAP WHEN SURROUNDED"
+        case .prism: "TAP BEFORE THE BEAM FIRES"
+        case .blink: "FACE A DIRECTION · TAP"
+        case .ward: "AUTOMATIC AT START"
+        }
+    }
+
+    var bestUse: String {
+        switch self {
+        case .shield: "When one unavoidable hit is close."
+        case .freeze: "When several moving hazards overlap."
+        case .surge: "On long routes or while escaping an echo."
+        case .pulse: "When the echo countdown is almost empty."
+        case .magnet: "Inside a dense cluster of sparks."
+        case .phase: "To cut through a trapped corridor."
+        case .chrono: "Before a difficult final route."
+        case .anchor: "When timing windows are too tight."
+        case .repulse: "Among brittle rocks or lethal scars."
+        case .prism: "While crossing a charged laser."
+        case .blink: "To skip one wall, beam, or collision line."
+        case .ward: "At the beginning of assisted runs."
         }
     }
 
@@ -45,6 +93,10 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: 5.0
         case .phase: 2.4
         case .chrono: 0
+        case .anchor: 5.0
+        case .repulse: 0
+        case .prism: 4.5
+        case .blink: 0
         case .ward: 0
         }
     }
@@ -58,6 +110,10 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .freeze: 80
         case .phase: 90
         case .chrono: 85
+        case .anchor: 115
+        case .repulse: 105
+        case .prism: 120
+        case .blink: 110
         case .ward: 75
         }
     }
@@ -86,6 +142,10 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: 10
         case .phase: 12
         case .chrono: 13
+        case .anchor: 14
+        case .repulse: 12
+        case .prism: 13
+        case .blink: 10
         case .ward: 0
         }
     }
@@ -96,9 +156,13 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .freeze: "snowflake"
         case .surge: "bolt.fill"
         case .pulse: "waveform.circle.fill"
-        case .magnet: "magnet.fill"
+        case .magnet: "dot.radiowaves.left.and.right"
         case .phase: "sparkles"
         case .chrono: "clock.arrow.circlepath"
+        case .anchor: "hourglass.bottomhalf.filled"
+        case .repulse: "burst.fill"
+        case .prism: "triangle.fill"
+        case .blink: "arrow.forward.to.line.compact"
         case .ward: "lock.shield.fill"
         }
     }
@@ -112,6 +176,10 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: "BonusMagnet"
         case .phase: "BonusShield"
         case .chrono: "BonusFreeze"
+        case .anchor: "BonusFreeze"
+        case .repulse: "BonusPulse"
+        case .prism: "BonusShield"
+        case .blink: "BonusSurge"
         case .ward: "BonusShield"
         }
     }
@@ -125,6 +193,10 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable {
         case .magnet: (1.00, 0.45, 0.70)
         case .phase: (0.85, 0.95, 1.00)
         case .chrono: (0.70, 0.55, 1.00)
+        case .anchor: (0.30, 0.88, 1.00)
+        case .repulse: (1.00, 0.38, 0.62)
+        case .prism: (0.60, 1.00, 0.92)
+        case .blink: (0.52, 0.62, 1.00)
         case .ward: (0.55, 0.90, 0.70)
         }
     }
@@ -154,142 +226,265 @@ enum UpgradeBranch: String, CaseIterable, Sendable {
 
 enum UpgradeKind: String, CaseIterable, Codable, Sendable, Identifiable {
     case velocity
+    case sparkSense
     case dashCapacitor
+    case surgeMastery
+    case dashImpulse
     case slots
     case reserves
+    case fabricator
     case aegis
+    case shieldLattice
+    case fieldAmplifier
     case recharge
     case beamForecast
     case cryostasis
+    case echoForecast
+    case crystalMemory
     case magnetism
     case phaseResearch
     case chronoResearch
     case rewind
+    case anchorResearch
+    case repulseResearch
+    case prismResearch
+    case blinkResearch
 
     var id: String { rawValue }
 
     var branch: UpgradeBranch {
         switch self {
-        case .velocity, .dashCapacitor, .magnetism: .motion
-        case .slots, .reserves, .aegis, .phaseResearch: .loadout
-        case .recharge, .beamForecast, .cryostasis, .chronoResearch, .rewind: .temporal
+        case .velocity, .sparkSense, .dashCapacitor, .surgeMastery, .dashImpulse,
+             .magnetism, .repulseResearch, .blinkResearch: .motion
+        case .slots, .reserves, .fabricator, .aegis, .shieldLattice,
+             .fieldAmplifier, .phaseResearch, .prismResearch: .loadout
+        case .recharge, .beamForecast, .cryostasis, .echoForecast, .crystalMemory,
+             .chronoResearch, .rewind, .anchorResearch: .temporal
         }
     }
 
     var title: String {
         switch self {
         case .velocity: "Vector Drive"
+        case .sparkSense: "Spark Sense"
         case .dashCapacitor: "Dash Capacitor"
+        case .surgeMastery: "Storm Runner"
+        case .dashImpulse: "Kinetic Impulse"
         case .slots: "Slot Matrix"
         case .reserves: "Deep Reserves"
+        case .fabricator: "Nano Fabricator"
         case .aegis: "Aegis Protocol"
+        case .shieldLattice: "Shield Lattice"
+        case .fieldAmplifier: "Field Amplifier"
         case .recharge: "Fast Cycle"
         case .beamForecast: "Beam Forecast"
         case .cryostasis: "Cryostasis"
+        case .echoForecast: "Echo Forecast"
+        case .crystalMemory: "Crystal Memory"
         case .magnetism: "Magnetic Field"
         case .phaseResearch: "Phase Theory"
         case .chronoResearch: "Chrono Theory"
         case .rewind: "Long Rewind"
+        case .anchorResearch: "World Anchor"
+        case .repulseResearch: "Repulse Core"
+        case .prismResearch: "Prism Shell"
+        case .blinkResearch: "Blink Drive"
         }
     }
 
     var detail: String {
         switch self {
-        case .velocity: "Move 5% faster per rank; unlocks Surge."
-        case .dashCapacitor: "Reduce double-tap dash cooldown by 12% per rank."
-        case .slots: "Add one equipped skill slot per rank."
-        case .reserves: "Carry two more charges of every skill."
-        case .aegis: "Extend shield recovery; final rank starts each run shielded."
-        case .recharge: "Reduce skill cooldowns by 9% per rank."
-        case .beamForecast: "Laser emitters telegraph their shot 0.22s earlier per rank."
-        case .cryostasis: "Freeze lasts 0.7 seconds longer per rank."
-        case .magnetism: "Unlock Magnet and widen its pull radius."
-        case .phaseResearch: "Unlock Phase for the loadout."
-        case .chronoResearch: "Unlock Shift and temporal Pulse."
-        case .rewind: "Extend rewind; rank two adds another charge."
+        case .velocity: "Your orb moves 4% faster per rank. Rank 1 also unlocks Surge for the Skills tab."
+        case .sparkSense: "Nearby sparks jump into your orb automatically. Every rank expands the collection ring."
+        case .dashCapacitor: "Your double-tap dash becomes ready 9% sooner per rank. Dash distance does not change."
+        case .surgeMastery: "Every Surge charge keeps its speed and lightning trail active 0.45s longer per rank."
+        case .dashImpulse: "Each double-tap dash travels farther and keeps its safe crossing window open longer."
+        case .slots: "Adds one ability slot. A new, larger activation button appears during a run."
+        case .reserves: "Adds two charges to every owned ability, so you can activate it more often per run."
+        case .fabricator: "Future ability charges cost 5% fewer research points per rank. Earlier purchases are unchanged."
+        case .aegis: "After a shield hit, you stay protected longer. At rank 5 every new run starts shielded."
+        case .shieldLattice: "Extends safety after impact. Rank 5 lets Shield absorb two separate hits."
+        case .fieldAmplifier: "Freeze, Surge, Magnet, Phase, Anchor and Prism last 4% longer per rank."
+        case .recharge: "All equipped abilities recover 8% faster per rank after you activate them."
+        case .beamForecast: "Laser warning lines appear 0.18s earlier per rank, giving you more time to move."
+        case .cryostasis: "Freeze holds asteroids, echoes and moving hazards still for 0.55s longer per rank."
+        case .echoForecast: "Each recorded echo starts 0.45s later per rank, leaving more space behind you."
+        case .crystalMemory: "Timed crystals release 0.30s more emergency Freeze energy per rank when collected."
+        case .magnetism: "Unlocks Magnet. Further ranks widen the field that pulls sparks toward your orb."
+        case .phaseResearch: "Unlocks Phase. Higher ranks keep you intangible longer while crossing hazards."
+        case .chronoResearch: "Unlocks Shift and Pulse. Further ranks push dangerous timeline events farther away."
+        case .rewind: "Rewinds more of your route. Ranks 2 and 5 add another rewind charge for each run."
+        case .anchorResearch: "Unlocks Anchor. Each rank slows the world more while your orb keeps full speed."
+        case .repulseResearch: "Unlocks Repulse. Each rank makes its blast clear a wider circle around your orb."
+        case .prismResearch: "Unlocks Prism. Higher ranks bend lasers away from you for longer."
+        case .blinkResearch: "Unlocks Blink. Each rank teleports your orb farther across one danger zone."
+        }
+    }
+
+    var useCase: String {
+        switch self {
+        case .velocity: "Best for races, collapsing lanes and crystals with short timers."
+        case .sparkSense: "Best when sparks sit near walls, lasers or moving asteroids."
+        case .dashCapacitor: "Best on maps that demand several emergency dodges in a row."
+        case .surgeMastery: "Best for long open routes and escaping a pursuing echo."
+        case .dashImpulse: "Best for crossing gates, walls and wide hazard lanes in one move."
+        case .slots: "Use it when you own more abilities than you can bring into a run."
+        case .reserves: "Best for long levels where one or two activations are not enough."
+        case .fabricator: "Buy early if you plan to collect and upgrade many abilities."
+        case .aegis: "Best for learning dense maps without losing a run to one mistake."
+        case .shieldLattice: "Best against chain collisions and hazards that strike twice quickly."
+        case .fieldAmplifier: "Best for loadouts built around timed area effects."
+        case .recharge: "Best when your strongest ability is often still cooling down."
+        case .beamForecast: "Best on laser-heavy maps and narrow corridors."
+        case .cryostasis: "Best for safely collecting crystals inside crowded rooms."
+        case .echoForecast: "Best when your own previous route blocks the next objective."
+        case .crystalMemory: "Best when the timer is nearly empty and the map is already crowded."
+        case .magnetism: "Best for collecting risky sparks without touching their exact position."
+        case .phaseResearch: "Best for direct shortcuts through asteroids, gates and echo trails."
+        case .chronoResearch: "Best for delaying the next wave while you finish an objective."
+        case .rewind: "Best for undoing a wrong turn or returning to a missed crystal."
+        case .anchorResearch: "Best when several moving hazards converge at the same time."
+        case .repulseResearch: "Best when enemies and breakable asteroids surround you."
+        case .prismResearch: "Best for crossing overlapping laser beams without waiting."
+        case .blinkResearch: "Best for instant escapes across a wall or fatal collision line."
         }
     }
 
     var icon: String {
         switch self {
         case .velocity: "speedometer"
+        case .sparkSense: "dot.radiowaves.left.and.right"
         case .dashCapacitor: "bolt.circle.fill"
+        case .surgeMastery: "bolt.horizontal.circle.fill"
+        case .dashImpulse: "arrow.right.circle.fill"
         case .slots: "square.grid.2x2"
         case .reserves: "shippingbox.fill"
+        case .fabricator: "atom"
         case .aegis: "shield.fill"
+        case .shieldLattice: "shield.lefthalf.filled"
+        case .fieldAmplifier: "wave.3.up.circle.fill"
         case .recharge: "gauge.with.dots.needle.67percent"
         case .beamForecast: "scope"
         case .cryostasis: "snowflake"
-        case .magnetism: "magnet.fill"
+        case .echoForecast: "eye.trianglebadge.exclamationmark.fill"
+        case .crystalMemory: "diamond.circle.fill"
+        case .magnetism: "dot.radiowaves.left.and.right"
         case .phaseResearch: "sparkles"
         case .chronoResearch: "clock.badge.checkmark"
         case .rewind: "clock.arrow.circlepath"
+        case .anchorResearch: "hourglass.bottomhalf.filled"
+        case .repulseResearch: "burst.fill"
+        case .prismResearch: "triangle.fill"
+        case .blinkResearch: "arrow.forward.to.line.compact"
         }
     }
 
     var maxLevel: Int {
         switch self {
-        case .velocity: 5
-        case .dashCapacitor: 4
-        case .slots: 3
-        case .reserves: 3
-        case .aegis: 3
-        case .recharge: 4
-        case .beamForecast: 4
-        case .cryostasis: 4
-        case .magnetism: 3
-        case .phaseResearch, .chronoResearch: 1
-        case .rewind: 3
+        case .velocity: 7
+        case .sparkSense: 5
+        case .dashCapacitor: 6
+        case .surgeMastery, .dashImpulse: 5
+        case .slots: 4
+        case .reserves: 6
+        case .fabricator: 5
+        case .aegis: 5
+        case .shieldLattice, .fieldAmplifier: 5
+        case .recharge: 6
+        case .beamForecast: 6
+        case .cryostasis: 6
+        case .echoForecast, .crystalMemory: 5
+        case .magnetism: 5
+        case .phaseResearch, .chronoResearch: 3
+        case .rewind: 5
+        case .anchorResearch, .repulseResearch, .blinkResearch: 4
+        case .prismResearch: 3
         }
     }
 
     var baseCost: Int {
         switch self {
         case .velocity: 100
+        case .sparkSense: 125
         case .dashCapacitor: 135
+        case .surgeMastery: 260
+        case .dashImpulse: 285
         case .slots: 180
         case .reserves: 130
+        case .fabricator: 210
         case .aegis: 190
+        case .shieldLattice: 300
+        case .fieldAmplifier: 325
         case .recharge: 140
         case .beamForecast: 165
         case .cryostasis: 150
+        case .echoForecast: 280
+        case .crystalMemory: 245
         case .magnetism: 170
         case .phaseResearch: 260
         case .chronoResearch: 340
         case .rewind: 220
+        case .anchorResearch: 390
+        case .repulseResearch: 350
+        case .prismResearch: 430
+        case .blinkResearch: 470
         }
     }
 
     var costStep: Int {
         switch self {
         case .velocity: 70
+        case .sparkSense: 80
         case .dashCapacitor: 90
+        case .surgeMastery: 135
+        case .dashImpulse: 145
         case .slots: 140
         case .reserves: 90
+        case .fabricator: 125
         case .aegis: 125
+        case .shieldLattice: 155
+        case .fieldAmplifier: 165
         case .recharge: 90
         case .beamForecast: 105
         case .cryostasis: 100
+        case .echoForecast: 145
+        case .crystalMemory: 125
         case .magnetism: 110
-        case .phaseResearch, .chronoResearch: 0
+        case .phaseResearch, .chronoResearch: 155
         case .rewind: 140
+        case .anchorResearch: 190
+        case .repulseResearch: 175
+        case .prismResearch: 220
+        case .blinkResearch: 240
         }
     }
 
     var prerequisites: [(kind: UpgradeKind, level: Int)] {
         switch self {
         case .velocity: []
+        case .sparkSense: [(.velocity, 2)]
         case .dashCapacitor: [(.velocity, 1)]
+        case .surgeMastery: [(.velocity, 4), (.sparkSense, 2)]
+        case .dashImpulse: [(.dashCapacitor, 3)]
         case .slots: [(.velocity, 1)]
         case .reserves: [(.slots, 1)]
+        case .fabricator: [(.reserves, 2)]
         case .aegis: [(.reserves, 1)]
+        case .shieldLattice: [(.aegis, 3)]
+        case .fieldAmplifier: [(.phaseResearch, 2), (.recharge, 2)]
         case .recharge: [(.velocity, 2)]
         case .beamForecast: [(.recharge, 1)]
         case .cryostasis: [(.recharge, 1)]
+        case .echoForecast: [(.beamForecast, 2)]
+        case .crystalMemory: [(.cryostasis, 2)]
         case .magnetism: [(.velocity, 2), (.dashCapacitor, 1)]
         case .phaseResearch: [(.slots, 2), (.aegis, 1)]
         case .chronoResearch: [(.phaseResearch, 1), (.beamForecast, 2)]
         case .rewind: [(.chronoResearch, 1)]
+        case .repulseResearch: [(.magnetism, 2)]
+        case .blinkResearch: [(.dashCapacitor, 3), (.repulseResearch, 1)]
+        case .prismResearch: [(.aegis, 2), (.beamForecast, 2)]
+        case .anchorResearch: [(.cryostasis, 2), (.recharge, 3)]
         }
     }
 
@@ -300,15 +495,30 @@ enum UpgradeKind: String, CaseIterable, Codable, Sendable, Identifiable {
 
 struct PlayerTuning: Equatable, Sendable {
     var speedMultiplier: Double = 1
+    var pickupRadiusBonus: Double = 0
     var dashCooldownMultiplier: Double = 1
+    var dashDurationBonus: TimeInterval = 0
     var cooldownMultiplier: Double = 1
+    var timedEffectMultiplier: Double = 1
+    var surgeBonus: TimeInterval = 0
     var freezeBonus: TimeInterval = 0
     var magnetRadiusMultiplier: Double = 1
     var shieldGraceBonus: TimeInterval = 0
     var startsShielded = false
+    var shieldChargesPerUse: Int = 1
     var laserWarningBonus: TimeInterval = 0
+    var echoDelayBonus: TimeInterval = 0
+    var crystalRewardBonus: TimeInterval = 0
     var rewindSeconds: TimeInterval = 3
     var rewindCharges: Int = 1
+    var anchorTimeScale: Double = 0.42
+    var anchorBonus: TimeInterval = 0
+    var repulseRadius: Double = 175
+    var prismBonus: TimeInterval = 0
+    var blinkDistance: Double = 190
+    var phaseBonus: TimeInterval = 0
+    var chronoDelayBonus: TimeInterval = 0
+    var pulseDelayBonus: TimeInterval = 0
 }
 
 struct BonusSpawn: Equatable, Sendable, Identifiable {
@@ -342,6 +552,8 @@ struct ActiveEffects: Equatable, Sendable {
     var surgeRemaining: TimeInterval = 0
     var magnetRemaining: TimeInterval = 0
     var phaseRemaining: TimeInterval = 0
+    var anchorRemaining: TimeInterval = 0
+    var prismRemaining: TimeInterval = 0
     var dashCooldown: TimeInterval = 0
     var iFrames: TimeInterval = 0
 
@@ -349,6 +561,8 @@ struct ActiveEffects: Equatable, Sendable {
     var isSurging: Bool { surgeRemaining > 0 }
     var isMagnet: Bool { magnetRemaining > 0 }
     var isPhasing: Bool { phaseRemaining > 0 }
+    var isAnchored: Bool { anchorRemaining > 0 }
+    var isPrismatic: Bool { prismRemaining > 0 }
     var canDash: Bool { dashCooldown <= 0 }
 }
 
@@ -406,11 +620,19 @@ enum EncounterHint: String, Equatable, Sendable {
     case resonance
     case blackHole
     case realityShift
+    case surge
+    case pulse
+    case magnet
+    case chrono
+    case anchor
+    case repulse
+    case prism
+    case blink
 
     var title: String {
         switch self {
-        case .echo: "Your first echo"
-        case .asteroid: "Asteroids"
+        case .echo: "Violet orb = your echo"
+        case .asteroid: "Moving rock = asteroid"
         case .rift: "Time rifts"
         case .freeze: "Freeze"
         case .phase: "Phase"
@@ -421,15 +643,23 @@ enum EncounterHint: String, Equatable, Sendable {
         case .resonance: "Resonance route"
         case .blackHole: "Gravity wells"
         case .realityShift: "Reality breach"
+        case .surge: "Surge"
+        case .pulse: "Pulse"
+        case .magnet: "Magnet"
+        case .chrono: "Shift"
+        case .anchor: "Anchor"
+        case .repulse: "Repulse"
+        case .prism: "Prism"
+        case .blink: "Blink"
         }
     }
 
     var detail: String {
         switch self {
         case .echo:
-            "A copy of your path just appeared. It will replay what you already did. Do not meet it."
+            "It repeats the route you just drew. Change direction so the violet orb never touches you."
         case .asteroid:
-            "Debris has a material. Ice, crystal, and basalt begin fracturing after a wall hit; their local clock and cracks show what remains. Alloy never breaks. Freeze stops both motion and fracture time."
+            "Ice, crystal, and basalt crack after wall hits. The small ring shows time until they break; metal alloy never breaks."
         case .rift:
             "Rifts open and close. A calm tear pauses time. A collapsing one is a collision — stay out."
         case .freeze:
@@ -450,6 +680,39 @@ enum EncounterHint: String, Equatable, Sendable {
             "The bright lens is only a warning. Gravity pulls inside the outer ring; the dark core ends the run. Freeze suspends its pull."
         case .realityShift:
             "Warp tears fold the arena. Candy tears open a temporary pocket timeline with faster movement and a wider resonance window."
+        case .surge: BonusKind.surge.detail
+        case .pulse: BonusKind.pulse.detail
+        case .magnet: BonusKind.magnet.detail
+        case .chrono: BonusKind.chrono.detail
+        case .anchor: BonusKind.anchor.detail
+        case .repulse: BonusKind.repulse.detail
+        case .prism: BonusKind.prism.detail
+        case .blink: BonusKind.blink.detail
+        }
+    }
+
+    var action: String {
+        switch self {
+        case .echo: "YOUR OLD PATH CHASES YOU"
+        case .asteroid: "WALL HITS CRACK SOME ROCKS"
+        case .rift: "ENTER ONLY WHILE THE RING IS OPEN"
+        case .freeze: BonusKind.freeze.command
+        case .phase: BonusKind.phase.command
+        case .collision: "LEAVE THE PURPLE SCAR"
+        case .gate: "CROSS WHILE THE BAR IS GONE"
+        case .laser: "MOVE AFTER CHARGE · BEFORE FIRE"
+        case .timeCrystal: "TAKE IT BEFORE THE RING EMPTIES"
+        case .resonance: "CHAIN SPARKS BEFORE TIME RUNS OUT"
+        case .blackHole: "ESCAPE THE OUTER RING"
+        case .realityShift: "A TEAR CHANGES THE ARENA RULES"
+        case .surge: BonusKind.surge.command
+        case .pulse: BonusKind.pulse.command
+        case .magnet: BonusKind.magnet.command
+        case .chrono: BonusKind.chrono.command
+        case .anchor: BonusKind.anchor.command
+        case .repulse: BonusKind.repulse.command
+        case .prism: BonusKind.prism.command
+        case .blink: BonusKind.blink.command
         }
     }
 }

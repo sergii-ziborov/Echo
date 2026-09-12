@@ -452,6 +452,75 @@ final class WorldSimulationTests: XCTestCase {
         XCTAssertEqual(frozen.phase, .playing)
     }
 
+    func testPrismMakesFiringLaserSafe() {
+        var level = LevelCatalog.prototype
+        level.walls = []
+        level.playerStart = Vec2(x: 500, y: 120)
+        level.lasers = [.horizontal(id: 0, y: 260, period: 10, chargeFor: 0, activeFor: 10)]
+        var config = SimConfig()
+        config.collisionSlop = 0
+        let sim = WorldSimulation(level: level, config: config)
+
+        XCTAssertTrue(sim.activate(.prism))
+        advance(sim, seconds: 1.2, target: Vec2(x: 500, y: 500))
+
+        XCTAssertEqual(sim.phase, .playing)
+        XCTAssertTrue(sim.effects.isPrismatic)
+    }
+
+    func testAnchorSlowsTimelineButNotPlayerClock() {
+        var level = LevelCatalog.prototype
+        level.walls = []
+        level.maxEchoes = 0
+        var config = SimConfig()
+        config.collisionSlop = 1_000
+        let sim = WorldSimulation(level: level, config: config)
+        advance(sim, seconds: 0.2, target: Vec2(x: 580, y: 120))
+        let wallClock = sim.time
+        let timeline = sim.playbackTime
+
+        XCTAssertTrue(sim.activate(.anchor))
+        advance(sim, seconds: 1.0, target: Vec2(x: 900, y: 120))
+
+        XCTAssertGreaterThan(sim.time - wallClock, 0.9)
+        XCTAssertEqual(sim.playbackTime - timeline, 0.42, accuracy: 0.06)
+        XCTAssertGreaterThan(sim.playerPosition.x, 800)
+    }
+
+    func testBlinkJumpsInLastMovementDirection() {
+        var level = LevelCatalog.prototype
+        level.walls = []
+        level.maxEchoes = 0
+        var config = SimConfig()
+        config.collisionSlop = 1_000
+        let sim = WorldSimulation(level: level, config: config)
+        advance(sim, seconds: 0.12, target: Vec2(x: 800, y: 120))
+        let before = sim.playerPosition
+
+        XCTAssertTrue(sim.activate(.blink))
+
+        XCTAssertGreaterThan(sim.playerPosition.x - before.x, 150)
+        XCTAssertGreaterThan(sim.effects.iFrames, 0.4)
+    }
+
+    func testRepulseShattersNearbyBreakableAsteroid() {
+        var level = LevelCatalog.prototype
+        level.walls = []
+        level.maxEchoes = 0
+        level.playerStart = Vec2(x: 500, y: 500)
+        level.movers = [
+            .bounce(id: 0, at: Vec2(x: 620, y: 500), velocity: .zero, radius: 34, material: .ice),
+        ]
+        var config = SimConfig()
+        config.collisionSlop = 1_000
+        let sim = WorldSimulation(level: level, config: config)
+
+        XCTAssertTrue(sim.activate(.repulse))
+        advance(sim, seconds: 0.2, target: Vec2(x: 560, y: 500))
+
+        XCTAssertTrue(sim.movers.isEmpty)
+    }
+
     func testSweepingLaserMovesAndFreezeStopsItsGeometry() {
         var level = LevelCatalog.prototype
         level.walls = []
