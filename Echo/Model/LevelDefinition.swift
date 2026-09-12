@@ -136,6 +136,21 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
         return copy
     }
 
+    /// Gives every debris field a deterministic material language without
+    /// changing authored routes. The palette rotates between maps so players
+    /// cannot assume that every moving body will eventually disappear.
+    func assigningAsteroidMaterials() -> LevelDefinition {
+        let palette: [AsteroidMaterial] = [.basalt, .ice, .crystal, .alloy]
+        var copy = self
+        copy.movers = movers.map { mover in
+            var next = mover
+            let index = abs(number * 5 + mover.id * 3) % palette.count
+            next.material = palette[index]
+            return next
+        }
+        return copy
+    }
+
     /// Push sparks, the exit, and the start out of walls so pickups are always reachable.
     func sanitized(clearance: Double = 34) -> LevelDefinition {
         var copy = self
@@ -1585,7 +1600,8 @@ enum LevelCatalog {
         ),
     ]
 
-    static let playable: [LevelDefinition] = handcrafted + (37...77).map(expandedLevel)
+    static let playable: [LevelDefinition] = (handcrafted + (37...77).map(expandedLevel))
+        .map { $0.assigningAsteroidMaterials() }
 
     private static func expandedLevel(_ number: Int) -> LevelDefinition {
         let names = [

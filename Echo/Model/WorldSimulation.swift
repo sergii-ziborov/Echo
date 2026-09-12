@@ -35,6 +35,8 @@ enum SimEvent: Equatable, Sendable {
     case dashed
     case laserCharging(id: Int)
     case laserFired(id: Int)
+    case asteroidImpacted(id: Int, material: AsteroidMaterial, at: Vec2)
+    case asteroidShattered(id: Int, material: AsteroidMaterial, at: Vec2)
     case echoWillSpawn(index: Int, in: TimeInterval)
     case echoSpawned(index: Int)
     case exitOpened
@@ -166,6 +168,17 @@ final class WorldSimulation {
         realityRemaining = 30
         for index in rifts.indices where rifts[index].kind == .candy || rifts[index].kind == .warp {
             rifts[index].open = true
+        }
+    }
+
+    func debugPreviewAsteroidFractures() {
+        hasStarted = true
+        for index in movers.indices where movers[index].material.isBreakable {
+            if let duration = movers[index].material.fractureDuration,
+               let maxHits = movers[index].material.wallHitsToShatter {
+                movers[index].fractureRemaining = duration * 0.72
+                movers[index].hitsRemaining = max(1, maxHits - 1)
+            }
         }
     }
 #endif
@@ -318,7 +331,7 @@ final class WorldSimulation {
         tickResonance(dt: timeIsFrozen ? 0 : dt)
         updateOrbits()
         if !timeIsFrozen {
-            stepMovers(dt: dt)
+            events.append(contentsOf: stepMovers(dt: dt))
             applyGravityWells(dt: dt)
         }
 
@@ -643,10 +656,12 @@ final class WorldSimulation {
             MoverState(
                 id: $0.id,
                 kind: $0.kind,
+                material: $0.material,
                 position: $0.position,
                 velocity: $0.velocity,
                 radius: max(34, $0.radius),
-                path: $0.path
+                path: $0.path,
+                hitsRemaining: $0.material.wallHitsToShatter
             )
         }
     }
@@ -796,12 +811,20 @@ final class WorldSimulation {
         }
     }
 
-    private func stepMovers(dt: TimeInterval) {
+    private func stepMovers(dt: TimeInterval) -> [SimEvent] {
+        var events: [SimEvent] = []
         for i in movers.indices {
+            movers[i].impactCooldown = max(0, movers[i].impactCooldown - dt)
+            if let remaining = movers[i].fractureRemaining {
+                movers[i].fractureRemaining = max(0, remaining - dt)
+            }
+
+            let impacted: Bool
             switch movers[i].path {
             case .bounce:
-                stepBouncingMover(at: i, dt: dt)
+                impacted = stepBouncingMover(at: i, dt: dt)
             case .patrol(let a, let b):
+                impacted = false
                 let span = max(a.distance(to: b), 1)
                 let speed = 90.0 / span
                 movers[i].patrolT += dt * speed * movers[i].patrolDir
@@ -814,21 +837,50 @@ final class WorldSimulation {
                 }
                 movers[i].position = a.lerp(b, movers[i].patrolT)
             case .orbit(let center, let radius, let period, let phase):
+                impacted = false
                 let angle = phase + (time / max(period, 0.1)) * (.pi * 2)
                 movers[i].position = Vec2(
                     x: center.x + cos(angle) * radius,
                     y: center.y + sin(angle) * radius
                 )
             }
+
+            if impacted, movers[i].impactCooldown <= 0 {
+                movers[i].impactCooldown = 0.18
+                if let maxHits = movers[i].material.wallHitsToShatter {
+                    if movers[i].fractureRemaining == nil {
+                        movers[i].fractureRemaining = movers[i].material.fractureDuration
+                    }
+                    movers[i].hitsRemaining = max(0, (movers[i].hitsRemaining ?? maxHits) - 1)
+                }
+                events.append(
+                    .asteroidImpacted(
+                        id: movers[i].id,
+                        material: movers[i].material,
+                        at: movers[i].position
+                    )
+                )
+            }
         }
+
+        for index in movers.indices.reversed() {
+            let hitLimitReached = movers[index].hitsRemaining == 0
+            let timerExpired = movers[index].fractureRemaining.map { $0 <= 0 } ?? false
+            guard hitLimitReached || timerExpired else { continue }
+            let mover = movers.remove(at: index)
+            events.append(.asteroidShattered(id: mover.id, material: mover.material, at: mover.position))
+        }
+        return events
     }
 
-    private func stepBouncingMover(at index: Int, dt: TimeInterval) {
+    private func stepBouncingMover(at index: Int, dt: TimeInterval) -> Bool {
         var mover = movers[index]
         var position = mover.position
+        var impacted = false
 
         var xCandidate = Vec2(x: position.x + mover.velocity.x * dt, y: position.y)
         if moverIsBlocked(at: xCandidate, radius: mover.radius) {
+            impacted = true
             mover.velocity.x *= -1
             xCandidate = Vec2(x: position.x + mover.velocity.x * dt, y: position.y)
         }
@@ -838,6 +890,7 @@ final class WorldSimulation {
 
         var yCandidate = Vec2(x: position.x, y: position.y + mover.velocity.y * dt)
         if moverIsBlocked(at: yCandidate, radius: mover.radius) {
+            impacted = true
             mover.velocity.y *= -1
             yCandidate = Vec2(x: position.x, y: position.y + mover.velocity.y * dt)
         }
@@ -847,6 +900,7 @@ final class WorldSimulation {
 
         mover.position = clampToArena(position, radius: mover.radius)
         movers[index] = mover
+        return impacted
     }
 
     private func moverIsBlocked(at position: Vec2, radius: Double) -> Bool {

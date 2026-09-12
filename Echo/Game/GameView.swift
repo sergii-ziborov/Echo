@@ -257,6 +257,12 @@ struct GameView: View {
             case .laserFired(let id):
                 model.audio.haptic(.rigid)
                 scene.laserDischarge(id: id)
+            case .asteroidImpacted(let id, let material, let position):
+                model.audio.haptic(material == .alloy ? .rigid : .soft)
+                scene.asteroidImpact(id: id, material: material, at: position)
+            case .asteroidShattered(let id, let material, let position):
+                model.audio.haptic(.medium)
+                scene.asteroidShatter(id: id, material: material, at: position)
             case .echoWillSpawn:
                 model.audio.play(.warn)
                 model.audio.haptic(.medium)

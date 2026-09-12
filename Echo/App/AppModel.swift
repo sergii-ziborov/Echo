@@ -53,12 +53,14 @@ final class AppModel {
         } else if args.contains("-shot-settings") {
             progress.markTutorialSeen()
             screen = .settings
-        } else if args.contains("-shot-rift") || args.contains("-shot-gravity") || args.contains("-shot-candy") {
+        } else if args.contains("-shot-rift") || args.contains("-shot-gravity") || args.contains("-shot-candy") || args.contains("-shot-fracture") {
             progress.markTutorialSeen()
             for hint in [EncounterHint.echo, .asteroid, .rift, .laser, .timeCrystal, .blackHole, .realityShift] {
                 _ = progress.markHint(hint.rawValue)
             }
-            let number = args.contains("-shot-candy") ? 70 : (args.contains("-shot-gravity") ? 56 : 49)
+            let number = args.contains("-shot-fracture")
+                ? 33
+                : (args.contains("-shot-candy") ? 70 : (args.contains("-shot-gravity") ? 56 : 49))
             screen = .playing(PlayRequest(levelID: LevelCatalog.level(number: number)?.id ?? LevelCatalog.prototype.id, daily: false))
         } else if args.contains("-shot-ricochet") {
             progress.markTutorialSeen()

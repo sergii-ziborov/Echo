@@ -429,7 +429,7 @@ enum EncounterHint: String, Equatable, Sendable {
         case .echo:
             "A copy of your path just appeared. It will replay what you already did. Do not meet it."
         case .asteroid:
-            "Rocks move on their own. A shield eats one hit. Freeze stops them with the echoes."
+            "Debris has a material. Ice, crystal, and basalt begin fracturing after a wall hit; their local clock and cracks show what remains. Alloy never breaks. Freeze stops both motion and fracture time."
         case .rift:
             "Rifts open and close. A calm tear pauses time. A collapsing one is a collision — stay out."
         case .freeze:

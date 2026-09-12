@@ -51,6 +51,11 @@ final class GameSession {
         self.level = level
         self.daily = daily
         self.sim = WorldSimulation(level: level)
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-shot-fracture") {
+            sim.debugPreviewAsteroidFractures()
+        }
+#endif
         publish()
     }
 
@@ -124,7 +129,8 @@ final class GameSession {
     func handle(events: [SimEvent], autoReplay: Bool) {
         for event in events {
             switch event {
-            case .sparkCollected, .dashed, .laserCharging, .laserFired:
+            case .sparkCollected, .dashed, .laserCharging, .laserFired,
+                 .asteroidImpacted, .asteroidShattered:
                 break
             case .resonance(let chain, _):
                 banner = "Resonance ×\(chain)"

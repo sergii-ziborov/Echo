@@ -2,7 +2,7 @@
 
 ECHO is a top-down temporal survival puzzle for iPhone with 77 maps arranged as 11 seven-map epochs. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records.
 
-The later epochs introduce moving debris, timed crystals, laser arrays, spatial folds, mirrored controls, gravity wells, black holes and a temporary Candy Timeline pocket dimension. The in-game Wiki documents every rule, while Settings includes a confirmed full-progress reset that preserves accessibility/audio preferences.
+The later epochs introduce moving debris, timed crystals, laser arrays, spatial folds, mirrored controls, gravity wells, black holes and a temporary Candy Timeline pocket dimension. Rifts, lensing rings, pocket backgrounds, emitters, and debris shells are continuously animated rather than static decals. The in-game Wiki documents every rule, while Settings includes a confirmed full-progress reset that preserves accessibility/audio preferences.
 
 A path-replay puzzle for iPhone and iPad. You steer a glowing orb, collect sparks, and reach the exit. Every few seconds a copy of you appears and walks the line you already drew. The past is the hazard.
 
@@ -31,7 +31,7 @@ A crash can **Paradox Rewind** three seconds. The failed branch stays as an unst
 ## Hazards and tools
 
 - **Echoes** — up to five copies. Double-tap to dash.
-- **Asteroids** — bounce, patrol, or orbit. Freeze stops them too.
+- **Asteroids** — bounce, patrol, or orbit with four readable materials. Cryo Ice, Chrono Crystal, and Basalt arm an on-rock fracture clock after hitting solid geometry and progressively crack until they shatter; Void Alloy never breaks. Freeze pauses both motion and fracture time.
 - **Temporal lasers** — generated mechanical emitters telegraph, charge, discharge, and send energy pulses down staggered beams. Event Horizon adds a sweeping beam; Freeze suspends and disarms every laser.
 - **Reality rifts** — calm tears freeze time, collapsing tears kill, Warp tears fold space and mirror steering, and Candy tears open a faster pocket timeline with a wider Resonance window.
 - **Black holes** — bend movement inside their lensing radius and destroy the timeline at the core. Freeze suspends their pull.

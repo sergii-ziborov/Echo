@@ -372,6 +372,65 @@ final class WorldSimulationTests: XCTestCase {
         XCTAssertLessThanOrEqual(sim.movers[0].position.x, 462.1)
     }
 
+    func testBrittleAsteroidStartsFractureClockOnWallImpact() {
+        let sim = asteroidImpactSimulation(material: .ice)
+        var sawImpact = false
+        for _ in 0..<30 {
+            let events = sim.step(dt: 1.0 / 60.0, target: Vec2(x: 560, y: 500))
+            sawImpact = sawImpact || events.contains {
+                if case .asteroidImpacted(_, .ice, _) = $0 { return true }
+                return false
+            }
+        }
+
+        XCTAssertTrue(sawImpact)
+        XCTAssertEqual(sim.movers.first?.material, .ice)
+        XCTAssertEqual(sim.movers.first?.hitsRemaining, 1)
+        XCTAssertNotNil(sim.movers.first?.fractureRemaining)
+        XCTAssertGreaterThan(sim.movers.first?.fractureProgress ?? 0, 0)
+    }
+
+    func testFractureClockShattersBrittleAsteroid() {
+        let sim = asteroidImpactSimulation(material: .ice)
+        var shattered = false
+        for _ in 0..<390 {
+            let events = sim.step(dt: 1.0 / 60.0, target: Vec2(x: 560, y: 500))
+            shattered = shattered || events.contains {
+                if case .asteroidShattered(_, .ice, _) = $0 { return true }
+                return false
+            }
+            if shattered { break }
+        }
+
+        XCTAssertTrue(shattered)
+        XCTAssertTrue(sim.movers.isEmpty)
+    }
+
+    func testFreezePausesAsteroidFractureClock() {
+        let sim = asteroidImpactSimulation(material: .crystal)
+        advance(sim, seconds: 0.45, target: Vec2(x: 560, y: 500))
+        let before = sim.movers[0].fractureRemaining
+        XCTAssertNotNil(before)
+        XCTAssertTrue(sim.activate(.freeze))
+        advance(sim, seconds: 1.0, target: Vec2(x: 580, y: 500))
+        XCTAssertEqual(sim.movers[0].fractureRemaining ?? -1, before ?? -2, accuracy: 0.02)
+    }
+
+    func testVoidAlloyNeverArmsFractureClock() {
+        let sim = asteroidImpactSimulation(material: .alloy)
+        advance(sim, seconds: 0.45, target: Vec2(x: 560, y: 500))
+        XCTAssertEqual(sim.movers.first?.material, .alloy)
+        XCTAssertNil(sim.movers.first?.hitsRemaining)
+        XCTAssertNil(sim.movers.first?.fractureRemaining)
+    }
+
+    func testCampaignUsesEveryAsteroidMaterial() {
+        let materials = Set(LevelCatalog.playable.flatMap { $0.movers.map(\.material) })
+        XCTAssertEqual(materials, Set(AsteroidMaterial.allCases))
+        XCTAssertTrue(LevelCatalog.playable.flatMap(\.movers).contains { $0.material == .alloy })
+        XCTAssertTrue(LevelCatalog.playable.flatMap(\.movers).contains { $0.material.isBreakable })
+    }
+
     func testFiringLaserKillsAndFreezeDisarmsIt() {
         var level = LevelCatalog.prototype
         level.walls = []
@@ -586,6 +645,27 @@ final class WorldSimulationTests: XCTestCase {
             _ = sim.step(dt: 1.0 / 30.0, target: sim.level.playerStart)
             XCTAssertGreaterThanOrEqual(sim.scarsCreated, scars)
         }
+    }
+
+    private func asteroidImpactSimulation(material: AsteroidMaterial) -> WorldSimulation {
+        var level = LevelCatalog.prototype
+        level.walls = []
+        level.maxEchoes = 0
+        level.playerStart = Vec2(x: 500, y: 500)
+        level.exit = Vec2(x: 900, y: 900)
+        level.sparks = [SparkSpawn(id: 0, position: Vec2(x: 900, y: 100))]
+        level.movers = [
+            MoverSpawn.bounce(
+                id: 0,
+                at: Vec2(x: 62.5, y: 180),
+                velocity: Vec2(x: -140, y: 0),
+                radius: 34,
+                material: material
+            ),
+        ]
+        var config = SimConfig()
+        config.collisionSlop = 1_000
+        return WorldSimulation(level: level, config: config)
     }
 }
 

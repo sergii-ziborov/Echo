@@ -65,12 +65,32 @@ final class GameScene: SKScene {
         backgroundColor = session.level.theme.sky.uiColor
         trailAcc = 0
         trailBudget = 0
-        realityBackdrop = SKSpriteNode(texture: GlowTextures.candyTimeline, size: size)
+        realityBackdrop = SKSpriteNode(
+            texture: GlowTextures.candyTimeline,
+            size: CGSize(width: size.width * 1.08, height: size.height * 1.08)
+        )
         realityBackdrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
         realityBackdrop.zPosition = 0.25
         realityBackdrop.alpha = 0
         realityBackdrop.color = UIColor(red: 0.75, green: 0.45, blue: 1, alpha: 1)
         realityBackdrop.colorBlendFactor = 0.04
+        realityBackdrop.run(.repeatForever(.sequence([
+            .group([
+                .moveBy(x: 3, y: 5, duration: 3.8),
+                .scaleY(to: 1.025, duration: 3.8),
+                .rotate(toAngle: 0.008, duration: 3.8, shortestUnitArc: true),
+            ]),
+            .group([
+                .moveBy(x: -6, y: -10, duration: 4.6),
+                .scaleY(to: 0.985, duration: 4.6),
+                .rotate(toAngle: -0.008, duration: 4.6, shortestUnitArc: true),
+            ]),
+            .group([
+                .moveBy(x: 3, y: 5, duration: 3.8),
+                .scaleY(to: 1, duration: 3.8),
+                .rotate(toAngle: 0, duration: 3.8, shortestUnitArc: true),
+            ]),
+        ])))
         addChild(realityBackdrop)
         ambienceNode = SKNode()
         ambienceNode.zPosition = 1.5
@@ -286,6 +306,43 @@ final class GameScene: SKScene {
                 ]))
             }
         }
+    }
+
+    func asteroidImpact(id: Int, material: AsteroidMaterial, at position: Vec2) {
+        let point = scenePoint(position)
+        let tint = Self.color(for: material)
+        if let root = moverNodes[id] {
+            root.removeAction(forKey: "impact")
+            root.run(.sequence([
+                .scale(to: 1.11, duration: 0.055),
+                .scale(to: 0.96, duration: 0.075),
+                .scale(to: 1, duration: 0.12),
+            ]), withKey: "impact")
+        }
+        asteroidFragments(at: point, color: tint, count: material == .alloy ? 4 : 6, distance: 28)
+        shockwave(at: point, color: tint, start: 7, end: 34)
+    }
+
+    func asteroidShatter(id: Int, material: AsteroidMaterial, at position: Vec2) {
+        let point = scenePoint(position)
+        let tint = Self.color(for: material)
+        if let root = moverNodes.removeValue(forKey: id) {
+            root.removeAllActions()
+            root.speed = 1
+            root.run(.sequence([
+                .group([
+                    .scale(to: 1.28, duration: 0.12),
+                    .fadeAlpha(to: 0.2, duration: 0.12),
+                ]),
+                .group([
+                    .scale(to: 0.18, duration: 0.24),
+                    .fadeOut(withDuration: 0.24),
+                ]),
+                .removeFromParent(),
+            ]))
+        }
+        asteroidFragments(at: point, color: tint, count: 16, distance: 72)
+        shockwave(at: point, color: tint, start: 10, end: 78)
     }
 
     func realityShift(kind: RiftKind, at position: Vec2) {
@@ -750,29 +807,143 @@ final class GameScene: SKScene {
 
     private func buildMovers() {
         for mover in session.sim.movers {
-            let root = SKNode()
-            root.zPosition = 10
-            root.position = scenePoint(mover.position)
-            let diameter = max(50, CGFloat(mover.radius) * worldScale * 2.7)
-            let glow = SKSpriteNode(texture: GlowTextures.blob)
-            let glowSize = diameter * 1.45
-            glow.size = CGSize(width: glowSize, height: glowSize)
-            glow.blendMode = .add
-            glow.color = session.level.theme.wallStroke.uiColor
-            glow.colorBlendFactor = 0.72
-            glow.alpha = 0.32
-            glow.name = "glow"
-            let rock = SKSpriteNode(texture: GlowTextures.asteroid)
-            rock.size = CGSize(width: diameter, height: diameter)
-            rock.color = session.level.theme.wallStroke.uiColor
-            rock.colorBlendFactor = 0.10
-            rock.name = "rock"
-            rock.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: TimeInterval.random(in: 5...9))))
-            root.addChild(glow)
-            root.addChild(rock)
-            addChild(root)
-            moverNodes[mover.id] = root
+            addMoverNode(for: mover)
         }
+    }
+
+    private func addMoverNode(for mover: MoverState) {
+        guard moverNodes[mover.id] == nil else { return }
+        let root = SKNode()
+        root.zPosition = 10
+        root.position = scenePoint(mover.position)
+        root.name = "asteroid-\(mover.id)"
+
+        let diameter = max(58, CGFloat(mover.radius) * worldScale * 2.75)
+        let tint = Self.color(for: mover.material)
+        let secondary = Self.secondaryColor(for: mover.material)
+
+        let glow = SKSpriteNode(texture: GlowTextures.blob)
+        let glowSize = diameter * 1.48
+        glow.size = CGSize(width: glowSize, height: glowSize)
+        glow.blendMode = .add
+        glow.color = tint
+        glow.colorBlendFactor = 0.86
+        glow.alpha = mover.material == .alloy ? 0.20 : 0.33
+        glow.name = "glow"
+        glow.run(.repeatForever(.sequence([
+            .fadeAlpha(to: mover.material == .crystal ? 0.48 : 0.38, duration: 0.75),
+            .fadeAlpha(to: mover.material == .alloy ? 0.17 : 0.27, duration: 0.92),
+        ])))
+
+        let shell = SKShapeNode(
+            path: Self.segmentedCirclePath(
+                radius: diameter * 0.48,
+                segments: mover.material == .alloy ? 8 : 5,
+                coverage: mover.material == .ice ? 0.48 : 0.68
+            )
+        )
+        shell.name = "shell"
+        shell.fillColor = .clear
+        shell.strokeColor = secondary.withAlphaComponent(0.82)
+        shell.lineWidth = mover.material == .alloy ? 2.2 : 1.4
+        shell.glowWidth = mover.material == .crystal ? 5 : 2
+        shell.run(.repeatForever(.rotate(
+            byAngle: mover.material == .alloy ? -.pi * 2 : .pi * 2,
+            duration: mover.material == .ice ? 4.2 : 7.5
+        )))
+
+        let rock = SKSpriteNode(texture: GlowTextures.asteroid)
+        rock.size = CGSize(width: diameter, height: diameter)
+        rock.color = tint
+        rock.colorBlendFactor = mover.material == .basalt ? 0.30 : 0.52
+        rock.name = "rock"
+        let spinDuration: TimeInterval = switch mover.material {
+        case .basalt: 8.8
+        case .ice: 6.2
+        case .crystal: 5.0
+        case .alloy: 10.5
+        }
+        rock.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: spinDuration)))
+
+        let surface = SKShapeNode(
+            path: Self.asteroidMaterialPath(
+                material: mover.material,
+                radius: diameter * 0.34,
+                seed: mover.id + session.level.number * 11
+            )
+        )
+        surface.name = "surface"
+        surface.fillColor = .clear
+        surface.strokeColor = secondary.withAlphaComponent(0.72)
+        surface.lineWidth = mover.material == .alloy ? 1.8 : 1.35
+        surface.glowWidth = mover.material == .crystal ? 4 : 1
+        surface.run(.repeatForever(.rotate(
+            byAngle: mover.material == .ice ? -.pi * 2 : .pi * 2,
+            duration: mover.material == .crystal ? 7.2 : 12.0
+        )))
+
+        let cracks = SKShapeNode(
+            path: Self.asteroidCrackPath(
+                radius: diameter * 0.38,
+                seed: mover.id + session.level.number * 17
+            )
+        )
+        cracks.name = "cracks"
+        cracks.fillColor = .clear
+        cracks.strokeColor = UIColor.white.withAlphaComponent(0.96)
+        cracks.lineWidth = 1.7
+        cracks.glowWidth = 3
+        cracks.alpha = 0
+
+        let chips = SKNode()
+        chips.name = "chips"
+        chips.alpha = 0
+        for index in 0..<6 {
+            let angle = CGFloat(index) / 6 * .pi * 2 + CGFloat(mover.id) * 0.21
+            let chip = SKShapeNode(path: Self.polygonPath(radius: 2.5 + CGFloat(index % 2), sides: 4))
+            chip.position = CGPoint(x: cos(angle) * diameter * 0.43, y: sin(angle) * diameter * 0.43)
+            chip.fillColor = index.isMultiple(of: 2) ? tint : secondary
+            chip.strokeColor = .clear
+            chip.glowWidth = 2
+            chips.addChild(chip)
+        }
+        chips.run(.repeatForever(.rotate(byAngle: -.pi * 2, duration: 6.4)))
+
+        let timerRoot = SKNode()
+        timerRoot.name = "fractureTimer"
+        timerRoot.position = CGPoint(x: 0, y: diameter * 0.66)
+        timerRoot.alpha = 0
+        let timerPlate = SKShapeNode(rectOf: CGSize(width: 72, height: 23), cornerRadius: 11.5)
+        timerPlate.fillColor = UIColor(red: 0.025, green: 0.045, blue: 0.10, alpha: 0.88)
+        timerPlate.strokeColor = tint.withAlphaComponent(0.65)
+        timerPlate.lineWidth = 1
+        let timerArc = SKShapeNode()
+        timerArc.name = "fractureArc"
+        timerArc.strokeColor = tint
+        timerArc.lineWidth = 2.2
+        timerArc.lineCap = .round
+        timerArc.glowWidth = 3
+        timerArc.position = CGPoint(x: -24, y: 0)
+        let timerLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+        timerLabel.name = "fractureLabel"
+        timerLabel.fontSize = 9
+        timerLabel.fontColor = .white
+        timerLabel.horizontalAlignmentMode = .left
+        timerLabel.verticalAlignmentMode = .center
+        timerLabel.position = CGPoint(x: -13, y: 0)
+        timerRoot.addChild(timerPlate)
+        timerRoot.addChild(timerArc)
+        timerRoot.addChild(timerLabel)
+
+        root.addChild(glow)
+        root.addChild(shell)
+        root.addChild(rock)
+        root.addChild(surface)
+        root.addChild(cracks)
+        root.addChild(chips)
+        root.addChild(timerRoot)
+        addChild(root)
+        moverNodes[mover.id] = root
     }
 
     private func buildGravityWells() {
@@ -792,6 +963,51 @@ final class GameScene: SKScene {
                 .scale(to: 1.04, duration: 1.4),
             ])))
 
+            let lensing = SKNode()
+            lensing.name = "lensing"
+            for index in 0..<3 {
+                let radius = CGFloat(well.coreRadius) * worldScale * (1.05 + CGFloat(index) * 0.30)
+                let arc = SKShapeNode(
+                    path: Self.segmentedCirclePath(
+                        radius: radius,
+                        segments: 3 + index,
+                        coverage: 0.42
+                    )
+                )
+                arc.strokeColor = index == 1
+                    ? UIColor(red: 1, green: 0.78, blue: 0.35, alpha: 0.86)
+                    : UIColor(red: 0.42, green: 0.82, blue: 1, alpha: 0.72)
+                arc.lineWidth = 1.5 + CGFloat(index) * 0.35
+                arc.glowWidth = 5
+                arc.xScale = 1.25
+                arc.yScale = 0.58 + CGFloat(index) * 0.08
+                arc.zRotation = CGFloat(index) * 0.72
+                arc.run(.repeatForever(.rotate(
+                    byAngle: index.isMultiple(of: 2) ? .pi * 2 : -.pi * 2,
+                    duration: 3.8 + Double(index) * 1.2
+                )))
+                lensing.addChild(arc)
+            }
+
+            let orbiters = SKNode()
+            orbiters.name = "orbiters"
+            for index in 0..<6 {
+                let angle = CGFloat(index) / 6 * .pi * 2
+                let mote = SKSpriteNode(texture: GlowTextures.blob)
+                mote.size = CGSize(width: 5 + CGFloat(index % 2) * 2, height: 5 + CGFloat(index % 2) * 2)
+                mote.position = CGPoint(
+                    x: cos(angle) * CGFloat(well.coreRadius) * worldScale * 1.55,
+                    y: sin(angle) * CGFloat(well.coreRadius) * worldScale * 0.82
+                )
+                mote.color = index.isMultiple(of: 3)
+                    ? UIColor(red: 1, green: 0.75, blue: 0.3, alpha: 1)
+                    : UIColor(red: 0.45, green: 0.85, blue: 1, alpha: 1)
+                mote.colorBlendFactor = 0.8
+                mote.blendMode = .add
+                orbiters.addChild(mote)
+            }
+            orbiters.run(.repeatForever(.rotate(byAngle: -.pi * 2, duration: 4.8)))
+
             let sprite = SKSpriteNode(texture: GlowTextures.blackHole)
             sprite.name = "core"
             let diameter = max(92, CGFloat(well.coreRadius) * worldScale * 3.4)
@@ -799,6 +1015,8 @@ final class GameScene: SKScene {
             sprite.run(.repeatForever(.rotate(byAngle: -.pi * 2, duration: 8.5)))
 
             root.addChild(influence)
+            root.addChild(lensing)
+            root.addChild(orbiters)
             root.addChild(sprite)
             addChild(root)
             gravityWellNodes[well.id] = root
@@ -834,6 +1052,25 @@ final class GameScene: SKScene {
             ring.fillColor = color.withAlphaComponent(0.08)
             ring.run(.repeatForever(.rotate(byAngle: .pi, duration: 5)))
             root.addChild(glow)
+
+            let orbit = SKNode()
+            orbit.name = "riftOrbit"
+            for index in 0..<8 {
+                let angle = CGFloat(index) / 8 * .pi * 2
+                let shard = SKShapeNode(rectOf: CGSize(width: 2.2, height: 8 + CGFloat(index % 3) * 2), cornerRadius: 1)
+                shard.position = CGPoint(
+                    x: cos(angle) * s * 0.72,
+                    y: sin(angle) * s * 0.48
+                )
+                shard.zRotation = angle - .pi / 2
+                shard.fillColor = index.isMultiple(of: 3) ? .white : color
+                shard.strokeColor = .clear
+                shard.glowWidth = 4
+                orbit.addChild(shard)
+            }
+            orbit.run(.repeatForever(.rotate(byAngle: -.pi * 2, duration: rift.kind == .candy ? 3.8 : 5.4)))
+            root.addChild(orbit)
+
             if rift.kind == .warp || rift.kind == .candy {
                 let tear = SKSpriteNode(texture: GlowTextures.dimensionalRift)
                 tear.name = "tear"
@@ -843,8 +1080,14 @@ final class GameScene: SKScene {
                 tear.colorBlendFactor = rift.kind == .candy ? 0.28 : 0.08
                 tear.blendMode = .add
                 tear.run(.repeatForever(.sequence([
-                    .rotate(toAngle: 0.08, duration: 0.7, shortestUnitArc: true),
-                    .rotate(toAngle: -0.08, duration: 0.7, shortestUnitArc: true),
+                    .group([
+                        .rotate(toAngle: 0.08, duration: 0.62, shortestUnitArc: true),
+                        .scaleX(to: 0.94, duration: 0.62),
+                    ]),
+                    .group([
+                        .rotate(toAngle: -0.08, duration: 0.74, shortestUnitArc: true),
+                        .scaleX(to: 1.06, duration: 0.74),
+                    ]),
                 ])))
                 root.addChild(tear)
             }
@@ -1194,10 +1437,7 @@ final class GameScene: SKScene {
         for bonus in session.sim.bonuses {
             bonusNodes[bonus.id]?.isHidden = bonus.collected
         }
-        for mover in session.sim.movers {
-            moverNodes[mover.id]?.position = scenePoint(mover.position)
-            moverNodes[mover.id]?.alpha = session.sim.effects.isFrozen ? 0.58 : 1
-        }
+        syncMovers(session.sim.movers, frozen: session.sim.effects.isFrozen)
         for well in session.sim.gravityWells {
             gravityWellNodes[well.id]?.position = scenePoint(well.position)
             gravityWellNodes[well.id]?.alpha = session.sim.effects.isFrozen ? 0.52 : 1
@@ -1239,6 +1479,73 @@ final class GameScene: SKScene {
         }
     }
 
+    private func syncMovers(_ states: [MoverState], frozen: Bool) {
+        let liveIDs = Set(states.map(\.id))
+        for id in Array(moverNodes.keys) where !liveIDs.contains(id) {
+            moverNodes.removeValue(forKey: id)?.removeFromParent()
+        }
+
+        for mover in states {
+            if moverNodes[mover.id] == nil {
+                addMoverNode(for: mover)
+            }
+            guard let root = moverNodes[mover.id] else { continue }
+            root.position = scenePoint(mover.position)
+            root.alpha = frozen ? 0.58 : 1
+
+            let progress = CGFloat(mover.fractureProgress)
+            let tint = Self.color(for: mover.material)
+            if let rock = root.childNode(withName: "rock") as? SKSpriteNode {
+                let scale = 1 - progress * 0.075
+                rock.xScale = scale
+                rock.yScale = scale
+                rock.colorBlendFactor = mover.material == .basalt
+                    ? 0.30 + progress * 0.22
+                    : 0.52 + progress * 0.18
+            }
+            if let cracks = root.childNode(withName: "cracks") as? SKShapeNode {
+                cracks.alpha = max(0, min(1, progress * 1.35))
+                cracks.strokeColor = progress > 0.68
+                    ? UIColor.white
+                    : tint.withAlphaComponent(0.96)
+            }
+            root.childNode(withName: "chips")?.alpha = max(0, min(0.92, (progress - 0.28) * 1.7))
+
+            guard let timer = root.childNode(withName: "fractureTimer") else { continue }
+            let diameter = (root.childNode(withName: "rock") as? SKSpriteNode)?.size.height ?? 68
+            let vertical = root.position.y > size.height - 76 ? -diameter * 0.67 : diameter * 0.67
+            let horizontal: CGFloat
+            if root.position.x < 42 {
+                horizontal = 42 - root.position.x
+            } else if root.position.x > size.width - 42 {
+                horizontal = size.width - 42 - root.position.x
+            } else {
+                horizontal = 0
+            }
+            timer.position = CGPoint(x: horizontal, y: vertical)
+            if let remaining = mover.fractureRemaining,
+               let duration = mover.material.fractureDuration {
+                timer.alpha = frozen ? 0.62 : 1
+                let fraction = max(0, min(1, remaining / max(duration, 0.01)))
+                let arc = timer.childNode(withName: "fractureArc") as? SKShapeNode
+                arc?.path = Self.arc(radius: 7.2, fraction: fraction)
+                arc?.strokeColor = fraction < 0.28
+                    ? UIColor(red: 1, green: 0.35, blue: 0.45, alpha: 1)
+                    : tint
+                let label = timer.childNode(withName: "fractureLabel") as? SKLabelNode
+                label?.text = "\(mover.material.shortLabel)  \(String(format: "%.1f", remaining))"
+                if fraction < 0.28 {
+                    timer.setScale(1 + 0.045 * abs(sin(CACurrentMediaTime() * 10)))
+                } else {
+                    timer.setScale(1)
+                }
+            } else {
+                timer.alpha = 0
+                timer.setScale(1)
+            }
+        }
+    }
+
     private func syncRealityBackdrop() {
         switch session.sim.reality {
         case .normal:
@@ -1271,6 +1578,7 @@ final class GameScene: SKScene {
         for (i, echo) in snap.echoes.enumerated() {
             echoNodes[i].position = scenePoint(echo)
         }
+        syncMovers(snap.movers, frozen: snap.effects.isFrozen)
     }
 
     private func renderBallet() {
@@ -1509,6 +1817,35 @@ final class GameScene: SKScene {
         }
     }
 
+    private func asteroidFragments(at point: CGPoint, color: UIColor, count: Int, distance: CGFloat) {
+        for index in 0..<max(1, count) {
+            let angle = CGFloat(index) / CGFloat(max(1, count)) * .pi * 2 + CGFloat(index % 3) * 0.16
+            let radius = 2.2 + CGFloat(index % 3) * 1.35
+            let fragment = SKShapeNode(path: Self.polygonPath(radius: radius, sides: index.isMultiple(of: 2) ? 4 : 5))
+            fragment.position = CGPoint(
+                x: point.x + cos(angle) * 5,
+                y: point.y + sin(angle) * 5
+            )
+            fragment.fillColor = index.isMultiple(of: 4) ? .white : color
+            fragment.strokeColor = color.withAlphaComponent(0.55)
+            fragment.lineWidth = 0.8
+            fragment.glowWidth = 3
+            fragment.zPosition = 23
+            addChild(fragment)
+
+            let travel = distance * (0.72 + CGFloat(index % 4) * 0.11)
+            fragment.run(.sequence([
+                .group([
+                    .moveBy(x: cos(angle) * travel, y: sin(angle) * travel, duration: 0.38),
+                    .rotate(byAngle: index.isMultiple(of: 2) ? .pi : -.pi, duration: 0.38),
+                    .scale(to: 0.18, duration: 0.38),
+                    .fadeOut(withDuration: 0.38),
+                ]),
+                .removeFromParent(),
+            ]))
+        }
+    }
+
     private func polygonWave(
         at point: CGPoint,
         sides: Int,
@@ -1687,6 +2024,73 @@ final class GameScene: SKScene {
         return node
     }
 
+    private static func asteroidMaterialPath(
+        material: AsteroidMaterial,
+        radius: CGFloat,
+        seed: Int
+    ) -> CGPath {
+        let path = CGMutablePath()
+        let offset = CGFloat(seed % 17) * 0.11
+        switch material {
+        case .basalt:
+            for index in 0..<4 {
+                let angle = offset + CGFloat(index) * 1.71
+                let distance = radius * (0.22 + CGFloat(index % 2) * 0.18)
+                let craterRadius = radius * (0.12 + CGFloat(index % 3) * 0.035)
+                path.addEllipse(in: CGRect(
+                    x: cos(angle) * distance - craterRadius,
+                    y: sin(angle) * distance - craterRadius,
+                    width: craterRadius * 2,
+                    height: craterRadius * 2
+                ))
+            }
+        case .ice:
+            path.addPath(polygonPath(radius: radius * 0.76, sides: 6))
+            for index in 0..<6 {
+                let angle = offset + CGFloat(index) / 6 * .pi * 2
+                path.move(to: CGPoint(x: cos(angle) * radius * 0.12, y: sin(angle) * radius * 0.12))
+                path.addLine(to: CGPoint(x: cos(angle) * radius * 0.82, y: sin(angle) * radius * 0.82))
+            }
+        case .crystal:
+            path.addPath(polygonPath(radius: radius * 0.86, sides: 5))
+            for index in 0..<5 {
+                let angle = -.pi / 2 + CGFloat(index) / 5 * .pi * 2
+                path.move(to: .zero)
+                path.addLine(to: CGPoint(x: cos(angle) * radius * 0.86, y: sin(angle) * radius * 0.86))
+            }
+            path.addEllipse(in: CGRect(x: -radius * 0.19, y: -radius * 0.19, width: radius * 0.38, height: radius * 0.38))
+        case .alloy:
+            path.addEllipse(in: CGRect(x: -radius * 0.78, y: -radius * 0.78, width: radius * 1.56, height: radius * 1.56))
+            path.addEllipse(in: CGRect(x: -radius * 0.31, y: -radius * 0.31, width: radius * 0.62, height: radius * 0.62))
+            for index in 0..<8 {
+                let angle = offset + CGFloat(index) / 8 * .pi * 2
+                path.move(to: CGPoint(x: cos(angle) * radius * 0.38, y: sin(angle) * radius * 0.38))
+                path.addLine(to: CGPoint(x: cos(angle) * radius * 0.76, y: sin(angle) * radius * 0.76))
+            }
+        }
+        return path
+    }
+
+    private static func asteroidCrackPath(radius: CGFloat, seed: Int) -> CGPath {
+        let path = CGMutablePath()
+        let offset = CGFloat(seed % 23) * 0.09
+        for index in 0..<4 {
+            let angle = offset + CGFloat(index) / 4 * .pi * 2
+            let inner = CGPoint(x: cos(angle + 0.25) * radius * 0.08, y: sin(angle + 0.25) * radius * 0.08)
+            let middle = CGPoint(x: cos(angle - 0.12) * radius * 0.48, y: sin(angle - 0.12) * radius * 0.48)
+            let outer = CGPoint(x: cos(angle + 0.08) * radius * 0.92, y: sin(angle + 0.08) * radius * 0.92)
+            path.move(to: inner)
+            path.addLine(to: middle)
+            path.addLine(to: outer)
+            path.move(to: middle)
+            path.addLine(to: CGPoint(
+                x: middle.x + cos(angle + 0.72) * radius * 0.24,
+                y: middle.y + sin(angle + 0.72) * radius * 0.24
+            ))
+        }
+        return path
+    }
+
     private static func polygonPath(radius: CGFloat, sides: Int) -> CGPath {
         let path = CGMutablePath()
         let count = max(3, sides)
@@ -1730,6 +2134,32 @@ final class GameScene: SKScene {
         let end = CGFloat(fraction) * .pi * 2
         path.addArc(center: .zero, radius: radius, startAngle: 0, endAngle: end, clockwise: false)
         return path
+    }
+
+    private static func color(for material: AsteroidMaterial) -> UIColor {
+        switch material {
+        case .basalt:
+            UIColor(red: 0.50, green: 0.40, blue: 0.34, alpha: 1)
+        case .ice:
+            UIColor(red: 0.48, green: 0.91, blue: 1.00, alpha: 1)
+        case .crystal:
+            UIColor(red: 0.82, green: 0.42, blue: 1.00, alpha: 1)
+        case .alloy:
+            UIColor(red: 0.72, green: 0.82, blue: 0.92, alpha: 1)
+        }
+    }
+
+    private static func secondaryColor(for material: AsteroidMaterial) -> UIColor {
+        switch material {
+        case .basalt:
+            UIColor(red: 1.00, green: 0.62, blue: 0.29, alpha: 1)
+        case .ice:
+            UIColor.white
+        case .crystal:
+            UIColor(red: 0.42, green: 0.92, blue: 1.00, alpha: 1)
+        case .alloy:
+            UIColor(red: 1.00, green: 0.78, blue: 0.32, alpha: 1)
+        }
     }
 
     private static func color(for kind: BonusKind) -> UIColor {
