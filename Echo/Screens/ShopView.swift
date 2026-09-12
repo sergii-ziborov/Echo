@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct ShopView: View {
     private static var screenshotUpgrade: UpgradeKind {
@@ -15,11 +16,15 @@ struct ShopView: View {
     var hostTopInset: CGFloat = 0
 
     @State private var section: LabSection = ProcessInfo.processInfo.arguments.contains("-shot-research")
+        || ProcessInfo.processInfo.arguments.contains("-shot-research-loadout")
+        || ProcessInfo.processInfo.arguments.contains("-shot-research-time")
         || ProcessInfo.processInfo.arguments.contains("-shot-research-detail")
         ? .research
         : .loadout
     @State private var flash: String?
-    @State private var selectedUpgrade: UpgradeKind = ShopView.screenshotUpgrade
+    @State private var researchBranch: UpgradeBranch = ProcessInfo.processInfo.arguments.contains("-shot-research-loadout")
+        ? .loadout
+        : (ProcessInfo.processInfo.arguments.contains("-shot-research-time") ? .temporal : .motion)
     @State private var inspectedUpgrade: UpgradeKind? = ProcessInfo.processInfo.arguments.contains("-shot-research-detail")
         || ProcessInfo.processInfo.arguments.contains("-shot-tech-surge")
         || ProcessInfo.processInfo.arguments.contains("-shot-tech-magnet")
@@ -450,8 +455,8 @@ struct ShopView: View {
         VStack(alignment: .leading, spacing: 16) {
             researchSummary
             researchGuide
-            researchMatrix
-            researchLegend
+            researchBranchPicker
+            researchRoute
         }
         .padding(.top, 2)
     }
@@ -488,7 +493,7 @@ struct ShopView: View {
                 Text("\(total)-rank journey · \(earned) synchronized")
                     .font(.system(size: 11))
                     .foregroundStyle(EchoTheme.muted)
-                Text("Tap any glowing node; every rank changes play.")
+                Text("Choose a branch. Only fully unlocked nodes can be opened.")
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(EchoTheme.cyan.opacity(0.82))
             }
@@ -510,28 +515,25 @@ struct ShopView: View {
     }
 
     private var researchGuide: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Label("HOW TO UPGRADE", systemImage: "hand.tap.fill")
+                Label("HOW THE TREE WORKS", systemImage: "point.3.connected.trianglepath.dotted")
                     .font(.system(size: 10, weight: .black, design: .rounded))
                     .tracking(1.1)
                     .foregroundStyle(.white)
                 Spacer()
-                Label("\(model.progress.points) AVAILABLE", systemImage: "diamond.fill")
+                Label("ALL PARENTS REQUIRED", systemImage: "checkmark.circle.fill")
                     .font(.system(size: 9, weight: .bold, design: .rounded))
                     .foregroundStyle(EchoTheme.magenta)
             }
 
+            Text("A node opens only after every listed prerequisite reaches its rank. Green checks are complete; locks still need research. Prerequisites can live in another branch.")
+                .font(.system(size: 11, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.80))
+                .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 6) {
-                researchStep(number: 1, icon: "circle.dotted", title: "TAP A\nNODE", tint: EchoTheme.cyan)
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 9, weight: .black))
-                    .foregroundStyle(EchoTheme.muted.opacity(0.55))
-                researchStep(number: 2, icon: "text.magnifyingglass", title: "CHECK THE\nNEXT RANK", tint: EchoTheme.magenta)
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 9, weight: .black))
-                    .foregroundStyle(EchoTheme.muted.opacity(0.55))
-                researchStep(number: 3, icon: "arrow.up.circle.fill", title: "PRESS\nUPGRADE", tint: EchoTheme.gold)
+                researchGuideBadge("✓ REQUIREMENT MET", tint: .green)
+                researchGuideBadge("◆ POINT COST", tint: EchoTheme.gold)
             }
         }
         .padding(13)
@@ -549,253 +551,221 @@ struct ShopView: View {
         )
     }
 
-    private func researchStep(number: Int, icon: String, title: String, tint: Color) -> some View {
+    private func researchGuideBadge(_ title: String, tint: Color) -> some View {
+        Text(title)
+            .font(.system(size: 8, weight: .black, design: .rounded))
+            .tracking(0.4)
+            .foregroundStyle(tint)
+            .padding(.horizontal, 9)
+            .frame(height: 24)
+            .background(tint.opacity(0.10), in: Capsule())
+    }
+
+    private var researchBranchPicker: some View {
         HStack(spacing: 7) {
-            ZStack {
-                Circle()
-                    .fill(tint.opacity(0.14))
-                Image(systemName: icon)
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(tint)
-            }
-            .frame(width: 28, height: 28)
-
-            VStack(alignment: .leading, spacing: 1) {
-                Text("STEP \(number)")
-                    .font(.system(size: 7, weight: .black, design: .rounded))
-                    .foregroundStyle(tint)
-                Text(title)
-                    .font(.system(size: 7, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.white.opacity(0.76))
-                    .multilineTextAlignment(.leading)
-                    .lineLimit(2)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private var researchMatrix: some View {
-        GeometryReader { proxy in
-            let layout = ResearchTreeLayout(size: proxy.size)
-            ZStack {
-                Canvas { context, _ in
-                    let orbitTint = EchoTheme.violet.opacity(0.08)
-                    for radius in [CGFloat(58), 94, 132] {
-                        let rect = CGRect(
-                            x: layout.core.x - radius,
-                            y: layout.core.y - radius,
-                            width: radius * 2,
-                            height: radius * 2
-                        )
-                        context.stroke(
-                            Circle().path(in: rect),
-                            with: .color(orbitTint),
-                            style: StrokeStyle(lineWidth: 1, dash: [3, 7])
-                        )
+            ForEach(UpgradeBranch.allCases, id: \.rawValue) { branch in
+                let tint = color(branch.tint)
+                let kinds = researchOrder(for: branch)
+                let unlocked = kinds.filter {
+                    model.progress.prerequisitesMet(for: $0) && model.progress.upgradeLevel($0) < $0.maxLevel
+                }.count
+                Button {
+                    withAnimation(.easeInOut(duration: 0.18)) { researchBranch = branch }
+                    model.audio.play(.select)
+                } label: {
+                    VStack(spacing: 5) {
+                        ResearchIconView(kind: kinds[0], size: 34)
+                            .opacity(researchBranch == branch ? 1 : 0.66)
+                        Text(branch.title)
+                            .font(.system(size: 8, weight: .black, design: .rounded))
+                            .tracking(0.5)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                        Text("\(unlocked) UNLOCKED")
+                            .font(.system(size: 8, weight: .bold, design: .rounded))
+                            .foregroundStyle(unlocked > 0 ? tint : EchoTheme.muted)
                     }
-
-                    drawResearchConnection(
-                        context: &context,
-                        from: layout.core,
-                        to: layout.point(for: .velocity),
-                        tint: color(UpgradeBranch.motion.tint),
-                        active: true
+                    .foregroundStyle(researchBranch == branch ? .white : EchoTheme.muted)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 77)
+                    .background(
+                        researchBranch == branch ? tint.opacity(0.18) : Color.white.opacity(0.035),
+                        in: RoundedRectangle(cornerRadius: 16, style: .continuous)
                     )
-
-                    for child in UpgradeKind.allCases {
-                        for requirement in child.prerequisites {
-                            drawResearchConnection(
-                                context: &context,
-                                from: layout.point(for: requirement.kind),
-                                to: layout.point(for: child),
-                                tint: color(child.branch.tint),
-                                active: model.progress.upgradeLevel(requirement.kind) >= requirement.level
-                            )
-                        }
-                    }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(researchBranch == branch ? tint.opacity(0.62) : Color.white.opacity(0.07), lineWidth: 1)
+                    )
                 }
-                .allowsHitTesting(false)
+                .buttonStyle(.plain)
+                .accessibilityLabel("\(branch.title) research, \(unlocked) unlocked upgrades")
+            }
+        }
+    }
 
-                researchCore
-                    .position(layout.core)
+    private var researchRoute: some View {
+        let kinds = researchOrder(for: researchBranch)
+        let tint = color(researchBranch.tint)
+        let researched = kinds.filter { model.progress.upgradeLevel($0) > 0 }.count
 
-                ForEach(UpgradeBranch.allCases, id: \.rawValue) { branch in
-                    Label(branch.title, systemImage: branchIcon(branch))
-                        .font(.system(size: 8, weight: .bold))
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 11) {
+                Image(systemName: branchIcon(researchBranch))
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(tint)
+                    .frame(width: 42, height: 42)
+                    .background(tint.opacity(0.13), in: RoundedRectangle(cornerRadius: 12))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("\(researchBranch.title) RESEARCH")
+                        .font(.system(size: 13, weight: .black, design: .rounded))
                         .tracking(1.1)
-                        .foregroundStyle(color(branch.tint).opacity(0.86))
-                        .position(layout.labelPoint(for: branch))
+                    Text("\(researched) of \(kinds.count) technologies researched")
+                        .font(.system(size: 10, weight: .medium, design: .rounded))
+                        .foregroundStyle(EchoTheme.muted)
                 }
+                Spacer(minLength: 0)
+            }
+            .padding(.bottom, 3)
 
-                ForEach(UpgradeKind.allCases) { kind in
-                    researchNode(kind)
-                        .position(layout.point(for: kind))
-                }
+            ForEach(Array(kinds.enumerated()), id: \.element) { index, kind in
+                researchRouteNode(kind, index: index)
             }
         }
-        .frame(height: 1_080)
-        .background(
-            ZStack {
-                RoundedRectangle(cornerRadius: 26, style: .continuous)
-                    .fill(EchoTheme.navyDeep.opacity(0.72))
-                RadialGradient(
-                    colors: [EchoTheme.violet.opacity(0.12), Color.clear],
-                    center: UnitPoint(x: 0.5, y: 0.12),
-                    startRadius: 8,
-                    endRadius: 230
-                )
-            }
-        )
+        .padding(12)
+        .background(EchoTheme.navyDeep.opacity(0.76), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 26, style: .continuous)
-                .stroke(Color.white.opacity(0.075), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(tint.opacity(0.16), lineWidth: 1)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
     }
 
-    private var researchCore: some View {
-        ZStack {
-            Circle()
-                .fill(EchoTheme.violet.opacity(0.16))
-                .frame(width: 86, height: 86)
-                .blur(radius: 8)
-            Circle()
-                .stroke(
-                    AngularGradient(
-                        colors: [EchoTheme.cyan, EchoTheme.violet, EchoTheme.gold, EchoTheme.cyan],
-                        center: .center
-                    ),
-                    style: StrokeStyle(lineWidth: 1.5, dash: [3, 5])
-                )
-                .frame(width: 75, height: 75)
-                .rotationEffect(.degrees(-18))
-            Image("TemporalCore")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 68, height: 68)
-                .shadow(color: EchoTheme.cyan.opacity(0.35), radius: 7)
-                .shadow(color: EchoTheme.violet.opacity(0.45), radius: 13)
-        }
-        .accessibilityLabel("Timeline Matrix research core")
-    }
-
-    private func researchNode(_ kind: UpgradeKind) -> some View {
+    private func researchRouteNode(_ kind: UpgradeKind, index: Int) -> some View {
         let level = model.progress.upgradeLevel(kind)
         let available = model.progress.prerequisitesMet(for: kind)
+        let revealed = available || level > 0
+        let complete = level >= kind.maxLevel
+        let cost = model.progress.upgradeCost(kind)
         let affordable = model.progress.canUpgrade(kind)
         let tint = color(kind.branch.tint)
-        let selected = selectedUpgrade == kind
 
         return Button {
             guard available else {
                 model.audio.play(.denied)
-                show(model.progress.upgradeRequirement(kind) ?? "Complete the previous node first")
+                show(model.progress.upgradeRequirement(kind) ?? "Finish the marked prerequisites")
                 return
             }
-            withAnimation(.spring(response: 0.28, dampingFraction: 0.76)) {
-                selectedUpgrade = kind
-            }
-            model.audio.play(.select)
             inspectedUpgrade = kind
+            model.audio.play(.select)
         } label: {
-            VStack(spacing: 4) {
-                ZStack {
-                    if selected {
-                        Circle()
-                            .fill(tint.opacity(0.14))
-                            .frame(width: 68, height: 68)
-                            .blur(radius: 2)
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 10) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 13, style: .continuous)
+                            .fill(tint.opacity(revealed ? 0.14 : 0.04))
+                        ResearchIconView(kind: kind, size: 54)
+                            .saturation(revealed ? 1 : 0)
+                            .opacity(revealed ? 1 : 0.13)
+                        if !revealed {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 17, weight: .bold))
+                                .foregroundStyle(.white.opacity(0.70))
+                        }
                     }
+                    .frame(width: 60, height: 60)
 
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    tint.opacity(level > 0 ? 0.60 : available ? 0.20 : 0.06),
-                                    EchoTheme.navyDeep,
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 52, height: 52)
-
-                    Circle()
-                        .stroke(
-                            selected ? tint : tint.opacity(level > 0 ? 0.72 : available ? 0.36 : 0.12),
-                            lineWidth: selected ? 2.4 : 1.3
-                        )
-                        .frame(width: 52, height: 52)
-                        .shadow(color: selected || affordable ? tint.opacity(0.65) : .clear, radius: selected ? 9 : 4)
-
-                    Circle()
-                        .trim(from: 0, to: kind.maxLevel == 0 ? 0 : CGFloat(level) / CGFloat(kind.maxLevel))
-                        .stroke(tint, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                        .frame(width: 60, height: 60)
-                        .rotationEffect(.degrees(-90))
-
-                    Image(systemName: available ? kind.icon : "lock.fill")
-                        .font(.system(size: available ? 17 : 13, weight: .semibold))
-                        .foregroundStyle(available ? (level > 0 ? .white : tint) : EchoTheme.muted.opacity(0.55))
-
-                    Text(level == kind.maxLevel ? "MAX" : "\(level)/\(kind.maxLevel)")
-                        .font(.system(size: 7, weight: .bold, design: .rounded))
-                        .foregroundStyle(level > 0 ? EchoTheme.navyDeep : .white)
-                        .padding(.horizontal, 5)
-                        .frame(height: 15)
-                        .background(level > 0 ? tint : EchoTheme.panel, in: Capsule())
-                        .overlay(Capsule().stroke(tint.opacity(0.45), lineWidth: 0.7))
-                        .offset(x: 21, y: 20)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("NODE \(String(format: "%02d", index + 1)) · \(kind.branch.title)")
+                            .font(.system(size: 8, weight: .black, design: .rounded))
+                            .tracking(1)
+                            .foregroundStyle(tint)
+                        Text(revealed ? kind.title : "Undiscovered technology")
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .foregroundStyle(revealed ? .white : EchoTheme.muted)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.78)
+                        Text(revealed ? "Rank \(level) / \(kind.maxLevel)" : "Complete all requirements to reveal")
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .foregroundStyle(EchoTheme.muted)
+                    }
+                    Spacer(minLength: 0)
+                    Image(systemName: revealed ? "play.rectangle.fill" : "lock.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(revealed ? tint : EchoTheme.muted.opacity(0.45))
                 }
-                Text(nodeTitle(kind))
-                    .font(.system(size: 8, weight: .bold))
-                    .foregroundStyle(selected || level > 0 ? .white : EchoTheme.muted)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.72)
-                    .frame(width: 82, height: 20, alignment: .top)
 
-                if level == kind.maxLevel {
-                    Text("COMPLETE")
-                        .font(.system(size: 7, weight: .black, design: .rounded))
-                        .foregroundStyle(tint)
-                } else if available, let cost = model.progress.upgradeCost(kind) {
-                    Label("\(cost)", systemImage: "diamond.fill")
-                        .font(.system(size: 7, weight: .black, design: .rounded))
-                        .foregroundStyle(affordable ? EchoTheme.gold : EchoTheme.muted)
+                if revealed {
+                    Text(kind.detail)
+                        .font(.system(size: 10, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.73))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                if !kind.prerequisites.isEmpty {
+                    Text("REQUIRES ALL")
+                        .font(.system(size: 8, weight: .black, design: .rounded))
+                        .tracking(1.0)
+                        .foregroundStyle(EchoTheme.muted)
+                    VStack(alignment: .leading, spacing: 5) {
+                        ForEach(0..<kind.prerequisites.count, id: \.self) { item in
+                            let requirement = kind.prerequisites[item]
+                            let met = model.progress.upgradeLevel(requirement.kind) >= requirement.level
+                            HStack(spacing: 6) {
+                                Image(systemName: met ? "checkmark.circle.fill" : "lock.circle.fill")
+                                    .foregroundStyle(met ? .green : EchoTheme.gold)
+                                Text("\(requirement.kind.branch.title.uppercased()) · \(requirement.kind.title) · rank \(requirement.level)")
+                                    .foregroundStyle(met ? .white.opacity(0.82) : EchoTheme.muted)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.78)
+                                Spacer(minLength: 0)
+                                Text(met ? "DONE" : "MISSING")
+                                    .foregroundStyle(met ? .green : EchoTheme.gold)
+                            }
+                            .font(.system(size: 9, weight: .semibold, design: .rounded))
+                        }
+                    }
                 } else {
-                    Text("LOCKED")
-                        .font(.system(size: 7, weight: .black, design: .rounded))
-                        .foregroundStyle(EchoTheme.muted.opacity(0.58))
+                    Label("STARTING TECHNOLOGY", systemImage: "sparkle")
+                        .font(.system(size: 9, weight: .bold, design: .rounded))
+                        .foregroundStyle(tint)
+                }
+
+                HStack {
+                    Text(complete ? "FULLY RESEARCHED" : revealed ? affordable ? "TAP TO WATCH & UPGRADE" : "TAP TO WATCH" : "LOCKED")
+                        .font(.system(size: 8, weight: .black, design: .rounded))
+                        .tracking(0.5)
+                        .foregroundStyle(revealed ? tint : EchoTheme.muted)
+                    Spacer()
+                    if let cost, revealed {
+                        Label("\(cost)", systemImage: "diamond.fill")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .foregroundStyle(affordable ? EchoTheme.gold : EchoTheme.muted)
+                    }
                 }
             }
-            .frame(width: 88, height: 98)
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                revealed ? tint.opacity(0.075) : Color.white.opacity(0.018),
+                in: RoundedRectangle(cornerRadius: 17, style: .continuous)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 17, style: .continuous)
+                    .stroke(revealed ? tint.opacity(affordable ? 0.44 : 0.19) : Color.white.opacity(0.055), lineWidth: 1)
+            )
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(kind.title), rank \(level) of \(kind.maxLevel)")
-        .accessibilityHint(available ? "Tap to open upgrade options" : model.progress.upgradeRequirement(kind) ?? "Locked")
+        .accessibilityLabel(revealed ? "\(kind.title), rank \(level) of \(kind.maxLevel)" : "Undiscovered technology")
+        .accessibilityHint(revealed ? "Open animated preview" : model.progress.upgradeRequirement(kind) ?? "Locked")
     }
 
-    private var researchLegend: some View {
-        HStack(spacing: 14) {
-            researchLegendItem("UPGRADED", color: EchoTheme.cyan, filled: true)
-            researchLegendItem("AVAILABLE", color: EchoTheme.gold, filled: false)
-            researchLegendItem("LOCKED", color: EchoTheme.muted, filled: false)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, 4)
-    }
-
-    private func researchLegendItem(_ title: String, color: Color, filled: Bool) -> some View {
-        HStack(spacing: 5) {
-            Circle()
-                .fill(filled ? color : Color.clear)
-                .overlay(Circle().stroke(color.opacity(0.8), lineWidth: 1))
-                .frame(width: 8, height: 8)
-            Text(title)
-                .font(.system(size: 7, weight: .bold))
-                .tracking(0.7)
-                .foregroundStyle(EchoTheme.muted)
+    private func researchOrder(for branch: UpgradeBranch) -> [UpgradeKind] {
+        switch branch {
+        case .motion:
+            [.velocity, .sparkSense, .dashCapacitor, .surgeMastery, .dashImpulse, .magnetism, .repulseResearch, .blinkResearch]
+        case .loadout:
+            [.slots, .reserves, .aegis, .fabricator, .shieldLattice, .phaseResearch, .prismResearch, .fieldAmplifier]
+        case .temporal:
+            [.recharge, .beamForecast, .cryostasis, .echoForecast, .crystalMemory, .anchorResearch, .chronoResearch, .rewind]
         }
     }
 
@@ -812,9 +782,7 @@ struct ShopView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .fill(tint.opacity(0.15))
-                    Image(systemName: kind.icon)
-                        .font(.system(size: 21, weight: .semibold))
-                        .foregroundStyle(tint)
+                    ResearchIconView(kind: kind, size: 44)
                         .shadow(color: tint.opacity(0.65), radius: 7)
                 }
                 .frame(width: 48, height: 48)
@@ -948,6 +916,8 @@ struct ShopView: View {
                         .padding(.top, 10)
 
                     HStack {
+                        ResearchIconView(kind: kind, size: 43)
+                            .frame(width: 48, height: 48)
                         VStack(alignment: .leading, spacing: 2) {
                             Text("TECHNOLOGY PREVIEW")
                                 .font(.system(size: 11, weight: .black, design: .rounded))
@@ -1052,33 +1022,6 @@ struct ShopView: View {
         )
     }
 
-    private func drawResearchConnection(
-        context: inout GraphicsContext,
-        from start: CGPoint,
-        to end: CGPoint,
-        tint: Color,
-        active: Bool
-    ) {
-        let bend = max(22, abs(end.y - start.y) * 0.42)
-        var path = Path()
-        path.move(to: start)
-        path.addCurve(
-            to: end,
-            control1: CGPoint(x: start.x, y: start.y + bend),
-            control2: CGPoint(x: end.x, y: end.y - bend)
-        )
-        if active {
-            context.stroke(path, with: .color(tint.opacity(0.13)), style: StrokeStyle(lineWidth: 7, lineCap: .round))
-            context.stroke(path, with: .color(tint.opacity(0.72)), style: StrokeStyle(lineWidth: 1.7, lineCap: .round))
-        } else {
-            context.stroke(
-                path,
-                with: .color(Color.white.opacity(0.085)),
-                style: StrokeStyle(lineWidth: 1.1, dash: [4, 5])
-            )
-        }
-    }
-
     private func researchEffect(_ kind: UpgradeKind, level: Int) -> String {
         switch kind {
         case .velocity:
@@ -1135,35 +1078,6 @@ struct ShopView: View {
             return level == 0 ? "Prism locked" : String(format: "Prism · %.1fs", BonusKind.prism.duration + Double(level) * 0.5)
         case .blinkResearch:
             return level == 0 ? "Blink locked" : "Blink · \(165 + level * 28) distance"
-        }
-    }
-
-    private func nodeTitle(_ kind: UpgradeKind) -> String {
-        switch kind {
-        case .velocity: "VECTOR DRIVE"
-        case .sparkSense: "SPARK SENSE"
-        case .dashCapacitor: "DASH CAPACITOR"
-        case .surgeMastery: "STORM RUNNER"
-        case .dashImpulse: "KINETIC IMPULSE"
-        case .slots: "SLOT MATRIX"
-        case .reserves: "RESERVES"
-        case .fabricator: "NANO FABRICATOR"
-        case .aegis: "AEGIS PROTOCOL"
-        case .shieldLattice: "SHIELD LATTICE"
-        case .fieldAmplifier: "FIELD AMPLIFIER"
-        case .recharge: "FAST CYCLE"
-        case .beamForecast: "BEAM FORECAST"
-        case .cryostasis: "CRYOSTASIS"
-        case .echoForecast: "ECHO FORECAST"
-        case .crystalMemory: "CRYSTAL MEMORY"
-        case .magnetism: "MAGNETIC FIELD"
-        case .phaseResearch: "PHASE THEORY"
-        case .chronoResearch: "CHRONO THEORY"
-        case .rewind: "LONG REWIND"
-        case .anchorResearch: "WORLD ANCHOR"
-        case .repulseResearch: "REPULSE CORE"
-        case .prismResearch: "PRISM SHELL"
-        case .blinkResearch: "BLINK DRIVE"
         }
     }
 
@@ -1239,76 +1153,6 @@ struct ShopView: View {
     }
 }
 
-private struct ResearchTreeLayout {
-    var size: CGSize
-
-    var core: CGPoint {
-        CGPoint(x: size.width * 0.5, y: 47)
-    }
-
-    func labelPoint(for branch: UpgradeBranch) -> CGPoint {
-        let x: CGFloat = switch branch {
-        case .motion: size.width * 0.16
-        case .loadout: size.width * 0.50
-        case .temporal: size.width * 0.84
-        }
-        return CGPoint(x: x, y: 105)
-    }
-
-    func point(for kind: UpgradeKind) -> CGPoint {
-        switch kind {
-        case .velocity:
-            CGPoint(x: size.width * 0.16, y: 158)
-        case .sparkSense:
-            CGPoint(x: size.width * 0.16, y: 252)
-        case .slots:
-            CGPoint(x: size.width * 0.50, y: 252)
-        case .recharge:
-            CGPoint(x: size.width * 0.84, y: 252)
-        case .dashCapacitor:
-            CGPoint(x: size.width * 0.16, y: 356)
-        case .reserves:
-            CGPoint(x: size.width * 0.50, y: 356)
-        case .beamForecast:
-            CGPoint(x: size.width * 0.84, y: 356)
-        case .magnetism:
-            CGPoint(x: size.width * 0.16, y: 444)
-        case .aegis:
-            CGPoint(x: size.width * 0.50, y: 444)
-        case .cryostasis:
-            CGPoint(x: size.width * 0.84, y: 444)
-        case .repulseResearch:
-            CGPoint(x: size.width * 0.16, y: 536)
-        case .phaseResearch:
-            CGPoint(x: size.width * 0.50, y: 536)
-        case .anchorResearch:
-            CGPoint(x: size.width * 0.84, y: 536)
-        case .blinkResearch:
-            CGPoint(x: size.width * 0.16, y: 630)
-        case .prismResearch:
-            CGPoint(x: size.width * 0.50, y: 630)
-        case .chronoResearch:
-            CGPoint(x: size.width * 0.84, y: 630)
-        case .rewind:
-            CGPoint(x: size.width * 0.84, y: 730)
-        case .surgeMastery:
-            CGPoint(x: size.width * 0.16, y: 730)
-        case .dashImpulse:
-            CGPoint(x: size.width * 0.16, y: 830)
-        case .fabricator:
-            CGPoint(x: size.width * 0.50, y: 730)
-        case .shieldLattice:
-            CGPoint(x: size.width * 0.50, y: 830)
-        case .fieldAmplifier:
-            CGPoint(x: size.width * 0.50, y: 930)
-        case .echoForecast:
-            CGPoint(x: size.width * 0.84, y: 830)
-        case .crystalMemory:
-            CGPoint(x: size.width * 0.84, y: 930)
-        }
-    }
-}
-
 private enum LabSection: String, CaseIterable {
     case loadout = "SKILLS"
     case research = "UPGRADES"
@@ -1319,4 +1163,63 @@ private enum LabSection: String, CaseIterable {
         case .research: "point.3.connected.trianglepath.dotted"
         }
     }
+}
+
+struct ResearchIconView: View {
+    let kind: UpgradeKind
+    let size: CGFloat
+
+    var body: some View {
+        Group {
+            if let icon = ResearchIconAtlas.icons[kind] {
+                Image(uiImage: icon)
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+            } else {
+                Image(systemName: kind.icon)
+                    .resizable()
+                    .scaledToFit()
+                    .padding(size * 0.18)
+            }
+        }
+        .frame(width: size, height: size)
+        .accessibilityHidden(true)
+    }
+}
+
+private enum ResearchIconAtlas {
+    static let icons: [UpgradeKind: UIImage] = {
+        let groups: [(String, [UpgradeKind])] = [
+            ("ResearchMotionAtlas", [
+                .velocity, .sparkSense, .dashCapacitor, .magnetism,
+                .repulseResearch, .blinkResearch, .surgeMastery, .dashImpulse,
+            ]),
+            ("ResearchLoadoutAtlas", [
+                .slots, .reserves, .aegis, .phaseResearch,
+                .prismResearch, .fabricator, .shieldLattice, .fieldAmplifier,
+            ]),
+            ("ResearchTimeAtlas", [
+                .recharge, .beamForecast, .cryostasis, .anchorResearch,
+                .chronoResearch, .rewind, .echoForecast, .crystalMemory,
+            ]),
+        ]
+        var output: [UpgradeKind: UIImage] = [:]
+        for (assetName, kinds) in groups {
+            guard let image = UIImage(named: assetName)?.cgImage else { continue }
+            let cellWidth = image.width / 4
+            let cellHeight = image.height / 2
+            for (index, kind) in kinds.enumerated() {
+                let rect = CGRect(
+                    x: (index % 4) * cellWidth,
+                    y: (index / 4) * cellHeight,
+                    width: cellWidth,
+                    height: cellHeight
+                )
+                guard let cropped = image.cropping(to: rect) else { continue }
+                output[kind] = UIImage(cgImage: cropped)
+            }
+        }
+        return output
+    }()
 }

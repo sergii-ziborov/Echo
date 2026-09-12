@@ -823,6 +823,7 @@ struct TechnologyPreviewView: View {
     var height: CGFloat = 232
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var loopStartedAt = Date()
 
     private var tint: Color {
         Color(red: kind.branch.tint.r, green: kind.branch.tint.g, blue: kind.branch.tint.b)
@@ -838,7 +839,7 @@ struct TechnologyPreviewView: View {
 
     var body: some View {
         TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { timeline in
-            let rawTime = reduceMotion ? 3.8 : timeline.date.timeIntervalSinceReferenceDate
+            let rawTime = reduceMotion ? 3.8 : max(0, timeline.date.timeIntervalSince(loopStartedAt))
             let progress = rawTime.truncatingRemainder(dividingBy: 5.4) / 5.4
             let phase = min(2, Int(progress * 3))
 
@@ -854,13 +855,30 @@ struct TechnologyPreviewView: View {
                 }
 
                 VStack(spacing: 0) {
-                    HStack {
-                        Label("GUIDED SIMULATION", systemImage: "play.rectangle.fill")
+                    HStack(spacing: 7) {
+                        ResearchIconView(kind: kind, size: 33)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(kind.title.uppercased())
+                                .font(.system(size: 9, weight: .black, design: .rounded))
+                                .tracking(0.7)
+                            Text("ANIMATED EFFECT DEMO · 5.4S LOOP")
+                                .font(.system(size: 8, weight: .bold, design: .rounded))
+                                .tracking(0.4)
+                                .foregroundStyle(tint)
+                        }
                         Spacer()
-                        Text("AUTO · 5S")
+                        Button {
+                            loopStartedAt = Date()
+                        } label: {
+                            Image(systemName: "arrow.counterclockwise")
+                                .font(.system(size: 12, weight: .bold))
+                                .frame(width: 31, height: 31)
+                                .foregroundStyle(.white)
+                                .background(tint.opacity(0.20), in: Circle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Replay technology demonstration")
                     }
-                    .font(.system(size: 8, weight: .black, design: .rounded))
-                    .tracking(1)
                     .foregroundStyle(.white.opacity(0.90))
 
                     HStack(spacing: 8) {
@@ -875,17 +893,20 @@ struct TechnologyPreviewView: View {
                     Spacer()
 
                     Text(stageCopy(phase))
-                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                        .font(.system(size: 11, weight: .black, design: .rounded))
                         .foregroundStyle(.white)
                         .contentTransition(.numericText())
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 7)
-                        .background(.ultraThinMaterial, in: Capsule())
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.82)
+                        .padding(.horizontal, 10)
+                        .frame(minHeight: 33)
+                        .background(EchoTheme.navyDeep.opacity(0.88), in: RoundedRectangle(cornerRadius: 11))
 
                     HStack(spacing: 5) {
-                        stagePill("1 · BEFORE", active: phase == 0)
-                        stagePill("2 · INSTALL", active: phase == 1)
-                        stagePill("3 · RESULT", active: phase == 2)
+                        stagePill("1 · WITHOUT", active: phase == 0)
+                        stagePill("2 · UPGRADE", active: phase == 1)
+                        stagePill("3 · WITH", active: phase == 2)
                     }
                     .padding(.top, 7)
                 }
@@ -899,7 +920,7 @@ struct TechnologyPreviewView: View {
                         .scaledToFill()
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .clipped()
-                        .opacity(0.50)
+                        .opacity(0.32)
                 }
             }
             .clipped()
@@ -946,7 +967,7 @@ struct TechnologyPreviewView: View {
 
     private func stageCopy(_ phase: Int) -> String {
         if phase == 0 { return baselineCopy }
-        if phase == 1 { return "INSTALLING \(kind.title.uppercased())…" }
+        if phase == 1 { return "UPGRADE APPLIED · WATCH THE SAME SCENE CHANGE" }
         return resultCopy
     }
 
@@ -1018,6 +1039,7 @@ struct TechnologyPreviewView: View {
         let phase = min(2, Int(t * 3))
         let pulse = 0.5 + 0.5 * sin(t * .pi * 6)
         let reveal = phase == 0 ? 0.12 : phase == 1 ? 0.48 + pulse * 0.18 : 1.0
+        let sceneProgress = (t * 3).truncatingRemainder(dividingBy: 1)
         let center = CGPoint(x: size.width * 0.5, y: size.height * 0.56)
         let arena = CGSize(width: size.width * 0.74, height: size.height * 0.31)
 
@@ -1038,7 +1060,7 @@ struct TechnologyPreviewView: View {
             context: &context,
             center: center,
             arena: arena,
-            time: t,
+            time: sceneProgress / 2.1,
             strength: reveal
         )
     }
@@ -1059,23 +1081,24 @@ struct TechnologyPreviewView: View {
         switch kind {
         case .velocity:
             let start = CGPoint(x: center.x - w * 0.42, y: center.y + h * 0.14)
-            let end = CGPoint(x: center.x + w * (0.12 + 0.30 * boost), y: center.y - h * 0.10)
-            techLine(context: &context, from: start, to: end, color: tint.opacity(0.55), width: 2, dashed: true)
+            let target = CGPoint(x: center.x + w * 0.42, y: center.y - h * 0.10)
+            let end = point(start, target, 0.59 + 0.41 * boost)
+            techLine(context: &context, from: start, to: target, color: tint.opacity(0.55), width: 2, dashed: true)
             for index in 0..<4 {
                 let trail = max(0, smooth - Double(index) * 0.09)
                 techOrb(context: &context, center: point(start, end, trail), radius: 8 - CGFloat(index), color: tint.opacity(0.16 + trail * 0.35), hollow: true)
             }
             techOrb(context: &context, center: point(start, end, smooth), radius: 10, color: .white)
-            techCrystal(context: &context, center: end, radius: 12, color: EchoTheme.gold)
+            techCrystal(context: &context, center: target, radius: 12, color: EchoTheme.gold)
 
         case .sparkSense:
-            let radius = CGFloat(30 + 42 * boost)
+            let radius = CGFloat(30 + 47 * boost)
             techRing(context: &context, center: center, radius: radius, color: tint, width: 2, opacity: 0.72)
             techOrb(context: &context, center: center, radius: 10, color: .white)
             for index in 0..<7 {
                 let angle = Double(index) / 7 * .pi * 2
-                let start = CGPoint(x: center.x + CGFloat(cos(angle)) * radius * 1.18, y: center.y + CGFloat(sin(angle)) * radius * 0.55)
-                let pulled = max(0, min(0.82, (smooth - 0.14) * boost))
+                let start = CGPoint(x: center.x + CGFloat(cos(angle)) * 68, y: center.y + CGFloat(sin(angle)) * 38)
+                let pulled = boost > 0.70 ? max(0, min(0.96, (smooth - 0.14) * 1.4)) : 0
                 techOrb(context: &context, center: point(start, center, pulled), radius: 4, color: EchoTheme.cyan)
             }
 
@@ -1188,7 +1211,9 @@ struct TechnologyPreviewView: View {
             let warningStart = 0.62 - boost * 0.30
             let warning = local > warningStart
             let firing = local > 0.76
-            techLine(context: &context, from: CGPoint(x: center.x - w * 0.43, y: center.y), to: CGPoint(x: center.x + w * 0.43, y: center.y), color: firing ? .red : .orange, width: firing ? 6 : 2, dashed: !firing)
+            if warning || firing {
+                techLine(context: &context, from: CGPoint(x: center.x - w * 0.43, y: center.y), to: CGPoint(x: center.x + w * 0.43, y: center.y), color: firing ? .red : .orange, width: firing ? 6 : 2, dashed: !firing)
+            }
             techOrb(context: &context, center: CGPoint(x: center.x + 20, y: center.y - (warning ? 31 : 0)), radius: 10, color: .white)
 
         case .cryostasis:

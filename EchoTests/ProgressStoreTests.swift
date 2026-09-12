@@ -98,6 +98,22 @@ final class ProgressStoreTests: XCTestCase {
         XCTAssertTrue(store.prerequisitesMet(for: .cryostasis))
     }
 
+    func testResearchRequiresEveryParentBeforeOpening() {
+        let store = makeStore()
+        store.addShards(10_000)
+
+        XCTAssertTrue(store.buyUpgrade(.velocity))
+        XCTAssertTrue(store.buyUpgrade(.velocity))
+        XCTAssertFalse(store.prerequisitesMet(for: .magnetism))
+        XCTAssertFalse(store.canUpgrade(.magnetism))
+        XCTAssertFalse(store.buyUpgrade(.magnetism))
+        XCTAssertEqual(store.upgradeLevel(.magnetism), 0)
+
+        XCTAssertTrue(store.buyUpgrade(.dashCapacitor))
+        XCTAssertTrue(store.prerequisitesMet(for: .magnetism))
+        XCTAssertTrue(store.buyUpgrade(.magnetism))
+    }
+
     func testExpandedResearchTreeHasFunctionalBranchUpgrades() {
         let store = makeStore()
         store.addShards(10_000)

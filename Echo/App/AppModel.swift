@@ -51,6 +51,8 @@ final class AppModel {
             screen = .daily
         } else if args.contains("-shot-shop")
             || args.contains("-shot-research")
+            || args.contains("-shot-research-loadout")
+            || args.contains("-shot-research-time")
             || args.contains("-shot-research-detail")
             || args.contains("-shot-tech-surge")
             || args.contains("-shot-tech-magnet")
