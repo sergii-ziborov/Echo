@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
     var onBack: (() -> Void)? = nil
+    @State private var showingResetConfirmation = false
 
     var body: some View {
         ZStack {
@@ -21,6 +22,40 @@ struct SettingsView: View {
                 toggle("Sound", isOn: Bindable(model.progress).soundEnabled)
                 toggle("Haptics", isOn: Bindable(model.progress).hapticsEnabled)
                 toggle("Replay last seconds on collision", isOn: Bindable(model.progress).autoReplayEnabled)
+
+                VStack(alignment: .leading, spacing: 7) {
+                    HStack {
+                        Label("DIFFICULTY \(model.progress.difficulty.number)", systemImage: "gauge.with.dots.needle.67percent")
+                            .font(.system(size: 10, weight: .black, design: .rounded))
+                            .tracking(1.1)
+                            .foregroundStyle(EchoTheme.magenta)
+                        Spacer()
+                        Text(model.progress.difficulty.title)
+                            .font(.system(size: 10, weight: .black, design: .rounded))
+                            .foregroundStyle(.white)
+                    }
+                    Text(model.progress.difficulty.detail)
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundStyle(EchoTheme.muted)
+                    Text("Clear all 77 epochs to raise difficulty. Every cycle keeps its own seals and records.")
+                        .font(.system(size: 10, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.white.opacity(0.48))
+                }
+                .padding(16)
+                .background(EchoTheme.magenta.opacity(0.07), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(EchoTheme.magenta.opacity(0.18), lineWidth: 1))
+
+                Button(role: .destructive) {
+                    showingResetConfirmation = true
+                } label: {
+                    Label("Reset all progress", systemImage: "arrow.counterclockwise.circle.fill")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(EchoTheme.danger.opacity(0.10), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(EchoTheme.danger.opacity(0.22), lineWidth: 1))
+                }
+                .buttonStyle(PressStyle())
 
                 Spacer()
 
@@ -48,6 +83,15 @@ struct SettingsView: View {
         }
         .onChange(of: model.progress.autoReplayEnabled) {
             model.progress.persistSettings()
+        }
+        .alert("Reset the timeline?", isPresented: $showingResetConfirmation) {
+            Button("Cancel", role: .cancel) {}
+            Button("Reset progress", role: .destructive) {
+                model.progress.resetProgress()
+                model.goHome()
+            }
+        } message: {
+            Text("Maps, difficulty, records, shards, inventory and research will be erased. Sound and haptic settings stay unchanged.")
         }
     }
 

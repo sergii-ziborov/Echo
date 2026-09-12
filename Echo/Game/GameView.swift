@@ -22,7 +22,9 @@ struct GameView: View {
         }
         let bounds = UIScreen.main.bounds.size
         let aspect = Double(bounds.height / max(bounds.width, 1))
-        let level = raw.fitted(aspect: aspect)
+        let level = raw
+            .difficultyAdjusted(for: request.difficultyCycle)
+            .fitted(aspect: aspect)
         let session = GameSession(level: level, daily: request.daily)
         _session = State(initialValue: session)
         _scene = State(initialValue: GameScene(session: session, size: bounds))
@@ -42,6 +44,19 @@ struct GameView: View {
                         model.audio.play(.tap)
                     }
                     .padding(.horizontal, 12)
+
+                    if case .ballet = session.phase {
+                        Label("TEMPORAL REPLAY", systemImage: "waveform.path.ecg")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .tracking(2.1)
+                            .foregroundStyle(EchoTheme.cyan)
+                            .padding(.horizontal, 12)
+                            .frame(height: 29)
+                            .background(.ultraThinMaterial, in: Capsule())
+                            .overlay(Capsule().stroke(EchoTheme.cyan.opacity(0.25), lineWidth: 1))
+                            .padding(.top, 8)
+                            .allowsHitTesting(false)
+                    }
 
                     Spacer()
 
@@ -96,6 +111,9 @@ struct GameView: View {
                         paradoxSeal: seals.paradox,
                         bestTime: model.progress.progress(for: resultKey).bestTime,
                         bestMoves: model.progress.progress(for: resultKey).bestMoves,
+                        cycleComplete: session.level.number == LevelCatalog.playable.count
+                            && model.progress.isCurrentDifficultyComplete,
+                        nextDifficulty: DifficultyProfile(cycle: request.difficultyCycle + 1),
                         onWatch: { session.startBallet(result) },
                         onNext: nextLevel,
                         onMenu: { model.goHome() }
@@ -106,6 +124,7 @@ struct GameView: View {
                     DeathView(
                         cause: cause,
                         rewindCharges: session.sim.rewindCharges,
+                        rewindSeconds: session.tuning.rewindSeconds,
                         onRewind: paradoxRewind,
                         onRestart: restart,
                         onMenu: { model.goHome() }
@@ -138,35 +157,47 @@ struct GameView: View {
                     .allowsHitTesting(false)
                 }
 
-                if case .ballet = session.phase {
-                    VStack {
-                        Text("TEMPORAL REPLAY")
-                            .font(.system(size: 13, weight: .semibold))
-                            .tracking(4)
-                            .foregroundStyle(EchoTheme.cyan)
-                            .padding(.top, 28)
-                        Spacer()
-                    }
-                    .allowsHitTesting(false)
-                }
             }
         }
         .ignoresSafeArea()
         .onAppear {
+            session.configure(tuning: model.progress.playerTuning)
             scene.onEvents = { events in handle(events) }
             session.autoReplay = model.progress.autoReplayEnabled
             model.audio.setHapticsEnabled(model.progress.hapticsEnabled)
             model.audio.enabled = model.progress.soundEnabled
+            if session.level.sparks.contains(where: { $0.timer != nil }) {
+                offerHint(.timeCrystal)
+            }
             if !session.level.movers.isEmpty {
                 offerHint(.asteroid)
             }
             if !session.level.gates.isEmpty {
                 offerHint(.gate)
             }
+            if !session.level.lasers.isEmpty {
+                offerHint(.laser)
+            }
+            if !session.level.gravityWells.isEmpty {
+                offerHint(.blackHole)
+            }
             if model.progress.consume(.ward) {
                 _ = session.sim.activate(.ward)
                 session.banner = "Ward"
             }
+#if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-shot-candy") {
+                session.sim.debugEnterReality(.candy)
+            }
+            if ProcessInfo.processInfo.arguments.contains("-shot-active") {
+                session.inputTarget = Vec2(x: 500, y: 300)
+                for kind in [BonusKind.shield, .freeze, .surge, .magnet, .phase] {
+                    _ = session.useBonus(kind)
+                }
+                session.resonanceChain = 6
+                session.resonanceRemaining = 2.4
+            }
+#endif
         }
         .onChange(of: scenePhase) { _, phase in
             if phase != .active, session.phase == .playing {
@@ -197,6 +228,13 @@ struct GameView: View {
                 if let spark = session.sim.sparks.first(where: { $0.id == id }) {
                     scene.burst(at: spark.position, color: UIColor(red: 0.5, green: 0.95, blue: 1, alpha: 1))
                 }
+            case .resonance(let chain, _):
+                model.audio.haptic(chain >= 4 ? .rigid : .soft)
+                scene.resonanceEffect(chain: chain, at: session.sim.playerPosition)
+                if chain == 2 { offerHint(.resonance) }
+            case .timeCrystalSecured:
+                model.audio.haptic(.medium)
+                scene.abilityEffect(kind: .freeze, at: session.sim.playerPosition)
             case .sparkTimerExpired(let id):
                 model.audio.haptic(.soft)
                 if let spark = session.sim.sparks.first(where: { $0.id == id }) {
@@ -205,7 +243,7 @@ struct GameView: View {
             case .bonusCollected(let kind):
                 model.audio.play(.collect)
                 model.audio.haptic(.medium)
-                scene.burst(at: session.sim.playerPosition, color: UIColor(red: 1, green: 0.85, blue: 0.4, alpha: 1))
+                scene.abilityEffect(kind: kind, at: session.sim.playerPosition)
                 if kind == .freeze { offerHint(.freeze) }
                 if kind == .phase { offerHint(.phase) }
             case .shieldBroke:
@@ -213,6 +251,12 @@ struct GameView: View {
                 scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.4, green: 1, blue: 0.65, alpha: 1))
             case .dashed:
                 break
+            case .laserCharging:
+                model.audio.play(.warn)
+                model.audio.haptic(.soft)
+            case .laserFired(let id):
+                model.audio.haptic(.rigid)
+                scene.laserDischarge(id: id)
             case .echoWillSpawn:
                 model.audio.play(.warn)
                 model.audio.haptic(.medium)
@@ -229,7 +273,10 @@ struct GameView: View {
             case .riftEntered(let kind):
                 model.audio.play(.collect)
                 if kind == .calm {
-                    scene.burst(at: session.sim.playerPosition, color: UIColor(red: 0.55, green: 0.82, blue: 1, alpha: 1))
+                    scene.abilityEffect(kind: .freeze, at: session.sim.playerPosition)
+                } else if kind == .warp || kind == .candy {
+                    scene.realityShift(kind: kind, at: session.sim.playerPosition)
+                    offerHint(.realityShift)
                 }
             case .timeCollision(let at):
                 model.audio.haptic(.rigid)
@@ -264,11 +311,16 @@ struct GameView: View {
 
     private func useItem(_ kind: BonusKind) {
         guard session.phase == .playing else { return }
+        guard session.cooldownRemaining(for: kind) <= 0 else {
+            session.banner = String(format: "Recharging %.1fs", session.cooldownRemaining(for: kind))
+            model.audio.play(.tap)
+            return
+        }
         guard model.progress.consume(kind) else { return }
         if session.useBonus(kind) {
             model.audio.play(.collect)
             model.audio.haptic(.medium)
-            scene.burst(at: session.sim.playerPosition, color: UIColor(red: 1, green: 0.85, blue: 0.4, alpha: 1))
+            scene.abilityEffect(kind: kind, at: session.sim.playerPosition)
             if kind == .freeze { offerHint(.freeze) }
             if kind == .phase { offerHint(.phase) }
         } else {
@@ -295,6 +347,11 @@ struct GameView: View {
         model.audio.play(.tap)
         if request.daily {
             model.goHome()
+            return
+        }
+        if session.level.number == LevelCatalog.playable.count,
+           model.progress.advanceDifficultyIfComplete() {
+            model.play(level: LevelCatalog.prototype, daily: false)
             return
         }
         if let next = LevelCatalog.level(number: session.level.number + 1), model.progress.isUnlocked(next) {
@@ -351,52 +408,129 @@ struct HUDBar: View {
     var onPause: () -> Void
 
     var body: some View {
-        HStack(spacing: 8) {
-            HUDChip(icon: "sparkle", tint: EchoTheme.cyan) {
-                Text("\(session.sparksCollected)/\(session.sparksTotal)")
-            }
-            HUDChip(icon: "circle.dotted", tint: EchoTheme.magenta) {
-                Text("\(session.echoCount)/\(session.maxEchoes)")
-            }
-            HUDChip(icon: "clock.arrow.circlepath", tint: EchoTheme.cyan) {
-                Text("\(session.sim.rewindCharges)")
-            }
-            if session.effects.shieldCharges > 0 {
-                HUDChip(icon: "shield.fill", tint: Color.green) {
-                    Text("\(session.effects.shieldCharges)")
+        VStack(alignment: .leading, spacing: 7) {
+            HStack(spacing: 6) {
+                HUDChip(icon: "sparkle", tint: EchoTheme.cyan) {
+                    Text("\(session.sparksCollected)/\(session.sparksTotal)")
                 }
-            }
-            if session.effects.isFrozen {
-                HUDChip(icon: "snowflake", tint: EchoTheme.cyan) {
-                    Text(String(format: "%.0f", session.effects.freezeRemaining))
+                .accessibilityLabel("Sparks \(session.sparksCollected) of \(session.sparksTotal)")
+
+                HUDChip(icon: "circle.dotted", tint: EchoTheme.magenta) {
+                    Text("\(session.echoCount)/\(session.maxEchoes)")
                 }
-            }
-            if session.effects.isSurging {
-                HUDChip(icon: "bolt.fill", tint: EchoTheme.gold) {
-                    Text(String(format: "%.0f", session.effects.surgeRemaining))
+                .accessibilityLabel("Echoes \(session.echoCount) of \(session.maxEchoes)")
+
+                HUDChip(icon: "clock.arrow.circlepath", tint: EchoTheme.cyan) {
+                    Text("\(session.sim.rewindCharges)")
                 }
-            }
-            if session.effects.isMagnet {
-                HUDChip(icon: "magnet", tint: EchoTheme.magenta) {
-                    Text(String(format: "%.0f", session.effects.magnetRemaining))
+                .accessibilityLabel("\(session.sim.rewindCharges) rewind charges")
+
+                Spacer(minLength: 4)
+
+                Button(action: onPause) {
+                    Image(systemName: "pause.fill")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 36, height: 36)
+                        .background(.ultraThinMaterial, in: Circle())
+                        .overlay(Circle().stroke(Color.white.opacity(0.10), lineWidth: 1))
                 }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Pause")
             }
-            if session.effects.isPhasing {
-                HUDChip(icon: "sparkles", tint: Color.white) {
-                    Text(String(format: "%.0f", session.effects.phaseRemaining))
+
+            if hasActiveStatus {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 5) {
+                        Text("STATUS")
+                            .font(.system(size: 8, weight: .black, design: .rounded))
+                            .tracking(1.1)
+                            .foregroundStyle(Color.white.opacity(0.44))
+                            .padding(.leading, 3)
+
+                        if session.effects.shieldCharges > 0 {
+                            HUDEffectBadge(
+                                icon: "shield.fill",
+                                value: "×\(session.effects.shieldCharges)",
+                                tint: .green,
+                                accessibilityText: "Shield, \(session.effects.shieldCharges) charges"
+                            )
+                        }
+                        if session.effects.isFrozen {
+                            HUDEffectBadge(
+                                icon: "snowflake",
+                                value: seconds(session.effects.freezeRemaining),
+                                tint: EchoTheme.cyan,
+                                accessibilityText: "Freeze, \(seconds(session.effects.freezeRemaining)) remaining"
+                            )
+                        }
+                        if session.effects.isSurging {
+                            HUDEffectBadge(
+                                icon: "bolt.fill",
+                                value: seconds(session.effects.surgeRemaining),
+                                tint: EchoTheme.gold,
+                                accessibilityText: "Surge, \(seconds(session.effects.surgeRemaining)) remaining"
+                            )
+                        }
+                        if session.effects.isMagnet {
+                            HUDEffectBadge(
+                                icon: "magnet.fill",
+                                value: seconds(session.effects.magnetRemaining),
+                                tint: EchoTheme.magenta,
+                                accessibilityText: "Magnet, \(seconds(session.effects.magnetRemaining)) remaining"
+                            )
+                        }
+                        if session.effects.isPhasing {
+                            HUDEffectBadge(
+                                icon: "sparkles",
+                                value: seconds(session.effects.phaseRemaining),
+                                tint: .white,
+                                accessibilityText: "Phase, \(seconds(session.effects.phaseRemaining)) remaining"
+                            )
+                        }
+                        if session.resonanceChain >= 2 {
+                            HUDEffectBadge(
+                                icon: "link",
+                                value: "×\(session.resonanceChain)",
+                                tint: EchoTheme.gold,
+                                progress: max(0, min(1, session.resonanceRemaining / 3.25)),
+                                accessibilityText: "Resonance chain \(session.resonanceChain)"
+                            )
+                        }
+                        if session.reality != .normal {
+                            HUDEffectBadge(
+                                icon: session.reality == .candy ? "birthday.cake.fill" : "arrow.left.and.right.righttriangle.left.righttriangle.right.fill",
+                                value: seconds(session.realityRemaining),
+                                tint: session.reality == .candy ? EchoTheme.magenta : EchoTheme.cyan,
+                                accessibilityText: "\(session.reality.rawValue) reality, \(seconds(session.realityRemaining)) remaining"
+                            )
+                        }
+                    }
+                    .padding(5)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(Color.white.opacity(0.09), lineWidth: 1)
+                    )
                 }
+                .transition(.move(edge: .top).combined(with: .opacity))
             }
-            Spacer(minLength: 8)
-            Button(action: onPause) {
-                Image(systemName: "pause.fill")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 36, height: 36)
-                    .background(.ultraThinMaterial, in: Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Pause")
         }
+        .animation(.easeOut(duration: 0.18), value: hasActiveStatus)
+    }
+
+    private var hasActiveStatus: Bool {
+        session.effects.shieldCharges > 0
+            || session.effects.isFrozen
+            || session.effects.isSurging
+            || session.effects.isMagnet
+            || session.effects.isPhasing
+            || session.resonanceChain >= 2
+            || session.reality != .normal
+    }
+
+    private func seconds(_ value: TimeInterval) -> String {
+        "\(max(1, Int(ceil(value))))s"
     }
 }
 
@@ -413,10 +547,48 @@ struct HUDChip<Content: View>: View {
                 .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundStyle(.white)
         }
-        .padding(.horizontal, 9)
-        .padding(.vertical, 6)
+        .padding(.horizontal, 8)
+        .frame(height: 32)
         .background(.ultraThinMaterial, in: Capsule())
         .overlay(Capsule().stroke(tint.opacity(0.35), lineWidth: 1))
+        .fixedSize(horizontal: true, vertical: false)
+    }
+}
+
+private struct HUDEffectBadge: View {
+    let icon: String
+    let value: String
+    let tint: Color
+    var progress: Double? = nil
+    let accessibilityText: String
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(tint)
+            Text(value)
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(.white)
+        }
+        .padding(.horizontal, 7)
+        .frame(height: 26)
+        .background(tint.opacity(0.10), in: Capsule())
+        .overlay(Capsule().stroke(tint.opacity(0.25), lineWidth: 1))
+        .overlay(alignment: .bottomLeading) {
+            if let progress {
+                GeometryReader { geometry in
+                    Capsule()
+                        .fill(tint)
+                        .frame(width: geometry.size.width * progress, height: 2)
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                }
+                .padding(.horizontal, 4)
+            }
+        }
+        .fixedSize(horizontal: true, vertical: false)
+        .accessibilityLabel(accessibilityText)
     }
 }
 
@@ -426,38 +598,60 @@ struct InventoryBar: View {
     var onUse: (BonusKind) -> Void
 
     var body: some View {
-        let owned = BonusKind.allCases.filter { $0.useFromBar && model.progress.count($0) > 0 }
-        if !owned.isEmpty, session.phase == .playing || session.phase == .paused {
+        let equipped = model.progress.equippedSkills
+        if session.phase == .playing || session.phase == .paused {
             HStack(spacing: 8) {
-                ForEach(owned, id: \.self) { kind in
-                    let tint = Color(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b)
-                    Button {
-                        onUse(kind)
-                    } label: {
-                        VStack(spacing: 2) {
-                            Image(kind.assetName)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 26, height: 26)
-                            Text("\(model.progress.count(kind))")
-                                .font(.system(size: 11, weight: .semibold, design: .rounded))
-                                .foregroundStyle(.white)
+                ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
+                    if equipped.indices.contains(index) {
+                        let kind = equipped[index]
+                        let tint = Color(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b)
+                        let cooldown = session.cooldownRemaining(for: kind)
+                        let stock = model.progress.count(kind)
+                        Button {
+                            onUse(kind)
+                        } label: {
+                            ZStack {
+                                VStack(spacing: 1) {
+                                    Image(kind.assetName)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 25, height: 25)
+                                    Text("×\(stock)")
+                                        .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                        .foregroundStyle(stock > 0 ? .white : EchoTheme.muted)
+                                }
+                                if cooldown > 0 {
+                                    RoundedRectangle(cornerRadius: 13, style: .continuous)
+                                        .fill(Color.black.opacity(0.58))
+                                    Text(String(format: "%.1f", cooldown))
+                                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                            .frame(width: 46, height: 46)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .stroke(tint.opacity(stock > 0 ? 0.55 : 0.20), lineWidth: 1)
+                            )
                         }
-                        .frame(width: 46, height: 44)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(tint.opacity(0.45), lineWidth: 1)
-                        )
+                        .buttonStyle(.plain)
+                        .disabled(session.phase != .playing || stock == 0 || cooldown > 0)
+                        .accessibilityLabel("Use \(kind.title), \(stock) owned")
+                    } else {
+                        Image(systemName: "plus")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(EchoTheme.muted.opacity(0.65))
+                            .frame(width: 46, height: 46)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                            )
                     }
-                    .buttonStyle(.plain)
-                    .disabled(session.phase != .playing)
-                    .accessibilityLabel("Use \(kind.title), \(model.progress.count(kind)) owned")
                 }
                 Spacer()
             }
         }
     }
 }
-
-

@@ -20,6 +20,16 @@ struct Vec2: Equatable, Hashable, Sendable {
         hypot(x - other.x, y - other.y)
     }
 
+    func distance(toSegmentFrom start: Vec2, to end: Vec2) -> Double {
+        let segment = end - start
+        let lengthSquared = segment.lengthSquared
+        guard lengthSquared > 0.0001 else { return distance(to: start) }
+        let offset = self - start
+        let projection = (offset.x * segment.x + offset.y * segment.y) / lengthSquared
+        let t = min(1, max(0, projection))
+        return distance(to: start + segment * t)
+    }
+
     func lerp(_ other: Vec2, _ t: Double) -> Vec2 {
         Vec2(x: x + (other.x - x) * t, y: y + (other.y - y) * t)
     }

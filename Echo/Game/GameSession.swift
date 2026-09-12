@@ -37,6 +37,12 @@ final class GameSession {
     var hasStarted = false
     var balletClock: TimeInterval = 0
     var balletDuration: TimeInterval = 0
+    var abilityCooldowns: [BonusKind: TimeInterval] = [:]
+    var resonanceChain = 0
+    var resonanceRemaining: TimeInterval = 0
+    var reality: RealityMode = .normal
+    var realityRemaining: TimeInterval = 0
+    private(set) var tuning = PlayerTuning()
 
     var sparksTotal: Int { level.sparkCount }
     var maxEchoes: Int { level.maxEchoes }
@@ -45,6 +51,13 @@ final class GameSession {
         self.level = level
         self.daily = daily
         self.sim = WorldSimulation(level: level)
+        publish()
+    }
+
+    func configure(tuning: PlayerTuning) {
+        guard !hasStarted else { return }
+        self.tuning = tuning
+        sim.configure(tuning: tuning)
         publish()
     }
 
@@ -57,12 +70,13 @@ final class GameSession {
         deathCause = nil
         balletClock = 0
         balletDuration = 0
+        abilityCooldowns = [:]
         publish()
     }
 
     @discardableResult
     func paradoxRewind() -> Bool {
-        guard sim.rewind() else { return false }
+        guard sim.rewind(seconds: tuning.rewindSeconds) else { return false }
         phase = .playing
         deathCause = nil
         replaySnapshots = []
@@ -82,17 +96,42 @@ final class GameSession {
 
     @discardableResult
     func useBonus(_ kind: BonusKind) -> Bool {
-        guard phase == .playing, sim.activate(kind, fromShop: true) else { return false }
+        guard phase == .playing,
+              cooldownRemaining(for: kind) <= 0,
+              sim.activate(kind, fromShop: true) else { return false }
+        abilityCooldowns[kind] = kind.cooldown * tuning.cooldownMultiplier
         banner = kind.title
         publish()
         return true
     }
 
+    func cooldownRemaining(for kind: BonusKind) -> TimeInterval {
+        max(0, abilityCooldowns[kind] ?? 0)
+    }
+
+    func advanceCooldowns(dt: TimeInterval) {
+        guard dt > 0, !abilityCooldowns.isEmpty else { return }
+        for kind in Array(abilityCooldowns.keys) {
+            let remaining = max(0, (abilityCooldowns[kind] ?? 0) - dt)
+            if remaining <= 0 {
+                abilityCooldowns.removeValue(forKey: kind)
+            } else {
+                abilityCooldowns[kind] = remaining
+            }
+        }
+    }
+
     func handle(events: [SimEvent], autoReplay: Bool) {
         for event in events {
             switch event {
-            case .sparkCollected, .sparkTimerExpired, .dashed:
+            case .sparkCollected, .dashed, .laserCharging, .laserFired:
                 break
+            case .resonance(let chain, _):
+                banner = "Resonance ×\(chain)"
+            case .timeCrystalSecured(_, let freeze):
+                banner = String(format: "Freeze +%.1fs", freeze)
+            case .sparkTimerExpired:
+                banner = "Freeze charge expired"
             case .bonusCollected(let kind):
                 banner = kind.title
             case .shieldBroke:
@@ -106,7 +145,12 @@ final class GameSession {
             case .riftOpened:
                 banner = "Rift"
             case .riftEntered(let kind):
-                banner = kind == .calm ? "Time skip" : "Rift"
+                banner = switch kind {
+                case .calm: "TIME HELD"
+                case .collision: "COLLAPSING RIFT"
+                case .warp: "MIRROR SHIFT"
+                case .candy: "CANDY TIMELINE"
+                }
             case .timeCollision:
                 banner = "Time collision"
             case .died(let cause):
@@ -177,5 +221,9 @@ final class GameSession {
         effects = sim.effects
         inSlowField = sim.inSlowField
         hasStarted = sim.hasStarted
+        resonanceChain = sim.resonanceChain
+        resonanceRemaining = sim.resonanceRemaining
+        reality = sim.reality
+        realityRemaining = sim.realityRemaining
     }
 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct DeathView: View {
     var cause: DeathCause
     var rewindCharges: Int
+    var rewindSeconds: TimeInterval = 3
     var onRewind: () -> Void
     var onRestart: () -> Void
     var onMenu: () -> Void
@@ -25,7 +26,11 @@ struct DeathView: View {
                         .font(.system(size: 13))
                         .foregroundStyle(EchoTheme.muted)
                         .multilineTextAlignment(.center)
-                    PrimaryButton(title: "REWIND 3.0s", systemImage: "clock.arrow.circlepath", action: onRewind)
+                    PrimaryButton(
+                        title: String(format: "REWIND %.1fs", rewindSeconds),
+                        systemImage: "clock.arrow.circlepath",
+                        action: onRewind
+                    )
                     GhostButton(title: "Restart", action: onRestart)
                 } else {
                     Text("No rewind left on this timeline.")

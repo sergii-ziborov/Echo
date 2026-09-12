@@ -7,8 +7,12 @@ enum StarRating {
         return 1
     }
 
-    static func points(stars: Int, bonuses: Int) -> Int {
-        max(0, stars) * 50 + max(0, bonuses) * 20 + 10
+    static func points(stars: Int, bonuses: Int, timeCrystals: Int = 0, resonance: Int = 0) -> Int {
+        max(0, stars) * 50
+            + max(0, bonuses) * 20
+            + max(0, timeCrystals) * 15
+            + max(0, resonance - 1) * 10
+            + 10
     }
 }
 
@@ -19,6 +23,8 @@ struct SessionResult: Equatable, Sendable {
     var sparks: Int
     var echoesFaced: Int
     var bonuses: Int = 0
+    var timeCrystals: Int = 0
+    var resonance: Int = 0
     var dashed: Bool = false
     var usedItem: Bool = false
     var scars: Int = 0
@@ -28,7 +34,7 @@ struct SessionResult: Equatable, Sendable {
     var paradox: Bool = false
 
     var points: Int {
-        StarRating.points(stars: stars, bonuses: bonuses)
+        StarRating.points(stars: stars, bonuses: bonuses, timeCrystals: timeCrystals, resonance: resonance)
     }
 }
 
@@ -75,6 +81,12 @@ enum Act: Int, CaseIterable, Sendable {
     case fracture
     case debris
     case paradox
+    case singularity
+    case rift
+    case gravity
+    case mirage
+    case confection
+    case eternity
 
     var title: String {
         switch self {
@@ -83,6 +95,12 @@ enum Act: Int, CaseIterable, Sendable {
         case .fracture: "FRACTURE"
         case .debris: "DEBRIS"
         case .paradox: "PARADOX"
+        case .singularity: "SINGULARITY"
+        case .rift: "RIFT"
+        case .gravity: "GRAVITY"
+        case .mirage: "MIRAGE"
+        case .confection: "CONFECTION"
+        case .eternity: "ETERNITY"
         }
     }
 
@@ -93,17 +111,53 @@ enum Act: Int, CaseIterable, Sendable {
         case .fracture: "Rifts, gates, scars."
         case .debris: "Outside hazards enter the timeline."
         case .paradox: "Every law at once."
+        case .singularity: "The arena learns to fire back."
+        case .rift: "Reality develops exits of its own."
+        case .gravity: "Every route bends toward the dark."
+        case .mirage: "The map lies before your echoes do."
+        case .confection: "A beautiful timeline with dangerous rules."
+        case .eternity: "Master every law, then survive it faster."
         }
     }
 
     var range: ClosedRange<Int> {
-        let start = (rawValue - 1) * 6 + 1
-        return start...(start + 5)
+        let start = (rawValue - 1) * 7 + 1
+        return start...(start + 6)
     }
 
     static func containing(level number: Int) -> Act {
-        Act(rawValue: min(5, max(1, (number - 1) / 6 + 1))) ?? .trace
+        Act(rawValue: min(allCases.count, max(1, (number - 1) / 7 + 1))) ?? .trace
     }
+}
+
+struct DifficultyProfile: Equatable, Sendable {
+    var cycle: Int
+
+    var number: Int { max(0, cycle) + 1 }
+
+    var title: String {
+        switch max(0, cycle) {
+        case 0: "AWAKENING"
+        case 1: "FRACTURED"
+        case 2: "PARADOX"
+        case 3: "SINGULARITY"
+        default: "ETERNAL +\(cycle - 3)"
+        }
+    }
+
+    var shortTitle: String { "D\(number) · \(title)" }
+
+    var detail: String {
+        switch max(0, cycle) {
+        case 0: "The original 77-epoch timeline."
+        case 1: "Faster echoes and more aggressive hazards."
+        case 2: "Short laser cycles and stronger gravity."
+        case 3: "Maximum echo pressure and unstable rifts."
+        default: "An endless escalation beyond the stable timeline."
+        }
+    }
+
+    var hazardMultiplier: Double { 1 + Double(max(0, cycle)) * 0.12 }
 }
 
 enum DeathCause: Equatable, Sendable {
@@ -112,11 +166,13 @@ enum DeathCause: Equatable, Sendable {
     case rift
     case collision
     case ghost
+    case laser
+    case blackHole
 
     var echoIndex: Int? {
         switch self {
         case .echo(let index, _): index
-        case .asteroid, .rift, .collision, .ghost: nil
+        case .asteroid, .rift, .collision, .ghost, .laser, .blackHole: nil
         }
     }
 
@@ -134,6 +190,10 @@ enum DeathCause: Equatable, Sendable {
             return "A time collision left a scar"
         case .ghost:
             return "You met the timeline you discarded"
+        case .laser:
+            return "A temporal beam erased your route"
+        case .blackHole:
+            return "A gravity well swallowed your timeline"
         }
     }
 }
@@ -175,6 +235,7 @@ struct WorldSnapshot: Equatable, Sendable {
     var sparks: [SparkState]
     var bonuses: [BonusState]
     var movers: [MoverState]
+    var lasers: [LaserState]
     var rifts: [RiftState]
     var gates: [TimeGateState]
     var scars: [CollisionScar]
@@ -182,6 +243,10 @@ struct WorldSnapshot: Equatable, Sendable {
     var exitOpen: Bool
     var moves: Int
     var bonusesCollected: Int
+    var timedSparksSecured: Int
+    var resonanceChain: Int
+    var bestResonance: Int
+    var resonanceRemaining: TimeInterval
     var hasStarted: Bool
     var recorder: PathRecorder
     var pulseDelay: TimeInterval
@@ -193,4 +258,7 @@ struct WorldSnapshot: Equatable, Sendable {
     var scarsCreated: Int
     var riftsUsed: Int
     var closestApproach: Double
+    var reality: RealityMode
+    var realityRemaining: TimeInterval
+    var riftTravelCooldown: TimeInterval
 }

@@ -117,6 +117,7 @@ struct DailyChallengeView: View {
         if !level.rifts.isEmpty { items.append("RIFTS") }
         if !level.movers.isEmpty { items.append("MOVERS") }
         if !level.gates.isEmpty { items.append("GATES") }
+        if !level.lasers.isEmpty { items.append("LASERS") }
         if items.count < 3 { items.append("SCARS PERSIST") }
         return Array(items.prefix(3))
     }

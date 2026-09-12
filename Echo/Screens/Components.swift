@@ -152,17 +152,21 @@ struct PressStyle: ButtonStyle {
 
 struct Wordmark: View {
     var subtitle: String = "YOU SURVIVE THE TIMELINE YOU CREATED"
+    var titleSize: CGFloat = 54
+    var subtitleSize: CGFloat = 11
 
     var body: some View {
         VStack(spacing: 10) {
             Text("ECHO")
-                .font(.system(size: 54, weight: .ultraLight))
+                .font(.system(size: titleSize, weight: .ultraLight))
                 .tracking(EchoTheme.wordmarkTracking)
                 .foregroundStyle(.white)
             Text(subtitle)
-                .font(.system(size: 11, weight: .medium))
+                .font(.system(size: subtitleSize, weight: .medium))
                 .tracking(2.2)
                 .foregroundStyle(EchoTheme.muted)
+                .minimumScaleFactor(0.72)
+                .lineLimit(1)
         }
     }
 }

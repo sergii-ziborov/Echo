@@ -8,6 +8,11 @@ enum GlowTextures {
     static let spark: SKTexture = named("SparkGem") ?? named("SparkOrb") ?? orb(color: UIColor(red: 0.4, green: 0.9, blue: 1, alpha: 1), size: 192)
     static let blob: SKTexture = named("GlowBlob") ?? orb(color: UIColor(red: 0.4, green: 0.9, blue: 1, alpha: 1), size: 128)
     static let spawnRing: SKTexture = named("SpawnRing") ?? orb(color: UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1), size: 160)
+    static let asteroid: SKTexture = named("Asteroid") ?? orb(color: UIColor(red: 0.32, green: 0.48, blue: 0.65, alpha: 1), size: 256)
+    static let laserEmitter: SKTexture = named("LaserEmitter") ?? orb(color: UIColor(red: 1, green: 0.28, blue: 0.48, alpha: 1), size: 256)
+    static let dimensionalRift: SKTexture = named("DimensionalRift") ?? spawnRing
+    static let blackHole: SKTexture = named("BlackHole") ?? orb(color: UIColor(red: 0.25, green: 0.15, blue: 0.55, alpha: 1), size: 256)
+    static let candyTimeline: SKTexture = named("CandyTimeline") ?? blob
 
     static func bonus(_ kind: BonusKind) -> SKTexture {
         named(kind.assetName) ?? orb(color: color(for: kind), size: 160)

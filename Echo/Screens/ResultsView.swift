@@ -7,6 +7,8 @@ struct ResultsView: View {
     var paradoxSeal: SealKind
     var bestTime: TimeInterval?
     var bestMoves: Int?
+    var cycleComplete: Bool
+    var nextDifficulty: DifficultyProfile
     var onWatch: () -> Void
     var onNext: () -> Void
     var onMenu: () -> Void
@@ -22,6 +24,22 @@ struct ResultsView: View {
                     .font(.system(size: 26, weight: .ultraLight))
                     .tracking(4)
 
+                if cycleComplete {
+                    VStack(spacing: 4) {
+                        Label("77 EPOCHS COMPLETE", systemImage: "infinity.circle.fill")
+                            .font(.system(size: 11, weight: .black, design: .rounded))
+                            .tracking(1.2)
+                            .foregroundStyle(EchoTheme.gold)
+                        Text("Next: \(nextDifficulty.shortTitle) · +777 shards")
+                            .font(.system(size: 10, weight: .semibold, design: .rounded))
+                            .foregroundStyle(EchoTheme.muted)
+                    }
+                    .padding(.horizontal, 14)
+                    .frame(height: 48)
+                    .background(EchoTheme.gold.opacity(0.08), in: Capsule())
+                    .overlay(Capsule().stroke(EchoTheme.gold.opacity(0.22), lineWidth: 1))
+                }
+
                 VStack(spacing: 8) {
                     ResultLine(icon: "timer", title: "Time", value: format(result.time), best: bestTime.map(format))
                     ResultLine(icon: "circle.dotted", title: "Echoes survived", value: "\(result.echoesFaced)", best: nil)
@@ -32,6 +50,22 @@ struct ResultsView: View {
                         best: nil
                     )
                     ResultLine(icon: "bolt.horizontal", title: "Scars created", value: "\(result.scars)", best: nil)
+                    if result.timeCrystals > 0 {
+                        ResultLine(
+                            icon: "snowflake",
+                            title: "Time crystals secured",
+                            value: "\(result.timeCrystals)  ·  +\(result.timeCrystals * 15)",
+                            best: nil
+                        )
+                    }
+                    if result.resonance >= 2 {
+                        ResultLine(
+                            icon: "link",
+                            title: "Best resonance",
+                            value: "×\(result.resonance)  ·  +\((result.resonance - 1) * 10)",
+                            best: nil
+                        )
+                    }
                 }
 
                 VStack(alignment: .leading, spacing: 8) {

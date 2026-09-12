@@ -23,7 +23,11 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
     var movers: [MoverSpawn]
     var rifts: [RiftSpawn]
     var gates: [TimeGateSpawn]
+    var lasers: [LaserSpawn]
+    var gravityWells: [GravityWellSpawn] = []
+    var decorations: [ArenaDecoration]
     var theme: ArenaTheme
+    var atmosphere: ArenaAtmosphere
     var echoInterval: TimeInterval
     var maxEchoes: Int
     var warningLead: TimeInterval
@@ -92,14 +96,51 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
                 phase: $0.phase
             )
         }
+        copy.lasers = lasers.map { $0.scaled(sy: sy) }
+        copy.gravityWells = gravityWells.map { $0.scaled(sy: sy) }
+        copy.decorations = decorations.map { $0.scaled(sy: sy) }
         return copy.sanitized()
+    }
+
+    /// Replays the same 77 maps as a harder timeline without invalidating the
+    /// authored geometry or the player's records from earlier cycles.
+    func difficultyAdjusted(for cycle: Int) -> LevelDefinition {
+        guard cycle > 0 else { return self }
+        let pressure = Double(cycle)
+        let multiplier = DifficultyProfile(cycle: cycle).hazardMultiplier
+        var copy = self
+        copy.echoInterval = max(3.6, echoInterval * max(0.58, 1 - pressure * 0.055))
+        copy.maxEchoes = min(9, maxEchoes + (cycle + 1) / 2)
+        copy.warningLead = min(2.4, warningLead + pressure * 0.08)
+        copy.parTime = max(12, parTime * max(0.70, 1 - pressure * 0.035))
+        copy.movers = movers.map { mover in
+            var next = mover
+            next.velocity = mover.velocity * multiplier
+            if case .orbit(let center, let radius, let period, let phase) = mover.path {
+                next.path = .orbit(center: center, radius: radius, period: max(3.8, period / multiplier), phase: phase)
+            }
+            return next
+        }
+        copy.lasers = lasers.map { laser in
+            var next = laser
+            next.period = max(next.chargeFor + next.activeFor + 0.75, laser.period / multiplier)
+            next.activeFor = min(2.2, laser.activeFor * (1 + pressure * 0.04))
+            return next
+        }
+        copy.gravityWells = gravityWells.map { well in
+            var next = well
+            next.strength *= multiplier
+            next.influenceRadius = min(290, well.influenceRadius * (1 + pressure * 0.025))
+            return next
+        }
+        return copy
     }
 
     /// Push sparks, the exit, and the start out of walls so pickups are always reachable.
     func sanitized(clearance: Double = 34) -> LevelDefinition {
         var copy = self
         copy.playerStart = LayoutSafety.nudge(playerStart, walls: walls, worldWidth: worldWidth, worldHeight: worldHeight, clearance: clearance)
-        copy.exit = LayoutSafety.nudge(exit, walls: walls, worldWidth: worldWidth, worldHeight: worldHeight, clearance: clearance + 8)
+        copy.exit = LayoutSafety.nudge(exit, walls: walls, worldWidth: worldWidth, worldHeight: worldHeight, clearance: clearance + 14)
         copy.sparks = sparks.map { spark in
             var next = spark
             if var ring = spark.orbit {
@@ -131,6 +172,41 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
                 worldWidth: worldWidth,
                 worldHeight: worldHeight,
                 clearance: clearance
+            )
+            return next
+        }
+        copy.movers = movers.map { mover in
+            var next = mover
+            if case .bounce = mover.path {
+                next.position = LayoutSafety.nudge(
+                    mover.position,
+                    walls: walls,
+                    worldWidth: worldWidth,
+                    worldHeight: worldHeight,
+                    clearance: mover.radius + 4
+                )
+            }
+            return next
+        }
+        copy.rifts = rifts.map { rift in
+            var next = rift
+            next.position = LayoutSafety.nudge(
+                rift.position,
+                walls: walls,
+                worldWidth: worldWidth,
+                worldHeight: worldHeight,
+                clearance: rift.radius + 4
+            )
+            return next
+        }
+        copy.gravityWells = gravityWells.map { well in
+            var next = well
+            next.position = LayoutSafety.nudge(
+                well.position,
+                walls: walls,
+                worldWidth: worldWidth,
+                worldHeight: worldHeight,
+                clearance: well.coreRadius + 4
             )
             return next
         }
@@ -217,6 +293,12 @@ enum LevelCatalog {
         case 28: (.causeScar, .noDash)
         case 29: (.useRift, .noShop)
         case 30: (.noShop, .parTime)
+        case 31: (.beforeEcho(4), .parTime)
+        case 32: (.noDash, .avoidScar)
+        case 33: (.maxEchoes(4), .noShop)
+        case 34: (.useRift, .parTime)
+        case 35: (.avoidScar, .noDash)
+        case 36: (.noShop, .parTime)
         default: (.parTime, .noDash)
         }
     }
@@ -256,7 +338,7 @@ enum LevelCatalog {
         ]
     )
 
-    static let playable: [LevelDefinition] = [
+    private static let handcrafted: [LevelDefinition] = [
         prototype,
         make(
             number: 2,
@@ -286,7 +368,7 @@ enum LevelCatalog {
             number: 3,
             name: "Cross",
             subtitle: "Your first loop will cut the second.",
-            playerStart: Vec2(x: 500, y: 120),
+            playerStart: Vec2(x: 380, y: 120),
             exit: Vec2(x: 500, y: 500),
             walls: crossWalls(),
             sparks: [
@@ -855,7 +937,7 @@ enum LevelCatalog {
             ],
             movers: [
                 MoverSpawn.bounce(id: 0, at: Vec2(x: 360, y: 500), velocity: Vec2(x: 70, y: 55), radius: 20),
-                MoverSpawn.orbit(id: 1, center: Vec2(x: 500, y: 500), radius: 210, period: 9, phase: 1.2, size: 18),
+                MoverSpawn.orbit(id: 1, center: Vec2(x: 500, y: 500), radius: 195, period: 9, phase: 1.2, size: 18),
             ]
         ),
         make(
@@ -921,7 +1003,7 @@ enum LevelCatalog {
                 BonusSpawn(id: 1, kind: .pulse, position: Vec2(x: 860, y: 860)),
             ],
             movers: [
-                MoverSpawn.patrol(id: 0, from: Vec2(x: 200, y: 280), to: Vec2(x: 800, y: 720), radius: 20),
+                MoverSpawn.patrol(id: 0, from: Vec2(x: 180, y: 520), to: Vec2(x: 620, y: 820), radius: 20),
                 MoverSpawn.bounce(id: 1, at: Vec2(x: 500, y: 160), velocity: Vec2(x: 90, y: 0), radius: 16),
             ],
             theme: .ember
@@ -987,7 +1069,7 @@ enum LevelCatalog {
             ],
             movers: [
                 MoverSpawn.patrol(id: 0, from: Vec2(x: 160, y: 400), to: Vec2(x: 840, y: 400)),
-                MoverSpawn.patrol(id: 1, from: Vec2(x: 160, y: 620), to: Vec2(x: 840, y: 620)),
+                MoverSpawn.patrol(id: 1, from: Vec2(x: 160, y: 600), to: Vec2(x: 840, y: 600)),
             ],
             rifts: [
                 RiftSpawn(id: 0, kind: .collision, position: Vec2(x: 500, y: 300), period: 6.5, openFor: 2.2),
@@ -1058,7 +1140,7 @@ enum LevelCatalog {
                 SlowField(id: 0, area: AABB(x: 360, y: 360, width: 280, height: 280)),
             ],
             movers: [
-                MoverSpawn.patrol(id: 0, from: Vec2(x: 180, y: 260), to: Vec2(x: 820, y: 740), radius: 22),
+                MoverSpawn.patrol(id: 0, from: Vec2(x: 420, y: 160), to: Vec2(x: 580, y: 840), radius: 22),
             ],
             theme: .ember
         ),
@@ -1090,7 +1172,7 @@ enum LevelCatalog {
                 BonusSpawn(id: 2, kind: .shield, position: Vec2(x: 140, y: 140)),
             ],
             movers: [
-                MoverSpawn.orbit(id: 0, center: Vec2(x: 500, y: 500), radius: 140, period: 6.5, size: 20),
+                MoverSpawn.orbit(id: 0, center: Vec2(x: 500, y: 500), radius: 120, period: 6.5, size: 20),
                 MoverSpawn.bounce(id: 1, at: Vec2(x: 180, y: 300), velocity: Vec2(x: 0, y: 95), radius: 16),
             ],
             rifts: [
@@ -1196,16 +1278,513 @@ enum LevelCatalog {
             ],
             movers: [
                 MoverSpawn.bounce(id: 0, at: Vec2(x: 220, y: 400), velocity: Vec2(x: 40, y: 85), radius: 18),
-                MoverSpawn.orbit(id: 1, center: Vec2(x: 500, y: 500), radius: 190, period: 8.5, phase: 0.6, size: 20),
-                MoverSpawn.patrol(id: 2, from: Vec2(x: 160, y: 860), to: Vec2(x: 840, y: 140), radius: 16),
+                MoverSpawn.patrol(id: 1, from: Vec2(x: 380, y: 300), to: Vec2(x: 620, y: 300), radius: 20),
+                MoverSpawn.patrol(id: 2, from: Vec2(x: 400, y: 840), to: Vec2(x: 600, y: 160), radius: 16),
             ],
             rifts: [
                 RiftSpawn(id: 0, kind: .collision, position: Vec2(x: 500, y: 720), period: 7.2, openFor: 2.4, phase: 1.0),
-                RiftSpawn(id: 1, kind: .calm, position: Vec2(x: 240, y: 240), period: 8, openFor: 3.0),
+                RiftSpawn(id: 1, kind: .calm, position: Vec2(x: 200, y: 240), period: 8, openFor: 3.0),
             ],
             theme: .ember
         ),
+        make(
+            number: 31,
+            name: "Prism",
+            subtitle: "The warning line is safe. The bright line is not.",
+            playerStart: Vec2(x: 140, y: 140),
+            exit: Vec2(x: 860, y: 860),
+            walls: [
+                AABB(x: 250, y: 80, width: 60, height: 300),
+                AABB(x: 250, y: 320, width: 220, height: 60),
+                AABB(x: 690, y: 620, width: 60, height: 300),
+                AABB(x: 530, y: 620, width: 220, height: 60),
+            ],
+            sparks: [
+                SparkSpawn(id: 0, position: Vec2(x: 500, y: 500)),
+                SparkSpawn(id: 1, position: Vec2(x: 150, y: 500), timer: 18),
+                SparkSpawn(id: 2, position: Vec2(x: 850, y: 500)),
+                SparkSpawn(id: 3, position: Vec2(x: 500, y: 150)),
+                SparkSpawn(id: 4, position: Vec2(x: 500, y: 850), timer: 20),
+                SparkSpawn(id: 5, position: Vec2(x: 160, y: 820)),
+                SparkSpawn(id: 6, position: Vec2(x: 840, y: 180), timer: 22),
+            ],
+            echoInterval: 7.0,
+            maxEchoes: 5,
+            parTime: 44,
+            parMoves: 76,
+            bonuses: [
+                BonusSpawn(id: 0, kind: .freeze, position: Vec2(x: 160, y: 680)),
+                BonusSpawn(id: 1, kind: .shield, position: Vec2(x: 840, y: 320)),
+            ],
+            lasers: [
+                .horizontal(id: 0, y: 500, period: 6.4, chargeFor: 1.3, activeFor: 1.4),
+                .vertical(id: 1, x: 500, period: 7.2, chargeFor: 1.4, activeFor: 1.2, phase: 3.1),
+            ],
+            theme: .void,
+            atmosphere: .clear
+        ),
+        make(
+            number: 32,
+            name: "Relay",
+            subtitle: "Cross on one clock. Return on the other.",
+            playerStart: Vec2(x: 500, y: 120),
+            exit: Vec2(x: 500, y: 880),
+            walls: [
+                AABB(x: 80, y: 285, width: 300, height: 52),
+                AABB(x: 620, y: 285, width: 300, height: 52),
+                AABB(x: 80, y: 663, width: 300, height: 52),
+                AABB(x: 620, y: 663, width: 300, height: 52),
+                AABB(x: 280, y: 430, width: 80, height: 140),
+                AABB(x: 640, y: 430, width: 80, height: 140),
+            ],
+            sparks: [
+                SparkSpawn(id: 0, position: Vec2(x: 500, y: 500)),
+                SparkSpawn(id: 1, position: Vec2(x: 170, y: 170), timer: 18),
+                SparkSpawn(id: 2, position: Vec2(x: 830, y: 170)),
+                SparkSpawn(id: 3, position: Vec2(x: 170, y: 500)),
+                SparkSpawn(id: 4, position: Vec2(x: 830, y: 500), timer: 20),
+                SparkSpawn(id: 5, position: Vec2(x: 170, y: 830)),
+                SparkSpawn(id: 6, position: Vec2(x: 830, y: 830), timer: 22),
+            ],
+            echoInterval: 6.8,
+            maxEchoes: 5,
+            parTime: 46,
+            parMoves: 80,
+            bonuses: [
+                BonusSpawn(id: 0, kind: .phase, position: Vec2(x: 500, y: 400)),
+                BonusSpawn(id: 1, kind: .freeze, position: Vec2(x: 500, y: 600)),
+            ],
+            gates: [
+                TimeGateSpawn(id: 0, area: AABB(x: 380, y: 285, width: 240, height: 52), period: 5.8, openFor: 2.4),
+                TimeGateSpawn(id: 1, area: AABB(x: 380, y: 663, width: 240, height: 52), period: 6.4, openFor: 2.6, phase: 2.1),
+            ],
+            lasers: [
+                .horizontal(id: 0, y: 405, fromX: 100, toX: 900, period: 6.0, phase: 1.2),
+                .horizontal(id: 1, y: 595, fromX: 100, toX: 900, period: 6.0, phase: 4.2),
+            ],
+            theme: .ion,
+            atmosphere: .drift
+        ),
+        make(
+            number: 33,
+            name: "Ricochet",
+            subtitle: "Read the impact lanes before the chamber changes them.",
+            playerStart: Vec2(x: 500, y: 120),
+            exit: Vec2(x: 500, y: 500),
+            walls: [
+                AABB(x: 160, y: 250, width: 220, height: 58),
+                AABB(x: 620, y: 250, width: 220, height: 58),
+                AABB(x: 160, y: 692, width: 220, height: 58),
+                AABB(x: 620, y: 692, width: 220, height: 58),
+                AABB(x: 471, y: 90, width: 58, height: 190),
+                AABB(x: 471, y: 720, width: 58, height: 190),
+                AABB(x: 330, y: 394, width: 110, height: 38),
+                AABB(x: 560, y: 394, width: 110, height: 38),
+                AABB(x: 330, y: 568, width: 110, height: 38),
+                AABB(x: 560, y: 568, width: 110, height: 38),
+            ],
+            sparks: [
+                SparkSpawn(id: 0, position: Vec2(x: 500, y: 500)),
+                SparkSpawn(id: 1, position: Vec2(x: 170, y: 170), timer: 20),
+                SparkSpawn(id: 2, position: Vec2(x: 830, y: 170)),
+                SparkSpawn(id: 3, position: Vec2(x: 170, y: 830)),
+                SparkSpawn(id: 4, position: Vec2(x: 830, y: 830), timer: 22),
+                SparkSpawn(id: 5, position: Vec2(x: 280, y: 500)),
+                SparkSpawn(id: 6, position: Vec2(x: 720, y: 500), timer: 18),
+            ],
+            echoInterval: 6.7,
+            maxEchoes: 5,
+            parTime: 46,
+            parMoves: 82,
+            bonuses: [
+                BonusSpawn(id: 0, kind: .shield, position: Vec2(x: 500, y: 350)),
+                BonusSpawn(id: 1, kind: .freeze, position: Vec2(x: 500, y: 650)),
+                BonusSpawn(id: 2, kind: .magnet, position: Vec2(x: 120, y: 500)),
+            ],
+            movers: [
+                .bounce(id: 0, at: Vec2(x: 220, y: 420), velocity: Vec2(x: 105, y: 78), radius: 46),
+                .bounce(id: 1, at: Vec2(x: 780, y: 580), velocity: Vec2(x: -92, y: -88), radius: 44),
+                .bounce(id: 2, at: Vec2(x: 420, y: 820), velocity: Vec2(x: 74, y: -108), radius: 42),
+            ],
+            decorations: [
+                ArenaDecoration(id: 0, kind: .reactor(radius: 138, spokes: 8), position: Vec2(x: 500, y: 500), tone: .gold),
+                ArenaDecoration(id: 1, kind: .lane(to: Vec2(x: 880, y: 590), chevrons: 9), position: Vec2(x: 120, y: 410), tone: .danger),
+                ArenaDecoration(id: 2, kind: .lane(to: Vec2(x: 880, y: 410), chevrons: 9), position: Vec2(x: 120, y: 590), tone: .danger),
+                ArenaDecoration(id: 3, kind: .hazardRing(radius: 76, segments: 12), position: Vec2(x: 220, y: 420), tone: .gold),
+                ArenaDecoration(id: 4, kind: .hazardRing(radius: 76, segments: 12), position: Vec2(x: 780, y: 580), tone: .gold, rotation: .pi),
+                ArenaDecoration(id: 5, kind: .anchor(radius: 40), position: Vec2(x: 110, y: 500), tone: .cyan),
+                ArenaDecoration(id: 6, kind: .anchor(radius: 40), position: Vec2(x: 890, y: 500), tone: .cyan, rotation: .pi),
+                ArenaDecoration(id: 7, kind: .hazardRing(radius: 72, segments: 10), position: Vec2(x: 420, y: 820), tone: .gold, rotation: .pi / 3),
+            ],
+            theme: .dust,
+            atmosphere: .clear
+        ),
+        make(
+            number: 34,
+            name: "Cold Circuit",
+            subtitle: "Freeze holds the beam and every ticking crystal.",
+            playerStart: Vec2(x: 120, y: 500),
+            exit: Vec2(x: 880, y: 500),
+            walls: [
+                AABB(x: 240, y: 100, width: 54, height: 280),
+                AABB(x: 240, y: 326, width: 180, height: 54),
+                AABB(x: 706, y: 620, width: 54, height: 280),
+                AABB(x: 580, y: 620, width: 180, height: 54),
+                AABB(x: 470, y: 390, width: 60, height: 220),
+            ],
+            sparks: [
+                SparkSpawn(id: 0, position: Vec2(x: 500, y: 500), timer: 24),
+                SparkSpawn(id: 1, position: Vec2(x: 160, y: 180), timer: 18),
+                SparkSpawn(id: 2, position: Vec2(x: 840, y: 180)),
+                SparkSpawn(id: 3, position: Vec2(x: 160, y: 820)),
+                SparkSpawn(id: 4, position: Vec2(x: 840, y: 820), timer: 20),
+                SparkSpawn(id: 5, position: Vec2(x: 370, y: 700), timer: 22),
+                SparkSpawn(id: 6, position: Vec2(x: 630, y: 300)),
+            ],
+            echoInterval: 7.0,
+            maxEchoes: 5,
+            parTime: 48,
+            parMoves: 84,
+            bonuses: [
+                BonusSpawn(id: 0, kind: .freeze, position: Vec2(x: 330, y: 500)),
+                BonusSpawn(id: 1, kind: .freeze, position: Vec2(x: 670, y: 500)),
+            ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .calm, position: Vec2(x: 500, y: 760), period: 8.2, openFor: 3.0),
+            ],
+            lasers: [
+                .vertical(id: 0, x: 370, period: 6.8, chargeFor: 1.5, activeFor: 1.5, phase: 1.4),
+                .vertical(id: 1, x: 630, period: 6.8, chargeFor: 1.5, activeFor: 1.5, phase: 4.8),
+            ],
+            theme: .ice,
+            atmosphere: .clear
+        ),
+        make(
+            number: 35,
+            name: "Phase Array",
+            subtitle: "Three beams, three beats, one route through.",
+            playerStart: Vec2(x: 140, y: 140),
+            exit: Vec2(x: 860, y: 860),
+            walls: [
+                AABB(x: 100, y: 440, width: 250, height: 54),
+                AABB(x: 650, y: 506, width: 250, height: 54),
+                AABB(x: 440, y: 100, width: 54, height: 250),
+                AABB(x: 506, y: 650, width: 54, height: 250),
+            ],
+            sparks: [
+                SparkSpawn(id: 0, position: Vec2(x: 500, y: 500)),
+                SparkSpawn(id: 1, position: Vec2(x: 180, y: 300), timer: 20),
+                SparkSpawn(id: 2, position: Vec2(x: 820, y: 300)),
+                SparkSpawn(id: 3, position: Vec2(x: 180, y: 700)),
+                SparkSpawn(id: 4, position: Vec2(x: 820, y: 700), timer: 22),
+                SparkSpawn(id: 5, position: Vec2(x: 300, y: 820), timer: 24),
+                SparkSpawn(id: 6, position: Vec2(x: 700, y: 180)),
+            ],
+            echoInterval: 6.5,
+            maxEchoes: 6,
+            parTime: 50,
+            parMoves: 88,
+            bonuses: [
+                BonusSpawn(id: 0, kind: .phase, position: Vec2(x: 500, y: 200)),
+                BonusSpawn(id: 1, kind: .chrono, position: Vec2(x: 500, y: 800)),
+            ],
+            gates: [
+                TimeGateSpawn(id: 0, area: AABB(x: 350, y: 440, width: 300, height: 54), period: 6.2, openFor: 2.6, phase: 1.0),
+            ],
+            lasers: [
+                .horizontal(id: 0, y: 260, period: 7.5, chargeFor: 1.4, activeFor: 1.4),
+                .horizontal(id: 1, y: 500, period: 7.5, chargeFor: 1.4, activeFor: 1.4, phase: 2.5),
+                .horizontal(id: 2, y: 740, period: 7.5, chargeFor: 1.4, activeFor: 1.4, phase: 5.0),
+            ],
+            theme: .ion,
+            atmosphere: .nebula
+        ),
+        make(
+            number: 36,
+            name: "Event Horizon",
+            subtitle: "Clear the four sectors, then cross the firing core.",
+            playerStart: Vec2(x: 500, y: 110),
+            exit: Vec2(x: 500, y: 500),
+            walls: [
+                AABB(x: 150, y: 180, width: 180, height: 52),
+                AABB(x: 278, y: 180, width: 52, height: 180),
+                AABB(x: 670, y: 180, width: 180, height: 52),
+                AABB(x: 670, y: 180, width: 52, height: 180),
+                AABB(x: 150, y: 768, width: 180, height: 52),
+                AABB(x: 278, y: 640, width: 52, height: 180),
+                AABB(x: 670, y: 768, width: 180, height: 52),
+                AABB(x: 670, y: 640, width: 52, height: 180),
+            ],
+            sparks: [
+                SparkSpawn(id: 0, position: Vec2(x: 500, y: 500), timer: 26),
+                SparkSpawn(id: 1, position: Vec2(x: 140, y: 140), timer: 20),
+                SparkSpawn(id: 2, position: Vec2(x: 860, y: 140)),
+                SparkSpawn(id: 3, position: Vec2(x: 140, y: 860)),
+                SparkSpawn(id: 4, position: Vec2(x: 860, y: 860), timer: 22),
+                SparkSpawn(id: 5, position: Vec2(x: 180, y: 500), orbit: SparkOrbit(center: Vec2(x: 180, y: 500), radius: 52, period: 7.2)),
+                SparkSpawn(id: 6, position: Vec2(x: 820, y: 500), timer: 24, orbit: SparkOrbit(center: Vec2(x: 820, y: 500), radius: 52, period: 7.6, phase: .pi)),
+                SparkSpawn(id: 7, position: Vec2(x: 500, y: 840), orbit: SparkOrbit(center: Vec2(x: 500, y: 840), radius: 58, period: 6.8, phase: .pi / 2)),
+            ],
+            echoInterval: 6.2,
+            maxEchoes: 6,
+            parTime: 56,
+            parMoves: 94,
+            playerSpeed: 355,
+            bonuses: [
+                BonusSpawn(id: 0, kind: .shield, position: Vec2(x: 500, y: 260)),
+                BonusSpawn(id: 1, kind: .freeze, position: Vec2(x: 260, y: 500)),
+                BonusSpawn(id: 2, kind: .phase, position: Vec2(x: 740, y: 500)),
+                BonusSpawn(id: 3, kind: .chrono, position: Vec2(x: 500, y: 740)),
+            ],
+            fields: [
+                SlowField(id: 0, area: AABB(x: 410, y: 410, width: 180, height: 180)),
+            ],
+            movers: [
+                .bounce(id: 0, at: Vec2(x: 220, y: 390), velocity: Vec2(x: 98, y: 74), radius: 46),
+                .bounce(id: 1, at: Vec2(x: 780, y: 610), velocity: Vec2(x: -88, y: -92), radius: 44),
+                .orbit(id: 2, center: Vec2(x: 500, y: 500), radius: 150, period: 9.5, phase: 0.8, size: 42),
+            ],
+            rifts: [
+                RiftSpawn(id: 0, kind: .collision, position: Vec2(x: 500, y: 330), period: 7.0, openFor: 2.3, phase: 1.0),
+                RiftSpawn(id: 1, kind: .calm, position: Vec2(x: 500, y: 670), period: 8.0, openFor: 2.8, phase: 3.0),
+            ],
+            gates: [
+                TimeGateSpawn(id: 0, area: AABB(x: 330, y: 180, width: 340, height: 52), period: 6.0, openFor: 2.4),
+                TimeGateSpawn(id: 1, area: AABB(x: 330, y: 768, width: 340, height: 52), period: 6.0, openFor: 2.4, phase: 3.0),
+            ],
+            lasers: [
+                .vertical(id: 0, x: 380, period: 7.0, chargeFor: 1.4, activeFor: 1.5, phase: 1.4),
+                .vertical(id: 1, x: 620, period: 7.0, chargeFor: 1.4, activeFor: 1.5, phase: 4.9),
+                .horizontal(id: 2, y: 500, period: 8.0, chargeFor: 1.5, activeFor: 1.4, phase: 2.5),
+                .sweeping(
+                    id: 3,
+                    center: Vec2(x: 500, y: 500),
+                    length: 920,
+                    from: .pi / 4,
+                    to: .pi * 3 / 4,
+                    sweepDuration: 5.4,
+                    beamWidth: 15,
+                    period: 10.0,
+                    chargeFor: 1.8,
+                    activeFor: 1.1,
+                    phase: 6.2,
+                    motionPhase: 1.1
+                ),
+            ],
+            decorations: [
+                ArenaDecoration(id: 0, kind: .reactor(radius: 165, spokes: 12), position: Vec2(x: 500, y: 500), tone: .danger, rotation: .pi / 12),
+                ArenaDecoration(id: 1, kind: .hazardRing(radius: 260, segments: 16), position: Vec2(x: 500, y: 500), tone: .gold),
+                ArenaDecoration(id: 2, kind: .lane(to: Vec2(x: 865, y: 865), chevrons: 11), position: Vec2(x: 135, y: 135), tone: .danger),
+                ArenaDecoration(id: 3, kind: .anchor(radius: 42), position: Vec2(x: 380, y: 300), tone: .gold, rotation: .pi / 4),
+                ArenaDecoration(id: 4, kind: .anchor(radius: 42), position: Vec2(x: 620, y: 300), tone: .gold, rotation: -.pi / 4),
+                ArenaDecoration(id: 5, kind: .anchor(radius: 42), position: Vec2(x: 380, y: 700), tone: .gold, rotation: 3 * .pi / 4),
+                ArenaDecoration(id: 6, kind: .anchor(radius: 42), position: Vec2(x: 620, y: 700), tone: .gold, rotation: -3 * .pi / 4),
+            ],
+            theme: .ember,
+            atmosphere: .clear
+        ),
     ]
+
+    static let playable: [LevelDefinition] = handcrafted + (37...77).map(expandedLevel)
+
+    private static func expandedLevel(_ number: Int) -> LevelDefinition {
+        let names = [
+            "Corona", "Twinfire", "Redshift", "Lensing", "Pulse Crown", "Zero Hour",
+            "First Tear", "Foldline", "Split Realm", "Backstep", "False Door", "Broken Axis", "Rift Heart",
+            "Dark Tide", "Orbit Fall", "Gravity Choir", "Bent Route", "Well Spring", "Tidal Lock", "Dark Star",
+            "Doppelglass", "Inversion", "False North", "Phase Garden", "Echo Mask", "Glass Labyrinth", "Dream Collapse",
+            "Sugar Static", "Gumdrop Orbit", "Frosting Rail", "Candy Comet", "Crystal Syrup", "Sweet Paradox", "Candy Timeline",
+            "Last Dawn", "All Pasts", "Infinite Scar", "Final Mirror", "Event Crown", "Forever Loop", "Eternal Echo",
+        ]
+        let subtitles = [
+            "Read the light before it fires.",
+            "Two safe lanes never stay safe together.",
+            "The arena accelerates behind you.",
+            "Curved light hides a straight danger.",
+            "Break the firing rhythm at its center.",
+            "Survive every law of the horizon.",
+            "The first door opens somewhere else.",
+            "Cross once; return on a different axis.",
+            "One arena, two incompatible routes.",
+            "The tear sends your timeline backward.",
+            "Not every exit belongs to this reality.",
+            "Steering changes when the world folds.",
+            "Use the breach before it uses you.",
+            "The dark pulls long before it kills.",
+            "Orbit wide, then cut across the tide.",
+            "Three moving bodies share one gravity song.",
+            "Your straightest route will bend.",
+            "Collect at the edge of the pull.",
+            "The well and the laser keep one clock.",
+            "Nothing escapes without a planned loop.",
+            "The reflection is mechanically real.",
+            "Left becomes wrong for four seconds.",
+            "Trust the crystal, not the compass.",
+            "Phase through the route the map denies.",
+            "Your echo arrives wearing another rule.",
+            "Walls are honest; the breach is not.",
+            "Wake before the mirrored world closes.",
+            "A sweeter reality runs faster.",
+            "Orbit the gumdrops, avoid your old line.",
+            "Candy rails still carry lethal light.",
+            "The pretty path has moving teeth.",
+            "Freeze the countdown in a sugar storm.",
+            "Build resonance while the rules are soft.",
+            "Enter hungry. Leave before it hardens.",
+            "Everything learned returns at once.",
+            "Every route you made is waiting.",
+            "Scars, wells and tears share the arena.",
+            "Cross the fold without trusting your hand.",
+            "Take the center between four pulses.",
+            "The loop ends only when you outrun it.",
+            "Seventy-seven epochs answer with one final echo.",
+        ]
+        let slot = (number - 1) % 7
+        let act = Act.containing(level: number)
+        let start: Vec2 = slot.isMultiple(of: 2) ? Vec2(x: 120, y: 120) : Vec2(x: 880, y: 120)
+        let exit: Vec2 = slot == 6
+            ? Vec2(x: 650, y: 840)
+            : (slot.isMultiple(of: 2) ? Vec2(x: 850, y: 840) : Vec2(x: 150, y: 840))
+
+        let walls: [AABB] = switch slot {
+        case 0: [
+            AABB(x: 245, y: 260, width: 250, height: 48),
+            AABB(x: 505, y: 692, width: 250, height: 48),
+            AABB(x: 245, y: 470, width: 95, height: 48),
+            AABB(x: 660, y: 482, width: 95, height: 48),
+        ]
+        case 1: [
+            AABB(x: 245, y: 170, width: 48, height: 270),
+            AABB(x: 707, y: 560, width: 48, height: 270),
+            AABB(x: 390, y: 300, width: 220, height: 46),
+            AABB(x: 390, y: 654, width: 220, height: 46),
+        ]
+        case 2: [
+            AABB(x: 145, y: 390, width: 245, height: 50),
+            AABB(x: 610, y: 560, width: 245, height: 50),
+            AABB(x: 330, y: 145, width: 50, height: 190),
+            AABB(x: 620, y: 665, width: 50, height: 190),
+        ]
+        case 3: [
+            AABB(x: 190, y: 215, width: 210, height: 46),
+            AABB(x: 190, y: 215, width: 46, height: 205),
+            AABB(x: 600, y: 739, width: 210, height: 46),
+            AABB(x: 764, y: 580, width: 46, height: 205),
+        ]
+        case 4: [
+            AABB(x: 180, y: 315, width: 240, height: 46),
+            AABB(x: 580, y: 315, width: 240, height: 46),
+            AABB(x: 310, y: 640, width: 165, height: 46),
+            AABB(x: 525, y: 640, width: 165, height: 46),
+        ]
+        case 5: [
+            AABB(x: 210, y: 170, width: 46, height: 270),
+            AABB(x: 744, y: 170, width: 46, height: 270),
+            AABB(x: 210, y: 560, width: 46, height: 270),
+            AABB(x: 744, y: 560, width: 46, height: 270),
+        ]
+        default: fourPillars() + [
+            AABB(x: 105, y: 475, width: 175, height: 50),
+            AABB(x: 720, y: 475, width: 175, height: 50),
+        ]
+        }
+
+        let usesGravity = act == .gravity || act == .eternity
+        let sparkPositions = [
+            usesGravity ? Vec2(x: 500, y: 380) : Vec2(x: 500, y: 500),
+            Vec2(x: 150, y: 500), Vec2(x: 850, y: 500),
+            Vec2(x: 500, y: 150), Vec2(x: 500, y: 850), Vec2(x: 270, y: 720),
+            Vec2(x: 730, y: 280), Vec2(x: 730, y: 720),
+        ]
+        let sparks = sparkPositions.enumerated().map { index, position in
+            SparkSpawn(
+                id: index,
+                position: position,
+                timer: index == 1 || index == 6 ? TimeInterval(19 + slot) : nil,
+                orbit: index == 7 && act.rawValue >= Act.gravity.rawValue
+                    ? SparkOrbit(center: position, radius: 54, period: 7.5 + Double(slot) * 0.25)
+                    : nil
+            )
+        }
+
+        let moverCount = min(4, 2 + max(0, act.rawValue - 6) / 2)
+        let moverSeeds: [(Vec2, Vec2)] = [
+            (Vec2(x: 225, y: 555), Vec2(x: 92, y: 72)),
+            (Vec2(x: 775, y: 445), Vec2(x: -84, y: 88)),
+            (Vec2(x: 500, y: 235), Vec2(x: 118, y: -54)),
+            (Vec2(x: 500, y: 765), Vec2(x: -110, y: -62)),
+        ]
+        let movers = moverSeeds.prefix(moverCount).enumerated().map { index, seed in
+            MoverSpawn.bounce(id: index, at: seed.0, velocity: seed.1, radius: 38 + Double((index + slot) % 3) * 4)
+        }
+
+        let riftKind: RiftKind? = switch act {
+        case .rift, .mirage: .warp
+        case .confection: .candy
+        case .eternity: slot.isMultiple(of: 2) ? .warp : .candy
+        case .singularity: slot >= 4 ? .collision : nil
+        default: nil
+        }
+        let riftPositions = [
+            Vec2(x: 500, y: 600), Vec2(x: 360, y: 500), Vec2(x: 300, y: 700),
+            Vec2(x: 360, y: 500), Vec2(x: 120, y: 620), Vec2(x: 840, y: 610),
+            Vec2(x: 340, y: 500),
+        ]
+        let rifts = riftKind.map {
+            [RiftSpawn(id: 0, kind: $0, position: riftPositions[slot], radius: 48, period: 7.2, openFor: 3.0, phase: Double(slot) * 0.7)]
+        } ?? []
+
+        let gravityWells: [GravityWellSpawn] = usesGravity
+            ? [GravityWellSpawn(id: 0, position: Vec2(x: 500, y: 500), coreRadius: 34, influenceRadius: 190, strength: 250)]
+            : []
+
+        var lasers: [LaserSpawn] = [
+            slot.isMultiple(of: 2)
+                ? .horizontal(id: 0, y: 390, period: 7.4, chargeFor: 1.6, activeFor: 1.25, phase: 1.1)
+                : .vertical(id: 0, x: 500, period: 7.4, chargeFor: 1.6, activeFor: 1.25, phase: 1.1),
+        ]
+        if act.rawValue >= Act.rift.rawValue {
+            lasers.append(
+                slot.isMultiple(of: 3)
+                    ? .vertical(id: 1, x: 680, period: 8.6, chargeFor: 1.7, activeFor: 1.3, phase: 4.0)
+                    : .horizontal(id: 1, y: 690, period: 8.6, chargeFor: 1.7, activeFor: 1.3, phase: 4.0)
+            )
+        }
+        if number == 77 {
+            lasers.append(.sweeping(id: 2, center: Vec2(x: 500, y: 500), length: 860, from: 0, to: .pi, sweepDuration: 5.2, beamWidth: 15, period: 9.2, chargeFor: 1.8, activeFor: 1.2))
+        }
+
+        return make(
+            number: number,
+            name: names[number - 37],
+            subtitle: subtitles[number - 37],
+            playerStart: start,
+            exit: exit,
+            walls: walls,
+            sparks: sparks,
+            echoInterval: max(5.0, 6.7 - Double(act.rawValue - 6) * 0.18),
+            maxEchoes: act == .eternity ? 7 : 6,
+            parTime: 46 + Double(slot) * 1.8,
+            parMoves: 82 + slot * 3,
+            playerSpeed: act == .confection ? 345 : 330,
+            bonuses: [
+                BonusSpawn(id: 0, kind: slot.isMultiple(of: 2) ? .freeze : .phase, position: Vec2(x: 500, y: 92)),
+                BonusSpawn(id: 1, kind: act == .gravity ? .surge : .shield, position: Vec2(x: 500, y: 908)),
+            ],
+            fields: slot == 2 || act == .mirage
+                ? [SlowField(id: 0, area: AABB(x: 405, y: 405, width: 190, height: 190))]
+                : [],
+            movers: movers,
+            rifts: rifts,
+            gates: slot == 1 || slot == 5
+                ? [TimeGateSpawn(id: 0, area: AABB(x: 330, y: 476, width: 340, height: 48), period: 6.2, openFor: 2.5, phase: 1.2)]
+                : [],
+            lasers: lasers,
+            gravityWells: gravityWells,
+            theme: .forLevel(number),
+            atmosphere: [0, 3, 5].contains(slot) ? .clear : (slot == 2 || slot == 6 ? .nebula : .drift)
+        )
+    }
 
     static func daily(on day: Date = Date(), calendar: Calendar = .current) -> LevelDefinition {
         let start = calendar.startOfDay(for: day)
@@ -1215,7 +1794,7 @@ enum LevelCatalog {
         let seed = UInt64(year) * 10_000 + UInt64(month) * 100 + UInt64(dayNum)
         var rng = SplitMix64(seed: seed)
 
-        let templates = [1, 3, 8, 13, 16, 21, 25, 30]
+        let templates = [1, 3, 8, 13, 16, 21, 25, 30, 31, 33, 36]
         let pick = templates[Int(rng.next() % UInt64(templates.count))]
         var level = playable.first { $0.number == pick } ?? prototype
         let templateName = level.name
@@ -1265,9 +1844,25 @@ enum LevelCatalog {
         movers: [MoverSpawn] = [],
         rifts: [RiftSpawn] = [],
         gates: [TimeGateSpawn] = [],
-        theme: ArenaTheme? = nil
+        lasers: [LaserSpawn] = [],
+        gravityWells: [GravityWellSpawn] = [],
+        decorations: [ArenaDecoration] = [],
+        theme: ArenaTheme? = nil,
+        atmosphere: ArenaAtmosphere? = nil
     ) -> LevelDefinition {
-        LevelDefinition(
+        let resolvedDecorations = decorations.isEmpty
+            ? defaultDecorations(
+                number: number,
+                playerStart: playerStart,
+                exit: exit,
+                walls: walls,
+                sparks: sparks,
+                movers: movers,
+                rifts: rifts
+            )
+            : decorations
+
+        return LevelDefinition(
             id: "awakening-\(number)",
             number: number,
             name: name,
@@ -1283,7 +1878,11 @@ enum LevelCatalog {
             movers: movers,
             rifts: rifts,
             gates: gates,
+            lasers: lasers,
+            gravityWells: gravityWells,
+            decorations: resolvedDecorations,
             theme: theme ?? .forLevel(number),
+            atmosphere: atmosphere ?? .forLevel(number),
             echoInterval: echoInterval,
             maxEchoes: maxEchoes,
             warningLead: 1.6,
@@ -1292,6 +1891,98 @@ enum LevelCatalog {
             playerSpeed: playerSpeed,
             locked: false
         ).sanitized()
+    }
+
+    /// Every arena receives a small set of low, non-solid landmarks. The selection
+    /// follows its actual objectives and hazards, so repeated wall kits still read as
+    /// different places without putting decorative geometry through a solid wall.
+    private static func defaultDecorations(
+        number: Int,
+        playerStart: Vec2,
+        exit: Vec2,
+        walls: [AABB],
+        sparks: [SparkSpawn],
+        movers: [MoverSpawn],
+        rifts: [RiftSpawn]
+    ) -> [ArenaDecoration] {
+        var nextID = number * 100
+        var result: [ArenaDecoration] = []
+
+        func append(
+            _ kind: ArenaDecorationKind,
+            at position: Vec2,
+            tone: ArenaDecorationTone,
+            rotation: Double = 0
+        ) {
+            result.append(ArenaDecoration(id: nextID, kind: kind, position: position, tone: tone, rotation: rotation))
+            nextID += 1
+        }
+
+        append(
+            .anchor(radius: 38 + Double(number % 3) * 4),
+            at: playerStart,
+            tone: .cyan,
+            rotation: Double(number % 6) * .pi / 9
+        )
+        append(
+            .reactor(radius: 48 + Double(number % 2) * 5, spokes: 8 + number % 5),
+            at: exit,
+            tone: .theme,
+            rotation: -Double(number % 5) * .pi / 10
+        )
+
+        for spark in sparks.filter({ $0.timer != nil }).prefix(2) {
+            append(
+                .hazardRing(radius: 34, segments: 8 + (spark.id + number) % 5),
+                at: spark.position,
+                tone: .gold,
+                rotation: Double(spark.id) * .pi / 7
+            )
+        }
+
+        if let mover = movers.first {
+            append(
+                .hazardRing(radius: mover.radius + 18, segments: 10),
+                at: mover.position,
+                tone: .danger,
+                rotation: Double(number) * .pi / 13
+            )
+        } else if let rift = rifts.first {
+            append(
+                .hazardRing(radius: rift.radius + 10, segments: 12),
+                at: rift.position,
+                tone: .violet,
+                rotation: Double(number) * .pi / 11
+            )
+        }
+
+        let laneCandidates = sparks
+            .map(\.position)
+            .filter { $0.distance(to: playerStart) > 90 }
+            .sorted { $0.distance(to: playerStart) < $1.distance(to: playerStart) }
+        if let destination = laneCandidates.first(where: {
+            clearSegment(from: playerStart, to: $0, walls: walls, clearance: 9)
+        }) {
+            append(
+                .lane(to: destination, chevrons: 5 + number % 4),
+                at: playerStart,
+                tone: .theme
+            )
+        }
+
+        return result
+    }
+
+    private static func clearSegment(
+        from start: Vec2,
+        to end: Vec2,
+        walls: [AABB],
+        clearance: Double
+    ) -> Bool {
+        (0...30).allSatisfy { index in
+            let point = start.lerp(end, Double(index) / 30)
+            return walls.allSatisfy { !$0.intersectsCircle(center: point, radius: clearance) }
+        }
     }
 
     /// Four inner pillars. They break a clean outer lap and force interior routing to the exit.

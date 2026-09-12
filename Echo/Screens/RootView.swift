@@ -14,6 +14,8 @@ struct RootView: View {
                 WorldsView()
             case .daily:
                 DailyChallengeView()
+            case .wiki:
+                WikiView()
             case .tutorial(let thenPlay):
                 TutorialView {
                     model.finishTutorial(then: thenPlay)
@@ -37,6 +39,7 @@ struct RootView: View {
         case .home: "home"
         case .worlds: "worlds"
         case .daily: "daily"
+        case .wiki: "wiki"
         case .tutorial: "tutorial"
         case .playing(let r): "play-\(r.levelID)"
         case .settings: "settings"
