@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "AsteroidVariantAtlasB.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
