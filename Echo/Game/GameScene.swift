@@ -22,6 +22,7 @@ final class GameScene: SKScene {
     private var riftNodes: [Int: SKNode] = [:]
     private var gateNodes: [Int: SKNode] = [:]
     private var gateFrames: [Int: [SKSpriteNode]] = [:]
+    private var gateSolidStates: [Int: Bool] = [:]
     private var laserNodes: [Int: SKNode] = [:]
     private var scarNodes: [Int: SKNode] = [:]
     private var ghostNodes: [SKNode] = []
@@ -30,8 +31,13 @@ final class GameScene: SKScene {
     private var lastTime: TimeInterval = 0
     private var trailAcc: TimeInterval = 0
     private var trailBudget = 0
-    private var asteroidTrailAcc: TimeInterval = 0
-    private var asteroidTrailPositions: [Int: CGPoint] = [:]
+    private var trailLayer: SKNode!
+    private var trails: TrailRenderer!
+    private var magnetLinks: SKShapeNode!
+    private var lastPlayerScene = CGPoint.zero
+    private var lastSampledSimTime: TimeInterval = 0
+    private var dyingMoverIDs = Set<Int>()
+    private var wasExitOpen = false
 
     init(session: GameSession, size: CGSize) {
         self.session = session
@@ -62,6 +68,7 @@ final class GameScene: SKScene {
         riftNodes.removeAll()
         gateNodes.removeAll()
         gateFrames.removeAll()
+        gateSolidStates.removeAll()
         laserNodes.removeAll()
         scarNodes.removeAll()
         ghostNodes.removeAll()
@@ -69,8 +76,23 @@ final class GameScene: SKScene {
         backgroundColor = session.level.theme.sky.uiColor
         trailAcc = 0
         trailBudget = 0
-        asteroidTrailAcc = 0
-        asteroidTrailPositions.removeAll()
+        lastPlayerScene = .zero
+        lastSampledSimTime = 0
+        dyingMoverIDs.removeAll()
+        wasExitOpen = false
+        trailLayer = SKNode()
+        trailLayer.name = "trails"
+        trailLayer.zPosition = VisualLayer.trails
+        addChild(trailLayer)
+        trails = TrailRenderer(parent: trailLayer)
+        magnetLinks = SKShapeNode()
+        magnetLinks.name = "magnetLinks"
+        magnetLinks.strokeColor = UIColor(red: 1, green: 0.50, blue: 0.72, alpha: 0.55)
+        magnetLinks.lineWidth = 1.1
+        magnetLinks.glowWidth = 0
+        magnetLinks.lineCap = .round
+        magnetLinks.zPosition = VisualLayer.pickups - 0.2
+        addChild(magnetLinks)
         realityBackdrop = SKSpriteNode(
             texture: GlowTextures.candyTimeline,
             size: CGSize(width: size.width * 1.08, height: size.height * 1.08)
@@ -120,15 +142,15 @@ final class GameScene: SKScene {
         frostOverlay = SKSpriteNode(texture: GlowTextures.frostVignette, color: .clear, size: size)
         frostOverlay.position = CGPoint(x: size.width / 2, y: size.height / 2)
         frostOverlay.zPosition = 20
-        frostOverlay.blendMode = .screen
+        frostOverlay.blendMode = .alpha
         frostOverlay.alpha = 0
         frostOverlay.isUserInteractionEnabled = false
         addChild(frostOverlay)
         buildPlayer()
         threatLine = SKShapeNode()
         threatLine.strokeColor = UIColor(red: 1, green: 0.45, blue: 0.6, alpha: 0.85)
-        threatLine.lineWidth = 2
-        threatLine.glowWidth = 3
+        threatLine.lineWidth = 1.6
+        threatLine.glowWidth = 0
         threatLine.lineCap = .round
         threatLine.zPosition = 8
         addChild(threatLine)
@@ -145,17 +167,24 @@ final class GameScene: SKScene {
         let dt = currentTime - lastTime
         lastTime = currentTime
 
+        syncPauseClock()
         switch session.phase {
         case .paused, .dead, .won:
+            stopMotionEmitters()
             return
         case .replaying:
+            stopMotionEmitters()
             _ = session.advanceReplay(dt: dt)
             renderReplay()
+            sampleTrails(clock: session.replaySnapshots.indices.contains(session.replayIndex)
+                ? session.replaySnapshots[session.replayIndex].time
+                : session.sim.time)
             return
         case .ballet:
+            stopMotionEmitters()
             _ = session.advanceBallet(dt: dt)
             renderBallet()
-            dropTrails(dt: dt)
+            sampleTrails(clock: session.balletPlaybackTime)
             return
         case .playing:
             break
@@ -182,17 +211,29 @@ final class GameScene: SKScene {
         sparkNodes.values.forEach { $0.speed = spinning }
         bonusNodes.values.forEach { $0.speed = spinning }
         moverNodes.values.forEach { $0.speed = spinning }
-        echoNodes.forEach { $0.speed = spinning }
+        echoNodes.forEach { $0.speed = 1 }
         riftNodes.values.forEach { $0.speed = spinning }
         laserNodes.values.forEach { $0.speed = spinning }
         syncNodes()
         drawSpawnBeacon()
         if live {
-            dropTrails(dt: dt)
-            dropAsteroidTrails(dt: dt)
             drawThreat()
             updateSparkTimers()
             pulsePlayer()
+            sampleTrails(clock: session.sim.time)
+            syncMagnetLinks()
+        }
+    }
+
+    private func syncPauseClock() {
+        let halt: Bool
+        switch session.phase {
+        case .playing: halt = false
+        case .ballet: halt = false
+        default: halt = true
+        }
+        for child in children {
+            child.isPaused = halt
         }
     }
 
@@ -214,21 +255,10 @@ final class GameScene: SKScene {
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         session.inputTarget = nil
-        highlightPlayerLocator()
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         session.inputTarget = nil
-        highlightPlayerLocator()
-    }
-
-    private func highlightPlayerLocator() {
-        playerNode?.childNode(withName: "playerLocator")?
-            .childNode(withName: "pointer")?
-            .run(.sequence([
-                .scale(to: 1.48, duration: 0.14),
-                .scale(to: 1, duration: 0.34),
-            ]), withKey: "releasePulse")
     }
 
     func rebuild() {
@@ -277,11 +307,6 @@ final class GameScene: SKScene {
         case .surge:
             burst(at: position, color: color)
             speedStreaks(at: point, color: color)
-            electricArcBurst(
-                at: point,
-                color: UIColor(red: 0.35, green: 0.80, blue: 1, alpha: 1),
-                count: 9
-            )
         case .pulse:
             timelineWaves(at: point, color: color, count: 3)
         case .magnet:
@@ -357,36 +382,69 @@ final class GameScene: SKScene {
         let tint = Self.color(for: material)
         if let root = moverNodes[id] {
             root.removeAction(forKey: "impact")
-            root.run(.sequence([
-                .scale(to: 1.11, duration: 0.055),
-                .scale(to: 0.96, duration: 0.075),
+            let squash = SKAction.sequence([
+                .group([
+                    .scaleX(to: 1.16, duration: 0.05),
+                    .scaleY(to: 0.82, duration: 0.05),
+                ]),
+                .group([
+                    .scaleX(to: 0.88, duration: 0.07),
+                    .scaleY(to: 1.10, duration: 0.07),
+                ]),
                 .scale(to: 1, duration: 0.12),
-            ]), withKey: "impact")
+            ])
+            squash.timingMode = .easeOut
+            root.run(squash, withKey: "impact")
+            if let cracks = root.childNode(withName: "cracks") as? SKShapeNode {
+                cracks.removeAction(forKey: "flash")
+                cracks.run(.sequence([
+                    .fadeAlpha(to: 1, duration: 0.04),
+                    .fadeAlpha(to: max(cracks.alpha, 0.35), duration: 0.28),
+                ]), withKey: "flash")
+            }
+            if let chips = root.childNode(withName: "chips") {
+                chips.removeAction(forKey: "pop")
+                chips.run(.sequence([
+                    .fadeAlpha(to: 0.9, duration: 0.05),
+                    .fadeAlpha(to: max(chips.alpha, 0.22), duration: 0.32),
+                ]), withKey: "pop")
+            }
         }
-        asteroidFragments(at: point, color: tint, count: material == .alloy ? 4 : 6, distance: 28)
-        shockwave(at: point, color: tint, start: 7, end: 34)
+        asteroidFragments(at: point, color: tint, count: material == .alloy ? 8 : 12, distance: 42)
+        asteroidDust(at: point, color: tint, count: 10)
+        shockwave(at: point, color: tint, start: 8, end: 46)
     }
 
     func asteroidShatter(id: Int, material: AsteroidMaterial, at position: Vec2) {
         let point = scenePoint(position)
         let tint = Self.color(for: material)
-        if let root = moverNodes.removeValue(forKey: id) {
+        dyingMoverIDs.insert(id)
+        if let root = moverNodes[id] {
             root.removeAllActions()
             root.speed = 1
             root.run(.sequence([
                 .group([
-                    .scale(to: 1.28, duration: 0.12),
-                    .fadeAlpha(to: 0.2, duration: 0.12),
+                    .scale(to: 1.36, duration: 0.1),
+                    .fadeAlpha(to: 0.18, duration: 0.1),
                 ]),
                 .group([
-                    .scale(to: 0.18, duration: 0.24),
-                    .fadeOut(withDuration: 0.24),
+                    .scale(to: 0.12, duration: 0.28),
+                    .fadeOut(withDuration: 0.28),
                 ]),
-                .removeFromParent(),
+                .run { [weak self] in
+                    self?.dyingMoverIDs.remove(id)
+                    self?.moverNodes.removeValue(forKey: id)?.removeFromParent()
+                },
             ]))
+        } else {
+            dyingMoverIDs.remove(id)
         }
-        asteroidFragments(at: point, color: tint, count: 16, distance: 72)
-        shockwave(at: point, color: tint, start: 10, end: 78)
+        asteroidFragments(at: point, color: tint, count: 28, distance: 126)
+        asteroidDust(at: point, color: tint, count: 16)
+        shockwave(at: point, color: tint, start: 12, end: 96)
+        radialShards(at: point, color: tint, count: 14)
+        screenFlash(color: tint, alpha: 0.12)
+        burst(at: position, color: tint)
     }
 
     func realityShift(kind: RiftKind, at position: Vec2) {
@@ -435,7 +493,7 @@ final class GameScene: SKScene {
         border.position = CGPoint(x: w / 2, y: h / 2)
         border.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.40)
         border.lineWidth = 2
-        border.glowWidth = 8
+        border.glowWidth = 0
         border.fillColor = .clear
         border.zPosition = 1
         addChild(border)
@@ -446,34 +504,48 @@ final class GameScene: SKScene {
                 fillPath.addRect(mapped(wall))
             }
             let fill = SKShapeNode(path: fillPath)
-            fill.fillColor = theme.wallFill.uiColor.withAlphaComponent(0.97)
+            fill.fillColor = theme.wallFill.uiColor.withAlphaComponent(0.42)
             fill.strokeColor = .clear
             fill.zPosition = 2
             addChild(fill)
 
-            // Texture each connected island as one path. A single path for the
-            // entire arena stretches a few atlas pixels over distant islands;
-            // per-rectangle paths create visible seams where pieces touch.
             if let material = GlowTextures.wall(for: theme, levelNumber: session.level.number) {
-                for componentPath in wallTextureComponentPaths(session.level.walls) {
-                    let textureFill = SKShapeNode(path: componentPath)
-                    textureFill.fillTexture = material
-                    textureFill.fillColor = .white
-                    textureFill.alpha = theme == .ice ? 0.48 : 0.66
-                    textureFill.strokeColor = .clear
-                    textureFill.zPosition = 2.01
-                    addChild(textureFill)
+                for wall in session.level.walls {
+                    let rect = mapped(wall)
+                    addChild(roundedMaterialPanel(texture: material, rect: rect, zPosition: 2.02))
+                    let radius = wallCornerRadius(rect)
+                    let bevel = SKShapeNode(rectOf: rect.size, cornerRadius: radius)
+                    bevel.position = CGPoint(x: rect.midX, y: rect.midY)
+                    bevel.fillColor = UIColor.white.withAlphaComponent(0.05)
+                    bevel.strokeColor = UIColor.white.withAlphaComponent(0.22)
+                    bevel.lineWidth = 1.15
+                    bevel.glowWidth = 2
+                    bevel.zPosition = 2.03
+                    addChild(bevel)
                 }
             }
 
-            // Stroke only the union's exposed boundary. Drawing each rectangle separately
-            // leaves bright seams wherever two wall pieces meet.
             let boundaryPath = wallBoundaryPath(session.level.walls)
+            let energy = SKShapeNode(path: boundaryPath)
+            energy.fillColor = .clear
+            energy.strokeColor = theme.wallStroke.uiColor
+            energy.lineWidth = 2.4
+            energy.glowWidth = 0
+            energy.lineCap = .round
+            energy.lineJoin = .round
+            energy.zPosition = 2.06
+            energy.alpha = 0.52
+            energy.run(.repeatForever(.sequence([
+                .fadeAlpha(to: 0.84, duration: 1.15),
+                .fadeAlpha(to: 0.34, duration: 1.15),
+            ])))
+            addChild(energy)
+
             let glow = SKShapeNode(path: boundaryPath)
             glow.fillColor = .clear
             glow.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.30)
             glow.lineWidth = 5
-            glow.glowWidth = 9
+            glow.glowWidth = 0
             glow.lineCap = .round
             glow.lineJoin = .round
             glow.zPosition = 2.05
@@ -481,8 +553,8 @@ final class GameScene: SKScene {
 
             let edge = SKShapeNode(path: boundaryPath)
             edge.fillColor = .clear
-            edge.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.74)
-            edge.lineWidth = 1.5
+            edge.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.88)
+            edge.lineWidth = 1.6
             edge.lineCap = .round
             edge.lineJoin = .round
             edge.zPosition = 2.1
@@ -562,27 +634,26 @@ final class GameScene: SKScene {
             ])))
             ambienceNode.addChild(mote)
         }
-        let ambientRockMaterial: AsteroidMaterial = switch theme {
-        case .ice: .ice
-        case .void, .ion: .alloy
-        case .ember, .moss, .dust: .basalt
-        }
         for index in 0..<rockCount {
-            let rock = SKSpriteNode(texture: GlowTextures.asteroid(
-                for: ambientRockMaterial,
-                variation: AsteroidMaterial.appearanceSeed(levelNumber: session.level.number, rockID: index)
-            ))
-            let s = CGFloat.random(in: 18...34)
-            rock.size = CGSize(width: s, height: s)
-            rock.color = tint
-            rock.colorBlendFactor = 0.12
+            let s = CGFloat.random(in: 10...18)
+            let rock = Self.asteroidShape(
+                radius: s,
+                seed: session.level.number * 17 + index,
+                sides: 6 + index % 3,
+                jaggedness: 0.24
+            )
+            rock.fillColor = tint.withAlphaComponent(0.18)
+            rock.strokeColor = tint.withAlphaComponent(0.28)
+            rock.lineWidth = 0.8
             rock.alpha = 0.22
             rock.position = CGPoint(
                 x: CGFloat.random(in: 0...size.width),
                 y: CGFloat.random(in: 0...size.height)
             )
             rock.zPosition = 1.2
-            rock.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: TimeInterval.random(in: 14...28))))
+            if index.isMultiple(of: 2) {
+                rock.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: TimeInterval.random(in: 14...28))))
+            }
             rock.run(.repeatForever(.sequence([
                 .moveBy(x: CGFloat.random(in: -80...80), y: CGFloat.random(in: 40...120), duration: TimeInterval.random(in: 9...16)),
                 .moveBy(x: CGFloat.random(in: -80...80), y: CGFloat.random(in: -60...40), duration: TimeInterval.random(in: 9...16)),
@@ -612,7 +683,7 @@ final class GameScene: SKScene {
                 plate.fillColor = tint.withAlphaComponent(0.045)
                 plate.strokeColor = tint.withAlphaComponent(0.34)
                 plate.lineWidth = 1.2
-                plate.glowWidth = 3
+                plate.glowWidth = 0
 
                 let dial = SKShapeNode(path: Self.segmentedCirclePath(radius: r * 0.66, segments: 6, coverage: 0.56))
                 dial.fillColor = .clear
@@ -624,7 +695,7 @@ final class GameScene: SKScene {
                 let core = SKShapeNode(circleOfRadius: max(2.5, r * 0.10))
                 core.fillColor = tint.withAlphaComponent(0.72)
                 core.strokeColor = .clear
-                core.glowWidth = 4
+                core.glowWidth = 0
 
                 root.addChild(bloom)
                 root.addChild(plate)
@@ -665,7 +736,7 @@ final class GameScene: SKScene {
                     ring.fillColor = .clear
                     ring.strokeColor = tint.withAlphaComponent(index == 2 ? 0.36 : 0.23)
                     ring.lineWidth = index == 2 ? 1.7 : 1.1
-                    ring.glowWidth = index == 2 ? 3 : 1
+                    ring.glowWidth = 0
                     let direction: CGFloat = index.isMultiple(of: 2) ? 1 : -1
                     ring.run(.repeatForever(.rotate(byAngle: direction * .pi * 2, duration: 22 + Double(index) * 7)))
                     root.addChild(ring)
@@ -690,7 +761,7 @@ final class GameScene: SKScene {
                 let line = SKShapeNode(path: linePath)
                 line.strokeColor = tint.withAlphaComponent(0.13)
                 line.lineWidth = 1.2
-                line.glowWidth = 3
+                line.glowWidth = 0
 
                 let arrowPath = CGMutablePath()
                 for index in 1...max(1, chevrons) {
@@ -726,7 +797,7 @@ final class GameScene: SKScene {
                 outer.fillColor = .clear
                 outer.strokeColor = tint.withAlphaComponent(0.34)
                 outer.lineWidth = 2
-                outer.glowWidth = 3
+                outer.glowWidth = 0
                 outer.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: 19)))
 
                 let inner = SKShapeNode(path: Self.segmentedCirclePath(radius: r * 0.78, segments: max(4, segments / 2), coverage: 0.30))
@@ -748,15 +819,15 @@ final class GameScene: SKScene {
         root.position = scenePoint(session.level.exit)
         let r = CGFloat(session.sim.config.exitRadius) * worldScale
         let outer = SKShapeNode(circleOfRadius: r)
-        outer.strokeColor = UIColor.white.withAlphaComponent(0.2)
+        outer.strokeColor = UIColor.white.withAlphaComponent(0.22)
         outer.lineWidth = 2
-        outer.glowWidth = 4
-        outer.fillColor = UIColor(red: 0.2, green: 0.55, blue: 1, alpha: 0.08)
+        outer.glowWidth = 0
+        outer.fillColor = UIColor(white: 0.04, alpha: 0.55)
         outer.name = "outer"
         let spin = SKShapeNode(circleOfRadius: r * 0.72)
         spin.strokeColor = UIColor(red: 0.45, green: 0.85, blue: 1, alpha: 0.45)
-        spin.lineWidth = 2
-        spin.glowWidth = 6
+        spin.lineWidth = 1.6
+        spin.glowWidth = 0
         spin.fillColor = .clear
         spin.name = "spin"
         spin.run(.repeatForever(.rotate(byAngle: .pi, duration: 6)))
@@ -784,48 +855,45 @@ final class GameScene: SKScene {
             root.zPosition = 5
             root.name = "spark-\(spark.id)"
 
-            let glow = SKSpriteNode(texture: GlowTextures.blob)
-            glow.size = CGSize(width: 48, height: 48)
+            let timed = spark.timerDuration != nil
+            let gold = UIColor(red: 1, green: 0.84, blue: 0.38, alpha: 1)
+
+            let glow = SKSpriteNode(texture: GlowTextures.glowMask)
+            glow.size = CGSize(width: 34, height: 34)
             glow.blendMode = .add
-            glow.alpha = 0.45
+            glow.alpha = VisualStyle.glowAlpha
+            glow.color = timed ? gold : VisualPalette.spark
+            glow.colorBlendFactor = 1
             glow.name = "glow"
 
-            let gem = SKSpriteNode(texture: GlowTextures.spark)
-            gem.size = CGSize(width: 42, height: 42)
+            let gem = SKShapeNode(circleOfRadius: 7)
+            gem.fillColor = timed ? gold : VisualPalette.spark
+            gem.strokeColor = .white
+            gem.lineWidth = 1.1
+            gem.glowWidth = 0
             gem.name = "gem"
-            gem.run(.repeatForever(.rotate(byAngle: .pi, duration: 7)))
-            gem.run(.repeatForever(.sequence([
-                .scale(to: 1.12, duration: 0.55),
-                .scale(to: 0.9, duration: 0.55),
-            ])))
-
-            let ring = SKShapeNode(circleOfRadius: 30)
-            ring.strokeColor = UIColor(red: 0.45, green: 0.9, blue: 1, alpha: 0.7)
-            ring.lineWidth = 3
-            ring.glowWidth = 5
-            ring.fillColor = .clear
-            ring.name = "timer"
-            ring.zRotation = -.pi / 2
-
-            let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
-            label.fontSize = 13
-            label.fontColor = UIColor(red: 1, green: 0.85, blue: 0.4, alpha: 1)
-            label.verticalAlignmentMode = .center
-            label.position = CGPoint(x: 0, y: -42)
-            label.name = "timerLabel"
-
-            let reward = SKLabelNode(fontNamed: "AvenirNext-DemiBold")
-            reward.fontSize = 9
-            reward.fontColor = UIColor(red: 0.65, green: 0.9, blue: 1, alpha: 0.9)
-            reward.verticalAlignmentMode = .center
-            reward.position = CGPoint(x: 0, y: 41)
-            reward.name = "timerReward"
 
             root.addChild(glow)
             root.addChild(gem)
-            root.addChild(ring)
-            root.addChild(label)
-            root.addChild(reward)
+
+            if timed {
+                let arc = SKShapeNode()
+                arc.strokeColor = gold
+                arc.lineWidth = 2
+                arc.glowWidth = 0
+                arc.lineCap = .round
+                arc.fillColor = .clear
+                arc.zRotation = .pi / 2
+                arc.name = "timer"
+                root.addChild(arc)
+                let reward = fieldCaption("BONUS", color: gold, y: 20)
+                reward.name = "timerReward"
+                let label = fieldCaption("", color: gold, y: -20)
+                label.fontSize = 10
+                label.name = "timerLabel"
+                root.addChild(reward)
+                root.addChild(label)
+            }
             addChild(root)
             sparkNodes[spark.id] = root
         }
@@ -837,8 +905,8 @@ final class GameScene: SKScene {
             let node = SKShapeNode(rect: rect, cornerRadius: 18)
             node.fillColor = UIColor(red: 0.35, green: 0.55, blue: 1, alpha: 0.14)
             node.strokeColor = UIColor(red: 0.45, green: 0.7, blue: 1, alpha: 0.45)
-            node.lineWidth = 1.5
-            node.glowWidth = 4
+            node.lineWidth = 1.2
+            node.glowWidth = 0
             node.zPosition = 2.4
             node.run(.repeatForever(.sequence([
                 .fadeAlpha(to: 0.35, duration: 1.2),
@@ -846,9 +914,7 @@ final class GameScene: SKScene {
             ])))
             addChild(node)
             if let texture = GlowTextures.slowField {
-                let membrane = SKSpriteNode(texture: texture, size: rect.size)
-                membrane.position = CGPoint(x: rect.midX, y: rect.midY)
-                membrane.zPosition = 2.42
+                let membrane = roundedMaterialPanel(texture: texture, rect: rect, zPosition: 2.42, name: "field")
                 membrane.alpha = 0.24
                 membrane.run(.repeatForever(.sequence([
                     .fadeAlpha(to: 0.12, duration: 1.3),
@@ -866,20 +932,22 @@ final class GameScene: SKScene {
             root.zPosition = 7
             let aura = bonusAura(for: bonus.kind)
             let glow = SKSpriteNode(texture: GlowTextures.blob)
-            glow.size = CGSize(width: 32, height: 32)
+            glow.size = CGSize(width: 38, height: 38)
             glow.blendMode = .add
             glow.color = Self.color(for: bonus.kind)
             glow.colorBlendFactor = 0.7
-            glow.alpha = 0.4
+            glow.alpha = 0.46
             let gem = SKSpriteNode(texture: GlowTextures.bonus(bonus.kind))
-            gem.size = CGSize(width: 36, height: 36)
+            gem.size = CGSize(width: 40, height: 40)
             gem.run(.repeatForever(.sequence([
-                .scale(to: 1.12, duration: 0.55),
-                .scale(to: 0.92, duration: 0.55),
+                .scale(to: 1.08, duration: 0.55),
+                .scale(to: 0.94, duration: 0.55),
             ])))
+            let caption = fieldCaption(bonus.kind.fieldLabel, color: Self.color(for: bonus.kind), y: 30)
             root.addChild(aura)
             root.addChild(glow)
             root.addChild(gem)
+            root.addChild(caption)
             addChild(root)
             bonusNodes[bonus.id] = root
         }
@@ -896,7 +964,7 @@ final class GameScene: SKScene {
             ring.strokeColor = tint.withAlphaComponent(0.72)
             ring.fillColor = tint.withAlphaComponent(0.025)
             ring.lineWidth = 1.5
-            ring.glowWidth = 5
+            ring.glowWidth = 0
             ring.alpha = 0
             root.addChild(ring)
             ring.run(.repeatForever(.sequence([
@@ -914,7 +982,7 @@ final class GameScene: SKScene {
             field.fillColor = tint.withAlphaComponent(0.055)
             field.strokeColor = tint.withAlphaComponent(0.24)
             field.lineWidth = 1
-            field.glowWidth = 7
+            field.glowWidth = 0
             root.addChild(field)
             for index in 0..<6 {
                 let snow = SKSpriteNode(texture: GlowTextures.snowflakeParticle)
@@ -930,27 +998,55 @@ final class GameScene: SKScene {
             addPulse(radius: 32, delay: 0)
 
         case .surge:
-            let electricity = UIColor(red: 0.34, green: 0.80, blue: 1, alpha: 1)
-            for index in 0..<7 {
-                let angle = CGFloat(index) / 7 * .pi * 2 + sin(CGFloat(index) * 2.31) * 0.34
-                root.addChild(lightningBoltNode(
-                    angle: angle,
-                    inner: 17,
-                    outer: 49 + CGFloat(index % 3) * 5,
-                    baseSeed: index + 11,
-                    color: electricity,
-                    delay: Double(index) * 0.031,
-                    persistent: true
-                ))
+            for index in 0..<3 {
+                let path = CGMutablePath()
+                let y = CGFloat(-10 + index * 7)
+                path.move(to: CGPoint(x: -10, y: y))
+                path.addLine(to: CGPoint(x: 0, y: y + 8))
+                path.addLine(to: CGPoint(x: 10, y: y))
+                let chevron = SKShapeNode(path: path)
+                chevron.strokeColor = tint.withAlphaComponent(0.88)
+                chevron.lineWidth = 2.1
+                chevron.lineCap = .round
+                chevron.lineJoin = .round
+                chevron.glowWidth = 0
+                chevron.position = CGPoint(x: 0, y: CGFloat(index) * 3)
+                root.addChild(chevron)
+                chevron.run(.repeatForever(.sequence([
+                    .group([
+                        .moveBy(x: 0, y: 8, duration: 0.42),
+                        .fadeAlpha(to: 0.18, duration: 0.42),
+                    ]),
+                    .group([
+                        .moveBy(x: 0, y: -8, duration: 0),
+                        .fadeAlpha(to: 0.92, duration: 0),
+                    ]),
+                ])))
             }
 
         case .shield, .ward:
-            root.addChild(shieldBubbleNode(color: tint, radius: 45, layers: 1, animated: true))
+            let bloom = SKSpriteNode(texture: GlowTextures.blob)
+            bloom.size = CGSize(width: 54, height: 54)
+            bloom.blendMode = .add
+            bloom.color = tint
+            bloom.colorBlendFactor = 0.8
+            bloom.alpha = 0.28
+            bloom.run(.repeatForever(.sequence([
+                .fadeAlpha(to: 0.42, duration: 0.7),
+                .fadeAlpha(to: 0.22, duration: 0.7),
+            ])))
+            root.addChild(bloom)
 
         case .pulse:
-            addPulse(radius: 24, delay: 0, scale: 2.15)
-            addPulse(radius: 24, delay: 0.62, scale: 2.15)
-            addPulse(radius: 24, delay: 1.24, scale: 2.15)
+            let hand = SKShapeNode(rectOf: CGSize(width: 1.8, height: 15), cornerRadius: 0.9)
+            hand.fillColor = tint
+            hand.strokeColor = .clear
+            hand.glowWidth = 0
+            hand.position = CGPoint(x: 0, y: 7)
+            let pivot = SKNode()
+            pivot.addChild(hand)
+            pivot.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: 2.2)))
+            root.addChild(pivot)
 
         case .magnet:
             root.addChild(magneticFieldAura(tint: tint, radius: 52, particleCount: 4))
@@ -960,7 +1056,7 @@ final class GameScene: SKScene {
                 let ghost = SKShapeNode(circleOfRadius: CGFloat(10 + index * 7))
                 ghost.strokeColor = tint.withAlphaComponent(0.65 - CGFloat(index) * 0.10)
                 ghost.lineWidth = 1.5
-                ghost.glowWidth = 4
+                ghost.glowWidth = 0
                 ghost.position = CGPoint(x: CGFloat(index - 2) * 7, y: 0)
                 root.addChild(ghost)
             }
@@ -971,7 +1067,7 @@ final class GameScene: SKScene {
             let clock = SKShapeNode(path: Self.segmentedCirclePath(radius: 43, segments: 12, coverage: 0.32))
             clock.strokeColor = tint.withAlphaComponent(0.75)
             clock.lineWidth = 2
-            clock.glowWidth = 4
+            clock.glowWidth = 0
             root.addChild(clock)
             clock.run(.repeatForever(.rotate(byAngle: kind == .anchor ? -.pi / 2 : .pi * 2, duration: kind == .anchor ? 4.2 : 7)))
 
@@ -979,7 +1075,7 @@ final class GameScene: SKScene {
             let crown = SKShapeNode(path: Self.segmentedCirclePath(radius: 47, segments: 16, coverage: 0.34))
             crown.strokeColor = tint.withAlphaComponent(0.85)
             crown.lineWidth = 2.4
-            crown.glowWidth = 6
+            crown.glowWidth = 0
             root.addChild(crown)
             crown.run(.repeatForever(.sequence([.scale(to: 1.12, duration: 0.55), .scale(to: 0.92, duration: 0.55)])))
             addPulse(radius: 30, delay: 0.3, scale: 1.9)
@@ -989,7 +1085,7 @@ final class GameScene: SKScene {
             triangle.strokeColor = tint.withAlphaComponent(0.90)
             triangle.fillColor = tint.withAlphaComponent(0.045)
             triangle.lineWidth = 2
-            triangle.glowWidth = 7
+            triangle.glowWidth = 0
             root.addChild(triangle)
             let hex = SKShapeNode(path: Self.polygonPath(radius: 36, sides: 6))
             hex.strokeColor = UIColor.white.withAlphaComponent(0.62)
@@ -1008,47 +1104,52 @@ final class GameScene: SKScene {
 
     private func addMoverNode(for mover: MoverState) {
         guard moverNodes[mover.id] == nil else { return }
+        let look = asteroidAppearance(for: mover)
+        let minimumDiameter: CGFloat = mover.radius < 28 ? 54 : 74
+        let visualScale: CGFloat = mover.radius >= 72 ? 2.25 : 3.45
+        let diameter = max(minimumDiameter, CGFloat(mover.radius) * worldScale * visualScale)
+        let tint = Self.color(for: mover.material)
+        let secondary = Self.secondaryColor(for: mover.material)
         let root = SKNode()
         root.zPosition = 10
         root.position = scenePoint(mover.position)
         root.name = "asteroid-\(mover.id)"
-
-        let minimumDiameter: CGFloat = mover.radius < 28 ? 40 : 58
-        let visualScale: CGFloat = mover.radius >= 72 ? 1.8 : 2.75
-        let diameter = max(minimumDiameter, CGFloat(mover.radius) * worldScale * visualScale)
-        let tint = Self.color(for: mover.material)
-        let secondary = Self.secondaryColor(for: mover.material)
-        let variation = AsteroidMaterial.appearanceSeed(levelNumber: session.level.number, rockID: mover.id)
+        root.userData = ["diameter": NSNumber(value: Double(diameter))]
 
         let glow = SKSpriteNode(texture: GlowTextures.blob)
-        let glowSize = diameter * 1.48
-        glow.size = CGSize(width: glowSize, height: glowSize)
+        glow.size = CGSize(width: diameter * 1.12, height: diameter * 1.12)
         glow.blendMode = .add
         glow.color = tint
-        glow.colorBlendFactor = 0.86
-        glow.alpha = mover.material == .alloy ? 0.20 : 0.33
+        glow.colorBlendFactor = 0.7
+        glow.alpha = mover.material == .crystal ? 0.20 : 0.12
         glow.name = "glow"
         glow.run(.repeatForever(.sequence([
-            .fadeAlpha(to: mover.material == .crystal ? 0.48 : 0.38, duration: 0.75),
-            .fadeAlpha(to: mover.material == .alloy ? 0.17 : 0.27, duration: 0.92),
+            .fadeAlpha(to: glow.alpha + 0.10, duration: 0.8),
+            .fadeAlpha(to: glow.alpha, duration: 0.9),
         ])))
 
-        let rock = SKSpriteNode(texture: GlowTextures.asteroid(
-            for: mover.material,
-            variation: variation
-        ))
-        rock.size = CGSize(width: diameter * 1.12, height: diameter * 1.12)
-        rock.color = tint
-        rock.colorBlendFactor = 0.05
-        rock.name = "rock"
-        let spinDuration: TimeInterval = switch mover.material {
-        case .basalt: 8.8
-        case .ice: 6.2
-        case .crystal: 5.0
-        case .alloy: 10.5
-        }
-        rock.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: spinDuration)))
-
+        let body = SKNode()
+        body.name = "rock"
+        let silhouette = Self.asteroidShape(
+            radius: diameter * 0.5,
+            seed: mover.id + session.level.number * 9,
+            sides: look.sides,
+            jaggedness: look.jaggedness
+        )
+        silhouette.fillColor = Self.rockBodyColor(for: mover.material)
+        silhouette.strokeColor = secondary.withAlphaComponent(0.38)
+        silhouette.lineWidth = 1.15
+        silhouette.glowWidth = mover.material == .crystal ? 2.2 : 0.6
+        silhouette.lineJoin = .round
+        let core = Self.asteroidShape(
+            radius: diameter * 0.26,
+            seed: mover.id * 5 + 3,
+            sides: max(5, look.sides - 2),
+            jaggedness: look.jaggedness * 0.7
+        )
+        core.fillColor = UIColor(white: 0.08, alpha: 0.55)
+        core.strokeColor = .clear
+        core.position = CGPoint(x: diameter * 0.04, y: -diameter * 0.03)
         let surface = SKShapeNode(
             path: Self.asteroidMaterialPath(
                 material: mover.material,
@@ -1056,19 +1157,45 @@ final class GameScene: SKScene {
                 seed: mover.id + session.level.number * 11
             )
         )
-        surface.name = "surface"
         surface.fillColor = .clear
-        surface.strokeColor = secondary.withAlphaComponent(0.28)
-        surface.lineWidth = mover.material == .alloy ? 1.8 : 1.35
-        surface.glowWidth = mover.material == .crystal ? 4 : 1
-        surface.run(.repeatForever(.rotate(
-            byAngle: mover.material == .ice ? -.pi * 2 : .pi * 2,
-            duration: mover.material == .crystal ? 7.2 : 12.0
-        )))
+        surface.strokeColor = secondary.withAlphaComponent(mover.material == .ice ? 0.28 : 0.36)
+        surface.lineWidth = mover.material == .alloy ? 1.4 : 1.05
+        surface.glowWidth = mover.material == .crystal ? 2.2 : 0
+        body.addChild(silhouette)
+        body.addChild(core)
+        body.addChild(surface)
+        if look.embers {
+            for index in 0..<5 {
+                let ember = SKSpriteNode(texture: GlowTextures.blob)
+                let angle = CGFloat(index) / 5 * .pi * 2
+                ember.size = CGSize(width: 7, height: 7)
+                ember.position = CGPoint(x: cos(angle) * diameter * 0.28, y: sin(angle) * diameter * 0.28)
+                ember.blendMode = .add
+                ember.color = UIColor(red: 1, green: 0.45, blue: 0.18, alpha: 1)
+                ember.colorBlendFactor = 0.9
+                ember.alpha = 0.42
+                ember.run(.repeatForever(.sequence([
+                    .fadeAlpha(to: 0.72, duration: 0.28 + TimeInterval(index) * 0.05),
+                    .fadeAlpha(to: 0.18, duration: 0.34),
+                ])))
+                body.addChild(ember)
+            }
+        }
+        if look.spins {
+            body.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: look.spinDuration)))
+        }
+
+        let sheen = SKSpriteNode(texture: GlowTextures.blob)
+        sheen.size = CGSize(width: diameter * 0.34, height: diameter * 0.24)
+        sheen.position = CGPoint(x: -diameter * 0.14, y: diameter * 0.16)
+        sheen.blendMode = .add
+        sheen.alpha = 0.22
+        sheen.zPosition = 2
+        sheen.name = "rockSheen"
 
         let cracks = SKShapeNode(
             path: Self.asteroidCrackPath(
-                radius: diameter * 0.38,
+                radius: diameter * 0.42,
                 seed: mover.id + session.level.number * 17
             )
         )
@@ -1076,41 +1203,96 @@ final class GameScene: SKScene {
         cracks.fillColor = .clear
         cracks.strokeColor = UIColor.white.withAlphaComponent(0.96)
         cracks.lineWidth = 1.7
-        cracks.glowWidth = 3
+        cracks.glowWidth = 0
         cracks.alpha = 0
+        cracks.zPosition = 3
 
         let chips = SKNode()
         chips.name = "chips"
         chips.alpha = 0
+        chips.zPosition = 3
         for index in 0..<6 {
             let angle = CGFloat(index) / 6 * .pi * 2 + CGFloat(mover.id) * 0.21
-            let chip = SKShapeNode(path: Self.polygonPath(radius: 2.5 + CGFloat(index % 2), sides: 4))
-            chip.position = CGPoint(x: cos(angle) * diameter * 0.43, y: sin(angle) * diameter * 0.43)
+            let chip = SKShapeNode(path: Self.polygonPath(radius: 2.4 + CGFloat(index % 2), sides: 4))
+            chip.position = CGPoint(x: cos(angle) * diameter * 0.40, y: sin(angle) * diameter * 0.40)
             chip.fillColor = index.isMultiple(of: 2) ? tint : secondary
             chip.strokeColor = .clear
             chip.glowWidth = 2
             chips.addChild(chip)
         }
-        chips.run(.repeatForever(.rotate(byAngle: -.pi * 2, duration: 6.4)))
 
         root.addChild(glow)
-        if mover.material == .alloy && variation % 3 == 1 {
-            // One obsidian appearance gets the ring silhouette from the source sheets.
-            let orbitRing = SKShapeNode(ellipseOf: CGSize(width: diameter * 1.52, height: diameter * 0.38))
-            orbitRing.strokeColor = secondary.withAlphaComponent(0.58)
-            orbitRing.fillColor = .clear
-            orbitRing.lineWidth = 1.5
-            orbitRing.glowWidth = 3
-            orbitRing.zRotation = -.pi / 8
-            orbitRing.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: 14)))
-            root.addChild(orbitRing)
-        }
-        root.addChild(rock)
-        root.addChild(surface)
+        root.addChild(body)
+        root.addChild(sheen)
         root.addChild(cracks)
         root.addChild(chips)
+        root.addChild(makeMotionEmitter(color: tint, emphasis: 3.2))
         addChild(root)
         moverNodes[mover.id] = root
+    }
+
+    private struct AsteroidAppearance {
+        var variant: Int
+        var spins: Bool
+        var spinDuration: TimeInterval
+        var sides: Int
+        var jaggedness: CGFloat
+        var hasRing: Bool
+        var embers: Bool
+    }
+
+    private func asteroidAppearance(for mover: MoverState) -> AsteroidAppearance {
+        let seed = AsteroidMaterial.appearanceSeed(levelNumber: session.level.number, rockID: mover.id)
+        let lockedPath = {
+            if case .stationary = mover.path { return true }
+            return false
+        }()
+        switch mover.material {
+        case .basalt:
+            let variant = ((seed % 5) + 5) % 5
+            return AsteroidAppearance(
+                variant: variant,
+                spins: !lockedPath && variant != 4,
+                spinDuration: variant == 2 ? 4.6 : 8.8,
+                sides: variant == 2 ? 7 : variant == 4 ? 10 : 8,
+                jaggedness: variant == 2 ? 0.42 : variant == 1 ? 0.34 : 0.26,
+                hasRing: false,
+                embers: variant == 3
+            )
+        case .ice:
+            let variant = seed % 2
+            return AsteroidAppearance(
+                variant: variant,
+                spins: !lockedPath && variant == 0,
+                spinDuration: 6.4,
+                sides: variant == 1 ? 6 : 7,
+                jaggedness: variant == 1 ? 0.18 : 0.30,
+                hasRing: false,
+                embers: false
+            )
+        case .crystal:
+            let variant = seed % 2
+            return AsteroidAppearance(
+                variant: variant,
+                spins: !lockedPath,
+                spinDuration: variant == 0 ? 5.0 : 7.4,
+                sides: 5,
+                jaggedness: 0.16,
+                hasRing: false,
+                embers: false
+            )
+        case .alloy:
+            let variant = seed % 3
+            return AsteroidAppearance(
+                variant: variant,
+                spins: !lockedPath && variant == 0,
+                spinDuration: 11.5,
+                sides: variant == 2 ? 9 : 8,
+                jaggedness: variant == 0 ? 0.12 : 0.22,
+                hasRing: variant == 1,
+                embers: false
+            )
+        }
     }
 
     private func buildGravityWells() {
@@ -1124,7 +1306,7 @@ final class GameScene: SKScene {
             influence.fillColor = UIColor(red: 0.35, green: 0.20, blue: 0.65, alpha: 0.045)
             influence.strokeColor = UIColor(red: 0.45, green: 0.70, blue: 1, alpha: 0.20)
             influence.lineWidth = 1.2
-            influence.glowWidth = 4
+            influence.glowWidth = 0
             influence.run(.repeatForever(.sequence([
                 .scale(to: 0.92, duration: 1.4),
                 .scale(to: 1.04, duration: 1.4),
@@ -1145,7 +1327,7 @@ final class GameScene: SKScene {
                     ? UIColor(red: 1, green: 0.78, blue: 0.35, alpha: 0.86)
                     : UIColor(red: 0.42, green: 0.82, blue: 1, alpha: 0.72)
                 arc.lineWidth = 1.5 + CGFloat(index) * 0.35
-                arc.glowWidth = 5
+                arc.glowWidth = 0
                 arc.xScale = 1.25
                 arc.yScale = 0.58 + CGFloat(index) * 0.08
                 arc.zRotation = CGFloat(index) * 0.72
@@ -1215,10 +1397,22 @@ final class GameScene: SKScene {
             let ring = SKShapeNode(circleOfRadius: CGFloat(rift.radius) * worldScale)
             ring.strokeColor = color
             ring.lineWidth = 2
-            ring.glowWidth = 6
+            ring.glowWidth = 0
             ring.fillColor = color.withAlphaComponent(0.08)
             ring.run(.repeatForever(.rotate(byAngle: .pi, duration: 5)))
             root.addChild(glow)
+
+            let core = SKSpriteNode(texture: GlowTextures.blob)
+            core.size = CGSize(width: s * 0.72, height: s * 0.72)
+            core.blendMode = .add
+            core.color = color
+            core.colorBlendFactor = 0.85
+            core.alpha = 0.55
+            core.run(.repeatForever(.sequence([
+                .scale(to: 1.18, duration: 0.55),
+                .scale(to: 0.82, duration: 0.55),
+            ])))
+            root.addChild(core)
 
             let orbit = SKNode()
             orbit.name = "riftOrbit"
@@ -1232,32 +1426,12 @@ final class GameScene: SKScene {
                 shard.zRotation = angle - .pi / 2
                 shard.fillColor = index.isMultiple(of: 3) ? .white : color
                 shard.strokeColor = .clear
-                shard.glowWidth = 4
+                shard.glowWidth = 0
                 orbit.addChild(shard)
             }
             orbit.run(.repeatForever(.rotate(byAngle: -.pi * 2, duration: rift.kind == .candy ? 3.8 : 5.4)))
             root.addChild(orbit)
 
-            if rift.kind == .warp || rift.kind == .candy {
-                let tear = SKSpriteNode(texture: GlowTextures.dimensionalRift)
-                tear.name = "tear"
-                let tearWidth = max(105, s * 2.15)
-                tear.size = CGSize(width: tearWidth, height: tearWidth * 1.42)
-                tear.color = color
-                tear.colorBlendFactor = rift.kind == .candy ? 0.28 : 0.08
-                tear.blendMode = .add
-                tear.run(.repeatForever(.sequence([
-                    .group([
-                        .rotate(toAngle: 0.08, duration: 0.62, shortestUnitArc: true),
-                        .scaleX(to: 0.94, duration: 0.62),
-                    ]),
-                    .group([
-                        .rotate(toAngle: -0.08, duration: 0.74, shortestUnitArc: true),
-                        .scaleX(to: 1.06, duration: 0.74),
-                    ]),
-                ])))
-                root.addChild(tear)
-            }
             root.addChild(ring)
             addChild(root)
             riftNodes[rift.id] = root
@@ -1268,19 +1442,21 @@ final class GameScene: SKScene {
         let theme = session.level.theme
         for gate in session.sim.gates {
             let rect = mapped(gate.area)
-            let node = SKShapeNode(rect: rect, cornerRadius: 10)
+            let root = SKNode()
+            root.zPosition = 2.6
             if let material = GlowTextures.wall(for: theme, levelNumber: session.level.number) {
-                node.fillTexture = material
-                node.fillColor = .white
-            } else {
-                node.fillColor = theme.wallStroke.uiColor.withAlphaComponent(0.35)
+                let plate = roundedMaterialPanel(texture: material, rect: rect, zPosition: -1, name: "plate")
+                root.addChild(plate)
             }
+            let node = SKShapeNode(rect: rect, cornerRadius: 10)
+            node.fillColor = theme.wallStroke.uiColor.withAlphaComponent(0.12)
             node.strokeColor = theme.wallStroke.uiColor
             node.lineWidth = 1.5
-            node.glowWidth = 5
-            node.zPosition = 2.6
-            addChild(node)
-            gateNodes[gate.id] = node
+            node.glowWidth = 0
+            root.addChild(node)
+            addChild(root)
+            gateNodes[gate.id] = root
+            gateSolidStates[gate.id] = gate.solid
 
             let horizontal = rect.width >= rect.height
             let frameSize = max(23, min(rect.width, rect.height) * 1.05)
@@ -1294,10 +1470,6 @@ final class GameScene: SKScene {
                 frame.size = CGSize(width: frameSize, height: frameSize)
                 frame.zPosition = 2.72
                 frame.alpha = 0.92
-                frame.run(.repeatForever(.sequence([
-                    .scale(to: 1.06, duration: 0.8),
-                    .scale(to: 0.96, duration: 0.8),
-                ])))
                 addChild(frame)
                 return frame
             }
@@ -1316,7 +1488,7 @@ final class GameScene: SKScene {
             aura.strokeColor = UIColor(red: 1, green: 0.16, blue: 0.42, alpha: 1)
             aura.lineWidth = max(6, CGFloat(laser.beamWidth) * worldScale * 2.1)
             aura.lineCap = .round
-            aura.glowWidth = 18
+            aura.glowWidth = 0
             aura.alpha = 0
 
             let warning = SKShapeNode(path: path)
@@ -1324,14 +1496,14 @@ final class GameScene: SKScene {
             warning.strokeColor = UIColor(red: 1, green: 0.32, blue: 0.46, alpha: 1)
             warning.lineWidth = max(2, CGFloat(laser.beamWidth) * worldScale * 0.65)
             warning.lineCap = .round
-            warning.glowWidth = 4
+            warning.glowWidth = 0
 
             let core = SKShapeNode(path: path)
             core.name = "core"
             core.strokeColor = .white
             core.lineWidth = max(2, CGFloat(laser.beamWidth) * worldScale)
             core.lineCap = .round
-            core.glowWidth = 12
+            core.glowWidth = 0
             core.alpha = 0
 
             root.addChild(aura)
@@ -1366,9 +1538,12 @@ final class GameScene: SKScene {
         glow.color = UIColor(red: 1, green: 0.18, blue: 0.46, alpha: 1)
         glow.colorBlendFactor = 0.72
         glow.alpha = 0.44
-        let housing = SKSpriteNode(texture: GlowTextures.hazardEmitter ?? GlowTextures.laserEmitter)
+        let housing = SKShapeNode(circleOfRadius: 11)
         housing.name = "housing"
-        housing.size = CGSize(width: 43, height: 43)
+        housing.fillColor = UIColor(red: 0.18, green: 0.06, blue: 0.14, alpha: 0.92)
+        housing.strokeColor = UIColor(red: 1, green: 0.28, blue: 0.48, alpha: 0.88)
+        housing.lineWidth = 1.6
+        housing.glowWidth = 0
         let lens = SKSpriteNode(texture: GlowTextures.blob)
         lens.size = CGSize(width: 12, height: 12)
         lens.blendMode = .add
@@ -1388,11 +1563,19 @@ final class GameScene: SKScene {
     private func syncGates() {
         for gate in session.sim.gates {
             guard let node = gateNodes[gate.id] else { continue }
+            let changed = gateSolidStates[gate.id] != gate.solid
+            gateSolidStates[gate.id] = gate.solid
             node.alpha = gate.solid ? 0.95 : 0.12
             let texture = gate.solid ? GlowTextures.closedGate : GlowTextures.openGate
             for frame in gateFrames[gate.id] ?? [] {
                 if let texture { frame.texture = texture }
                 frame.alpha = gate.solid ? 0.92 : 0.72
+                if changed {
+                    frame.run(.sequence([
+                        .scale(to: 1.24, duration: 0.08),
+                        .scale(to: 1, duration: 0.24),
+                    ]), withKey: "gateTransition")
+                }
             }
         }
     }
@@ -1506,7 +1689,7 @@ final class GameScene: SKScene {
                 let ring = SKShapeNode(circleOfRadius: CGFloat(scar.radius) * worldScale)
                 ring.strokeColor = UIColor(red: 1, green: 0.45, blue: 0.85, alpha: 1)
                 ring.lineWidth = 2
-                ring.glowWidth = 6
+                ring.glowWidth = 0
                 ring.fillColor = UIColor(red: 0.7, green: 0.2, blue: 0.6, alpha: 0.18)
                 root.addChild(glow)
                 root.addChild(ring)
@@ -1520,43 +1703,7 @@ final class GameScene: SKScene {
     }
 
     private func syncFrostCrown() {
-        let existing = playerNode.childNode(withName: "frost")
-        if session.sim.effects.isFrozen {
-            if existing == nil {
-                let frost = SKNode()
-                frost.name = "frost"
-                frost.zPosition = 2
-                let snowflake = SKSpriteNode(texture: GlowTextures.snowflakeParticle)
-                snowflake.size = CGSize(width: 47, height: 47)
-                snowflake.alpha = 0.78
-                snowflake.blendMode = .add
-                snowflake.run(.repeatForever(.sequence([
-                    .group([.scale(to: 1.10, duration: 0.65), .fadeAlpha(to: 0.92, duration: 0.65)]),
-                    .group([.scale(to: 0.94, duration: 0.70), .fadeAlpha(to: 0.64, duration: 0.70)]),
-                ])))
-                frost.addChild(snowflake)
-
-                let mist = SKEmitterNode()
-                mist.particleTexture = GlowTextures.snowflakeParticle
-                mist.particleBirthRate = 9
-                mist.particleLifetime = 1.5
-                mist.particleLifetimeRange = 0.45
-                mist.particlePositionRange = CGVector(dx: 48, dy: 48)
-                mist.emissionAngleRange = .pi * 2
-                mist.particleSpeed = 9
-                mist.particleSpeedRange = 6
-                mist.particleScale = 0.065
-                mist.particleScaleRange = 0.028
-                mist.particleScaleSpeed = -0.025
-                mist.particleAlpha = 0.62
-                mist.particleAlphaSpeed = -0.38
-                mist.particleBlendMode = .add
-                frost.addChild(mist)
-                playerNode.addChild(frost)
-            }
-        } else {
-            existing?.removeFromParent()
-        }
+        playerNode.childNode(withName: "frost")?.removeFromParent()
     }
 
     private func syncWinterEffect() {
@@ -1564,7 +1711,7 @@ final class GameScene: SKScene {
         if session.sim.effects.isFrozen {
             guard existing == nil else { return }
             frostOverlay.removeAllActions()
-            frostOverlay.run(.fadeAlpha(to: 0.64, duration: 0.22))
+            frostOverlay.run(.fadeAlpha(to: 0.22, duration: 0.22))
 
             let storm = SKNode()
             storm.name = "winterStorm"
@@ -1574,7 +1721,7 @@ final class GameScene: SKScene {
             snow.particleTexture = GlowTextures.snowflakeParticle
             snow.position = CGPoint(x: size.width / 2, y: size.height + 24)
             snow.particlePositionRange = CGVector(dx: size.width * 1.12, dy: 70)
-            snow.particleBirthRate = 12
+            snow.particleBirthRate = 5
             snow.particleLifetime = 7.2
             snow.particleLifetimeRange = 2.0
             snow.emissionAngle = -.pi / 2
@@ -1622,165 +1769,59 @@ final class GameScene: SKScene {
     }
 
     private func syncShieldBubble() {
-        let charges = session.sim.effects.shieldCharges
-        let existing = playerNode.childNode(withName: "shieldBubble")
-        let renderedCharges = existing?.userData?["charges"] as? Int
-        if charges > 0 {
-            guard existing == nil || renderedCharges != charges else { return }
-            existing?.removeFromParent()
-            let bubble = shieldBubbleNode(
-                color: UIColor(red: 0.35, green: 1.0, blue: 0.70, alpha: 1),
-                radius: 33,
-                layers: min(2, charges),
-                animated: true
-            )
-            bubble.name = "shieldBubble"
-            bubble.zPosition = 1
-            bubble.userData = NSMutableDictionary(dictionary: ["charges": charges])
-            bubble.setScale(0.35)
-            playerNode.addChild(bubble)
-            let form = SKAction.scale(to: 1, duration: 0.34)
-            form.timingMode = .easeOut
-            bubble.run(form)
-        } else {
-            existing?.removeFromParent()
-        }
+        playerNode.childNode(withName: "shieldBubble")?.removeFromParent()
     }
 
     private func syncSurgeCrown() {
-        let existing = playerNode.childNode(withName: "energyCrown")
-        if session.sim.effects.isSurging {
-            guard existing == nil else { return }
-            let crown = SKNode()
-            crown.name = "energyCrown"
-            crown.zPosition = 3
-            let electricity = UIColor(red: 0.45, green: 0.82, blue: 1, alpha: 1)
-            for index in 0..<7 {
-                let angle = CGFloat(index) / 7 * .pi * 2 + sin(CGFloat(index + 3) * 1.73) * 0.37
-                crown.addChild(lightningBoltNode(
-                    angle: angle,
-                    inner: 10,
-                    outer: 42 + CGFloat(index % 3) * 5,
-                    baseSeed: index + 37,
-                    color: electricity,
-                    delay: Double(index) * 0.027,
-                    persistent: true
-                ))
-            }
-            playerNode.addChild(crown)
-        } else {
-            existing?.removeFromParent()
-        }
+        playerNode.childNode(withName: "energyCrown")?.removeFromParent()
     }
 
     private func syncMagnetCrown() {
-        let existing = playerNode.childNode(withName: "magnetCrown")
-        if session.sim.effects.isMagnet {
-            guard existing == nil else { return }
-            let crown = magneticFieldAura(
-                tint: UIColor(red: 1, green: 0.45, blue: 0.70, alpha: 1),
-                radius: 47,
-                particleCount: 5
-            )
-            crown.name = "magnetCrown"
-            crown.zPosition = 2
-            playerNode.addChild(crown)
-        } else {
-            existing?.removeFromParent()
-        }
+        playerNode.childNode(withName: "magnetCrown")?.removeFromParent()
     }
 
     private func syncAnchorCrown() {
-        let existing = playerNode.childNode(withName: "anchorCrown")
-        if session.sim.effects.isAnchored {
-            guard existing == nil else { return }
-            let crown = SKShapeNode(path: Self.segmentedCirclePath(radius: 31, segments: 12, coverage: 0.26))
-            crown.name = "anchorCrown"
-            crown.strokeColor = UIColor(red: 0.30, green: 0.88, blue: 1, alpha: 0.86)
-            crown.lineWidth = 2
-            crown.glowWidth = 5
-            crown.zPosition = 3
-            crown.run(.repeatForever(.rotate(byAngle: -.pi * 2, duration: 5.5)))
-            playerNode.addChild(crown)
-        } else {
-            existing?.removeFromParent()
-        }
+        playerNode.childNode(withName: "anchorCrown")?.removeFromParent()
     }
 
     private func syncPrismCrown() {
-        let existing = playerNode.childNode(withName: "prismCrown")
-        if session.sim.effects.isPrismatic {
-            guard existing == nil else { return }
-            let crown = SKNode()
-            crown.name = "prismCrown"
-            crown.zPosition = 4
-            let triangle = SKShapeNode(path: Self.polygonPath(radius: 34, sides: 3))
-            triangle.strokeColor = UIColor(red: 0.60, green: 1.00, blue: 0.92, alpha: 0.94)
-            triangle.lineWidth = 2.3
-            triangle.glowWidth = 7
-            triangle.fillColor = UIColor(red: 0.35, green: 0.88, blue: 1, alpha: 0.045)
-            crown.addChild(triangle)
-            let hex = SKShapeNode(path: Self.polygonPath(radius: 27, sides: 6))
-            hex.strokeColor = UIColor.white.withAlphaComponent(0.74)
-            hex.lineWidth = 1.1
-            crown.addChild(hex)
-            crown.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: 7)))
-            playerNode.addChild(crown)
+        playerNode.childNode(withName: "prismCrown")?.removeFromParent()
+    }
+
+    private func syncStatusShell() {
+        guard let shell = playerNode.childNode(withName: "statusShell") as? SKShapeNode else { return }
+        let shielded = session.sim.effects.shieldCharges > 0
+        let prism = session.sim.effects.isPrismatic
+        if shielded || prism {
+            shell.strokeColor = shielded && prism
+                ? UIColor(red: 0.58, green: 1.00, blue: 0.84, alpha: 0.95)
+                : (prism ? UIColor(red: 0.60, green: 1.00, blue: 0.92, alpha: 0.88) : VisualPalette.shield)
+            shell.lineWidth = 1.55
+            shell.alpha = 1
+            if prism {
+                shell.path = Self.polygonPath(radius: actorRadius + 6, sides: 3)
+            } else {
+                shell.path = CGPath(ellipseIn: CGRect(x: -actorRadius - 5, y: -actorRadius - 5, width: (actorRadius + 5) * 2, height: (actorRadius + 5) * 2), transform: nil)
+            }
         } else {
-            existing?.removeFromParent()
+            shell.strokeColor = .clear
         }
+        playerNode.childNode(withName: "body")?.alpha = session.sim.effects.isPhasing ? 0.74 : 1
     }
 
     private func buildPlayer() {
-        let root = SKNode()
-        root.zPosition = 14
-        let halo = SKSpriteNode(texture: GlowTextures.blob)
-        halo.size = CGSize(width: 38, height: 38)
-        halo.blendMode = .add
-        halo.alpha = 0.26
-        halo.name = "halo"
-        let body = SKSpriteNode(texture: GlowTextures.player)
-        body.size = CGSize(width: 72, height: 72)
-        body.position = CGPoint(x: -3, y: -5)
-        body.name = "body"
-        body.run(.repeatForever(.sequence([
-            .scale(to: 1.045, duration: 0.9),
-            .scale(to: 1, duration: 0.9),
-        ])))
-
-        // A persistent, asymmetric pointer is more useful than another halo:
-        // it still identifies the controlled orb when the child lifts a finger.
-        let locator = SKNode()
-        locator.name = "playerLocator"
-        locator.zPosition = 5
-        let pointerPath = CGMutablePath()
-        pointerPath.move(to: CGPoint(x: -7, y: 5))
-        pointerPath.addLine(to: CGPoint(x: 0, y: -4))
-        pointerPath.addLine(to: CGPoint(x: 7, y: 5))
-        let pointer = SKShapeNode(path: pointerPath)
-        pointer.name = "pointer"
-        pointer.strokeColor = UIColor(red: 0.63, green: 0.96, blue: 1, alpha: 1)
-        pointer.lineWidth = 2.5
-        pointer.lineCap = .round
-        pointer.lineJoin = .round
-        pointer.glowWidth = 5
-        let label = SKLabelNode(fontNamed: "AvenirNext-Heavy")
-        label.name = "label"
-        label.text = "YOU"
-        label.fontSize = 10
-        label.fontColor = .white
-        label.horizontalAlignmentMode = .center
-        label.verticalAlignmentMode = .center
-        label.position = CGPoint(x: 0, y: 16)
-        locator.addChild(pointer)
-        locator.addChild(label)
-        locator.run(.repeatForever(.sequence([
-            .scale(to: 1.09, duration: 0.75),
-            .scale(to: 1, duration: 0.75),
-        ])))
-        root.addChild(halo)
-        root.addChild(body)
-        root.addChild(locator)
+        if VisualStyle.useLegacyRenderer {
+            let root = SKNode()
+            root.zPosition = VisualLayer.actors
+            let body = SKSpriteNode(texture: GlowTextures.player)
+            body.size = CGSize(width: actorRadius * 2, height: actorRadius * 2)
+            body.name = "body"
+            root.addChild(body)
+            addChild(root)
+            playerNode = root
+            return
+        }
+        let root = ActorFactory.make(kind: .player, radius: actorRadius)
         addChild(root)
         playerNode = root
     }
@@ -1793,21 +1834,21 @@ final class GameScene: SKScene {
         let glow = SKSpriteNode(texture: GlowTextures.spawnRing)
         glow.size = CGSize(width: 72, height: 72)
         glow.blendMode = .add
-        glow.alpha = 0.55
+        glow.alpha = 0.18
         glow.name = "glow"
         glow.run(.repeatForever(.rotate(byAngle: .pi * 2, duration: 7.5)))
 
         let ring = SKShapeNode(circleOfRadius: 26)
         ring.strokeColor = UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 0.95)
-        ring.lineWidth = 2.4
-        ring.glowWidth = 5
+        ring.lineWidth = 2.0
+        ring.glowWidth = 0
         ring.fillColor = UIColor(red: 0.45, green: 0.2, blue: 0.7, alpha: 0.12)
         ring.name = "ring"
 
         let arc = SKShapeNode()
         arc.strokeColor = UIColor(red: 0.55, green: 0.85, blue: 1, alpha: 1)
-        arc.lineWidth = 3.4
-        arc.glowWidth = 4
+        arc.lineWidth = 2.4
+        arc.glowWidth = 0
         arc.lineCap = .round
         arc.fillColor = .clear
         arc.zRotation = .pi / 2
@@ -1829,25 +1870,17 @@ final class GameScene: SKScene {
     }
 
     private func echoNode() -> SKNode {
-        let root = SKNode()
-        root.zPosition = 11
-        let halo = SKSpriteNode(texture: GlowTextures.blob)
-        halo.size = CGSize(width: 28, height: 28)
-        halo.blendMode = .add
-        halo.color = UIColor(red: 0.85, green: 0.4, blue: 1, alpha: 1)
-        halo.colorBlendFactor = 0.45
-        halo.alpha = 0.28
-        halo.name = "halo"
-        let body = SKSpriteNode(texture: GlowTextures.echo)
-        body.size = CGSize(width: 42, height: 42)
-        body.name = "body"
-        body.alpha = 0.92
-        body.run(.repeatForever(.sequence([
-            .scale(to: 1.08, duration: 0.7),
-            .scale(to: 0.94, duration: 0.7),
-        ])))
-        root.addChild(halo)
-        root.addChild(body)
+        if VisualStyle.useLegacyRenderer {
+            let root = SKNode()
+            root.zPosition = VisualLayer.actors - 1
+            let body = SKSpriteNode(texture: GlowTextures.echo)
+            body.size = CGSize(width: actorRadius * 1.75, height: actorRadius * 1.75)
+            body.name = "body"
+            root.addChild(body)
+            return root
+        }
+        let root = ActorFactory.make(kind: .echo, radius: actorRadius * 0.92)
+        root.zPosition = VisualLayer.actors - 1
         return root
     }
 
@@ -1855,27 +1888,27 @@ final class GameScene: SKScene {
 
     private func syncNodes() {
         playerNode.position = scenePoint(session.sim.playerPosition)
-        if let locator = playerNode.childNode(withName: "playerLocator") {
-            let below = playerNode.position.y > size.height - 88
-            locator.position = CGPoint(x: 0, y: below ? -47 : 47)
-            locator.alpha = session.inputTarget == nil ? 1 : 0.62
-            locator.childNode(withName: "pointer")?.zRotation = below ? .pi : 0
-            locator.childNode(withName: "label")?.position.y = below ? -17 : 16
-        }
         while echoNodes.count < session.sim.echoCount {
             let node = echoNode()
+            let index = echoNodes.count
+            if session.sim.echoes.indices.contains(index) {
+                node.position = scenePoint(session.sim.echoes[index])
+            }
             addChild(node)
             echoNodes.append(node)
-            node.setScale(0.15)
-            node.run(.scale(to: 1, duration: 0.28))
-            shockwave(at: node.position, color: UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1), start: 10, end: 90)
+            node.userData = ["spawnedAt": session.sim.playbackTime]
+            node.setScale(0.2)
+            node.run(.scale(to: 1, duration: 0.22))
+            shockwave(at: node.position, color: UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1), start: 10, end: 64)
         }
         while echoNodes.count > session.sim.echoCount {
             echoNodes.removeLast().removeFromParent()
         }
         for (i, echo) in session.sim.echoes.enumerated() {
             echoNodes[i].position = scenePoint(echo)
+            syncEchoPose(echoNodes[i], index: i)
         }
+        syncPlayerPose()
         syncGhosts()
         for spark in session.sim.sparks {
             sparkNodes[spark.id]?.isHidden = spark.collected
@@ -1898,7 +1931,7 @@ final class GameScene: SKScene {
         }
         syncRealityBackdrop()
         for echo in echoNodes {
-            echo.alpha = session.sim.effects.isFrozen ? 0.4 : session.sim.effects.isAnchored ? 0.70 : 1
+            echo.alpha = session.sim.effects.isFrozen ? 0.78 : session.sim.effects.isAnchored ? 0.88 : 1
         }
         syncGates()
         syncLasers()
@@ -1910,36 +1943,32 @@ final class GameScene: SKScene {
         syncShieldBubble()
         syncAnchorCrown()
         syncPrismCrown()
+        syncStatusShell()
         exitNode.position = scenePoint(session.level.exit)
         refreshExit()
         if let halo = playerNode.childNode(withName: "halo") as? SKSpriteNode {
-            if session.sim.effects.isPrismatic {
-                halo.color = UIColor(red: 0.60, green: 1.00, blue: 0.92, alpha: 1)
-                halo.colorBlendFactor = 0.72
-            } else if session.sim.effects.isPhasing {
-                halo.color = UIColor.white
-                halo.colorBlendFactor = 0.7
-            } else if session.sim.effects.shieldCharges > 0 {
-                halo.color = UIColor(red: 0.45, green: 1, blue: 0.7, alpha: 1)
-                halo.colorBlendFactor = 0.55
+            let tint: UIColor
+            if session.sim.effects.shieldCharges > 0 {
+                tint = VisualPalette.shield
             } else if session.sim.effects.isSurging {
-                halo.color = UIColor(red: 1, green: 0.85, blue: 0.3, alpha: 1)
-                halo.colorBlendFactor = 0.5
-            } else if session.sim.effects.isAnchored {
-                halo.color = UIColor(red: 0.30, green: 0.88, blue: 1, alpha: 1)
-                halo.colorBlendFactor = 0.58
-            } else if session.sim.effects.isFrozen {
-                halo.color = UIColor(red: 0.55, green: 0.8, blue: 1, alpha: 1)
-                halo.colorBlendFactor = 0.45
+                tint = UIColor(red: 1, green: 0.86, blue: 0.40, alpha: 1)
+            } else if session.sim.effects.isPhasing {
+                tint = .white
             } else {
-                halo.colorBlendFactor = 0
+                tint = VisualPalette.playerGlow
             }
+            halo.color = tint
+            halo.colorBlendFactor = 1
+            halo.alpha = VisualStyle.glowAlpha
+            let span = actorRadius * 2 * VisualStyle.glowRadiusMul
+            halo.size = CGSize(width: span, height: span)
         }
     }
 
     private func syncMovers(_ states: [MoverState], frozen: Bool) {
         let liveIDs = Set(states.map(\.id))
         for id in Array(moverNodes.keys) where !liveIDs.contains(id) {
+            if dyingMoverIDs.contains(id) { continue }
             moverNodes.removeValue(forKey: id)?.removeFromParent()
         }
 
@@ -1953,14 +1982,14 @@ final class GameScene: SKScene {
 
             let iceShell = root.childNode(withName: "freezeShell")
             if frozen, iceShell == nil {
-                let rockSize = (root.childNode(withName: "rock") as? SKSpriteNode)?.size.width ?? 64
+                let rockSize = CGFloat((root.userData?["diameter"] as? NSNumber)?.doubleValue ?? 64)
                 let shell = SKShapeNode(circleOfRadius: rockSize * 0.46)
                 shell.name = "freezeShell"
                 shell.zPosition = 5
                 shell.fillColor = UIColor(red: 0.48, green: 0.83, blue: 1, alpha: 0.12)
                 shell.strokeColor = UIColor(red: 0.76, green: 0.95, blue: 1, alpha: 0.82)
                 shell.lineWidth = 1.4
-                shell.glowWidth = 5
+                shell.glowWidth = 0
                 for index in 0..<5 {
                     let crystal = SKSpriteNode(texture: GlowTextures.snowflakeParticle)
                     crystal.size = CGSize(width: 8, height: 8)
@@ -1980,19 +2009,28 @@ final class GameScene: SKScene {
 
             let progress = CGFloat(mover.fractureProgress)
             let tint = Self.color(for: mover.material)
-            if let rock = root.childNode(withName: "rock") as? SKSpriteNode {
-                let scale = 1 - progress * 0.075
-                rock.xScale = scale
-                rock.yScale = scale
-                rock.colorBlendFactor = 0.05 + progress * 0.17
+            if let rock = root.childNode(withName: "rock") {
+                let scale = 1 - progress * 0.32
+                rock.setScale(scale)
+            }
+            if let glow = root.childNode(withName: "glow") {
+                glow.setScale(1 - progress * 0.18)
+                glow.alpha = frozen ? 0.16 : (0.34 - progress * 0.14)
             }
             if let cracks = root.childNode(withName: "cracks") as? SKShapeNode {
-                cracks.alpha = max(0, min(1, progress * 1.35))
-                cracks.strokeColor = progress > 0.68
+                cracks.alpha = max(0, min(1, progress * 1.45))
+                cracks.strokeColor = progress > 0.62
                     ? UIColor.white
                     : tint.withAlphaComponent(0.96)
             }
-            root.childNode(withName: "chips")?.alpha = max(0, min(0.92, (progress - 0.28) * 1.7))
+            root.childNode(withName: "chips")?.alpha = max(0, min(0.95, progress * 1.15))
+            syncMotionEmitter(
+                root,
+                headingX: mover.velocity.x,
+                headingY: mover.velocity.y,
+                speed: mover.velocity.length,
+                dashing: false
+            )
         }
     }
 
@@ -2059,12 +2097,8 @@ final class GameScene: SKScene {
     private func syncGhosts() {
         let live = session.sim.ghosts
         while ghostNodes.count < live.count {
-            let node = echoNode()
-            node.alpha = 0.7
-            if let halo = node.childNode(withName: "halo") as? SKSpriteNode {
-                halo.color = UIColor(red: 1, green: 0.35, blue: 0.45, alpha: 1)
-                halo.colorBlendFactor = 0.8
-            }
+            let node = ActorFactory.make(kind: .ghost, radius: actorRadius * 0.92)
+            node.zPosition = VisualLayer.actors - 0.5
             addChild(node)
             ghostNodes.append(node)
         }
@@ -2075,65 +2109,175 @@ final class GameScene: SKScene {
             if let p = ghost.position(at: session.sim.time) {
                 ghostNodes[i].isHidden = false
                 ghostNodes[i].position = scenePoint(p)
-                ghostNodes[i].alpha = 0.45 + 0.35 * abs(sin(CACurrentMediaTime() * 8))
+                ghostNodes[i].alpha = 0.78 + 0.08 * abs(sin(session.sim.time * 6))
             } else {
                 ghostNodes[i].isHidden = true
             }
         }
     }
 
+    private func sampleTrails(clock: TimeInterval) {
+        guard !VisualStyle.useLegacyRenderer, let trails else { return }
+        if clock + 0.04 < lastSampledSimTime {
+            trails.beginBranch("player")
+        }
+        lastSampledSimTime = clock
+        let playerMoving = session.sim.lastVelocity.length > 8
+        let jumped = hypot(playerNode.position.x - lastPlayerScene.x, playerNode.position.y - lastPlayerScene.y) > VisualStyle.teleportGap
+        trails.sample(
+            id: "player",
+            position: playerNode.position,
+            time: clock,
+            color: session.sim.effects.isSurging ? UIColor(red: 1, green: 0.86, blue: 0.40, alpha: 1) : VisualPalette.playerGlow,
+            headWidth: session.sim.effects.isSurging ? 15 : 10,
+            moving: playerMoving,
+            breakBefore: jumped && lastPlayerScene != .zero
+        )
+        lastPlayerScene = playerNode.position
+        var live: Set<String> = ["player"]
+        for (index, node) in echoNodes.enumerated() where !node.isHidden {
+            let id = "echo-\(index)"
+            live.insert(id)
+            trails.sample(
+                id: id,
+                position: node.position,
+                time: clock,
+                color: VisualPalette.echoRim,
+                headWidth: 8,
+                moving: true
+            )
+        }
+        for (index, node) in ghostNodes.enumerated() where !node.isHidden {
+            let id = "ghost-\(index)"
+            live.insert(id)
+            trails.sample(
+                id: id,
+                position: node.position,
+                time: clock,
+                color: VisualPalette.ghostRim,
+                headWidth: 7,
+                moving: true
+            )
+        }
+        trails.prune(ids: live)
+    }
+
+    private func syncMagnetLinks() {
+        guard session.sim.effects.isMagnet else {
+            magnetLinks.path = nil
+            return
+        }
+        let path = CGMutablePath()
+        for spark in session.sim.sparks where spark.magnetHeld && !spark.collected {
+            path.move(to: playerNode.position)
+            path.addLine(to: scenePoint(spark.position))
+        }
+        magnetLinks.path = path
+    }
+
     private func dropTrails(dt: TimeInterval) {
         trailAcc += dt
-        guard trailAcc > 0.03 else { return }
+        guard trailAcc > 0.028 else { return }
         trailAcc = 0
-        dropTrail(at: playerNode.position, color: UIColor(red: 0.45, green: 0.9, blue: 1, alpha: 1), size: 16)
+        let playerSpeed = session.sim.lastVelocity.length
+        if playerSpeed > 18 {
+            dropTrail(
+                at: playerNode.position,
+                color: UIColor(red: 0.45, green: 0.9, blue: 1, alpha: 1),
+                size: session.sim.effects.isSurging ? 22 : 16
+            )
+        }
         for echo in echoNodes {
             dropTrail(at: echo.position, color: UIColor(red: 0.78, green: 0.38, blue: 1, alpha: 1), size: 14)
         }
     }
 
-    private func dropAsteroidTrails(dt: TimeInterval) {
-        asteroidTrailAcc += dt
-        guard asteroidTrailAcc >= 0.11 else { return }
-        asteroidTrailAcc = 0
+    private func makeMotionEmitter(color: UIColor, emphasis: CGFloat) -> SKEmitterNode {
+        let emitter = SKEmitterNode()
+        emitter.particleTexture = GlowTextures.blob
+        emitter.particleBirthRate = 0
+        emitter.particleLifetime = 0.3
+        emitter.particleLifetimeRange = 0.1
+        emitter.particleAlpha = 0.42
+        emitter.particleAlphaRange = 0.10
+        emitter.particleAlphaSpeed = -1.6
+        emitter.particleScale = 0.034 * emphasis
+        emitter.particleScaleRange = 0.012
+        emitter.particleScaleSpeed = -0.08
+        emitter.particleColor = color
+        emitter.particleColorBlendFactor = 1
+        emitter.particleBlendMode = .alpha
+        emitter.emissionAngleRange = 0.38
+        emitter.particleSpeed = 96
+        emitter.particleSpeedRange = 38
+        emitter.particlePositionRange = CGVector(dx: 3, dy: 3)
+        emitter.targetNode = self
+        emitter.zPosition = -1
+        emitter.name = "motionTrail"
+        let data = NSMutableDictionary()
+        data["emphasis"] = emphasis
+        emitter.userData = data
+        return emitter
+    }
 
-        let liveIDs = Set(session.sim.movers.map(\.id))
-        asteroidTrailPositions = asteroidTrailPositions.filter { liveIDs.contains($0.key) }
-        for mover in session.sim.movers {
-            let point = scenePoint(mover.position)
-            defer { asteroidTrailPositions[mover.id] = point }
-            guard !session.sim.effects.isFrozen,
-                  let previous = asteroidTrailPositions[mover.id],
-                  let root = moverNodes[mover.id] else { continue }
-            if case .stationary = mover.path { continue }
+    private func syncMotionEmitter(_ node: SKNode, headingX: Double, headingY: Double, speed: Double, dashing: Bool) {
+        guard let emitter = node.childNode(withName: "motionTrail") as? SKEmitterNode else { return }
+        let emphasis = CGFloat((emitter.userData?["emphasis"] as? NSNumber)?.doubleValue ?? 1)
+        guard !session.sim.effects.isFrozen,
+              speed > 12,
+              headingX * headingX + headingY * headingY > 0.01 else {
+            emitter.particleBirthRate = 0
+            return
+        }
+        emitter.emissionAngle = CGFloat(atan2(headingY, headingX)) + .pi
+        emitter.particleBirthRate = (dashing ? 96 : 52) * emphasis
+        emitter.particleLifetime = dashing ? 0.42 : 0.3
+        emitter.particleSpeed = dashing ? 150 : 92
+        emitter.particleScale = (dashing ? 0.07 : 0.052) * emphasis
+    }
 
-            let displacement = CGVector(dx: point.x - previous.x, dy: point.y - previous.y)
-            let distance = hypot(displacement.dx, displacement.dy)
-            guard distance > 2.2, distance < 44 else { continue }
-            let diameter = (root.childNode(withName: "rock") as? SKSpriteNode)?.size.width ?? 52
-            let offset = diameter * 0.43
-            let trail = SKSpriteNode(texture: GlowTextures.blob)
-            let moteSize = min(15, max(8, diameter * 0.23))
-            trail.size = CGSize(width: moteSize, height: moteSize)
-            trail.position = CGPoint(
-                x: point.x - displacement.dx / distance * offset,
-                y: point.y - displacement.dy / distance * offset
-            )
-            trail.zPosition = 9
-            trail.blendMode = .add
-            trail.color = Self.color(for: mover.material)
-            trail.colorBlendFactor = 0.88
-            trail.alpha = 0.18
-            trail.name = "asteroidTrail"
-            addChild(trail)
-            trail.run(.sequence([
+    private func stopMotionEmitters() {
+        (playerNode?.childNode(withName: "motionTrail") as? SKEmitterNode)?.particleBirthRate = 0
+        for node in echoNodes + ghostNodes + Array(moverNodes.values) {
+            (node.childNode(withName: "motionTrail") as? SKEmitterNode)?.particleBirthRate = 0
+        }
+    }
+
+    private func asteroidDust(at point: CGPoint, color: UIColor, count: Int) {
+        for index in 0..<max(1, count) {
+            let mote = SKSpriteNode(texture: GlowTextures.blob)
+            let size = CGFloat(7 + index % 4 * 3)
+            mote.size = CGSize(width: size, height: size)
+            mote.position = point
+            mote.blendMode = .add
+            mote.color = index.isMultiple(of: 3) ? .white : color
+            mote.colorBlendFactor = 0.9
+            mote.alpha = 0.72
+            mote.zPosition = 22
+            addChild(mote)
+            let angle = CGFloat(index) / CGFloat(max(1, count)) * .pi * 2 + CGFloat(index) * 0.13
+            let travel = CGFloat(18 + index % 5 * 8)
+            mote.run(.sequence([
                 .group([
-                    .fadeOut(withDuration: 0.42),
-                    .scale(to: 0.28, duration: 0.42),
+                    .moveBy(x: cos(angle) * travel, y: sin(angle) * travel, duration: 0.36),
+                    .fadeOut(withDuration: 0.36),
+                    .scale(to: 0.2, duration: 0.36),
                 ]),
                 .removeFromParent(),
             ]))
         }
+    }
+
+    private func fieldCaption(_ text: String, color: UIColor, y: CGFloat) -> SKLabelNode {
+        let label = SKLabelNode(fontNamed: "AvenirNext-Heavy")
+        label.text = text
+        label.fontSize = 9
+        label.fontColor = color
+        label.horizontalAlignmentMode = .center
+        label.verticalAlignmentMode = .center
+        label.position = CGPoint(x: 0, y: y)
+        label.zPosition = 4
+        return label
     }
 
     private func dropTrail(at point: CGPoint, color: UIColor, size: CGFloat) {
@@ -2234,57 +2378,113 @@ final class GameScene: SKScene {
     private func updateSparkTimers() {
         for spark in session.sim.sparks {
             guard let root = sparkNodes[spark.id] else { continue }
-            let ring = root.childNode(withName: "timer") as? SKShapeNode
             let label = root.childNode(withName: "timerLabel") as? SKLabelNode
             let reward = root.childNode(withName: "timerReward") as? SKLabelNode
-            if let duration = spark.timerDuration, let remaining = spark.timerRemaining, !spark.collected {
-                let frac = max(0, min(1, remaining / duration))
-                ring?.path = Self.arc(radius: 30, fraction: frac)
-                ring?.strokeColor = spark.timedOut
-                    ? UIColor(red: 1, green: 0.35, blue: 0.45, alpha: 0.55)
-                    : UIColor(red: 1, green: 0.82, blue: 0.35, alpha: 0.95)
+            let arc = root.childNode(withName: "timer") as? SKShapeNode
+            if let duration = spark.timerDuration, !spark.collected {
                 if spark.timedOut {
-                    label?.text = "CHARGE LOST"
-                    label?.fontSize = 9
-                    label?.fontColor = UIColor(red: 1, green: 0.48, blue: 0.55, alpha: 0.9)
+                    label?.text = ""
                     reward?.text = ""
-                } else {
-                    label?.fontSize = 11
-                    label?.fontColor = UIColor(red: 1, green: 0.85, blue: 0.4, alpha: 1)
+                    arc?.path = nil
+                    if let gem = root.childNode(withName: "gem") as? SKShapeNode {
+                        gem.fillColor = VisualPalette.spark
+                    }
+                } else if let remaining = spark.timerRemaining {
+                    let frac = max(0, min(1, remaining / duration))
+                    arc?.path = Self.arc(radius: 13, fraction: frac)
+                    arc?.strokeColor = VisualPalette.timedSpark
+                    label?.fontSize = 10
+                    label?.fontColor = VisualPalette.timedSpark
                     label?.text = session.sim.effects.isFrozen
-                        ? String(format: "PAUSED · %.0f", ceil(remaining))
+                        ? String(format: "HOLD  %.0f", ceil(remaining))
                         : String(format: "%.0fs", ceil(remaining))
-                    reward?.text = "+ FREEZE"
+                    reward?.text = "BONUS"
                 }
             } else {
-                ring?.path = Self.arc(radius: 30, fraction: 1)
-                ring?.strokeColor = UIColor(red: 0.45, green: 0.9, blue: 1, alpha: 0.35)
                 label?.text = ""
                 reward?.text = ""
+                arc?.path = nil
             }
         }
     }
 
     private func pulsePlayer() {
-        guard let halo = playerNode.childNode(withName: "halo") else { return }
-        let moving = session.sim.lastVelocity.length > 1
-        halo.run(.scale(to: moving ? 1.08 : 1.0, duration: 0.12))
+        guard let sheen = playerNode.childNode(withName: "sheen") else { return }
+        sheen.alpha = session.sim.lastVelocity.length > 1 ? 0.62 : 0.48
+    }
+
+    private func syncPlayerPose() {
+        if session.sim.phase == .dead, let body = playerNode.childNode(withName: "body") as? SKShapeNode {
+            body.fillColor = UIColor(red: 1, green: 0.42, blue: 0.46, alpha: 1)
+        }
+        let heading = session.sim.lastAim.length > 0.1 ? session.sim.lastAim : session.sim.lastVelocity
+        if let locator = playerNode.childNode(withName: "playerLocator") {
+            let below = playerNode.position.y > size.height - 70
+            locator.position = CGPoint(x: 0, y: below ? -(actorRadius + 11) : actorRadius + 11)
+            locator.zRotation = below ? .pi : 0
+            if heading.length > 8 {
+                locator.zRotation = CGFloat(atan2(heading.y, heading.x)) - .pi / 2
+            }
+        }
+        syncMotionEmitter(
+            playerNode,
+            headingX: heading.x,
+            headingY: heading.y,
+            speed: session.sim.lastVelocity.length,
+            dashing: session.sim.effects.isSurging
+        )
+    }
+
+    private func syncEchoPose(_ node: SKNode, index: Int) {
+        guard session.sim.echoes.indices.contains(index) else { return }
+        let current = session.sim.echoes[index]
+        let previous = recorderSample(before: current, index: index)
+        let delta = current - previous
+        let moving = current.distance(to: previous) > 1.2
+        syncMotionEmitter(
+            node,
+            headingX: delta.x,
+            headingY: delta.y,
+            speed: moving ? current.distance(to: previous) * 40 : 0,
+            dashing: false
+        )
+    }
+
+    private func recorderSample(before current: Vec2, index: Int) -> Vec2 {
+        let delay = Double(index + 1) * session.level.echoInterval
+        return session.sim.recorder.position(at: max(0, session.sim.playbackTime - delay - 0.05)) ?? current
     }
 
     private func refreshExit() {
         let outer = exitNode.childNode(withName: "outer") as? SKShapeNode
         let spin = exitNode.childNode(withName: "spin") as? SKShapeNode
         let core = exitNode.childNode(withName: "core") as? SKSpriteNode
+        if session.sim.exitOpen && !wasExitOpen {
+            outer?.run(.sequence([
+                .scale(to: 1.42, duration: 0.18),
+                .scale(to: 1, duration: 0.38),
+            ]), withKey: "opening")
+            shockwave(at: exitNode.position, color: UIColor(red: 0.55, green: 0.95, blue: 1, alpha: 1),
+                      start: 14, end: 88)
+        }
+        wasExitOpen = session.sim.exitOpen
         if session.sim.exitOpen {
             outer?.strokeColor = UIColor(red: 0.55, green: 0.95, blue: 1, alpha: 1)
-            outer?.glowWidth = 16
-            spin?.strokeColor = UIColor(red: 0.7, green: 0.95, blue: 1, alpha: 1)
-            core?.alpha = 0.85
+            outer?.fillColor = UIColor(red: 0.35, green: 0.78, blue: 1, alpha: 0.16)
+            outer?.glowWidth = 0
+            spin?.strokeColor = UIColor(red: 0.7, green: 0.95, blue: 1, alpha: 0.85)
+            spin?.glowWidth = 0
+            core?.alpha = 0.55
+            core?.color = UIColor(red: 0.55, green: 0.95, blue: 1, alpha: 1)
+            core?.colorBlendFactor = 0.55
+            spin?.isHidden = false
         } else {
-            outer?.strokeColor = UIColor.white.withAlphaComponent(0.18)
-            outer?.glowWidth = 3
-            spin?.strokeColor = UIColor.white.withAlphaComponent(0.2)
-            core?.alpha = 0.28
+            outer?.strokeColor = UIColor.white.withAlphaComponent(0.22)
+            outer?.fillColor = UIColor(white: 0.04, alpha: 0.55)
+            outer?.glowWidth = 0
+            spin?.isHidden = true
+            core?.alpha = 0.08
+            core?.colorBlendFactor = 0
         }
     }
 
@@ -2296,7 +2496,7 @@ final class GameScene: SKScene {
             shard.zRotation = angle - .pi / 2
             shard.fillColor = index.isMultiple(of: 3) ? .white : color
             shard.strokeColor = .clear
-            shard.glowWidth = 5
+            shard.glowWidth = 0
             shard.zPosition = 23
             addChild(shard)
             let distance: CGFloat = 58 + CGFloat(index % 3) * 10
@@ -2323,7 +2523,7 @@ final class GameScene: SKScene {
             fragment.fillColor = index.isMultiple(of: 4) ? .white : color
             fragment.strokeColor = color.withAlphaComponent(0.55)
             fragment.lineWidth = 0.8
-            fragment.glowWidth = 3
+            fragment.glowWidth = 0
             fragment.zPosition = 23
             addChild(fragment)
 
@@ -2353,7 +2553,7 @@ final class GameScene: SKScene {
         polygon.fillColor = color.withAlphaComponent(0.07)
         polygon.strokeColor = color
         polygon.lineWidth = 2.2
-        polygon.glowWidth = 8
+        polygon.glowWidth = 0
         polygon.zPosition = 22
         polygon.setScale(0.75)
         polygon.alpha = 0
@@ -2385,7 +2585,7 @@ final class GameScene: SKScene {
             streak.zRotation = angle
             streak.fillColor = index.isMultiple(of: 4) ? .white : color
             streak.strokeColor = .clear
-            streak.glowWidth = 4
+            streak.glowWidth = 0
             streak.zPosition = 22
             addChild(streak)
             streak.run(.sequence([
@@ -2448,7 +2648,7 @@ final class GameScene: SKScene {
         bloom.lineWidth = 6.5
         bloom.lineCap = .round
         bloom.lineJoin = .round
-        bloom.glowWidth = 9
+        bloom.glowWidth = 0
         let core = SKShapeNode(path: initialPath)
         core.name = "core"
         core.strokeColor = UIColor.white.withAlphaComponent(0.96)
@@ -2548,7 +2748,7 @@ final class GameScene: SKScene {
             shell.fillColor = .clear
             shell.strokeColor = (layer == 0 ? color : .white).withAlphaComponent(layer == 0 ? 0.36 : 0.20)
             shell.lineWidth = layer == 0 ? 1.2 : 0.8
-            shell.glowWidth = layer == 0 ? 4 : 2
+            shell.glowWidth = 0
             root.addChild(shell)
 
             let highlightPath = CGMutablePath()
@@ -2563,7 +2763,7 @@ final class GameScene: SKScene {
             highlight.strokeColor = UIColor.white.withAlphaComponent(layer == 0 ? 0.68 : 0.30)
             highlight.lineWidth = layer == 0 ? 1.8 : 1.0
             highlight.lineCap = .round
-            highlight.glowWidth = 3
+            highlight.glowWidth = 0
             root.addChild(highlight)
             if animated {
                 surface.run(.repeatForever(.sequence([
@@ -2587,7 +2787,7 @@ final class GameScene: SKScene {
             mote.position = CGPoint(x: cos(angle) * radius, y: sin(angle) * radius)
             mote.fillColor = index.isMultiple(of: 2) ? .white : color
             mote.strokeColor = .clear
-            mote.glowWidth = 4
+            mote.glowWidth = 0
             root.addChild(mote)
             if animated {
                 mote.run(.repeatForever(.sequence([
@@ -2608,54 +2808,38 @@ final class GameScene: SKScene {
 
     private func shieldFormEffect(at point: CGPoint, color: UIColor) {
         guard let playerNode else { return }
-        let bubble = shieldBubbleNode(color: color, radius: 34, layers: 1, animated: false)
-        bubble.zPosition = 2
-        bubble.setScale(0.28)
-        bubble.alpha = 0
-        playerNode.addChild(bubble)
-        bubble.run(.sequence([
-            .group([.scale(to: 1.16, duration: 0.25), .fadeIn(withDuration: 0.12)]),
-            .group([.scale(to: 1.32, duration: 0.42), .fadeOut(withDuration: 0.42)]),
+        let glow = SKSpriteNode(texture: GlowTextures.blob)
+        glow.size = CGSize(width: 30, height: 30)
+        glow.blendMode = .add
+        glow.color = color
+        glow.colorBlendFactor = 0.92
+        glow.alpha = 0.9
+        glow.zPosition = 2
+        playerNode.addChild(glow)
+        glow.run(.sequence([
+            .group([.scale(to: 2.6, duration: 0.34), .fadeOut(withDuration: 0.34)]),
             .removeFromParent(),
         ]))
-        shockwave(at: point, color: color, start: 23, end: 82)
+        shockwave(at: point, color: color, start: 16, end: 64)
     }
 
     private func shieldBreakEffect(at point: CGPoint) {
         let color = UIColor(red: 0.38, green: 1.0, blue: 0.72, alpha: 1)
-        let broken = shieldBubbleNode(color: color, radius: 34, layers: 1, animated: false)
-        broken.position = point
-        broken.zPosition = 25
-
-        let cracks = CGMutablePath()
-        let impact = CGPoint(x: -33, y: 3)
-        for index in 0..<5 {
-            let angle = -0.65 + CGFloat(index) * 0.31
-            let joint = CGPoint(x: -14, y: 3 + sin(angle) * 10)
-            let end = CGPoint(x: 5 + CGFloat(index % 2) * 8, y: 3 + sin(angle) * 25)
-            cracks.move(to: impact)
-            cracks.addLine(to: joint)
-            cracks.addLine(to: end)
-            if index.isMultiple(of: 2) {
-                cracks.move(to: joint)
-                cracks.addLine(to: CGPoint(x: joint.x + 5, y: joint.y + 9))
-            }
-        }
-        let crackNode = SKShapeNode(path: cracks)
-        crackNode.strokeColor = .white
-        crackNode.lineWidth = 1.45
-        crackNode.lineCap = .round
-        crackNode.lineJoin = .round
-        crackNode.glowWidth = 5
-        broken.addChild(crackNode)
-        addChild(broken)
-        broken.run(.sequence([
-            .wait(forDuration: 0.08),
-            .group([.scale(to: 1.28, duration: 0.34), .fadeOut(withDuration: 0.34)]),
+        let glow = SKSpriteNode(texture: GlowTextures.blob)
+        glow.position = point
+        glow.size = CGSize(width: 42, height: 42)
+        glow.blendMode = .add
+        glow.color = color
+        glow.colorBlendFactor = 0.95
+        glow.alpha = 0.95
+        glow.zPosition = 25
+        addChild(glow)
+        glow.run(.sequence([
+            .group([.scale(to: 2.4, duration: 0.28), .fadeOut(withDuration: 0.28)]),
             .removeFromParent(),
         ]))
-        shockwave(at: point, color: color, start: 30, end: 112)
-        screenFlash(color: color, alpha: 0.07)
+        burst(at: session.sim.playerPosition, color: color)
+        screenFlash(color: color, alpha: 0.05)
     }
 
     private func magneticFieldAura(tint: UIColor, radius: CGFloat, particleCount: Int) -> SKNode {
@@ -2674,7 +2858,7 @@ final class GameScene: SKScene {
                 .withAlphaComponent(0.34 + CGFloat(index) * 0.08)
             field.lineWidth = index == 3 ? 1.45 : 1.05
             field.lineCap = .round
-            field.glowWidth = index == 3 ? 4 : 2
+            field.glowWidth = 0
             root.addChild(field)
             field.run(.repeatForever(.sequence([
                 .fadeAlpha(to: 0.48, duration: 0.75 + Double(index) * 0.12),
@@ -2691,7 +2875,7 @@ final class GameScene: SKScene {
             let mote = SKShapeNode(circleOfRadius: index.isMultiple(of: 2) ? 1.8 : 1.25)
             mote.fillColor = index.isMultiple(of: 2) ? cyan : .white
             mote.strokeColor = .clear
-            mote.glowWidth = 4
+            mote.glowWidth = 0
             mote.alpha = 0
             root.addChild(mote)
             let travel = 1.55 + Double(index % 3) * 0.24
@@ -2708,14 +2892,14 @@ final class GameScene: SKScene {
         north.position = CGPoint(x: 0, y: 16)
         north.fillColor = cyan
         north.strokeColor = .white.withAlphaComponent(0.65)
-        north.glowWidth = 4
+        north.glowWidth = 0
         root.addChild(north)
 
         let south = SKShapeNode(circleOfRadius: 3.2)
         south.position = CGPoint(x: 0, y: -16)
         south.fillColor = tint
         south.strokeColor = .white.withAlphaComponent(0.65)
-        south.glowWidth = 4
+        south.glowWidth = 0
         root.addChild(south)
 
         root.run(.repeatForever(.sequence([
@@ -2732,7 +2916,7 @@ final class GameScene: SKScene {
             ring.fillColor = .clear
             ring.strokeColor = index.isMultiple(of: 2) ? color : .white
             ring.lineWidth = 2
-            ring.glowWidth = 7
+            ring.glowWidth = 0
             ring.zPosition = 22
             ring.alpha = 0
             addChild(ring)
@@ -2758,7 +2942,7 @@ final class GameScene: SKScene {
             arc.strokeColor = index == 1 ? .white : color
             arc.lineWidth = 2.4
             arc.lineCap = .round
-            arc.glowWidth = 6
+            arc.glowWidth = 0
             arc.zPosition = 22
             addChild(arc)
             arc.run(.sequence([
@@ -2816,7 +3000,7 @@ final class GameScene: SKScene {
         ring.position = point
         ring.strokeColor = color
         ring.lineWidth = 3
-        ring.glowWidth = 10
+        ring.glowWidth = 0
         ring.fillColor = .clear
         ring.zPosition = 21
         addChild(ring)
@@ -2829,11 +3013,17 @@ final class GameScene: SKScene {
         ]))
     }
 
-    private static func asteroidShape(radius: CGFloat, seed: Int) -> SKShapeNode {
+    private static func asteroidShape(
+        radius: CGFloat,
+        seed: Int,
+        sides: Int = 8,
+        jaggedness: CGFloat = 0.28
+    ) -> SKShapeNode {
         let path = CGMutablePath()
-        let count = 8
+        let count = max(5, sides)
         for i in 0..<count {
-            let jitter = 0.72 + 0.28 * sin(Double(seed * 13 + i * 19))
+            let wave = 0.5 + 0.5 * sin(Double(seed * 13 + i * 19))
+            let jitter = Double(1 - jaggedness) + Double(jaggedness) * wave
             let angle = (Double(i) / Double(count)) * .pi * 2
             let p = CGPoint(x: cos(angle) * Double(radius) * jitter, y: sin(angle) * Double(radius) * jitter)
             if i == 0 { path.move(to: p) } else { path.addLine(to: p) }
@@ -3031,13 +3221,26 @@ final class GameScene: SKScene {
     private static func color(for material: AsteroidMaterial) -> UIColor {
         switch material {
         case .basalt:
-            UIColor(red: 0.50, green: 0.40, blue: 0.34, alpha: 1)
+            UIColor(red: 0.42, green: 0.32, blue: 0.24, alpha: 1)
         case .ice:
-            UIColor(red: 0.48, green: 0.91, blue: 1.00, alpha: 1)
+            UIColor(red: 0.38, green: 0.62, blue: 0.78, alpha: 1)
         case .crystal:
-            UIColor(red: 0.82, green: 0.42, blue: 1.00, alpha: 1)
+            UIColor(red: 0.58, green: 0.32, blue: 0.78, alpha: 1)
         case .alloy:
-            UIColor(red: 0.72, green: 0.82, blue: 0.92, alpha: 1)
+            UIColor(red: 0.40, green: 0.46, blue: 0.52, alpha: 1)
+        }
+    }
+
+    private static func rockBodyColor(for material: AsteroidMaterial) -> UIColor {
+        switch material {
+        case .basalt:
+            UIColor(red: 0.22, green: 0.16, blue: 0.12, alpha: 1)
+        case .ice:
+            UIColor(red: 0.16, green: 0.24, blue: 0.32, alpha: 1)
+        case .crystal:
+            UIColor(red: 0.18, green: 0.10, blue: 0.26, alpha: 1)
+        case .alloy:
+            UIColor(red: 0.12, green: 0.14, blue: 0.17, alpha: 1)
         }
     }
 
@@ -3077,11 +3280,39 @@ final class GameScene: SKScene {
         size.width / CGFloat(max(session.level.worldWidth, 1))
     }
 
+    private var actorRadius: CGFloat {
+        max(18, CGFloat(session.sim.config.playerRadius) * worldScale * 1.85)
+    }
+
     private func beamPath(for laser: LaserState) -> CGPath {
         let path = CGMutablePath()
         path.move(to: scenePoint(laser.start))
         path.addLine(to: scenePoint(laser.end))
         return path
+    }
+
+    private func wallCornerRadius(_ rect: CGRect) -> CGFloat {
+        min(12, min(rect.width, rect.height) * 0.22)
+    }
+
+    private func roundedMaterialPanel(
+        texture: SKTexture,
+        rect: CGRect,
+        zPosition: CGFloat,
+        name: String = "material"
+    ) -> SKCropNode {
+        let crop = SKCropNode()
+        crop.name = name
+        crop.position = CGPoint(x: rect.midX, y: rect.midY)
+        crop.zPosition = zPosition
+        let mask = SKShapeNode(rectOf: rect.size, cornerRadius: wallCornerRadius(rect))
+        mask.fillColor = .white
+        mask.strokeColor = .clear
+        crop.maskNode = mask
+        let tile = SKSpriteNode(texture: texture, size: rect.size)
+        tile.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        crop.addChild(tile)
+        return crop
     }
 
     private func mapped(_ wall: AABB) -> CGRect {

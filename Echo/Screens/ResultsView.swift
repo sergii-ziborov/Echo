@@ -9,8 +9,11 @@ struct ResultsView: View {
     var bestMoves: Int?
     var cycleComplete: Bool
     var nextDifficulty: DifficultyProfile
+    var awardedPoints: Int
     var onWatch: () -> Void
+    var onRetry: () -> Void
     var onNext: () -> Void
+    var onNextCycle: (() -> Void)? = nil
     var onMenu: () -> Void
 
     var body: some View {
@@ -109,7 +112,7 @@ struct ResultsView: View {
                     Image(systemName: "diamond.fill")
                         .foregroundStyle(EchoTheme.magenta)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("+\(result.points) RESEARCH POINTS")
+                        Text(awardedPoints > 0 ? "+\(awardedPoints) RESEARCH POINTS" : "NO RESEARCH POINTS")
                             .font(.system(size: 12, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
                         Text(rewardDetail)
@@ -122,16 +125,28 @@ struct ResultsView: View {
                 .background(EchoTheme.magenta.opacity(0.10), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
 
                 HStack(spacing: 10) {
-                    SecondaryButton(title: "Watch", systemImage: "play.fill", action: onWatch)
-                    PrimaryButton(title: "Next", systemImage: "arrow.right", action: onNext)
+                    PrimaryButton(title: "Retry", systemImage: "arrow.counterclockwise", action: onRetry)
+                    if cycleComplete, let onNextCycle {
+                        PrimaryButton(title: "Next Cycle", systemImage: "infinity", action: onNextCycle)
+                    } else {
+                        PrimaryButton(title: "Next", systemImage: "arrow.right", action: onNext)
+                    }
                 }
-                GhostButton(title: "Main Menu", action: onMenu)
+                HStack(spacing: 10) {
+                    SecondaryButton(title: "Watch", systemImage: "play.fill", action: onWatch)
+                    GhostButton(title: "Main Menu", action: onMenu)
+                }
             }
             .foregroundStyle(.white)
         }
     }
 
     private var rewardDetail: String {
+        if awardedPoints == 0 {
+            return result.points > 0
+                ? "Repeat Daily · \(result.points) theoretical"
+                : "Already claimed"
+        }
         var parts = ["\(result.stars) seals"]
         if result.timeCrystals > 0 { parts.append("\(result.timeCrystals) crystals") }
         if result.resonance >= 2 { parts.append("×\(result.resonance) resonance") }

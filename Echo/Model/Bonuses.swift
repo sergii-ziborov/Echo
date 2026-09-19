@@ -33,11 +33,22 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable, Identifiabl
         }
     }
 
+    var fieldLabel: String {
+        switch self {
+        case .surge: "SPEED"
+        case .pulse: "DELAY"
+        case .chrono: "SHIFT"
+        case .anchor: "SLOW"
+        case .repulse: "BLAST"
+        default: title.uppercased()
+        }
+    }
+
     var detail: String {
         switch self {
         case .shield: "Block the next collision."
         case .freeze: "Stop every hazard; you keep moving."
-        case .surge: "Move much faster and trail lightning."
+        case .surge: "Move much faster for a few seconds."
         case .pulse: "Delay the next echo with a time wave."
         case .magnet: "Pull every nearby spark toward you."
         case .phase: "Pass safely through echoes and debris."
@@ -154,8 +165,8 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable, Identifiabl
         switch self {
         case .shield: "shield.fill"
         case .freeze: "snowflake"
-        case .surge: "bolt.fill"
-        case .pulse: "waveform.circle.fill"
+        case .surge: "hare.fill"
+        case .pulse: "clock.badge.plus"
         case .magnet: "dot.radiowaves.left.and.right"
         case .phase: "sparkles"
         case .chrono: "clock.arrow.circlepath"
@@ -297,7 +308,7 @@ enum UpgradeKind: String, CaseIterable, Codable, Sendable, Identifiable {
         case .velocity: "Your orb moves 4% faster per rank. Rank 1 also unlocks Surge for the Skills tab."
         case .sparkSense: "Nearby sparks jump into your orb automatically. Every rank expands the collection ring."
         case .dashCapacitor: "Your double-tap dash becomes ready 9% sooner per rank. Dash distance does not change."
-        case .surgeMastery: "Every Surge charge keeps its speed and lightning trail active 0.45s longer per rank."
+        case .surgeMastery: "Every Surge charge keeps the speed boost active 0.45s longer per rank."
         case .dashImpulse: "Each double-tap dash travels farther and keeps its safe crossing window open longer."
         case .slots: "Adds one ability slot. A new, larger activation button appears during a run."
         case .reserves: "Adds two charges to every owned ability, so you can activate it more often per run."
@@ -355,7 +366,7 @@ enum UpgradeKind: String, CaseIterable, Codable, Sendable, Identifiable {
         case .velocity: "speedometer"
         case .sparkSense: "dot.radiowaves.left.and.right"
         case .dashCapacitor: "bolt.circle.fill"
-        case .surgeMastery: "bolt.horizontal.circle.fill"
+        case .surgeMastery: "hare.circle.fill"
         case .dashImpulse: "arrow.right.circle.fill"
         case .slots: "square.grid.2x2"
         case .reserves: "shippingbox.fill"

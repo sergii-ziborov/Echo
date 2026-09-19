@@ -381,7 +381,7 @@ final class WorldSimulationTests: XCTestCase {
         level.sparks = [SparkSpawn(id: 0, position: Vec2(x: 900, y: 100))]
         level.movers = [
             .stationary(id: 0, at: Vec2(x: 500, y: 500), radius: 130),
-            .orbit(id: 1, center: Vec2(x: 500, y: 500), radius: 210, period: 8, size: 22),
+            .orbit(id: 1, center: Vec2(x: 500, y: 500), radius: 210, period: 8, size: ArenaMetrics.satelliteRadius),
         ]
         var config = SimConfig()
         config.collisionSlop = 1_000
@@ -394,7 +394,7 @@ final class WorldSimulationTests: XCTestCase {
         let satellite = try XCTUnwrap(sim.movers.first { $0.id == 1 })
         XCTAssertEqual(core.position, Vec2(x: 500, y: 500))
         XCTAssertEqual(core.velocity, .zero)
-        XCTAssertEqual(satellite.radius, 34)
+        XCTAssertEqual(satellite.radius, ArenaMetrics.satelliteRadius)
         XCTAssertGreaterThan(satellite.position.distance(to: satelliteStart), 10)
         XCTAssertEqual(satellite.position.distance(to: core.position), 210, accuracy: 0.001)
     }
@@ -413,7 +413,7 @@ final class WorldSimulationTests: XCTestCase {
                 }
                 XCTAssertEqual(center, level.movers[0].position)
                 XCTAssertEqual(radius, 210)
-                XCTAssertEqual(satellite.radius, 22)
+                XCTAssertEqual(satellite.radius, ArenaMetrics.satelliteRadius)
                 XCTAssertGreaterThan(radius, level.movers[0].radius + satellite.radius + 24)
             }
         }
@@ -781,6 +781,103 @@ final class WorldSimulationTests: XCTestCase {
         XCTAssertEqual(Act.containing(level: 43), .rift)
         XCTAssertEqual(Act.containing(level: 64), .confection)
         XCTAssertEqual(Act.containing(level: 77), .eternity)
+    }
+
+    func testEchoForecastDelaysSpawnAndIndicatorTogether() {
+        var level = LevelCatalog.prototype
+        level.echoInterval = 8
+        level.maxEchoes = 2
+        level.playerStart = Vec2(x: 200, y: 200)
+        level.exit = Vec2(x: 800, y: 800)
+        let sim = WorldSimulation(level: level)
+        var tuning = PlayerTuning()
+        tuning.echoDelayBonus = 2.25
+        sim.configure(tuning: tuning)
+
+        advance(sim, seconds: 8.0, target: Vec2(x: 260, y: 200))
+        XCTAssertEqual(sim.echoCount, 0)
+        XCTAssertEqual(sim.nextEchoIn ?? -1, 2.25, accuracy: 0.08)
+
+        advance(sim, seconds: 2.3, target: Vec2(x: 320, y: 200))
+        XCTAssertEqual(sim.echoCount, 1)
+        XCTAssertLessThan(sim.nextEchoIn ?? 9, 8.1)
+    }
+
+    func testLongRewindKeepsUpgradedHistory() {
+        var level = LevelCatalog.prototype
+        level.maxEchoes = 0
+        level.playerStart = Vec2(x: 180, y: 180)
+        var config = SimConfig()
+        config.snapshotHz = 60
+        config.snapshotWindow = 3
+        let sim = WorldSimulation(level: level, config: config)
+        var tuning = PlayerTuning()
+        tuning.rewindSeconds = 5.25
+        sim.configure(tuning: tuning)
+
+        advance(sim, seconds: 8.0, target: Vec2(x: 820, y: 180))
+        let before = sim.time
+        XCTAssertTrue(sim.rewind(seconds: 5.25))
+        XCTAssertEqual(sim.time, before - 5.25, accuracy: 0.12)
+    }
+
+    func testMagnetPullsOrbitalSparkOffItsRing() throws {
+        var level = LevelCatalog.prototype
+        level.walls = []
+        level.movers = []
+        level.lasers = []
+        level.gravityWells = []
+        level.rifts = []
+        level.gates = []
+        level.fields = []
+        level.bonuses = []
+        level.maxEchoes = 0
+        level.playerStart = Vec2(x: 160, y: 200)
+        level.exit = Vec2(x: 900, y: 900)
+        level.sparks = [
+            SparkSpawn(
+                id: 0,
+                position: Vec2(x: 280, y: 200),
+                orbit: SparkOrbit(center: Vec2(x: 200, y: 200), radius: 80, period: 90)
+            ),
+        ]
+        let sim = WorldSimulation(level: level)
+        XCTAssertTrue(sim.activate(.magnet))
+        XCTAssertTrue(sim.effects.isMagnet)
+        advance(sim, seconds: 0.5, target: Vec2(x: 220, y: 200))
+        let spark = try XCTUnwrap(sim.sparks.first)
+        XCTAssertTrue(spark.magnetHeld || spark.collected)
+        if !spark.collected {
+            XCTAssertNil(spark.orbit)
+            XCTAssertLessThan(spark.position.distance(to: sim.playerPosition), 70)
+        }
+    }
+
+    func testBlinkFollowsAimInsteadOfExit() {
+        var level = LevelCatalog.prototype
+        level.walls = []
+        level.playerStart = Vec2(x: 200, y: 200)
+        level.exit = Vec2(x: 880, y: 880)
+        let sim = WorldSimulation(level: level)
+        advance(sim, seconds: 0.35, target: Vec2(x: 200, y: 780))
+        XCTAssertTrue(sim.activate(.blink))
+        XCTAssertGreaterThan(sim.playerPosition.y, 280)
+        XCTAssertLessThan(sim.playerPosition.x, 280)
+    }
+
+    func testPulseDoesNothingWhenNoFutureEchoRemains() {
+        var level = LevelCatalog.prototype
+        level.maxEchoes = 0
+        let sim = WorldSimulation(level: level)
+        XCTAssertFalse(sim.activate(.pulse))
+        XCTAssertFalse(sim.activate(.chrono))
+    }
+
+    func testLateCoreMapsHaveTheirOwnSeals() {
+        XCTAssertEqual(LevelCatalog.seals(for: 40).control, .maxEchoes(3))
+        XCTAssertEqual(LevelCatalog.seals(for: 47).control, .useRift)
+        XCTAssertEqual(LevelCatalog.seals(for: 61).control, .noDash)
+        XCTAssertEqual(LevelCatalog.seals(for: 68).control, .useRift)
     }
 
     func testCollisionCooldownUsesRealDt() {

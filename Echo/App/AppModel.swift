@@ -180,21 +180,29 @@ final class AppModel {
     }
 
     func goHome() {
-        _ = progress.advanceDifficultyIfComplete()
         screen = .home
     }
 
-    func recordWin(levelID: String, result: SessionResult, daily: Bool) {
+    func startNextCycle() {
+        guard progress.advanceDifficultyIfComplete() else { return }
+        play(level: LevelCatalog.prototype, daily: false)
+    }
+
+    func recordWin(levelID: String, result: SessionResult, daily: Bool, dayKey: String? = nil) -> Int {
+        let awarded: Int
         if daily {
-            let key = LevelCatalog.dayKey(Date())
+            let key = dayKey ?? LevelCatalog.dayKey(Date())
             let firstClear = progress.lastDailyKey != key
+            awarded = firstClear ? result.points : 0
             progress.recordWin(levelID: levelID, result: result, awardsShard: firstClear)
             if firstClear {
                 progress.markDailyComplete(key)
             }
         } else {
+            awarded = result.points
             progress.recordWin(levelID: levelID, result: result, awardsShard: true)
         }
         audio.play(.win)
+        return awarded
     }
 }

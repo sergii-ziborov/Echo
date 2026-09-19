@@ -1,5 +1,9 @@
 import Foundation
 
+enum ArenaMetrics {
+    static let satelliteRadius: Double = 34
+}
+
 enum ArenaAtmosphere: String, Equatable, Sendable, CaseIterable {
     case clear
     case drift

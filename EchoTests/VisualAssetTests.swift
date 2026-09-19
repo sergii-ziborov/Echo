@@ -71,4 +71,14 @@ final class VisualAssetTests: XCTestCase {
         XCTAssertTrue(LevelCatalog.playable.contains { !$0.fields.isEmpty })
         XCTAssertTrue(LevelCatalog.playable.contains { !$0.lasers.isEmpty })
     }
+
+    func testEveryAbilityHasItsOwnGeneratedGem() {
+        XCTAssertEqual(BonusKind.allCases.count, 12)
+        for left in BonusKind.allCases {
+            for right in BonusKind.allCases where left != right {
+                XCTAssertFalse(GlowTextures.bonus(left) === GlowTextures.bonus(right),
+                               "\(left) and \(right) reuse the same in-game texture")
+            }
+        }
+    }
 }

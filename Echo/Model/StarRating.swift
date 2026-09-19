@@ -231,6 +231,7 @@ struct WorldSnapshot: Equatable, Sendable {
     var playbackTime: TimeInterval
     var player: Vec2
     var lastVelocity: Vec2
+    var lastAim: Vec2
     var echoes: [Vec2]
     var sparks: [SparkState]
     var bonuses: [BonusState]

@@ -9,6 +9,7 @@ struct GameView: View {
     @State private var session: GameSession
     @State private var scene: GameScene
     @State private var overlay: InRunOverlay = .none
+    @State private var awardedPoints = 0
     @State private var hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
     @Environment(\.scenePhase) private var scenePhase
 
@@ -116,8 +117,13 @@ struct GameView: View {
                         cycleComplete: session.level.number == LevelCatalog.playable.count
                             && model.progress.isCurrentDifficultyComplete,
                         nextDifficulty: DifficultyProfile(cycle: request.difficultyCycle + 1),
+                        awardedPoints: awardedPoints,
                         onWatch: { session.startBallet(result) },
+                        onRetry: { restart() },
                         onNext: nextLevel,
+                        onNextCycle: session.level.number == LevelCatalog.playable.count
+                            ? { model.startNextCycle() }
+                            : nil,
                         onMenu: { model.goHome() }
                     )
                 }
@@ -290,7 +296,10 @@ struct GameView: View {
             case .echoSpawned:
                 model.audio.play(.spawn)
                 model.audio.haptic(.rigid)
-                scene.burst(at: session.level.playerStart, color: UIColor(red: 0.75, green: 0.4, blue: 1, alpha: 1))
+                scene.burst(
+                    at: session.sim.echoes.last ?? session.level.playerStart,
+                    color: UIColor(red: 0.75, green: 0.4, blue: 1, alpha: 1)
+                )
                 offerHint(.echo)
             case .exitOpened:
                 model.audio.play(.exitOpen)
@@ -316,7 +325,12 @@ struct GameView: View {
                 model.audio.play(.death)
                 model.audio.notify(.error)
             case .won(let result):
-                model.recordWin(levelID: session.level.id, result: result, daily: request.daily)
+                awardedPoints = model.recordWin(
+                    levelID: session.level.id,
+                    result: result,
+                    daily: request.daily,
+                    dayKey: session.dailyKey
+                )
                 model.audio.notify(.success)
             }
         }
@@ -401,9 +415,8 @@ struct GameView: View {
             model.goHome()
             return
         }
-        if session.level.number == LevelCatalog.playable.count,
-           model.progress.advanceDifficultyIfComplete() {
-            model.play(level: LevelCatalog.prototype, daily: false)
+        if session.level.number == LevelCatalog.playable.count {
+            model.goHome()
             return
         }
         if let next = LevelCatalog.level(number: session.level.number + 1), model.progress.isUnlocked(next) {
@@ -513,6 +526,7 @@ struct HUDBar: View {
 
                         if session.effects.shieldCharges > 0 {
                             HUDEffectBadge(
+                                title: "SHIELD",
                                 icon: "shield.fill",
                                 value: "×\(session.effects.shieldCharges)",
                                 tint: .green,
@@ -521,6 +535,7 @@ struct HUDBar: View {
                         }
                         if session.effects.isFrozen {
                             HUDEffectBadge(
+                                title: "FREEZE",
                                 icon: "snowflake",
                                 value: seconds(session.effects.freezeRemaining),
                                 tint: EchoTheme.cyan,
@@ -529,14 +544,16 @@ struct HUDBar: View {
                         }
                         if session.effects.isSurging {
                             HUDEffectBadge(
-                                icon: "bolt.fill",
+                                title: "SPEED",
+                                icon: "hare.fill",
                                 value: seconds(session.effects.surgeRemaining),
                                 tint: EchoTheme.gold,
-                                accessibilityText: "Surge, \(seconds(session.effects.surgeRemaining)) remaining"
+                                accessibilityText: "Speed, \(seconds(session.effects.surgeRemaining)) remaining"
                             )
                         }
                         if session.effects.isMagnet {
                             HUDEffectBadge(
+                                title: "MAGNET",
                                 icon: "magnet.fill",
                                 value: seconds(session.effects.magnetRemaining),
                                 tint: EchoTheme.magenta,
@@ -545,6 +562,7 @@ struct HUDBar: View {
                         }
                         if session.effects.isPhasing {
                             HUDEffectBadge(
+                                title: "PHASE",
                                 icon: "sparkles",
                                 value: seconds(session.effects.phaseRemaining),
                                 tint: .white,
@@ -553,6 +571,7 @@ struct HUDBar: View {
                         }
                         if session.effects.isAnchored {
                             HUDEffectBadge(
+                                title: "SLOW",
                                 icon: "hourglass.bottomhalf.filled",
                                 value: seconds(session.effects.anchorRemaining),
                                 tint: EchoTheme.cyan,
@@ -561,6 +580,7 @@ struct HUDBar: View {
                         }
                         if session.effects.isPrismatic {
                             HUDEffectBadge(
+                                title: "PRISM",
                                 icon: "triangle.fill",
                                 value: seconds(session.effects.prismRemaining),
                                 tint: .green,
@@ -637,6 +657,7 @@ struct HUDChip<Content: View>: View {
 }
 
 private struct HUDEffectBadge: View {
+    var title: String? = nil
     let icon: String
     let value: String
     let tint: Color
@@ -648,13 +669,19 @@ private struct HUDEffectBadge: View {
             Image(systemName: icon)
                 .font(.system(size: 11, weight: .bold))
                 .foregroundStyle(tint)
+            if let title {
+                Text(title)
+                    .font(.system(size: 10, weight: .heavy, design: .rounded))
+                    .tracking(0.4)
+                    .foregroundStyle(.white.opacity(0.88))
+            }
             Text(value)
                 .font(.system(size: 11, weight: .bold, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(.white)
         }
-        .padding(.horizontal, 7)
-        .frame(height: 26)
+        .padding(.horizontal, 8)
+        .frame(height: 28)
         .background(tint.opacity(0.10), in: Capsule())
         .overlay(Capsule().stroke(tint.opacity(0.25), lineWidth: 1))
         .overlay(alignment: .bottomLeading) {
@@ -681,57 +708,57 @@ struct InventoryBar: View {
     var body: some View {
         let equipped = model.progress.equippedSkills
         if session.phase == .playing || session.phase == .paused {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
-                        if equipped.indices.contains(index) {
-                            let kind = equipped[index]
-                            let tint = Color(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b)
-                            let cooldown = session.cooldownRemaining(for: kind)
-                            let stock = model.progress.count(kind)
-                            Button {
-                                onUse(kind)
-                            } label: {
-                                ZStack {
-                                    VStack(spacing: 0) {
-                                        AbilityIconView(kind: kind, size: 31)
-                                        Text("×\(stock)")
-                                            .font(.system(size: 10, weight: .bold, design: .rounded))
-                                            .foregroundStyle(stock > 0 ? .white : EchoTheme.muted)
-                                    }
-                                    if cooldown > 0 {
-                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                            .fill(Color.black.opacity(0.66))
-                                        Text(String(format: "%.1f", cooldown))
-                                            .font(.system(size: 12, weight: .bold, design: .monospaced))
-                                            .foregroundStyle(.white)
-                                    }
+            HStack(spacing: 6) {
+                ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
+                    if equipped.indices.contains(index) {
+                        let kind = equipped[index]
+                        let tint = Color(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b)
+                        let cooldown = session.cooldownRemaining(for: kind)
+                        let stock = model.progress.count(kind)
+                        Button {
+                            onUse(kind)
+                        } label: {
+                            ZStack {
+                                VStack(spacing: 0) {
+                                    AbilityIconView(kind: kind, size: 26)
+                                    Text("×\(stock)")
+                                        .font(.system(size: 9, weight: .bold, design: .rounded))
+                                        .foregroundStyle(stock > 0 ? .white : EchoTheme.muted)
                                 }
-                                .frame(width: 53, height: 53)
-                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                        .stroke(tint.opacity(stock > 0 ? 0.65 : 0.20), lineWidth: 1)
-                                )
+                                if cooldown > 0 {
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .fill(Color.black.opacity(0.66))
+                                    Text(String(format: "%.1f", cooldown))
+                                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                                        .foregroundStyle(.white)
+                                }
                             }
-                            .buttonStyle(.plain)
-                            .disabled(session.phase != .playing || stock == 0 || cooldown > 0)
-                            .accessibilityLabel("Use \(kind.title), \(stock) owned")
-                        } else {
-                            Image(systemName: "plus")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(EchoTheme.muted.opacity(0.65))
-                                .frame(width: 53, height: 53)
-                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                        .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
-                                )
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 48)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .stroke(tint.opacity(stock > 0 ? 0.65 : 0.20), lineWidth: 1)
+                            )
                         }
+                        .buttonStyle(.plain)
+                        .disabled(session.phase != .playing || stock == 0 || cooldown > 0)
+                        .accessibilityLabel("Use \(kind.title), \(stock) owned")
+                    } else {
+                        Image(systemName: "plus")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(EchoTheme.muted.opacity(0.65))
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 48)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                            )
                     }
                 }
             }
-            .frame(maxWidth: 370, alignment: .leading)
+            .frame(maxWidth: 360, alignment: .leading)
         }
     }
 }

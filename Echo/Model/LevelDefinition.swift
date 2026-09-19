@@ -318,6 +318,10 @@ enum LevelCatalog {
         case 34: (.useRift, .parTime)
         case 35: (.avoidScar, .noDash)
         case 36: (.noShop, .parTime)
+        case 40: (.maxEchoes(3), .noShop)
+        case 47: (.useRift, .parTime)
+        case 61: (.noDash, .maxEchoes(3))
+        case 68: (.useRift, .maxEchoes(4))
         default: (.parTime, .noDash)
         }
     }
@@ -1747,9 +1751,9 @@ enum LevelCatalog {
             let orbitPeriod = 10.5 - Double(act.rawValue - Act.singularity.rawValue) * 0.45
             movers = [
                 .stationary(id: 0, at: center, radius: 130),
-                .orbit(id: 1, center: center, radius: 210, period: orbitPeriod, phase: 0, size: 22),
-                .orbit(id: 2, center: center, radius: 210, period: orbitPeriod, phase: .pi * 2 / 3, size: 22),
-                .orbit(id: 3, center: center, radius: 210, period: orbitPeriod, phase: .pi * 4 / 3, size: 22),
+                .orbit(id: 1, center: center, radius: 210, period: orbitPeriod, phase: 0, size: ArenaMetrics.satelliteRadius),
+                .orbit(id: 2, center: center, radius: 210, period: orbitPeriod, phase: .pi * 2 / 3, size: ArenaMetrics.satelliteRadius),
+                .orbit(id: 3, center: center, radius: 210, period: orbitPeriod, phase: .pi * 4 / 3, size: ArenaMetrics.satelliteRadius),
             ]
         } else if slot == 2 {
             let center = Vec2(x: 500, y: 500)

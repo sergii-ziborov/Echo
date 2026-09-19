@@ -3,20 +3,16 @@ import UIKit
 
 @MainActor
 enum GlowTextures {
-    static let player: SKTexture = {
-        // Trim ImageGen's transparent border in texture coordinates, keeping the
-        // white head and its short echo tail large enough to read on a phone.
-        if let artwork = named("PlayerOrbV2") {
-            let texture = SKTexture(rect: CGRect(x: 0.18, y: 0.20, width: 0.60, height: 0.60), in: artwork)
-            texture.filteringMode = .linear
-            return texture
-        }
-        return named("PlayerOrb") ?? orb(color: UIColor(red: 0.45, green: 0.9, blue: 1, alpha: 1), size: 256)
-    }()
-    static let echo: SKTexture = named("EchoOrb") ?? orb(color: UIColor(red: 0.75, green: 0.35, blue: 1, alpha: 1), size: 256)
-    static let spark: SKTexture = named("SparkGem") ?? named("SparkOrb") ?? orb(color: UIColor(red: 0.4, green: 0.9, blue: 1, alpha: 1), size: 192)
-    static let blob: SKTexture = named("GlowBlob") ?? orb(color: UIColor(red: 0.4, green: 0.9, blue: 1, alpha: 1), size: 128)
-    static let spawnRing: SKTexture = named("SpawnRing") ?? orb(color: UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1), size: 160)
+    enum OrbPose {
+        case idle, moving, dash, spawn, hit
+    }
+
+    static let glowMask: SKTexture = makeGlowMask(pixelSize: 128)
+    static let player: SKTexture = assembleOrb(color: UIColor(red: 0.40, green: 0.88, blue: 1, alpha: 1))
+    static let echo: SKTexture = assembleOrb(color: UIColor(red: 0.78, green: 0.36, blue: 1, alpha: 1))
+    static let spark: SKTexture = assembleOrb(color: UIColor(red: 0.45, green: 0.92, blue: 1, alpha: 1), size: 192)
+    static let blob: SKTexture = glowMask
+    static let spawnRing: SKTexture = makeRing(color: UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1), size: 160)
     static let asteroid: SKTexture = named("Asteroid") ?? orb(color: UIColor(red: 0.32, green: 0.48, blue: 0.65, alpha: 1), size: 256)
     private static let asteroidAtlas = UIImage(named: "AsteroidMaterialAtlas")
     private static let basaltAsteroid = quadrant(of: asteroidAtlas, top: true, right: false)
@@ -53,13 +49,16 @@ enum GlowTextures {
     static let openGate = quadrant(of: obstacleAtlas, top: true, right: true)
     static let slowField = quadrant(of: obstacleAtlas, top: false, right: false)
     static let hazardEmitter = quadrant(of: obstacleAtlas, top: false, right: true)
-    static let laserEmitter: SKTexture = named("LaserEmitter") ?? orb(color: UIColor(red: 1, green: 0.28, blue: 0.48, alpha: 1), size: 256)
-    static let dimensionalRift: SKTexture = named("DimensionalRift") ?? spawnRing
-    static let blackHole: SKTexture = named("BlackHole") ?? orb(color: UIColor(red: 0.25, green: 0.15, blue: 0.55, alpha: 1), size: 256)
+    static let blackHole: SKTexture = assembleOrb(color: UIColor(red: 0.22, green: 0.12, blue: 0.48, alpha: 1))
     static let candyTimeline: SKTexture = named("CandyTimeline") ?? blob
     static let frostVignette: SKTexture = frostVignetteTexture(size: 640)
     static let snowflakeParticle: SKTexture = snowflakeTexture(size: 96)
-    static let shieldBubble: SKTexture = named("ShieldBubbleV2") ?? shieldBubbleTexture(size: 256)
+    static let shieldBubble: SKTexture = shieldBubbleTexture(size: 256)
+    private static let bonusTextures: [BonusKind: SKTexture] = {
+        Dictionary(uniqueKeysWithValues: BonusKind.allCases.map { kind in
+            (kind, abilityPlate(kind: kind, color: color(for: kind), size: 160))
+        })
+    }()
 
     static func asteroid(for material: AsteroidMaterial, variation: Int = 0) -> SKTexture {
         let skins: [SKTexture?] = switch material {
@@ -69,7 +68,7 @@ enum GlowTextures {
         case .alloy: [alloyAsteroid, obsidianAsteroid, relicAsteroid]
         }
         let index = ((variation % skins.count) + skins.count) % skins.count
-        return skins[index] ?? skins[0] ?? asteroid
+        return circularized(skins[index] ?? skins[0] ?? asteroid)
     }
 
     static func wall(for theme: ArenaTheme, levelNumber: Int) -> SKTexture? {
@@ -85,10 +84,190 @@ enum GlowTextures {
         return finishes[epoch % finishes.count] ?? finishes[0]
     }
 
+    static func bonus(_ kind: BonusKind) -> SKTexture {
+        bonusTextures[kind] ?? abilityPlate(kind: kind, color: color(for: kind), size: 160)
+    }
+
+    static func color(for kind: BonusKind) -> UIColor {
+        UIColor(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b, alpha: 1)
+    }
+
+    static func named(_ name: String) -> SKTexture? {
+        guard let image = UIImage(named: name) else { return nil }
+        let texture = SKTexture(image: image)
+        texture.filteringMode = .linear
+        return texture
+    }
+
+    static func orb(color: UIColor, size: CGFloat) -> SKTexture {
+        makeGlowMask(pixelSize: Int(size), tint: color)
+    }
+
+    static func abilityGlyph(systemName: String, color: UIColor, size: CGFloat) -> SKTexture {
+        abilityPlate(kind: BonusKind.allCases.first { $0.icon == systemName } ?? .shield, color: color, size: size)
+    }
+
+    static func abilityPlate(kind: BonusKind, color: UIColor, size: CGFloat) -> SKTexture {
+        let image = transparentImage(size: size) { cg in
+            let bounds = CGRect(x: size * 0.08, y: size * 0.08, width: size * 0.84, height: size * 0.84)
+            let hex = hexPath(in: bounds)
+            cg.addPath(hex)
+            cg.setFillColor(UIColor(white: 0.08, alpha: 0.92).cgColor)
+            cg.fillPath()
+            cg.addPath(hex)
+            cg.setStrokeColor(color.withAlphaComponent(0.92).cgColor)
+            cg.setLineWidth(size * 0.035)
+            cg.strokePath()
+            AbilityGlyph.draw(kind: kind, in: bounds, color: .white, onto: cg)
+        }
+        let texture = SKTexture(image: image)
+        texture.filteringMode = .linear
+        return texture
+    }
+
+    private static func makeGlowMask(pixelSize: Int, tint: UIColor = .white) -> SKTexture {
+        let side = CGFloat(max(16, pixelSize))
+        let image = transparentImage(size: side) { cg in
+            let center = CGPoint(x: side * 0.5, y: side * 0.5)
+            let colors = [
+                tint.withAlphaComponent(0.90).cgColor,
+                tint.withAlphaComponent(0.46).cgColor,
+                tint.withAlphaComponent(0.14).cgColor,
+                tint.withAlphaComponent(0.03).cgColor,
+                tint.withAlphaComponent(0).cgColor,
+            ] as CFArray
+            if let gradient = CGGradient(
+                colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                colors: colors,
+                locations: [0, 0.22, 0.50, 0.76, 1]
+            ) {
+                cg.drawRadialGradient(
+                    gradient,
+                    startCenter: center,
+                    startRadius: 0,
+                    endCenter: center,
+                    endRadius: side * 0.46,
+                    options: []
+                )
+            }
+        }
+        let texture = SKTexture(image: image)
+        texture.filteringMode = .linear
+        return texture
+    }
+
+    private static func makeRing(color: UIColor, size: CGFloat) -> SKTexture {
+        let image = transparentImage(size: size) { cg in
+            let inset = size * 0.18
+            let rect = CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2)
+            cg.setStrokeColor(color.withAlphaComponent(0.85).cgColor)
+            cg.setLineWidth(size * 0.06)
+            cg.strokeEllipse(in: rect)
+        }
+        let texture = SKTexture(image: image)
+        texture.filteringMode = .linear
+        return texture
+    }
+
+    private static func hexPath(in rect: CGRect) -> CGPath {
+        let path = CGMutablePath()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) * 0.5
+        for index in 0..<6 {
+            let angle = CGFloat(index) / 6 * .pi * 2 - .pi / 2
+            let point = CGPoint(x: center.x + cos(angle) * radius, y: center.y + sin(angle) * radius)
+            if index == 0 { path.move(to: point) } else { path.addLine(to: point) }
+        }
+        path.closeSubpath()
+        return path
+    }
+
+    private static func transparentImage(size: CGFloat, draw: (CGContext) -> Void) -> UIImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = false
+        format.scale = 1
+        format.preferredRange = .standard
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size), format: format)
+        return renderer.image { context in
+            context.cgContext.clear(CGRect(x: 0, y: 0, width: size, height: size))
+            draw(context.cgContext)
+        }
+    }
+
+    private static func circularized(_ texture: SKTexture) -> SKTexture {
+        let image = UIImage(cgImage: texture.cgImage())
+        let masked = SKTexture(image: circularMasked(image))
+        masked.filteringMode = .linear
+        return masked
+    }
+
+    private static func circularMasked(_ image: UIImage) -> UIImage {
+        let side = min(image.size.width, image.size.height)
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = false
+        format.scale = image.scale
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: side, height: side), format: format)
+        return renderer.image { context in
+            let rect = CGRect(x: 1, y: 1, width: side - 2, height: side - 2)
+            context.cgContext.addEllipse(in: rect)
+            context.cgContext.clip()
+            image.draw(in: CGRect(
+                x: (side - image.size.width) / 2,
+                y: (side - image.size.height) / 2,
+                width: image.size.width,
+                height: image.size.height
+            ))
+        }
+    }
+
+    private static func assembleOrb(color: UIColor, size: CGFloat = 256) -> SKTexture {
+        let image = transparentImage(size: size) { cg in
+            let inset = size * 0.08
+            let circle = CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2)
+            cg.addEllipse(in: circle)
+            cg.clip()
+
+            let center = CGPoint(x: size * 0.50, y: size * 0.50)
+            let light = CGPoint(x: size * 0.38, y: size * 0.36)
+            let sphere = [
+                UIColor.white.withAlphaComponent(0.96).cgColor,
+                color.withAlphaComponent(0.95).cgColor,
+                color.withAlphaComponent(0.42).cgColor,
+                UIColor(white: 0.04, alpha: 0.96).cgColor,
+            ] as CFArray
+            if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: sphere, locations: [0, 0.22, 0.62, 1]) {
+                cg.drawRadialGradient(
+                    gradient,
+                    startCenter: light,
+                    startRadius: 0,
+                    endCenter: center,
+                    endRadius: size * 0.46,
+                    options: [.drawsAfterEndLocation]
+                )
+            }
+
+            let sheen = [
+                UIColor.white.withAlphaComponent(0.85).cgColor,
+                UIColor.white.withAlphaComponent(0).cgColor,
+            ] as CFArray
+            if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: sheen, locations: [0, 1]) {
+                cg.drawRadialGradient(
+                    gradient,
+                    startCenter: CGPoint(x: size * 0.36, y: size * 0.33),
+                    startRadius: 0,
+                    endCenter: CGPoint(x: size * 0.36, y: size * 0.33),
+                    endRadius: size * 0.13,
+                    options: []
+                )
+            }
+        }
+        let texture = SKTexture(image: image)
+        texture.filteringMode = .linear
+        return texture
+    }
+
     private static func quadrant(of atlas: UIImage?, top: Bool, right: Bool) -> SKTexture? {
         guard let image = atlas?.cgImage else { return nil }
-        // Shape-node fill textures do not reliably honor SKTexture subrects.
-        // Crop the bitmap so no neighboring material can bleed into the wall.
         let halfWidth = image.width / 2
         let halfHeight = image.height / 2
         let inset = 4
@@ -104,105 +283,14 @@ enum GlowTextures {
         return texture
     }
 
-    static func bonus(_ kind: BonusKind) -> SKTexture {
-        switch kind {
-        case .shield, .ward:
-            named("BonusShieldV3") ?? named(kind.assetName) ?? abilityGlyph(systemName: kind.icon, color: color(for: kind), size: 160)
-        case .anchor, .repulse, .prism, .blink:
-            abilityGlyph(systemName: kind.icon, color: color(for: kind), size: 160)
-        default:
-            named(kind.assetName) ?? abilityGlyph(systemName: kind.icon, color: color(for: kind), size: 160)
-        }
-    }
-
-    static func color(for kind: BonusKind) -> UIColor {
-        UIColor(red: kind.tint.r, green: kind.tint.g, blue: kind.tint.b, alpha: 1)
-    }
-
-    static func named(_ name: String) -> SKTexture? {
-        guard let image = UIImage(named: name) else { return nil }
-        let texture = SKTexture(image: image)
-        texture.filteringMode = .linear
-        return texture
-    }
-
-    static func orb(color: UIColor, size: CGFloat) -> SKTexture {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
-        let image = renderer.image { ctx in
-            let cg = ctx.cgContext
-            let center = CGPoint(x: size / 2, y: size / 2)
-            let colors = [
-                color.withAlphaComponent(0.0).cgColor,
-                color.withAlphaComponent(0.15).cgColor,
-                color.withAlphaComponent(0.55).cgColor,
-                UIColor.white.withAlphaComponent(0.95).cgColor,
-            ] as CFArray
-            let locations: [CGFloat] = [0, 0.35, 0.7, 1]
-            if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: colors, locations: locations) {
-                cg.drawRadialGradient(
-                    gradient,
-                    startCenter: center,
-                    startRadius: 0,
-                    endCenter: center,
-                    endRadius: size / 2,
-                    options: [.drawsAfterEndLocation]
-                )
-            }
-        }
-        return SKTexture(image: image)
-    }
-
-    static func abilityGlyph(systemName: String, color: UIColor, size: CGFloat) -> SKTexture {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
-        let image = renderer.image { context in
-            let cg = context.cgContext
-            let center = CGPoint(x: size / 2, y: size / 2)
-            let colors = [
-                color.withAlphaComponent(0).cgColor,
-                color.withAlphaComponent(0.42).cgColor,
-                color.withAlphaComponent(0.88).cgColor,
-            ] as CFArray
-            if let gradient = CGGradient(
-                colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                colors: colors,
-                locations: [0, 0.58, 1]
-            ) {
-                cg.drawRadialGradient(
-                    gradient,
-                    startCenter: center,
-                    startRadius: 0,
-                    endCenter: center,
-                    endRadius: size * 0.47,
-                    options: []
-                )
-            }
-            let configuration = UIImage.SymbolConfiguration(pointSize: size * 0.34, weight: .bold)
-            if let symbol = UIImage(systemName: systemName, withConfiguration: configuration)?
-                .withTintColor(.white, renderingMode: .alwaysOriginal) {
-                let rect = CGRect(
-                    x: (size - symbol.size.width) / 2,
-                    y: (size - symbol.size.height) / 2,
-                    width: symbol.size.width,
-                    height: symbol.size.height
-                )
-                symbol.draw(in: rect)
-            }
-        }
-        let texture = SKTexture(image: image)
-        texture.filteringMode = .linear
-        return texture
-    }
-
     private static func frostVignetteTexture(size: CGFloat) -> SKTexture {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
-        let image = renderer.image { context in
-            let cg = context.cgContext
+        let image = transparentImage(size: size) { cg in
             let center = CGPoint(x: size / 2, y: size / 2)
             let colors = [
                 UIColor.clear.cgColor,
-                UIColor(red: 0.42, green: 0.76, blue: 1, alpha: 0.04).cgColor,
-                UIColor(red: 0.72, green: 0.93, blue: 1, alpha: 0.30).cgColor,
-                UIColor.white.withAlphaComponent(0.58).cgColor,
+                UIColor(red: 0.42, green: 0.76, blue: 1, alpha: 0.02).cgColor,
+                UIColor(red: 0.72, green: 0.93, blue: 1, alpha: 0.12).cgColor,
+                UIColor.white.withAlphaComponent(0.22).cgColor,
             ] as CFArray
             if let gradient = CGGradient(
                 colorsSpace: CGColorSpaceCreateDeviceRGB(),

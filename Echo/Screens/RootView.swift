@@ -23,7 +23,9 @@ struct RootView: View {
                     bestMoves: 15,
                     cycleComplete: false,
                     nextDifficulty: DifficultyProfile(cycle: 1),
+                    awardedPoints: 180,
                     onWatch: {},
+                    onRetry: {},
                     onNext: {},
                     onMenu: {}
                 )

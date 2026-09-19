@@ -15,6 +15,7 @@ enum GamePhase: Equatable {
 final class GameSession {
     let level: LevelDefinition
     let daily: Bool
+    let dailyKey: String?
     let sim: WorldSimulation
 
     var phase: GamePhase = .playing
@@ -50,6 +51,7 @@ final class GameSession {
     init(level: LevelDefinition, daily: Bool) {
         self.level = level
         self.daily = daily
+        self.dailyKey = daily ? LevelCatalog.dayKey(Date()) : nil
         self.sim = WorldSimulation(level: level)
 #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-shot-fracture") {

@@ -284,21 +284,10 @@ struct AbilityIconView: View {
                 )
             RoundedRectangle(cornerRadius: size * 0.30, style: .continuous)
                 .stroke(tint.opacity(0.55), lineWidth: 1)
-            Circle()
-                .fill(tint.opacity(0.20))
-                .frame(width: size * 0.72, height: size * 0.72)
-                .blur(radius: size * 0.08)
-            if kind == .shield || kind == .ward {
-                Image("BonusShieldV3")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: size * 0.78, height: size * 0.78)
-            } else {
-                Image(systemName: kind.icon)
-                    .font(.system(size: size * 0.42, weight: .bold))
-                    .foregroundStyle(.white)
-                    .shadow(color: tint.opacity(0.9), radius: size * 0.12)
-            }
+            Image(uiImage: UIImage(cgImage: GlowTextures.bonus(kind).cgImage()))
+                .resizable()
+                .interpolation(.high)
+                .padding(size * 0.06)
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)
@@ -381,11 +370,11 @@ enum MechanicDemoScenario: Hashable {
         case .collision: "TWO ECHOES LEAVE A SCAR"
         case .gate: "WAIT · THEN CROSS"
         case .laser: "CHARGE → FIRE → MOVE"
-        case .timeCrystal: "REACH IT BEFORE ZERO"
+        case .timeCrystal: "GOLD BONUS · GRAB FOR FREEZE"
         case .resonance: "FAST SPARKS BUILD A CHAIN"
         case .blackHole: "PULL OUTSIDE · DEATH INSIDE"
         case .shield: "ONE HIT BOUNCES AWAY"
-        case .surge: "SPEED + ELECTRIC TRAIL"
+        case .surge: "YOU MOVE FASTER"
         case .pulse: "NEXT ECHO ARRIVES LATER"
         case .magnet: "SPARKS FLY TO YOU"
         case .chrono: "PUSH THE TIMELINE BACK"
@@ -585,8 +574,7 @@ struct MechanicDemoView: View {
 
         case .timeCrystal:
             polygon(context: &context, center: CGPoint(x: w * 0.78, y: mid.y), radius: 17, sides: 6, color: EchoTheme.gold, filled: true)
-            let remaining = max(0.08, 1 - t)
-            ring(context: &context, center: CGPoint(x: w * 0.78, y: mid.y), radius: CGFloat(26 + remaining * 7), color: EchoTheme.gold, lineWidth: 3, opacity: remaining)
+            orb(context: &context, center: CGPoint(x: w * 0.78, y: mid.y), radius: 7, color: .white)
             orb(context: &context, center: CGPoint(x: w * (0.12 + eased * 0.66), y: mid.y), radius: 11, color: .white)
 
         case .resonance:
@@ -615,13 +603,11 @@ struct MechanicDemoView: View {
 
         case .surge:
             let x = w * (0.10 + min(1, t * 1.55) * 0.80)
-            for index in 0..<3 {
-                mechanicLightning(
-                    context: &context,
-                    from: CGPoint(x: x - CGFloat(48 + index * 18), y: mid.y + CGFloat(index * 13 - 13)),
-                    to: CGPoint(x: x - 8, y: mid.y + CGFloat(index * 5 - 5)),
-                    color: index == 1 ? .white : EchoTheme.gold,
-                    seed: index + Int(t * 18)
+            for index in 0..<4 {
+                let trailX = x - CGFloat(18 + index * 14)
+                context.fill(
+                    Path(ellipseIn: CGRect(x: trailX - 5, y: mid.y - 5, width: 10, height: 10)),
+                    with: .color(EchoTheme.gold.opacity(0.55 - Double(index) * 0.1))
                 )
             }
             orb(context: &context, center: CGPoint(x: x, y: mid.y), radius: 12, color: .white)
@@ -1018,7 +1004,7 @@ struct TechnologyPreviewView: View {
         case .velocity: "BEFORE · THE CRYSTAL IS JUST OUT OF REACH"
         case .sparkSense: "BEFORE · YOU MUST TOUCH EVERY SPARK"
         case .dashCapacitor: "BEFORE · DASH IS STILL RECHARGING"
-        case .surgeMastery: "BEFORE · THE LIGHTNING TRAIL ENDS EARLY"
+        case .surgeMastery: "BEFORE · THE SPEED BOOST ENDS EARLY"
         case .dashImpulse: "BEFORE · ONE DASH STOPS INSIDE DANGER"
         case .slots: "BEFORE · ONLY CURRENT ABILITY BUTTONS FIT"
         case .reserves: "BEFORE · CHARGES RUN OUT SOONER"
@@ -1050,7 +1036,7 @@ struct TechnologyPreviewView: View {
         case .velocity: "AFTER · YOU REACH THE CRYSTAL SOONER"
         case .sparkSense: "AFTER · THE WIDER RING COLLECTS IT FOR YOU"
         case .dashCapacitor: "AFTER · DASH BECOMES READY SOONER"
-        case .surgeMastery: "AFTER · SURGE AND LIGHTNING LAST LONGER"
+        case .surgeMastery: "AFTER · THE SPEED BOOST LASTS LONGER"
         case .dashImpulse: "AFTER · ONE DASH CLEARS THE ENTIRE HAZARD"
         case .slots: "AFTER · ONE MORE ABILITY CAN BE EQUIPPED"
         case .reserves: "AFTER · EVERY ABILITY GAINS TWO CHARGES"
@@ -1180,14 +1166,11 @@ struct TechnologyPreviewView: View {
             let travel = min(1, smooth * (0.85 + boost * 0.35))
             let orbPoint = point(start, end, travel)
             let trailLength = CGFloat(24 + boost * 72)
-            for index in 0..<3 {
-                let y = orbPoint.y + CGFloat(index * 10 - 10)
-                techLightning(
-                    context: &context,
-                    from: CGPoint(x: orbPoint.x - trailLength - CGFloat(index * 7), y: y + CGFloat(index.isMultiple(of: 2) ? 8 : -7)),
-                    to: CGPoint(x: orbPoint.x - 8, y: y),
-                    color: index == 1 ? .white : EchoTheme.gold,
-                    seed: index + Int(t * 20)
+            for index in 0..<4 {
+                let trailX = orbPoint.x - 10 - CGFloat(index) * (trailLength / 4)
+                context.fill(
+                    Path(ellipseIn: CGRect(x: trailX - 5, y: orbPoint.y - 5, width: 10, height: 10)),
+                    with: .color(EchoTheme.gold.opacity(0.55 - Double(index) * 0.1))
                 )
             }
             techOrb(context: &context, center: orbPoint, radius: 11, color: .white)

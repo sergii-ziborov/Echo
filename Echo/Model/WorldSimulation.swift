@@ -55,6 +55,7 @@ struct SparkState: Equatable, Sendable, Identifiable {
     var timerRemaining: TimeInterval?
     var timedOut: Bool
     var orbit: SparkOrbit?
+    var magnetHeld: Bool = false
 }
 
 final class WorldSimulation {
@@ -66,6 +67,7 @@ final class WorldSimulation {
     private(set) var playbackTime: TimeInterval = 0
     private(set) var playerPosition: Vec2
     private(set) var lastVelocity: Vec2 = .zero
+    private(set) var lastAim: Vec2 = .zero
     private(set) var echoes: [Vec2] = []
     private(set) var sparks: [SparkState]
     private(set) var bonuses: [BonusState]
@@ -110,6 +112,10 @@ final class WorldSimulation {
     var nextEchoAt: TimeInterval? {
         guard echoCount < level.maxEchoes else { return nil }
         return Double(echoCount + 1) * level.echoInterval + tuning.echoDelayBonus + pulseDelay
+    }
+
+    private var echoClock: TimeInterval {
+        max(0, playbackTime - pulseDelay - tuning.echoDelayBonus)
     }
 
     var nextEchoIn: TimeInterval? {
@@ -201,6 +207,7 @@ final class WorldSimulation {
         playbackTime = 0
         playerPosition = level.playerStart
         lastVelocity = .zero
+        lastAim = .zero
         echoes = []
         sparks = Self.makeSparks(level.sparks)
         bonuses = Self.makeBonuses(level.bonuses)
@@ -266,6 +273,7 @@ final class WorldSimulation {
         playbackTime = snap.playbackTime
         playerPosition = snap.player
         lastVelocity = snap.lastVelocity
+        lastAim = snap.lastAim
         echoes = snap.echoes
         sparks = snap.sparks
         bonuses = snap.bonuses
@@ -311,6 +319,14 @@ final class WorldSimulation {
     @discardableResult
     func activate(_ kind: BonusKind, fromShop: Bool = false) -> Bool {
         guard phase == .playing else { return false }
+        switch kind {
+        case .pulse, .chrono:
+            guard echoCount < level.maxEchoes else { return false }
+        case .blink:
+            guard blinkDirection() != nil else { return false }
+        default:
+            break
+        }
         apply(kind)
         if fromShop { usedItem = true }
         return true
@@ -453,9 +469,10 @@ final class WorldSimulation {
             let delta = effectiveTarget - playerPosition
             let dist = delta.length
             if dist > config.inputDeadzone {
+                lastAim = delta.normalized()
                 let stepLen = min(currentSpeed * dt, dist)
-                playerPosition = playerPosition + delta.normalized() * stepLen
-                velocity = delta.normalized() * (stepLen / max(dt, 0.0001))
+                playerPosition = playerPosition + lastAim * stepLen
+                velocity = lastAim * (stepLen / max(dt, 0.0001))
             }
         }
         lastVelocity = velocity
@@ -473,8 +490,8 @@ final class WorldSimulation {
 
     private func spawnEchoesIfNeeded() -> [SimEvent] {
         var events: [SimEvent] = []
-        let clock = max(0, playbackTime - pulseDelay)
-        let desired = min(level.maxEchoes, Int(clock / level.echoInterval))
+        let clock = echoClock
+        let desired = min(level.maxEchoes, Int(clock / max(level.echoInterval, 0.001)))
 
         if desired > echoCount {
             let previous = echoCount
@@ -676,7 +693,7 @@ final class WorldSimulation {
                 material: $0.material,
                 position: $0.position,
                 velocity: $0.velocity,
-                radius: max(34, $0.radius),
+                radius: $0.radius,
                 path: $0.path,
                 hitsRemaining: $0.material.wallHitsToShatter
             )
@@ -720,7 +737,7 @@ final class WorldSimulation {
 
     private func updateOrbits() {
         for i in sparks.indices where !sparks[i].collected {
-            guard let orbit = sparks[i].orbit, orbit.period > 0 else { continue }
+            guard !sparks[i].magnetHeld, let orbit = sparks[i].orbit, orbit.period > 0 else { continue }
             let angle = orbit.phase + (playbackTime / orbit.period) * (.pi * 2)
             sparks[i].position = Vec2(
                 x: orbit.center.x + cos(angle) * orbit.radius,
@@ -735,6 +752,8 @@ final class WorldSimulation {
             let delta = playerPosition - sparks[i].position
             let dist = delta.length
             if dist < config.magnetRadius * tuning.magnetRadiusMultiplier, dist > 1 {
+                sparks[i].magnetHeld = true
+                sparks[i].orbit = nil
                 sparks[i].position = sparks[i].position + delta.normalized() * min(280 * dt, dist)
             }
         }
@@ -859,10 +878,14 @@ final class WorldSimulation {
         effects.iFrames = max(effects.iFrames, 0.25)
     }
 
+    private func blinkDirection() -> Vec2? {
+        if lastAim.length > 0.1 { return lastAim }
+        if lastVelocity.length > 1 { return lastVelocity.normalized() }
+        return nil
+    }
+
     private func applyBlink() {
-        let fallback = level.exit - playerPosition
-        let direction = lastVelocity.length > 1 ? lastVelocity.normalized() : fallback.normalized()
-        guard direction.length > 0 else { return }
+        guard let direction = blinkDirection() else { return }
         let destination = playerPosition + direction * tuning.blinkDistance
         playerPosition = resolveWalls(clampToArena(destination, radius: config.playerRadius), radius: config.playerRadius)
         effects.iFrames = max(effects.iFrames, 0.45)
@@ -894,14 +917,18 @@ final class WorldSimulation {
                     movers[i].patrolT = 0
                     movers[i].patrolDir = 1
                 }
-                movers[i].position = a.lerp(b, movers[i].patrolT)
+                let next = a.lerp(b, movers[i].patrolT)
+                movers[i].velocity = (next - movers[i].position) / max(dt, 0.0001)
+                movers[i].position = next
             case .orbit(let center, let radius, let period, let phase):
                 impacted = false
                 let angle = phase + (playbackTime / max(period, 0.1)) * (.pi * 2)
-                movers[i].position = Vec2(
+                let next = Vec2(
                     x: center.x + cos(angle) * radius,
                     y: center.y + sin(angle) * radius
                 )
+                movers[i].velocity = (next - movers[i].position) / max(dt, 0.0001)
+                movers[i].position = next
             }
 
             if impacted, movers[i].impactCooldown <= 0 {
@@ -1056,6 +1083,7 @@ final class WorldSimulation {
                 playbackTime: playbackTime,
                 player: playerPosition,
                 lastVelocity: lastVelocity,
+                lastAim: lastAim,
                 echoes: echoes,
                 sparks: sparks,
                 bonuses: bonuses,
@@ -1088,7 +1116,8 @@ final class WorldSimulation {
                 riftTravelCooldown: riftTravelCooldown
             )
         )
-        let keep = Int(config.snapshotWindow * config.snapshotHz) + 8
+        let window = max(config.snapshotWindow, tuning.rewindSeconds) + 0.25
+        let keep = Int((window * config.snapshotHz).rounded(.up)) + 8
         if snapshots.count > keep {
             snapshots.removeFirst(snapshots.count - keep)
         }
