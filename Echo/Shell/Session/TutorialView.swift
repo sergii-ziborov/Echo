@@ -5,7 +5,12 @@ struct TutorialView: View {
 
     @Environment(AppModel.self) private var model
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var stepIndex = 0
+    @State var stepIndex: Int
+
+    init(stepIndex: Int = 0, onDone: @escaping () -> Void) {
+        self.onDone = onDone
+        _stepIndex = State(initialValue: stepIndex)
+    }
 
     private let steps: [TutorialBeat] = [
         TutorialBeat(

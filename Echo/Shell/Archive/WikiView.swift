@@ -2,7 +2,11 @@ import SwiftUI
 
 struct WikiView: View {
     @Environment(AppModel.self) private var model
-    @State private var section: WikiSection = ProcessInfo.processInfo.arguments.contains("-shot-wiki-research") ? .research : .basics
+    @State var section: WikiSection
+
+    init(section: WikiSection = ProcessInfo.processInfo.arguments.contains("-shot-wiki-research") ? .research : .basics) {
+        _section = State(initialValue: section)
+    }
 
     var body: some View {
         ZStack {

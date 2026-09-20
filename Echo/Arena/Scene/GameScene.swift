@@ -4,7 +4,7 @@ import UIKit
 
 @MainActor
 final class GameScene: SKScene {
-    unowned let session: GameSession
+    let session: GameSession
     var onEvents: (([SimEvent]) -> Void)?
 
     var playerNode: SKNode!

@@ -72,6 +72,17 @@ final class VisualAssetTests: XCTestCase {
         XCTAssertTrue(LevelCatalog.playable.contains { !$0.lasers.isEmpty })
     }
 
+    func testLegacyTextureHelpersStillBuild() {
+        _ = GlowTextures.asteroid
+        _ = GlowTextures.candyTimeline
+        _ = GlowTextures.asteroid(for: .basalt, variation: 0)
+        _ = GlowTextures.wall(for: .void, levelNumber: 1)
+        _ = GlowTextures.bonus(.ward)
+        _ = GlowTextures.orb(color: .cyan, size: 32)
+        _ = GlowTextures.abilityGlyph(systemName: "shield.fill", color: .green, size: 28)
+        _ = GlowTextures.abilityGlyph(systemName: "missing", color: .white, size: 20)
+    }
+
     func testEveryAbilityHasItsOwnGeneratedGem() {
         XCTAssertEqual(BonusKind.allCases.count, 12)
         for left in BonusKind.allCases {

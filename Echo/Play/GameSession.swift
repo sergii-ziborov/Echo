@@ -56,14 +56,20 @@ final class GameSession {
         self.dailyKey = daily ? LevelCatalog.dayKey(Date()) : nil
         self.sim = WorldSimulation(level: level)
 #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-shot-fracture") {
-            sim.debugPreviewAsteroidFractures()
-        } else if ProcessInfo.processInfo.arguments.contains("-shot-asteroid-core") {
-            sim.debugPreviewAsteroidMotion()
-        }
+        applyDebugPreview(ProcessInfo.processInfo.arguments)
 #endif
         publish()
     }
+
+#if DEBUG
+    func applyDebugPreview(_ args: [String]) {
+        if args.contains("-shot-fracture") {
+            sim.debugPreviewAsteroidFractures()
+        } else if args.contains("-shot-asteroid-core") {
+            sim.debugPreviewAsteroidMotion()
+        }
+    }
+#endif
 
     func configure(tuning: PlayerTuning) {
         guard !hasStarted else { return }

@@ -247,4 +247,143 @@ extension ShopView {
     func color(_ tint: (r: Double, g: Double, b: Double)) -> Color {
         Color(red: tint.r, green: tint.g, blue: tint.b)
     }
+
+    @ViewBuilder
+    func loadoutSlot(_ index: Int) -> some View {
+        let equipped = model.progress.equippedSkills
+        if equipped.indices.contains(index) {
+            let kind = equipped[index]
+            let tint = color(kind.tint)
+            VStack(spacing: 4) {
+                AbilityIconView(kind: kind, size: 31)
+                Text(kind.title.uppercased())
+                    .font(.system(size: 7, weight: .bold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.65)
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 58)
+            .background(tint.opacity(0.13), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .stroke(tint.opacity(0.42), lineWidth: 1)
+            )
+        } else {
+            VStack(spacing: 5) {
+                Image(systemName: "plus")
+                    .font(.system(size: 15, weight: .semibold))
+                Text("EMPTY")
+                    .font(.system(size: 7, weight: .bold))
+            }
+            .foregroundStyle(EchoTheme.muted)
+            .frame(maxWidth: .infinity)
+            .frame(height: 58)
+            .background(Color.white.opacity(0.025), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+            )
+        }
+    }
+
+    func skillRow(_ kind: BonusKind) -> some View {
+        let unlocked = model.progress.isSkillUnlocked(kind)
+        let owned = model.progress.count(kind)
+        let equipped = model.progress.equippedSkills.contains(kind)
+        let full = owned >= model.progress.inventoryCapacity
+        let affordable = model.progress.canBuy(kind)
+        let tint = color(kind.tint)
+
+        return VStack(spacing: 11) {
+            HStack(spacing: 12) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15, style: .continuous)
+                        .fill(tint.opacity(unlocked ? 0.17 : 0.06))
+                    AbilityIconView(kind: kind, size: 42)
+                        .saturation(unlocked ? 1 : 0)
+                        .opacity(unlocked ? 1 : 0.35)
+                }
+                .frame(width: 54, height: 54)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 7) {
+                        Text(kind.title)
+                            .font(.system(size: 17, weight: .semibold))
+                        Text("\(Int(kind.cooldown))s CD")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundStyle(EchoTheme.muted)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 3)
+                            .background(Color.white.opacity(0.06), in: Capsule())
+                    }
+                    Text(unlocked ? kind.detail : model.progress.skillUnlockHint(kind))
+                        .font(.system(size: 11))
+                        .foregroundStyle(unlocked ? EchoTheme.muted : EchoTheme.gold)
+                        .lineLimit(2)
+                    Text(unlocked ? "Reserve \(owned)/\(model.progress.inventoryCapacity)" : "LOCKED")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(unlocked && owned > 0 ? EchoTheme.cyan : EchoTheme.muted)
+                }
+                Spacer(minLength: 0)
+            }
+
+            Button {
+                guard unlocked else { return }
+                model.audio.play(.select)
+                inspectedSkill = kind
+            } label: {
+                Label(unlocked ? "ANIMATED DEMO · TAP TO WATCH" : "DEMO LOCKED", systemImage: unlocked ? "play.rectangle.fill" : "lock.fill")
+                    .font(.system(size: 10, weight: .black, design: .rounded))
+                    .tracking(0.8)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 36)
+                    .foregroundStyle(unlocked ? tint : EchoTheme.muted)
+                    .background(tint.opacity(unlocked ? 0.10 : 0.035), in: Capsule())
+                    .overlay(Capsule().stroke(tint.opacity(unlocked ? 0.26 : 0.07), lineWidth: 1))
+            }
+            .buttonStyle(PressStyle())
+            .disabled(!unlocked)
+
+            HStack(spacing: 9) {
+                Button {
+                    toggle(kind)
+                } label: {
+                    Label(equipped ? "EQUIPPED" : "EQUIP", systemImage: equipped ? "checkmark.circle.fill" : "circle")
+                        .font(.system(size: 10, weight: .bold))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 38)
+                        .foregroundStyle(equipped ? EchoTheme.cyan : .white)
+                        .background(Color.white.opacity(0.06), in: Capsule())
+                }
+                .buttonStyle(PressStyle())
+                .disabled(!unlocked)
+
+                Button {
+                    buy(kind)
+                } label: {
+                    HStack(spacing: 5) {
+                        Image(systemName: "diamond.fill")
+                        Text(full ? "FULL" : "\(model.progress.skillPrice(kind))")
+                    }
+                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 38)
+                    .foregroundStyle(affordable ? .white : EchoTheme.muted)
+                    .background(affordable ? EchoTheme.primaryBlue : Color.white.opacity(0.05), in: Capsule())
+                }
+                .buttonStyle(PressStyle())
+                .disabled(!affordable)
+            }
+        }
+        .padding(13)
+        .background(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(EchoTheme.panel.opacity(unlocked ? 0.90 : 0.54))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .stroke(unlocked ? tint.opacity(0.20) : Color.white.opacity(0.06), lineWidth: 1)
+        )
+    }
 }

@@ -4,7 +4,17 @@ import UIKit
 
 struct GameView: View {
     @Environment(AppModel.self) var model
+#if DEBUG
+    var modelOverride: AppModel?
+#endif
     let request: PlayRequest
+
+    var activeModel: AppModel {
+#if DEBUG
+        if let modelOverride { return modelOverride }
+#endif
+        return model
+    }
 
     @State var session: GameSession
     @State var scene: GameScene
@@ -13,7 +23,11 @@ struct GameView: View {
     @State var hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
     @Environment(\.scenePhase) var scenePhase
 
-    init(request: PlayRequest) {
+    init(
+        request: PlayRequest,
+        overlay: InRunOverlay = .none,
+        hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
+    ) {
         self.request = request
         let raw: LevelDefinition
         if request.daily {
@@ -29,6 +43,8 @@ struct GameView: View {
         let session = GameSession(level: level, daily: request.daily)
         _session = State(initialValue: session)
         _scene = State(initialValue: GameScene(session: session, size: bounds))
+        _overlay = State(initialValue: overlay)
+        _hint = State(initialValue: hint)
     }
 
     var body: some View {
@@ -44,7 +60,7 @@ struct GameView: View {
                 VStack(spacing: 0) {
                     HUDBar(session: session) {
                         session.togglePause()
-                        model.audio.play(.tap)
+                        activeModel.audio.play(.tap)
                     }
                     .padding(.horizontal, 12)
 
@@ -101,7 +117,7 @@ struct GameView: View {
                         onRestart: { restart() },
                         onShop: { overlay = .shop },
                         onSettings: { overlay = .settings },
-                        onMenu: { model.goHome() }
+                        onMenu: { activeModel.goHome() }
                     )
                 }
 
@@ -112,19 +128,19 @@ struct GameView: View {
                         result: result,
                         controlSeal: seals.control,
                         paradoxSeal: seals.paradox,
-                        bestTime: model.progress.progress(for: resultKey).bestTime,
-                        bestMoves: model.progress.progress(for: resultKey).bestMoves,
+                        bestTime: activeModel.progress.progress(for: resultKey).bestTime,
+                        bestMoves: activeModel.progress.progress(for: resultKey).bestMoves,
                         cycleComplete: session.level.number == LevelCatalog.playable.count
-                            && model.progress.isCurrentDifficultyComplete,
+                            && activeModel.progress.isCurrentDifficultyComplete,
                         nextDifficulty: DifficultyProfile(cycle: request.difficultyCycle + 1),
                         awardedPoints: awardedPoints,
                         onWatch: { session.startBallet(result) },
                         onRetry: { restart() },
                         onNext: nextLevel,
                         onNextCycle: session.level.number == LevelCatalog.playable.count
-                            ? { model.startNextCycle() }
+                            ? { activeModel.startNextCycle() }
                             : nil,
-                        onMenu: { model.goHome() }
+                        onMenu: { activeModel.goHome() }
                     )
                 }
 
@@ -135,7 +151,7 @@ struct GameView: View {
                         rewindSeconds: session.tuning.rewindSeconds,
                         onRewind: paradoxRewind,
                         onRestart: { restart() },
-                        onMenu: { model.goHome() }
+                        onMenu: { activeModel.goHome() }
                     )
                 }
 
@@ -172,11 +188,11 @@ struct GameView: View {
         }
         .ignoresSafeArea()
         .onAppear {
-            session.configure(tuning: model.progress.playerTuning)
+            session.configure(tuning: activeModel.progress.playerTuning)
             scene.onEvents = { events in handle(events) }
-            session.autoReplay = model.progress.autoReplayEnabled
-            model.audio.setHapticsEnabled(model.progress.hapticsEnabled)
-            model.audio.enabled = model.progress.soundEnabled
+            session.autoReplay = activeModel.progress.autoReplayEnabled
+            activeModel.audio.setHapticsEnabled(activeModel.progress.hapticsEnabled)
+            activeModel.audio.enabled = activeModel.progress.soundEnabled
             if session.level.sparks.contains(where: { $0.timer != nil }) {
                 offerHint(.timeCrystal)
             }
@@ -192,7 +208,7 @@ struct GameView: View {
             if !session.level.gravityWells.isEmpty {
                 offerHint(.blackHole)
             }
-            if model.progress.consume(.ward) {
+            if activeModel.progress.consume(.ward) {
                 _ = session.sim.activate(.ward)
                 session.banner = "Ward"
             }

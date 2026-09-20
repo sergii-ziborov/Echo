@@ -3,8 +3,18 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
     var onBack: (() -> Void)? = nil
-    @State private var showingResetConfirmation = false
-    @State private var legalDocument: LegalDocument?
+    @State var showingResetConfirmation: Bool
+    @State var legalDocument: LegalDocument?
+
+    init(
+        onBack: (() -> Void)? = nil,
+        showingResetConfirmation: Bool = false,
+        legalDocument: LegalDocument? = nil
+    ) {
+        self.onBack = onBack
+        _showingResetConfirmation = State(initialValue: showingResetConfirmation)
+        _legalDocument = State(initialValue: legalDocument)
+    }
 
     var body: some View {
         ZStack {

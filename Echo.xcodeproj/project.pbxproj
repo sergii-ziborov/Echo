@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00F8A65497EF66F620EDF593 /* GraphicsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F5E5E5780E1DC17FE2980 /* GraphicsTests.swift */; };
 		0558B6400B3C6E811EA5D90F /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3AA771216D8B1B25EE3154 /* DailyChallengeView.swift */; };
+		05AEDB702D9C33CB1717BBC1 /* SessionCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B165656CCF82A8872B2E270 /* SessionCoverageTests.swift */; };
 		05C998AB53B2A1D1F6627F45 /* LaserTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812D55F81564754B4D96DDB3 /* LaserTypes.swift */; };
 		08070C2C42D70514ECB61118 /* WorldSimulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9740D1BCE9319217DB7E2979 /* WorldSimulationTests.swift */; };
 		09DD77556486AEB8D27A1ED3 /* win.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7667BFF4E65A6C68B48445A8 /* win.wav */; };
@@ -21,6 +22,7 @@
 		10FB7182AE0E9E78E1173F09 /* HandcraftedPressureMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466A52F15D6C8CCC7A7BFC42 /* HandcraftedPressureMaps.swift */; };
 		1144EA9C991914CBD4253667 /* ChromePrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1FCA0CF8B2E737C91E5C9C /* ChromePrimitives.swift */; };
 		1183A46A88366B941FD5098B /* LevelGeometryAuditTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC1128466E6D1D25C3DA68D /* LevelGeometryAuditTests.swift */; };
+		1369403B28086FA04A9EE178 /* AppModelCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77FDFB6FA0A364BE0A349A3 /* AppModelCoverageTests.swift */; };
 		13B54DAE528A6F2F73A323C5 /* WorldSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4810701140A99AD8C82337F /* WorldSimulation.swift */; };
 		1644B97ECCB223B9A3B22647 /* DeathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29CA521555759205D0AF7C2 /* DeathView.swift */; };
 		1655590F765FC3FF83C9695F /* SimulationCollect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0041C1EAB435F1E5E114C9 /* SimulationCollect.swift */; };
@@ -30,23 +32,28 @@
 		1FD22BA2C2C60D6808782E33 /* LevelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C1412C5BED8201B14E0DC9 /* LevelFactory.swift */; };
 		20FE0F1A5357B5E0876C11A0 /* TechnologyPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA08B8518A2930C7816535CE /* TechnologyPreviewView.swift */; };
 		236F4DB96CAE5D156F9A173E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 97696FFCBF8755B6D306340E /* PrivacyInfo.xcprivacy */; };
+		2414EBC8C2F1E5ED62CBD73C /* ChromeCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9DB9F1FBC0A92388DDCF51 /* ChromeCoverageTests.swift */; };
 		2A1322BE67B6A6C5D81902ED /* ArenaPickupBuild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4DC9A94DCA28AC82DAED26 /* ArenaPickupBuild.swift */; };
 		2F412920E82FEF3866484F3B /* RenderFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A681C76BA1D848C2345267C /* RenderFrame.swift */; };
 		2F8844C5DC7C500F52E0D982 /* GlowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C155CA4430C5F512C247CF0 /* GlowTextures.swift */; };
 		30159F13946E4D487EA38DBC /* ResearchIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901ECEB573CC31175A6BF3B1 /* ResearchIconView.swift */; };
 		3470A879985C2D4E68293C1B /* spawn.wav in Resources */ = {isa = PBXBuildFile; fileRef = B3C72B518D24FD1F057BF3F1 /* spawn.wav */; };
 		35680A7D67A23155E54D29CE /* HandcraftedMidMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982D9E33D56A1301EA6B03DA /* HandcraftedMidMaps.swift */; };
+		36528F98FA0543ACEF282B3B /* LabCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2956A36EA492FC6EA80661C1 /* LabCoverageTests.swift */; };
 		3994AC968871B9566A4CA7BF /* tap.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7A11F590D2F45DB12A844B14 /* tap.wav */; };
 		3CB407BE21751D7778CB4A3B /* AtlasCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E6A67121C0D3B3A5BBB4AF /* AtlasCards.swift */; };
 		3FB60F7DDBA8EC8BDDA27254 /* LevelBlueprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9450C2F1C69A7165C2AD4 /* LevelBlueprint.swift */; };
+		403B19685267F0A48890D5CE /* ArenaSceneCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76740A1D46ECB4CB7CAFB8D5 /* ArenaSceneCoverageTests.swift */; };
 		4050A45D0766D40C67FB8EA3 /* PathRecorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E50EE643C4F860E44F22FD8 /* PathRecorderTests.swift */; };
 		40D4023D66CF9E5D382DFBB0 /* SimulationClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9418282F22A74AA5C49EE99 /* SimulationClock.swift */; };
 		4186CABE4CD809056C430126 /* GlowTextureDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099AA9444D83881806E130C7 /* GlowTextureDrawing.swift */; };
+		43740F9113CDF31DC78BEBF4 /* DemoCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0524C837E4C6567F020B6CE3 /* DemoCoverageTests.swift */; };
 		46B2A6EE73829332C799C013 /* LevelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D1DB628C13446D3A5DEE719 /* LevelCatalog.swift */; };
 		4798E69714CB809A4C35DE37 /* SimulationTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9482EC419D8A61CF9919F88F /* SimulationTestSupport.swift */; };
 		4AA0097BFB6CBD0D5F18364F /* EncounterCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9171D0D1E03F886CBD0392 /* EncounterCard.swift */; };
 		4CE46C9973BFEB3D58B707D5 /* MoverTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC1727AEFE7793A4828DE30 /* MoverTypes.swift */; };
 		4D13842EC751F06ECC2AC72F /* ProgressCampaign.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EA584CD649517E60179389 /* ProgressCampaign.swift */; };
+		4E2293E67469E604F48A2EB2 /* AtlasCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9576855AF3A23A2AD07E4C /* AtlasCoverageTests.swift */; };
 		5148F2B391C31F9B1253CCF1 /* ArenaMoverSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C67DA3D474EC6C7D838373C /* ArenaMoverSync.swift */; };
 		54DB425122F6538168388E88 /* ShopNodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE13BA38D6A4415C1B2E35B8 /* ShopNodes.swift */; };
 		54DCF3B46AFCB3810E551343 /* GameViewActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A4D203BE59B7CFCA32F71C /* GameViewActions.swift */; };
@@ -57,8 +64,10 @@
 		5FF4B8EACCC111152BB4771E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D4F10181A7E16F79F9D9CF /* HomeView.swift */; };
 		60F78625A2260E37CE2F143B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CA734C52C9F53B6659873 /* RootView.swift */; };
 		63B5826C1BD543E3CEE2E89D /* AbilityGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7DF815999D0D7953BF10C9 /* AbilityGlyph.swift */; };
+		6584E5F919D78C3F2FA7F3DE /* AudioCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF427C01EEFE41BB8F1715 /* AudioCoverageTests.swift */; };
 		65D1AF76299418B337C2EC98 /* MechanicDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16AA64DDE6A721F6AE2DF9C4 /* MechanicDemoView.swift */; };
 		666184025B10DC2C35F9C8E0 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194EA970BDA85C19DC061F34 /* AppModel.swift */; };
+		66D9B198D0B7614447DF3910 /* HUDCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59AF29CD354D92A490DC877 /* HUDCoverageTests.swift */; };
 		682E84473EF9CF7D3EEE6B3D /* SimulationFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454E4319D2B5C285ACC7405 /* SimulationFields.swift */; };
 		6A8FCE222A89F6BE07E503CE /* Vec2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F308A1BD37FDF59FE84C7B8 /* Vec2.swift */; };
 		70B4C19F53291D1C20E9FCE3 /* HandcraftedEarlyMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09FFFA30794C939184CC161 /* HandcraftedEarlyMaps.swift */; };
@@ -67,6 +76,7 @@
 		7D0EE8A2CA5284D939A1071C /* SplitMix64.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE09E4FA371A2BC87C84895 /* SplitMix64.swift */; };
 		7D2CE66A025F289C198EE61B /* LevelPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA371066EE3061D0269A188 /* LevelPrototype.swift */; };
 		7E67F4F3BDE7061094799451 /* AtlasNodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC170D672FEA98EDB7D72EB /* AtlasNodes.swift */; };
+		7E8346E9F2AD5D6542F39660 /* WikiCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFF98DC5F7F30DEC21B48FF /* WikiCoverageTests.swift */; };
 		7ECDDCA48205B1C922C302A2 /* HandcraftedMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B69C55FD5477A8C168DA8D4 /* HandcraftedMaps.swift */; };
 		80E80FEF83173799202B95CE /* ShopInspectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96711535532DF734AEF806EE /* ShopInspectors.swift */; };
 		86817721ECD790A3AA822387 /* WikiPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C1A6DF1DC3D998C18AFA61 /* WikiPages.swift */; };
@@ -75,12 +85,14 @@
 		909CE39501A2AB657DDFB7F2 /* HomeControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37854D78DDF0D45D3E53439A /* HomeControls.swift */; };
 		917318EFBB7FF1D8A3A0D949 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB1A3E656D347B9FF08D274 /* GameScene.swift */; };
 		93D0D6285EA7D60ACF338F9F /* ArenaCombatFX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8635FB36141D37484880AA16 /* ArenaCombatFX.swift */; };
+		9A918E477A4B268193FA812A /* OverlayCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523E9017762DADD19D37A2EC /* OverlayCoverageTests.swift */; };
 		9B99298CBEACDAF891D09A5A /* TrailRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AFC3F947350BBF5733A0AB /* TrailRenderer.swift */; };
 		A19648EA476F5FD14D27DD0F /* ArenaProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B46F657ABB0B8315E62BD93 /* ArenaProjection.swift */; };
 		A221F5FBAE313AF11D70C02B /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA04E64E2D54305E24EFDAD4 /* ProgressStore.swift */; };
 		A27F474B806E8A4FBDA8E956 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2494146AE8C6E2EA8C3486 /* SettingsView.swift */; };
 		A2A90E2EB5F866133E8E9199 /* ArenaBurstFX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD213FC3B66EE94F9571429 /* ArenaBurstFX.swift */; };
 		A33F864D68142FAB7AF261E9 /* collect.wav in Resources */ = {isa = PBXBuildFile; fileRef = A499390892B6961CC6458790 /* collect.wav */; };
+		A44D3CAD2FF956A2DD447674 /* CoverageHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655296264A5EF4FAE83D1834 /* CoverageHost.swift */; };
 		A54E7F615786FB977DE98F16 /* ProgressModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708A35F5D7C71F4BC6648B16 /* ProgressModels.swift */; };
 		A6894717A4D4E49DE321F4D1 /* StarRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1B53A7A4F2DD44FC69055 /* StarRating.swift */; };
 		A88B948331F078BB2C56A71C /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AA03B1D00D39F06FEE1882 /* SplashView.swift */; };
@@ -92,12 +104,14 @@
 		B606A85ECF8A4AA4595743D7 /* UpgradeTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844264196A1E2E2706C7214E /* UpgradeTree.swift */; };
 		B9AE7240E2B4CCAF2EDF7C8D /* WorldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EFF3329D5260EDDFC05BE8 /* WorldsView.swift */; };
 		BA50238DECBD2F202A1E9AF9 /* ArenaShieldFX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D6A6565D40004A688135FF /* ArenaShieldFX.swift */; };
+		C49FCC7C9D16600BE4F6E616 /* HomeCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD8C451BAACF240537DF469 /* HomeCoverageTests.swift */; };
 		C575B35F242243FFD54DE66D /* HUDChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53544675A08D1C4DACBF72AF /* HUDChrome.swift */; };
 		C77DEF100B8BEB5CC11E469D /* ArenaHazardSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D8A11DBDF53926A3CDCA18 /* ArenaHazardSync.swift */; };
 		CC58A8003640C33E3AD5243D /* VisualAssetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1243E5572CEE34546A84D7C /* VisualAssetTests.swift */; };
 		CDFA37B737DD0E471387BA09 /* ArenaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A40A6505EC86386FF2BA23 /* ArenaTheme.swift */; };
 		CE172CF63460627D9F95D8D8 /* warn.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8CC812D7BB5ADBCC7D4821AF /* warn.wav */; };
 		CEA955D8DEFEBF2CC9094AAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 546FBBBE11D88D6AC114509C /* Assets.xcassets */; };
+		D109FF443ADEB98B8B470D55 /* GameViewCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB701352DB455C9CAE8E58A /* GameViewCoverageTests.swift */; };
 		D2571F7BE04572C444A04E94 /* SimulationTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB537A4616C84D5E90EC346 /* SimulationTypes.swift */; };
 		D25A1D8148D4341FD6577526 /* SimulationEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DAF1CFE5BFE48F1E490145 /* SimulationEffects.swift */; };
 		D27B0F4102D97BCE416B458B /* ActorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E629412D14789B950FF9CF /* ActorFactory.swift */; };
@@ -111,7 +125,9 @@
 		E218C04CE7031304673E5005 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354EBB57B4313E203FE67AAD /* ShopView.swift */; };
 		E5E4E4FFEA2F109BBFA62317 /* ArenaHudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B170F5955A9497EA739886 /* ArenaHudSync.swift */; };
 		E71D21C0789662BC2750F9FA /* ShopResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006CDF1D900C49FFCEDAF198 /* ShopResearch.swift */; };
+		E8E68ED2D91D0D177F34C32A /* ArenaFXCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2B33CC7E41404A49EF12BA /* ArenaFXCoverageTests.swift */; };
 		EA387393DDF57B40E4CF9530 /* HandcraftedCoreMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FEB5A044C7338F0383C2CE /* HandcraftedCoreMaps.swift */; };
+		EAFCC99A4E6FF79CB833F621 /* GameSessionCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33273365323639FA0684F212 /* GameSessionCoverageTests.swift */; };
 		EB233D462C418C41E071A647 /* LevelSeals.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C14A82EE315B6F4C339ACA /* LevelSeals.swift */; };
 		EB415A835C6250108F5F9610 /* HandcraftedLateMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF8D8E3127179ED6B14B9B6 /* HandcraftedLateMaps.swift */; };
 		ED0A9F89DDE77DBF89D33D8C /* MechanicDemoScenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1023225E50EDD60963331457 /* MechanicDemoScenario.swift */; };
@@ -122,6 +138,7 @@
 		F7FF7D5F11D24D51EDB426A3 /* VisualStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57D107E34C022C855BA62A6 /* VisualStyle.swift */; };
 		F82694D2DA3C309EAEF89879 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8BA42C8456D20A217E052F /* GameView.swift */; };
 		FA8B3162365193C5141616B0 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFDB3B471C2B17D0EFD057 /* ResultsView.swift */; };
+		FD3F4531889DB0812ADF7A76 /* RulesCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FD678187E4D332436505D6 /* RulesCoverageTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,11 +154,13 @@
 /* Begin PBXFileReference section */
 		006CDF1D900C49FFCEDAF198 /* ShopResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopResearch.swift; sourceTree = "<group>"; };
 		00E6A67121C0D3B3A5BBB4AF /* AtlasCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasCards.swift; sourceTree = "<group>"; };
+		0524C837E4C6567F020B6CE3 /* DemoCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCoverageTests.swift; sourceTree = "<group>"; };
 		05D6A6565D40004A688135FF /* ArenaShieldFX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaShieldFX.swift; sourceTree = "<group>"; };
 		07D9450C2F1C69A7165C2AD4 /* LevelBlueprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelBlueprint.swift; sourceTree = "<group>"; };
 		0804D2A287FF3667A2FC8F8A /* ProgressEconomy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressEconomy.swift; sourceTree = "<group>"; };
 		099AA9444D83881806E130C7 /* GlowTextureDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowTextureDrawing.swift; sourceTree = "<group>"; };
 		0AD98C8A76FE81C9731E3E2F /* PathRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathRecorder.swift; sourceTree = "<group>"; };
+		0B165656CCF82A8872B2E270 /* SessionCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCoverageTests.swift; sourceTree = "<group>"; };
 		0BA371066EE3061D0269A188 /* LevelPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelPrototype.swift; sourceTree = "<group>"; };
 		0BA73AFF25F9E074A8F015A6 /* MechanicDemoBrushes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MechanicDemoBrushes.swift; sourceTree = "<group>"; };
 		0D8BA42C8456D20A217E052F /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
@@ -160,9 +179,11 @@
 		1DC170D672FEA98EDB7D72EB /* AtlasNodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasNodes.swift; sourceTree = "<group>"; };
 		1F0CA734C52C9F53B6659873 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		2042C1C5EE1E0CDC47C60202 /* Echo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Echo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2956A36EA492FC6EA80661C1 /* LabCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabCoverageTests.swift; sourceTree = "<group>"; };
 		2C155CA4430C5F512C247CF0 /* GlowTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowTextures.swift; sourceTree = "<group>"; };
 		2DB537A4616C84D5E90EC346 /* SimulationTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationTypes.swift; sourceTree = "<group>"; };
 		2E3AA771216D8B1B25EE3154 /* DailyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeView.swift; sourceTree = "<group>"; };
+		33273365323639FA0684F212 /* GameSessionCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionCoverageTests.swift; sourceTree = "<group>"; };
 		354EBB57B4313E203FE67AAD /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
 		359089611FDBDE265B760D7B /* ArenaRockBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaRockBuild.swift; sourceTree = "<group>"; };
 		37854D78DDF0D45D3E53439A /* HomeControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeControls.swift; sourceTree = "<group>"; };
@@ -173,17 +194,23 @@
 		3DF1B53A7A4F2DD44FC69055 /* StarRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRating.swift; sourceTree = "<group>"; };
 		3E50EE643C4F860E44F22FD8 /* PathRecorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathRecorderTests.swift; sourceTree = "<group>"; };
 		3E9F5E5E5780E1DC17FE2980 /* GraphicsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsTests.swift; sourceTree = "<group>"; };
+		3F2B33CC7E41404A49EF12BA /* ArenaFXCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaFXCoverageTests.swift; sourceTree = "<group>"; };
+		3FB701352DB455C9CAE8E58A /* GameViewCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewCoverageTests.swift; sourceTree = "<group>"; };
 		41C1412C5BED8201B14E0DC9 /* LevelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelFactory.swift; sourceTree = "<group>"; };
 		466A52F15D6C8CCC7A7BFC42 /* HandcraftedPressureMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedPressureMaps.swift; sourceTree = "<group>"; };
+		46FD678187E4D332436505D6 /* RulesCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesCoverageTests.swift; sourceTree = "<group>"; };
 		47AFC3F947350BBF5733A0AB /* TrailRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailRenderer.swift; sourceTree = "<group>"; };
 		4AB1A3E656D347B9FF08D274 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		4F6F0CC039E3C2F8D3307012 /* BonusKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusKind.swift; sourceTree = "<group>"; };
+		523E9017762DADD19D37A2EC /* OverlayCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayCoverageTests.swift; sourceTree = "<group>"; };
 		53544675A08D1C4DACBF72AF /* HUDChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDChrome.swift; sourceTree = "<group>"; };
 		546FBBBE11D88D6AC114509C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56D4F10181A7E16F79F9D9CF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		57DAF1CFE5BFE48F1E490145 /* SimulationEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationEffects.swift; sourceTree = "<group>"; };
 		59B9D900D124EB075E28C6BB /* MechanicDemoCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MechanicDemoCanvas.swift; sourceTree = "<group>"; };
+		5BCF427C01EEFE41BB8F1715 /* AudioCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCoverageTests.swift; sourceTree = "<group>"; };
 		5D5DA97EE0EC1A7E3BA9EF8A /* ArenaShapeKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaShapeKit.swift; sourceTree = "<group>"; };
+		655296264A5EF4FAE83D1834 /* CoverageHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverageHost.swift; sourceTree = "<group>"; };
 		68D8A11DBDF53926A3CDCA18 /* ArenaHazardSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaHazardSync.swift; sourceTree = "<group>"; };
 		69D2C2A8CA81A77FB457A82F /* EchoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoApp.swift; sourceTree = "<group>"; };
 		6A3E40E850E74643250C95EA /* RunSystemsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunSystemsTests.swift; sourceTree = "<group>"; };
@@ -192,10 +219,12 @@
 		708A35F5D7C71F4BC6648B16 /* ProgressModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressModels.swift; sourceTree = "<group>"; };
 		75B170F5955A9497EA739886 /* ArenaHudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaHudSync.swift; sourceTree = "<group>"; };
 		7667BFF4E65A6C68B48445A8 /* win.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = win.wav; sourceTree = "<group>"; };
+		76740A1D46ECB4CB7CAFB8D5 /* ArenaSceneCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaSceneCoverageTests.swift; sourceTree = "<group>"; };
 		773ADD1F9CD1243A41F4FC70 /* ArenaHazardBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaHazardBuild.swift; sourceTree = "<group>"; };
 		7A11F590D2F45DB12A844B14 /* tap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tap.wav; sourceTree = "<group>"; };
 		7B2494146AE8C6E2EA8C3486 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7B69C55FD5477A8C168DA8D4 /* HandcraftedMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedMaps.swift; sourceTree = "<group>"; };
+		7BD8C451BAACF240537DF469 /* HomeCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoverageTests.swift; sourceTree = "<group>"; };
 		7C7DF815999D0D7953BF10C9 /* AbilityGlyph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbilityGlyph.swift; sourceTree = "<group>"; };
 		80A4D203BE59B7CFCA32F71C /* GameViewActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewActions.swift; sourceTree = "<group>"; };
 		812D55F81564754B4D96DDB3 /* LaserTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaserTypes.swift; sourceTree = "<group>"; };
@@ -204,6 +233,7 @@
 		86F39031729D042A590BC8A5 /* death.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = death.wav; sourceTree = "<group>"; };
 		8AE5001C82C0B23775698A0B /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		8CC812D7BB5ADBCC7D4821AF /* warn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = warn.wav; sourceTree = "<group>"; };
+		8CFF98DC5F7F30DEC21B48FF /* WikiCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiCoverageTests.swift; sourceTree = "<group>"; };
 		8D4DC9A94DCA28AC82DAED26 /* ArenaPickupBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaPickupBuild.swift; sourceTree = "<group>"; };
 		901ECEB573CC31175A6BF3B1 /* ResearchIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchIconView.swift; sourceTree = "<group>"; };
 		9454E4319D2B5C285ACC7405 /* SimulationFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationFields.swift; sourceTree = "<group>"; };
@@ -233,13 +263,16 @@
 		C2A40A6505EC86386FF2BA23 /* ArenaTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaTheme.swift; sourceTree = "<group>"; };
 		C4810701140A99AD8C82337F /* WorldSimulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSimulation.swift; sourceTree = "<group>"; };
 		C57D107E34C022C855BA62A6 /* VisualStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualStyle.swift; sourceTree = "<group>"; };
+		C59AF29CD354D92A490DC877 /* HUDCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDCoverageTests.swift; sourceTree = "<group>"; };
 		CE13BA38D6A4415C1B2E35B8 /* ShopNodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopNodes.swift; sourceTree = "<group>"; };
+		CE9DB9F1FBC0A92388DDCF51 /* ChromeCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromeCoverageTests.swift; sourceTree = "<group>"; };
 		CEE09E4FA371A2BC87C84895 /* SplitMix64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMix64.swift; sourceTree = "<group>"; };
 		D09FFFA30794C939184CC161 /* HandcraftedEarlyMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedEarlyMaps.swift; sourceTree = "<group>"; };
 		D29CA521555759205D0AF7C2 /* DeathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeathView.swift; sourceTree = "<group>"; };
 		D4C1A6DF1DC3D998C18AFA61 /* WikiPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiPages.swift; sourceTree = "<group>"; };
 		D7C14A82EE315B6F4C339ACA /* LevelSeals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSeals.swift; sourceTree = "<group>"; };
 		DF74137B0385C0F008759FA0 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
+		DF9576855AF3A23A2AD07E4C /* AtlasCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasCoverageTests.swift; sourceTree = "<group>"; };
 		E35EBCD7B6E1E123F2574627 /* HUDBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDBar.swift; sourceTree = "<group>"; };
 		E535E3F797B7DD5BF9B9305F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		E9418282F22A74AA5C49EE99 /* SimulationClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationClock.swift; sourceTree = "<group>"; };
@@ -250,6 +283,7 @@
 		EFC1727AEFE7793A4828DE30 /* MoverTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoverTypes.swift; sourceTree = "<group>"; };
 		EFF8D8E3127179ED6B14B9B6 /* HandcraftedLateMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedLateMaps.swift; sourceTree = "<group>"; };
 		F1E629412D14789B950FF9CF /* ActorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorFactory.swift; sourceTree = "<group>"; };
+		F77FDFB6FA0A364BE0A349A3 /* AppModelCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelCoverageTests.swift; sourceTree = "<group>"; };
 		F85F62EF7C58D511077F5DE7 /* HomeDecor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDecor.swift; sourceTree = "<group>"; };
 		FBC1128466E6D1D25C3DA68D /* LevelGeometryAuditTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelGeometryAuditTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -266,6 +300,22 @@
 				466A52F15D6C8CCC7A7BFC42 /* HandcraftedPressureMaps.swift */,
 			);
 			path = Handmade;
+			sourceTree = "<group>";
+		};
+		09964E760173E99A9EA5AA28 /* Lab */ = {
+			isa = PBXGroup;
+			children = (
+				2956A36EA492FC6EA80661C1 /* LabCoverageTests.swift */,
+			);
+			path = Lab;
+			sourceTree = "<group>";
+		};
+		157003049DAF6652B176A927 /* FX */ = {
+			isa = PBXGroup;
+			children = (
+				3F2B33CC7E41404A49EF12BA /* ArenaFXCoverageTests.swift */,
+			);
+			path = FX;
 			sourceTree = "<group>";
 		};
 		25073297C38FC3C40AB631E8 /* Build */ = {
@@ -350,6 +400,19 @@
 			path = Demos;
 			sourceTree = "<group>";
 		};
+		4F02205C948E0D7AE1567363 /* Shell */ = {
+			isa = PBXGroup;
+			children = (
+				5831F172819240221B5AFB6F /* Archive */,
+				6B34F0CAC02C1E768774456F /* Atlas */,
+				DC9638E71D4DCB37A8519E4B /* Chrome */,
+				D57FCFBCEA236936C5448A81 /* Home */,
+				09964E760173E99A9EA5AA28 /* Lab */,
+				6659001B2FE030D6C839FE4C /* Session */,
+			);
+			path = Shell;
+			sourceTree = "<group>";
+		};
 		4F5E1F04A765385202197F60 /* Progress */ = {
 			isa = PBXGroup;
 			children = (
@@ -359,6 +422,14 @@
 				EA04E64E2D54305E24EFDAD4 /* ProgressStore.swift */,
 			);
 			path = Progress;
+			sourceTree = "<group>";
+		};
+		5831F172819240221B5AFB6F /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+				8CFF98DC5F7F30DEC21B48FF /* WikiCoverageTests.swift */,
+			);
+			path = Archive;
 			sourceTree = "<group>";
 		};
 		5894A87B414BA06761589C0C /* Core */ = {
@@ -371,12 +442,38 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		5A879F34267EFE8B1B3588B0 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F77FDFB6FA0A364BE0A349A3 /* AppModelCoverageTests.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		5ABB291EAEDF23ED6EDB08E6 /* Arena */ = {
+			isa = PBXGroup;
+			children = (
+				157003049DAF6652B176A927 /* FX */,
+				9BE6EC2241E83E1AFC155C81 /* Scene */,
+			);
+			path = Arena;
+			sourceTree = "<group>";
+		};
 		62CDB350742A1D27C6C7E0EC /* Theme */ = {
 			isa = PBXGroup;
 			children = (
 				E535E3F797B7DD5BF9B9305F /* Theme.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		6659001B2FE030D6C839FE4C /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				523E9017762DADD19D37A2EC /* OverlayCoverageTests.swift */,
+				0B165656CCF82A8872B2E270 /* SessionCoverageTests.swift */,
+			);
+			path = Session;
 			sourceTree = "<group>";
 		};
 		682514B28E4036287C52117D /* Sync */ = {
@@ -388,6 +485,14 @@
 				3C67DA3D474EC6C7D838373C /* ArenaMoverSync.swift */,
 			);
 			path = Sync;
+			sourceTree = "<group>";
+		};
+		6B34F0CAC02C1E768774456F /* Atlas */ = {
+			isa = PBXGroup;
+			children = (
+				DF9576855AF3A23A2AD07E4C /* AtlasCoverageTests.swift */,
+			);
+			path = Atlas;
 			sourceTree = "<group>";
 		};
 		6E646A2EB427C4E019A66850 /* Arena */ = {
@@ -407,9 +512,15 @@
 		73F00F00E9FE2883C03788A0 /* EchoTests */ = {
 			isa = PBXGroup;
 			children = (
+				5A879F34267EFE8B1B3588B0 /* App */,
+				5ABB291EAEDF23ED6EDB08E6 /* Arena */,
+				A1BA2AB7ADE0F3074058817D /* Audio */,
 				D96A677F55D2CE425C287B4B /* Graphics */,
+				D32EB04C51A5C7172734CFB9 /* Play */,
 				C6D9B3E72DF00B10EF29D94A /* Progress */,
+				4F02205C948E0D7AE1567363 /* Shell */,
 				F30E5EEBBFAFB448D7F54B04 /* Simulation */,
+				E37CAAF19F45F6E9F02F9608 /* Support */,
 			);
 			path = EchoTests;
 			sourceTree = "<group>";
@@ -424,6 +535,14 @@
 				6F308A1BD37FDF59FE84C7B8 /* Vec2.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		7B9FA39D2CEA175FE93E8B47 /* Rules */ = {
+			isa = PBXGroup;
+			children = (
+				46FD678187E4D332436505D6 /* RulesCoverageTests.swift */,
+			);
+			path = Rules;
 			sourceTree = "<group>";
 		};
 		80CF9C01432B45ECE365B3C9 /* Hazards */ = {
@@ -480,6 +599,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		9BE6EC2241E83E1AFC155C81 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				76740A1D46ECB4CB7CAFB8D5 /* ArenaSceneCoverageTests.swift */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
 		A1B822DA27044A7865C98826 /* Play */ = {
 			isa = PBXGroup;
 			children = (
@@ -487,6 +614,14 @@
 				9740D1BCE9319217DB7E2979 /* WorldSimulationTests.swift */,
 			);
 			path = Play;
+			sourceTree = "<group>";
+		};
+		A1BA2AB7ADE0F3074058817D /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				5BCF427C01EEFE41BB8F1715 /* AudioCoverageTests.swift */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 		A224372FE8E6D60C81BACA8A /* Shell */ = {
@@ -627,6 +762,24 @@
 			path = Legal;
 			sourceTree = "<group>";
 		};
+		D32EB04C51A5C7172734CFB9 /* Play */ = {
+			isa = PBXGroup;
+			children = (
+				33273365323639FA0684F212 /* GameSessionCoverageTests.swift */,
+				3FB701352DB455C9CAE8E58A /* GameViewCoverageTests.swift */,
+				C59AF29CD354D92A490DC877 /* HUDCoverageTests.swift */,
+			);
+			path = Play;
+			sourceTree = "<group>";
+		};
+		D57FCFBCEA236936C5448A81 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				7BD8C451BAACF240537DF469 /* HomeCoverageTests.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		D96A677F55D2CE425C287B4B /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
@@ -645,6 +798,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		DC9638E71D4DCB37A8519E4B /* Chrome */ = {
+			isa = PBXGroup;
+			children = (
+				CE9DB9F1FBC0A92388DDCF51 /* ChromeCoverageTests.swift */,
+				0524C837E4C6567F020B6CE3 /* DemoCoverageTests.swift */,
+			);
+			path = Chrome;
+			sourceTree = "<group>";
+		};
 		E014690D3C5D9DE0197CFBAD /* FX */ = {
 			isa = PBXGroup;
 			children = (
@@ -653,6 +815,14 @@
 				05D6A6565D40004A688135FF /* ArenaShieldFX.swift */,
 			);
 			path = FX;
+			sourceTree = "<group>";
+		};
+		E37CAAF19F45F6E9F02F9608 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				655296264A5EF4FAE83D1834 /* CoverageHost.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		EA811E7BE7C60AA6696475AA /* Catalog */ = {
@@ -683,6 +853,7 @@
 				5894A87B414BA06761589C0C /* Core */,
 				80CF9C01432B45ECE365B3C9 /* Hazards */,
 				A1B822DA27044A7865C98826 /* Play */,
+				7B9FA39D2CEA175FE93E8B47 /* Rules */,
 			);
 			path = Simulation;
 			sourceTree = "<group>";
@@ -917,16 +1088,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1369403B28086FA04A9EE178 /* AppModelCoverageTests.swift in Sources */,
+				E8E68ED2D91D0D177F34C32A /* ArenaFXCoverageTests.swift in Sources */,
+				403B19685267F0A48890D5CE /* ArenaSceneCoverageTests.swift in Sources */,
 				D3DC5B06BABD242CC136B889 /* AsteroidSimulationTests.swift in Sources */,
+				4E2293E67469E604F48A2EB2 /* AtlasCoverageTests.swift in Sources */,
+				6584E5F919D78C3F2FA7F3DE /* AudioCoverageTests.swift in Sources */,
+				2414EBC8C2F1E5ED62CBD73C /* ChromeCoverageTests.swift in Sources */,
+				A44D3CAD2FF956A2DD447674 /* CoverageHost.swift in Sources */,
+				43740F9113CDF31DC78BEBF4 /* DemoCoverageTests.swift in Sources */,
+				EAFCC99A4E6FF79CB833F621 /* GameSessionCoverageTests.swift in Sources */,
+				D109FF443ADEB98B8B470D55 /* GameViewCoverageTests.swift in Sources */,
 				00F8A65497EF66F620EDF593 /* GraphicsTests.swift in Sources */,
+				66D9B198D0B7614447DF3910 /* HUDCoverageTests.swift in Sources */,
+				C49FCC7C9D16600BE4F6E616 /* HomeCoverageTests.swift in Sources */,
+				36528F98FA0543ACEF282B3B /* LabCoverageTests.swift in Sources */,
 				1A6A03356F451E52BCE2C565 /* LaserAbilityTests.swift in Sources */,
 				1183A46A88366B941FD5098B /* LevelGeometryAuditTests.swift in Sources */,
+				9A918E477A4B268193FA812A /* OverlayCoverageTests.swift in Sources */,
 				4050A45D0766D40C67FB8EA3 /* PathRecorderTests.swift in Sources */,
 				1F98ED326B43128BAEABF54A /* ProgressStoreTests.swift in Sources */,
+				FD3F4531889DB0812ADF7A76 /* RulesCoverageTests.swift in Sources */,
 				DE2D017EF2CBF6B64D9A9E67 /* RunSystemsTests.swift in Sources */,
+				05AEDB702D9C33CB1717BBC1 /* SessionCoverageTests.swift in Sources */,
 				4798E69714CB809A4C35DE37 /* SimulationTestSupport.swift in Sources */,
 				0DB6DEF828A2914609F00DAC /* StarRatingTests.swift in Sources */,
 				CC58A8003640C33E3AD5243D /* VisualAssetTests.swift in Sources */,
+				7E8346E9F2AD5D6542F39660 /* WikiCoverageTests.swift in Sources */,
 				08070C2C42D70514ECB61118 /* WorldSimulationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -265,6 +265,26 @@ final class ProgressStoreTests: XCTestCase {
         XCTAssertEqual(ProgressStore(defaults: defaults).soundVolume, 1, accuracy: 0.001)
     }
 
+    func testEconomyRefundLivesAndLoadout() {
+        let store = makeStore()
+        store.addShards(5_000)
+        XCTAssertGreaterThanOrEqual(store.unlockedSkillCount, 2)
+        XCTAssertTrue(store.buy(.shield))
+        XCTAssertTrue(store.consume(.shield))
+        store.refund(.shield)
+        XCTAssertEqual(store.count(.shield), 1)
+        _ = store.toggleEquipped(.shield)
+        _ = store.toggleEquipped(.shield)
+        _ = store.addLife(2)
+        XCTAssertTrue(store.canBuyLife || store.lives >= 1)
+        if store.canBuyLife {
+            XCTAssertTrue(store.buyLife())
+        }
+        _ = store.spendLife()
+        while store.spendLife() {}
+        XCTAssertFalse(store.spendLife())
+    }
+
     private func makeStore() -> ProgressStore {
         let name = "echo.test.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: name)!

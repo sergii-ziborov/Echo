@@ -4,9 +4,15 @@ struct WorldsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    @State private var selectedActID = Act.trace.rawValue
-    @State private var selectedLevelNumber = 1
-    @State private var appeared = false
+    @State var selectedActID: Int
+    @State var selectedLevelNumber: Int
+    @State var appeared: Bool
+
+    init(act: Act = .trace, levelNumber: Int = 1, appeared: Bool = true) {
+        _selectedActID = State(initialValue: act.rawValue)
+        _selectedLevelNumber = State(initialValue: levelNumber)
+        _appeared = State(initialValue: appeared)
+    }
 
     private var selectedAct: Act {
         Act(rawValue: selectedActID) ?? .trace

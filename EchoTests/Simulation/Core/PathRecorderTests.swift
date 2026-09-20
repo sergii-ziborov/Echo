@@ -18,4 +18,17 @@ final class PathRecorderTests: XCTestCase {
         XCTAssertEqual(recorder.position(at: 0)?.x, 4)
         XCTAssertEqual(recorder.position(at: 9)?.x, 8)
     }
+
+    func testPolylineAndTruncate() {
+        var recorder = PathRecorder()
+        recorder.record(time: 0, position: Vec2(x: 0, y: 0))
+        recorder.record(time: 1, position: Vec2(x: 10, y: 0))
+        XCTAssertTrue(recorder.polyline(from: 0, duration: 0).isEmpty)
+        XCTAssertTrue(recorder.polyline(from: 0, duration: 1, stride: 0).isEmpty)
+        XCTAssertFalse(recorder.polyline(from: 0, duration: 1, stride: 0.25).isEmpty)
+        recorder.record(time: 0.5, position: Vec2(x: 1, y: 1))
+        recorder.truncate(after: 1)
+        XCTAssertEqual(recorder.position(at: 2)?.x, 10)
+        _ = recorder.slice(from: 0, to: 1)
+    }
 }

@@ -2,17 +2,27 @@ import SwiftUI
 
 struct RootView: View {
     @Environment(AppModel.self) private var model
+#if DEBUG
+    static var testLaunchArguments: [String] = []
+#endif
+
+    var shotArguments: [String] {
+#if DEBUG
+        if !Self.testLaunchArguments.isEmpty { return Self.testLaunchArguments }
+#endif
+        return ProcessInfo.processInfo.arguments
+    }
 
     var body: some View {
         ZStack {
 #if DEBUG
-            if ProcessInfo.processInfo.arguments.contains("-shot-pause") {
+            if shotArguments.contains("-shot-pause") {
                 ScreenBackground()
                 PauseView(levelName: "Frostlane · Paradox 27", rewindCharges: 2, onResume: {}, onRestart: {}, onShop: {}, onSettings: {}, onMenu: {})
-            } else if ProcessInfo.processInfo.arguments.contains("-shot-death") {
+            } else if shotArguments.contains("-shot-death") {
                 ScreenBackground()
                 DeathView(cause: .asteroid, rewindCharges: 2, onRewind: {}, onRestart: {}, onMenu: {})
-            } else if ProcessInfo.processInfo.arguments.contains("-shot-results") {
+            } else if shotArguments.contains("-shot-results") {
                 ScreenBackground()
                 ResultsView(
                     levelName: "Frostlane · Paradox 27",

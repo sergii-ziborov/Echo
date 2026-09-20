@@ -33,11 +33,10 @@ final class AppModel {
         audio.enabled = progress.soundEnabled
         audio.setMasterVolume(progress.soundVolume)
         audio.setHapticsEnabled(progress.hapticsEnabled)
-        applyLaunchArgs()
+        applyLaunchArgs(ProcessInfo.processInfo.arguments)
     }
 
-    private func applyLaunchArgs() {
-        let args = ProcessInfo.processInfo.arguments
+    func applyLaunchArgs(_ args: [String]) {
         if args.contains("-shot-splash") {
             screen = .splash
         } else if args.contains("-shot-tutorial") {

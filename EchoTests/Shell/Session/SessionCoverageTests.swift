@@ -1,0 +1,48 @@
+import XCTest
+@testable import Echo
+
+@MainActor
+final class SessionCoverageTests: XCTestCase {
+    func testSettingsLegalAndReset() {
+        let model = CoverageFixtures.model()
+        CoverageHost.render(SettingsView().environment(model))
+        CoverageHost.render(SettingsView(showingResetConfirmation: true).environment(model))
+        for document in LegalDocument.allCases {
+            CoverageHost.render(SettingsView(legalDocument: document).environment(model))
+            CoverageHost.render(LegalPageView(document: document, onBack: {}))
+            XCTAssertFalse(document.paragraphs.isEmpty)
+        }
+        _ = LegalDocument.shortVersion
+        _ = LegalDocument.buildNumber
+    }
+
+    func testTutorialDailyAndPause() {
+        let model = CoverageFixtures.model()
+        for step in 0..<4 {
+            CoverageHost.render(TutorialView(stepIndex: step, onDone: {}).environment(model))
+        }
+        CoverageHost.render(DailyChallengeView().environment(model))
+        CoverageHost.render(
+            PauseView(
+                levelName: "Trace",
+                rewindCharges: 2,
+                onResume: {},
+                onRestart: {},
+                onShop: {},
+                onSettings: {},
+                onMenu: {}
+            )
+        )
+        CoverageHost.render(
+            PauseView(
+                levelName: "Trace",
+                rewindCharges: 0,
+                onResume: {},
+                onRestart: {},
+                onShop: {},
+                onSettings: {},
+                onMenu: {}
+            )
+        )
+    }
+}

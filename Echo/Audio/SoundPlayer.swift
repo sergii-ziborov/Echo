@@ -115,6 +115,9 @@ enum EchoSound: CaseIterable {
 
 @MainActor
 final class SoundPlayer {
+#if DEBUG
+    static var testSilent = false
+#endif
     var enabled = true
     private(set) var masterVolume: Float = 0.82
 
@@ -132,6 +135,13 @@ final class SoundPlayer {
     private let notificationHaptic = UINotificationFeedbackGenerator()
 
     init() {
+#if DEBUG
+        if Self.testSilent {
+            enabled = false
+            hapticsEnabled = false
+            return
+        }
+#endif
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(.ambient, mode: .default, options: [.mixWithOthers])
         try? session.setActive(true)
