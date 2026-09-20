@@ -1,6 +1,6 @@
 # ECHO player guide
 
-ECHO is a route-planning survival game. Your orb is the **bright white core with a cyan ring and a “YOU” marker**; violet orbs are your recorded past. Collect every required spark, then reach the illuminated exit without touching an Echo or a lethal hazard.
+ECHO is a route-planning survival game. Your orb is the **bright cyan core**; violet orbs are your recorded past. Collect every required spark, then reach the illuminated exit without touching an Echo or a lethal hazard. When you lift your finger, the orb pulses so you can find it again.
 
 ## Your first run
 
