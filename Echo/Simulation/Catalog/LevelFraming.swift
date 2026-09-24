@@ -3,7 +3,7 @@ import Foundation
 /// What the phone interface covers once a level fills the screen: the HUD
 /// across the top edge and the item bar along the bottom. All values are
 /// world units of the fitted level.
-struct InterfaceBands: Equatable, Sendable {
+struct InterfaceBands: Codable, Equatable, Sendable {
     /// Distance from the top edge a token centre must keep so the token and
     /// the caption drawn above it stay below the HUD.
     var top: Double

@@ -153,7 +153,7 @@ struct WatchRunView: View {
     }
 }
 
-private extension DeathCause {
+extension DeathCause {
     var watchLabel: String {
         switch self {
         case .echo: "Your echo caught you"
@@ -238,7 +238,7 @@ struct WatchRunHUD: View {
     }
 }
 
-private struct CompactLabelStyle: LabelStyle {
+struct CompactLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack(spacing: 2) {
             configuration.icon
@@ -247,7 +247,7 @@ private struct CompactLabelStyle: LabelStyle {
     }
 }
 
-private extension LabelStyle where Self == CompactLabelStyle {
+extension LabelStyle where Self == CompactLabelStyle {
     static var compact: CompactLabelStyle { CompactLabelStyle() }
 }
 

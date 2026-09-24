@@ -50,9 +50,9 @@ The download includes a watch app that runs the same rules on the wrist.
 - **Wrist Timeline** — twelve compact maps in three acts (Tick, Crown, Tourbillon). Each map opens after the previous one is cleared. Tap where the orb should fly; it keeps going after your finger lifts, so your thumb never hides it.
 - **Watch skills** — turn the Digital Crown back to rewind three seconds. Pulse Sense taps your wrist before each echo. Wrist Dash (double-tap) opens after 2 clears. Tick Freeze (button, or the double-tap hand gesture) opens after 6.
 - **Rewards on iPhone** — every first clear on the watch pays 25 research points in the phone game. Four clears unlock the ember-gold *Tourbillon Tail*, eight add a Paradox Rewind charge (*Crown Charge*), and all twelve make echoes arrive 0.5 s later (*Mainspring*). The Home screen tracks progress and has a switch for the tail.
-- **iPhone Remote** — while a map runs on the phone, open Remote on the watch. The whole screen becomes a thumbstick, a live radar of the phone's arena is drawn underneath, and a double-tap dashes. The phone HUD shows a WATCH chip while the wrist is steering.
+- **iPhone Remote** — while a map runs on the phone, open Remote on the watch. The whole face becomes a thumbstick and a double-tap dashes. Underneath, a close-up of the phone's arena follows the orb, and rocks, echoes, the next spark and the exit that are off the face show up as markers on its rim. The wrist taps for sparks, echoes, the exit opening and a rock or echo closing in, and after a crash a backward turn of the Crown rewinds the phone. The phone HUD shows a WATCH chip while the wrist is steering.
 
-WatchConnectivity carries clears through the application context (plus a queued transfer for each first clear). Remote commands and the radar use live messages at about 12–20 Hz.
+WatchConnectivity carries clears through the application context (plus a queued transfer for each first clear). Remote play sends a few bytes of binary per message: the phone names its level once and the watch builds the same arena from its own catalog, then only the moving parts travel, up to 20 frames a second. Each side keeps just a couple of messages waiting for replies and always sends the newest state, so a slow Bluetooth link drops stale stick positions instead of queueing lag, and the phone keeps steering from the held stick every frame.
 
 ## Requirements
 
@@ -74,6 +74,7 @@ xcodebuild test -scheme Echo -destination 'platform=iOS Simulator,name=iPhone 17
 The `EchoWatch` scheme builds and runs the watch app alone. Debug builds accept `-wrist-map N`, `-wrist-autopilot`, `-wrist-remote`, `-wrist-remote-demo` and `-wrist-unlock-all` for reviews and screenshots, like the phone's `-shot-*` arguments.
 
 `scripts/install-device.sh [device-id]` builds a signed Debug copy and installs it on a connected iPhone, the first available one by default. The watch app rides inside `Echo.app`, so the iPhone's Watch app puts it on the paired Apple Watch.
+
 For Xcode Cloud, the checked-in project is discoverable at clone time and `ci_scripts/ci_post_clone.sh` regenerates it from `project.yml`. Use an iOS Archive action with **App Store Connect** distribution preparation and a **TestFlight Internal Testing** post-action. The exact release checklist is in the [App Store release guide](docs/APP_STORE_RELEASE.md).
 
 ## Layout

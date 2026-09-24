@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00F5537FE5B3D3E651FBFF8F /* RemoteFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5924108C5B874313935282 /* RemoteFrame.swift */; };
 		00F8A65497EF66F620EDF593 /* GraphicsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F5E5E5780E1DC17FE2980 /* GraphicsTests.swift */; };
 		035B4BAB06DF71AEB294CA16 /* WorldSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4810701140A99AD8C82337F /* WorldSimulation.swift */; };
 		0558B6400B3C6E811EA5D90F /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3AA771216D8B1B25EE3154 /* DailyChallengeView.swift */; };
@@ -15,6 +16,7 @@
 		07A4A07FB19992612667797F /* LevelPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA371066EE3061D0269A188 /* LevelPrototype.swift */; };
 		07E57E5D723BA533FD2F22C1 /* SimulationClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9418282F22A74AA5C49EE99 /* SimulationClock.swift */; };
 		08070C2C42D70514ECB61118 /* WorldSimulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9740D1BCE9319217DB7E2979 /* WorldSimulationTests.swift */; };
+		08A1DB97CCA0C6E41C4AEE7B /* RemoteWire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E99D7D804B1F8DDF58061AB /* RemoteWire.swift */; };
 		09DD77556486AEB8D27A1ED3 /* win.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7667BFF4E65A6C68B48445A8 /* win.wav */; };
 		0BD66D58CB2A71E964649DD4 /* HUDBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35EBCD7B6E1E123F2574627 /* HUDBar.swift */; };
 		0D351961DA75402B99FAA62A /* ArenaHazardBuild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 773ADD1F9CD1243A41F4FC70 /* ArenaHazardBuild.swift */; };
@@ -109,6 +111,7 @@
 		66D9B198D0B7614447DF3910 /* HUDCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59AF29CD354D92A490DC877 /* HUDCoverageTests.swift */; };
 		671DB2672CE242C8A1D211BF /* SplitMix64.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE09E4FA371A2BC87C84895 /* SplitMix64.swift */; };
 		682E84473EF9CF7D3EEE6B3D /* SimulationFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454E4319D2B5C285ACC7405 /* SimulationFields.swift */; };
+		6A2E7CFCF8BA528689779CA3 /* RemoteHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F382707B17E73A4923C1E5 /* RemoteHUD.swift */; };
 		6A4A0A36AF9A19C132DE1BD0 /* LevelFraming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2284B415450680799E6045D1 /* LevelFraming.swift */; };
 		6A8FCE222A89F6BE07E503CE /* Vec2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F308A1BD37FDF59FE84C7B8 /* Vec2.swift */; };
 		70B4C19F53291D1C20E9FCE3 /* HandcraftedEarlyMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09FFFA30794C939184CC161 /* HandcraftedEarlyMaps.swift */; };
@@ -136,9 +139,11 @@
 		909CE39501A2AB657DDFB7F2 /* HomeControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37854D78DDF0D45D3E53439A /* HomeControls.swift */; };
 		917318EFBB7FF1D8A3A0D949 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB1A3E656D347B9FF08D274 /* GameScene.swift */; };
 		93D0D6285EA7D60ACF338F9F /* ArenaCombatFX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8635FB36141D37484880AA16 /* ArenaCombatFX.swift */; };
+		93ECCAE8628C8793AB9CDC6B /* RemoteWire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E99D7D804B1F8DDF58061AB /* RemoteWire.swift */; };
 		9571A27CD380E71AEF015845 /* WatchRemoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A26F69846F9F6CCD3953AF3 /* WatchRemoteView.swift */; };
 		9A918E477A4B268193FA812A /* OverlayCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523E9017762DADD19D37A2EC /* OverlayCoverageTests.swift */; };
 		9B99298CBEACDAF891D09A5A /* TrailRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AFC3F947350BBF5733A0AB /* TrailRenderer.swift */; };
+		9F1243D08B7EDA3270CB413C /* RemoteScopeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813A0FE1FF8590A45599E3D1 /* RemoteScopeScene.swift */; };
 		A19648EA476F5FD14D27DD0F /* ArenaProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B46F657ABB0B8315E62BD93 /* ArenaProjection.swift */; };
 		A221F5FBAE313AF11D70C02B /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA04E64E2D54305E24EFDAD4 /* ProgressStore.swift */; };
 		A223650F6D11E8B7753A7519 /* RockShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302A60CB624D280AA73626CD /* RockShape.swift */; };
@@ -148,7 +153,7 @@
 		A3D1769007B14C2235C64765 /* LevelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C1412C5BED8201B14E0DC9 /* LevelFactory.swift */; };
 		A44D3CAD2FF956A2DD447674 /* CoverageHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655296264A5EF4FAE83D1834 /* CoverageHost.swift */; };
 		A46A023E9A0707D1F00585D2 /* WatchRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E1EF98ABFC54F34279F916 /* WatchRun.swift */; };
-		A48C082D948B8133AEE11FA6 /* RadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B46C4C4431D9A2F459C5AF4 /* RadarView.swift */; };
+		A47E0D8AE31531E9114A57D6 /* RemoteFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5924108C5B874313935282 /* RemoteFrame.swift */; };
 		A4B6D8D4B50D18D0368ED5BA /* TrailRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AFC3F947350BBF5733A0AB /* TrailRenderer.swift */; };
 		A50EEC8E41D46A281FCA8978 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6575D44A19953377E6B616FB /* PrivacyInfo.xcprivacy */; };
 		A54E7F615786FB977DE98F16 /* ProgressModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708A35F5D7C71F4BC6648B16 /* ProgressModels.swift */; };
@@ -180,6 +185,7 @@
 		D109FF443ADEB98B8B470D55 /* GameViewCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB701352DB455C9CAE8E58A /* GameViewCoverageTests.swift */; };
 		D16070DA4B9C660AF60B14C4 /* WatchProgressViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F23F50D5ECF7A8AA3FF4A4 /* WatchProgressViews.swift */; };
 		D1D3974B5F53EC364FB8FCE1 /* ExpandedMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D0C51062E23678F045FBC7 /* ExpandedMaps.swift */; };
+		D23741BFF6D964F21ACE5FB9 /* RemoteScopeMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E994E2278BDD80A0B4EA056 /* RemoteScopeMarkers.swift */; };
 		D2571F7BE04572C444A04E94 /* SimulationTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB537A4616C84D5E90EC346 /* SimulationTypes.swift */; };
 		D25A1D8148D4341FD6577526 /* SimulationEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DAF1CFE5BFE48F1E490145 /* SimulationEffects.swift */; };
 		D27B0F4102D97BCE416B458B /* ActorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E629412D14789B950FF9CF /* ActorFactory.swift */; };
@@ -296,7 +302,6 @@
 		359089611FDBDE265B760D7B /* ArenaRockBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaRockBuild.swift; sourceTree = "<group>"; };
 		37854D78DDF0D45D3E53439A /* HomeControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeControls.swift; sourceTree = "<group>"; };
 		37AA03B1D00D39F06FEE1882 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
-		3B46C4C4431D9A2F459C5AF4 /* RadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
 		3B485A9977770EA82757E999 /* ArenaActorSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaActorSync.swift; sourceTree = "<group>"; };
 		3C67DA3D474EC6C7D838373C /* ArenaMoverSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaMoverSync.swift; sourceTree = "<group>"; };
 		3D9871A92F435D253701CBF2 /* LaserAbilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaserAbilityTests.swift; sourceTree = "<group>"; };
@@ -346,6 +351,7 @@
 		7FCD5DE2EE71F9D011D02189 /* WatchArenaEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchArenaEffects.swift; sourceTree = "<group>"; };
 		80A4D203BE59B7CFCA32F71C /* GameViewActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewActions.swift; sourceTree = "<group>"; };
 		812D55F81564754B4D96DDB3 /* LaserTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaserTypes.swift; sourceTree = "<group>"; };
+		813A0FE1FF8590A45599E3D1 /* RemoteScopeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteScopeScene.swift; sourceTree = "<group>"; };
 		82835A97653DD8DCF3BDC266 /* WristCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WristCatalog.swift; sourceTree = "<group>"; };
 		844264196A1E2E2706C7214E /* UpgradeTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeTree.swift; sourceTree = "<group>"; };
 		8635FB36141D37484880AA16 /* ArenaCombatFX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaCombatFX.swift; sourceTree = "<group>"; };
@@ -357,6 +363,8 @@
 		8CC812D7BB5ADBCC7D4821AF /* warn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = warn.wav; sourceTree = "<group>"; };
 		8CFF98DC5F7F30DEC21B48FF /* WikiCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiCoverageTests.swift; sourceTree = "<group>"; };
 		8D4DC9A94DCA28AC82DAED26 /* ArenaPickupBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaPickupBuild.swift; sourceTree = "<group>"; };
+		8E994E2278BDD80A0B4EA056 /* RemoteScopeMarkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteScopeMarkers.swift; sourceTree = "<group>"; };
+		8E99D7D804B1F8DDF58061AB /* RemoteWire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWire.swift; sourceTree = "<group>"; };
 		901ECEB573CC31175A6BF3B1 /* ResearchIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchIconView.swift; sourceTree = "<group>"; };
 		907A25A26A8F5267B60AC13B /* ArenaBonusBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaBonusBuild.swift; sourceTree = "<group>"; };
 		9454E4319D2B5C285ACC7405 /* SimulationFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationFields.swift; sourceTree = "<group>"; };
@@ -405,6 +413,7 @@
 		D4C1A6DF1DC3D998C18AFA61 /* WikiPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiPages.swift; sourceTree = "<group>"; };
 		D55E24D73D57D5CFD9179266 /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
 		D7C14A82EE315B6F4C339ACA /* LevelSeals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSeals.swift; sourceTree = "<group>"; };
+		DC5924108C5B874313935282 /* RemoteFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFrame.swift; sourceTree = "<group>"; };
 		DD101603746F700D0003BD92 /* RockPainter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPainter.swift; sourceTree = "<group>"; };
 		DF74137B0385C0F008759FA0 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		DF9576855AF3A23A2AD07E4C /* AtlasCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasCoverageTests.swift; sourceTree = "<group>"; };
@@ -420,6 +429,7 @@
 		EFC1727AEFE7793A4828DE30 /* MoverTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoverTypes.swift; sourceTree = "<group>"; };
 		EFF8D8E3127179ED6B14B9B6 /* HandcraftedLateMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedLateMaps.swift; sourceTree = "<group>"; };
 		F1E629412D14789B950FF9CF /* ActorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorFactory.swift; sourceTree = "<group>"; };
+		F1F382707B17E73A4923C1E5 /* RemoteHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteHUD.swift; sourceTree = "<group>"; };
 		F77FDFB6FA0A364BE0A349A3 /* AppModelCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelCoverageTests.swift; sourceTree = "<group>"; };
 		F85F62EF7C58D511077F5DE7 /* HomeDecor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDecor.swift; sourceTree = "<group>"; };
 		FBC1128466E6D1D25C3DA68D /* LevelGeometryAuditTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelGeometryAuditTests.swift; sourceTree = "<group>"; };
@@ -429,6 +439,8 @@
 		0498BA79259D99F57888E0E5 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				DC5924108C5B874313935282 /* RemoteFrame.swift */,
+				8E99D7D804B1F8DDF58061AB /* RemoteWire.swift */,
 				82835A97653DD8DCF3BDC266 /* WristCatalog.swift */,
 				7546EBFBF375921A03E8B29A /* WristLink.swift */,
 				54A28703530A792C6460A491 /* WristRelics.swift */,
@@ -519,7 +531,9 @@
 		28DBC4B3CC5B6E3813EDEB83 /* Remote */ = {
 			isa = PBXGroup;
 			children = (
-				3B46C4C4431D9A2F459C5AF4 /* RadarView.swift */,
+				F1F382707B17E73A4923C1E5 /* RemoteHUD.swift */,
+				8E994E2278BDD80A0B4EA056 /* RemoteScopeMarkers.swift */,
+				813A0FE1FF8590A45599E3D1 /* RemoteScopeScene.swift */,
 				9A26F69846F9F6CCD3953AF3 /* WatchRemoteView.swift */,
 			);
 			path = Remote;
@@ -1316,6 +1330,8 @@
 				A54E7F615786FB977DE98F16 /* ProgressModels.swift in Sources */,
 				A221F5FBAE313AF11D70C02B /* ProgressStore.swift in Sources */,
 				E444C6216EE9380371B9CC2B /* ProgressWrist.swift in Sources */,
+				00F5537FE5B3D3E651FBFF8F /* RemoteFrame.swift in Sources */,
+				93ECCAE8628C8793AB9CDC6B /* RemoteWire.swift in Sources */,
 				2F412920E82FEF3866484F3B /* RenderFrame.swift in Sources */,
 				30159F13946E4D487EA38DBC /* ResearchIconView.swift in Sources */,
 				FA8B3162365193C5141616B0 /* ResultsView.swift in Sources */,
@@ -1389,7 +1405,11 @@
 				1930A180673249A6A59F3576 /* ProgressModels.swift in Sources */,
 				3B0031A0B5EF061934AE10D2 /* ProgressStore.swift in Sources */,
 				566D5E705F2BB6BA5F373E32 /* ProgressWrist.swift in Sources */,
-				A48C082D948B8133AEE11FA6 /* RadarView.swift in Sources */,
+				A47E0D8AE31531E9114A57D6 /* RemoteFrame.swift in Sources */,
+				6A2E7CFCF8BA528689779CA3 /* RemoteHUD.swift in Sources */,
+				D23741BFF6D964F21ACE5FB9 /* RemoteScopeMarkers.swift in Sources */,
+				9F1243D08B7EDA3270CB413C /* RemoteScopeScene.swift in Sources */,
+				08A1DB97CCA0C6E41C4AEE7B /* RemoteWire.swift in Sources */,
 				CC4D69455B4103CD908D871A /* RenderFrame.swift in Sources */,
 				863E07CC8F4043895FC6891D /* RockPainter.swift in Sources */,
 				D45EE4F1F23F0D5F5EF47DCF /* RockShape.swift in Sources */,

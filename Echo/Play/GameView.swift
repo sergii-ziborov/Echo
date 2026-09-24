@@ -8,6 +8,8 @@ struct GameView: View {
     var modelOverride: AppModel?
 #endif
     let request: PlayRequest
+    /// How this run's level was made, so a watch remote can build the same arena.
+    let remoteLevel: RemoteLevel
 
     var activeModel: AppModel {
 #if DEBUG
@@ -29,18 +31,18 @@ struct GameView: View {
         hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
     ) {
         self.request = request
-        let raw: LevelDefinition
-        if request.daily {
-            raw = LevelCatalog.daily()
-        } else {
-            raw = LevelCatalog.level(id: request.levelID) ?? LevelCatalog.prototype
-        }
         let bounds = UIScreen.main.bounds.size
-        let aspect = Double(bounds.height / max(bounds.width, 1))
-        let fitted = raw
-            .difficultyAdjusted(for: request.difficultyCycle)
-            .fitted(aspect: aspect)
-        let level = fitted.keepingBonusesInView(Self.interfaceBands(for: fitted, screen: bounds))
+        var recipe = RemoteLevel(
+            id: request.levelID,
+            daily: request.daily ? Date() : nil,
+            cycle: request.difficultyCycle,
+            aspect: Double(bounds.height / max(bounds.width, 1))
+        )
+        let fitted = recipe.fitted()
+        let bands = Self.interfaceBands(for: fitted, screen: bounds)
+        recipe.bands = bands
+        remoteLevel = recipe
+        let level = fitted.keepingBonusesInView(bands)
         let session = GameSession(level: level, daily: request.daily)
         _session = State(initialValue: session)
         _scene = State(initialValue: GameScene(session: session, size: bounds))
@@ -220,7 +222,12 @@ struct GameView: View {
             session.configure(tuning: activeModel.progress.playerTuning)
             scene.onEvents = { events in handle(events) }
             scene.cometStyle = activeModel.progress.usesTourbillonTail ? .tourbillon : .classic
-            PhoneWatchLink.shared.attach(session: session, scene: scene)
+            PhoneWatchLink.shared.attach(
+                session: session,
+                scene: scene,
+                level: remoteLevel,
+                actions: PhoneWatchLink.RunActions(rewind: { paradoxRewind() }, retry: { restart() })
+            )
             session.autoReplay = activeModel.progress.autoReplayEnabled
             activeModel.audio.setHapticsEnabled(activeModel.progress.hapticsEnabled)
             activeModel.audio.enabled = activeModel.progress.soundEnabled

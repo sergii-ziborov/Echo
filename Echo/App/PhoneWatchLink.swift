@@ -4,7 +4,7 @@ import WatchConnectivity
 
 /// The iPhone end of the Apple Watch link. It banks clears from the wrist
 /// campaign, and while a run is on screen it lets the watch steer the orb and
-/// streams a small radar back so the wrist shows what it is driving.
+/// streams the run's moving parts back so the wrist can show a close-up.
 @MainActor
 @Observable
 final class PhoneWatchLink: NSObject {
@@ -12,6 +12,18 @@ final class PhoneWatchLink: NSObject {
 
     /// False on iPad, which cannot pair with an Apple Watch.
     static var isAvailable: Bool { WCSession.isSupported() }
+
+    /// Run actions the watch can trigger that live in the game view.
+    struct RunActions {
+        var rewind: (@MainActor () -> Void)?
+        var retry: (@MainActor () -> Void)?
+    }
+
+    /// The watch sends its stick at least this often while a finger holds it.
+    static let stickTimeout: TimeInterval = 1
+    static let frameInterval: TimeInterval = 1.0 / 20
+    /// Frames allowed to wait for their replies at once.
+    static let frameWindow = 3
 
     private(set) var isPaired = false
     private(set) var isWatchAppInstalled = false
@@ -21,10 +33,15 @@ final class PhoneWatchLink: NSObject {
     @ObservationIgnored var onProgress: (@MainActor (WristProgress) -> Void)?
     @ObservationIgnored private weak var session: GameSession?
     @ObservationIgnored private weak var scene: GameScene?
+    @ObservationIgnored private var actions = RunActions()
+    @ObservationIgnored private var level: (data: Data, token: UInt32)?
+    @ObservationIgnored private var watchLevel: UInt32 = 0
+    @ObservationIgnored private var stick: Vec2?
     @ObservationIgnored private var lastHello: TimeInterval = 0
     @ObservationIgnored private var lastStick: TimeInterval = 0
-    @ObservationIgnored private var lastRadar: TimeInterval = 0
-    @ObservationIgnored private var stickHeld = false
+    @ObservationIgnored private var lastFrame: TimeInterval = 0
+    @ObservationIgnored private var framesInFlight: [TimeInterval] = []
+    @ObservationIgnored private var levelInFlight = false
     @ObservationIgnored private var activated = false
 
     func activate() {
@@ -35,64 +52,125 @@ final class PhoneWatchLink: NSObject {
         link.activate()
     }
 
-    func attach(session: GameSession, scene: GameScene) {
+    func attach(session: GameSession, scene: GameScene, level: RemoteLevel, actions: RunActions = RunActions()) {
         self.session = session
         self.scene = scene
-        stickHeld = false
+        self.actions = actions
+        let data = level.data
+        self.level = (data, RemoteLevel.token(of: data))
+        stick = nil
+        levelInFlight = false
+        framesInFlight = []
     }
 
     func detach(session: GameSession) {
         guard self.session === session else { return }
         self.session = nil
         scene = nil
-        stickHeld = false
+        actions = RunActions()
+        level = nil
+        stick = nil
     }
 
-    /// Called every frame by the arena: lets go of a stick the watch stopped
-    /// sending and streams the radar at a watch-friendly rate.
-    func tick() {
-        guard activated else { return }
-        let now = CACurrentMediaTime()
+    /// Called every frame by the arena: steers from the held stick and
+    /// streams the run to the watch.
+    func tick(now: TimeInterval = CACurrentMediaTime()) {
         if isSteering, now - lastHello > 3 { isSteering = false }
-        if stickHeld, now - lastStick > 1.0 { release() }
-        guard isSteering, now - lastRadar > 1.0 / 12, let session else { return }
-        let link = WCSession.default
-        guard link.activationState == .activated, link.isReachable else { return }
-        lastRadar = now
-        let frame = RadarFrame(simulation: session.sim, state: radarState(of: session))
-        link.sendMessage(frame.payload, replyHandler: nil, errorHandler: nil)
+        steer(now: now)
+        stream(now: now)
     }
 
-    func apply(_ command: RemoteCommand) {
-        let now = CACurrentMediaTime()
+    func apply(_ command: RemoteCommand, now: TimeInterval = CACurrentMediaTime()) {
         lastHello = now
         isSteering = true
-        guard let session else { return }
         switch command {
-        case .hello:
-            break
+        case .hello(let token):
+            watchLevel = token
         case .stick(let vector):
-            guard session.phase == .playing else { return }
+            stick = vector
             lastStick = now
-            stickHeld = true
-            session.inputTarget = RemoteSteering.target(stick: vector, player: session.sim.playerPosition)
+            steer(now: now)
         case .release:
             release()
         case .dash:
-            guard session.phase == .playing, session.sim.tryDash() else { return }
+            guard let session, session.phase == .playing, session.sim.tryDash() else { return }
             scene?.abilityEffect(kind: .surge, at: session.sim.playerPosition)
             scene?.onEvents?([.dashed])
         case .pause:
-            session.togglePause()
+            session?.togglePause()
+        case .rewind:
+            guard case .dead = session?.phase else { return }
+            actions.rewind?()
+        case .retry:
+            switch session?.phase {
+            case .dead, .won: actions.retry?()
+            default: break
+            }
         }
     }
 
+    /// The orb keeps flying toward a point ahead of where it is now, every
+    /// frame, so a late message never leaves it chasing a stale target.
+    private func steer(now: TimeInterval) {
+        guard let stick else { return }
+        guard now - lastStick <= Self.stickTimeout else {
+            release()
+            return
+        }
+        guard let session, session.phase == .playing else { return }
+        session.inputTarget = RemoteSteering.target(stick: stick, player: session.sim.playerPosition)
+    }
+
     private func release() {
-        stickHeld = false
+        guard stick != nil else { return }
+        stick = nil
         session?.inputTarget = nil
     }
 
-    private func radarState(of session: GameSession) -> RadarFrame.State {
+    /// The level once, then the newest frames, a few at a time.
+    private func stream(now: TimeInterval) {
+        guard activated, isSteering, let session, let level else { return }
+        let link = WCSession.default
+        guard link.activationState == .activated, link.isReachable else { return }
+        if watchLevel != level.token {
+            guard !levelInFlight else { return }
+            levelInFlight = true
+            let token = level.token
+            link.sendMessageData(level.data, replyHandler: { @Sendable [weak self] _ in
+                Task { @MainActor in self?.levelDelivered(token) }
+            }, errorHandler: { @Sendable [weak self] _ in
+                Task { @MainActor in self?.levelInFlight = false }
+            })
+            return
+        }
+        framesInFlight.removeAll { now - $0 >= RemoteOutbox.replyTimeout }
+        guard framesInFlight.count < Self.frameWindow, now - lastFrame >= Self.frameInterval else { return }
+        framesInFlight.append(now)
+        lastFrame = now
+        let frame = RemoteFrame(
+            sim: session.sim,
+            level: level.token,
+            state: remoteState(of: session),
+            cause: session.deathCause,
+            sentAt: Date().timeIntervalSince1970
+        )
+        link.sendMessageData(frame.data, replyHandler: { @Sendable [weak self] _ in
+            Task { @MainActor in self?.frameDelivered() }
+        }, errorHandler: { @Sendable [weak self] _ in
+            Task { @MainActor in self?.frameDelivered() }
+        })
+    }
+
+    private func frameDelivered() {
+        if !framesInFlight.isEmpty { framesInFlight.removeFirst() }
+    }
+
+    private func levelDelivered(_ token: UInt32) {
+        levelInFlight = false
+        watchLevel = token
+    }
+
+    private func remoteState(of session: GameSession) -> RemoteFrame.State {
         switch session.phase {
         case .playing: session.hasStarted ? .playing : .ready
         case .paused: .paused
@@ -130,8 +208,16 @@ extension PhoneWatchLink: WCSessionDelegate {
         Task { @MainActor in self.updateWatchState(paired: paired, installed: installed) }
     }
 
-    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        guard let command = RemoteCommand(message) else { return }
+    /// Reply at once, with a byte because an empty reply never arrives: the
+    /// reply is what lets the watch send its next message.
+    nonisolated func session(_ session: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
+        replyHandler(Data([1]))
+        guard let command = RemoteCommand(data: messageData) else { return }
+        Task { @MainActor in self.apply(command) }
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
+        guard let command = RemoteCommand(data: messageData) else { return }
         Task { @MainActor in self.apply(command) }
     }
 
