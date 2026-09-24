@@ -11,6 +11,16 @@ extension GameScene {
         max(8, CGFloat(session.sim.config.playerRadius) * worldScale * VisualStyle.actorBodyScale)
     }
 
+    var pickupScale: CGFloat {
+        Self.pickupScale(worldScale: worldScale)
+    }
+
+    /// Pickups were tuned on phones; on an iPad-wide arena they grow with the
+    /// world instead of shrinking into dots.
+    static func pickupScale(worldScale: CGFloat) -> CGFloat {
+        min(1.9, max(1, worldScale / 0.4))
+    }
+
     func beamPath(for laser: LaserState) -> CGPath {
         let path = CGMutablePath()
         path.move(to: scenePoint(laser.start))

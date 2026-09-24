@@ -113,9 +113,7 @@ extension GameScene {
             sparkNodes[spark.id]?.isHidden = spark.collected
             sparkNodes[spark.id]?.position = scenePoint(spark.position)
         }
-        for bonus in frame.bonuses {
-            bonusNodes[bonus.id]?.isHidden = bonus.collected
-        }
+        syncBonuses(frame.bonuses, mode: mode)
         syncMovers(frame.movers, frozen: frame.effects.isFrozen)
         for well in frame.gravityWells {
             gravityWellNodes[well.id]?.position = scenePoint(well.position)
@@ -151,7 +149,7 @@ extension GameScene {
             } else if frame.effects.isPhasing {
                 tint = .white
             } else {
-                tint = VisualPalette.playerGlow
+                tint = cometStyle.glow
             }
             halo.color = tint
             halo.colorBlendFactor = 1

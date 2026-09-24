@@ -29,20 +29,6 @@ final class VisualAssetTests: XCTestCase {
         }
     }
 
-    func testEveryRockAppearanceOccursInTheLevelCatalog() {
-        let expectedCounts: [(AsteroidMaterial, Int)] = [
-            (.basalt, 5), (.ice, 2), (.crystal, 2), (.alloy, 3),
-        ]
-        for (material, count) in expectedCounts {
-            let appearances = Set(LevelCatalog.playable.flatMap { level in
-                level.movers.filter { $0.material == material }.map { mover in
-                    AsteroidMaterial.appearanceSeed(levelNumber: level.number, rockID: mover.id) % count
-                }
-            })
-            XCTAssertEqual(appearances.count, count, "Some \(material) art never appears")
-        }
-    }
-
     func testThemeFinishesCycleAcrossMaps() throws {
         for theme in ArenaTheme.allCases {
             let firstLevel = theme.rawValue + 1

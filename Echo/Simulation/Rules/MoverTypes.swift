@@ -10,12 +10,6 @@ enum AsteroidMaterial: String, CaseIterable, Equatable, Sendable {
     case crystal
     case alloy
 
-    /// Mix an epoch step into the visual choice so material assignment and
-    /// appearance do not lock to the same parity across the level catalog.
-    static func appearanceSeed(levelNumber: Int, rockID: Int) -> Int {
-        levelNumber * 7 + levelNumber / 4 + rockID * 3
-    }
-
     var title: String {
         switch self {
         case .basalt: "Basalt"

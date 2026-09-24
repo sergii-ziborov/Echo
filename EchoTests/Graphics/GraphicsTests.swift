@@ -16,38 +16,57 @@ final class GraphicsTests: XCTestCase {
         XCTAssertLessThan(edge, 0.02)
     }
 
-    func testRibbonNeedsRealMotion() {
+    func testCometNeedsRealMotion() {
         let parked = [
             VisualTrailPoint(position: .zero, time: 0.10),
             VisualTrailPoint(position: .zero, time: 0.20),
         ]
-        XCTAssertTrue(
-            TrailRenderer.ribbon(samples: parked, now: 0.25, lifetime: 0.85, headWidth: 10).isEmpty
-        )
+        XCTAssertTrue(stations(parked, now: 0.25).isEmpty)
 
         let moving = [
             VisualTrailPoint(position: .zero, time: 0.10),
             VisualTrailPoint(position: CGPoint(x: 18, y: 0), time: 0.20),
             VisualTrailPoint(position: CGPoint(x: 36, y: 3), time: 0.30),
         ]
-        XCTAssertFalse(
-            TrailRenderer.ribbon(samples: moving, now: 0.35, lifetime: 0.85, headWidth: 10).isEmpty
-        )
+        let tail = stations(moving, now: 0.30)
+        XCTAssertFalse(tail.isEmpty)
+        XCTAssertEqual(tail.first?.position, CGPoint(x: 36, y: 3), "The tail must start under the head")
+        XCTAssertEqual(tail.first?.age ?? -1, 0, accuracy: 0.0001)
+        XCTAssertTrue(zip(tail, tail.dropFirst()).allSatisfy { $0.age <= $1.age }, "Stations run from the head back")
     }
 
-    func testRibbonDoesNotBridgeATeleport() {
+    func testCometDoesNotBridgeATeleport() {
         let samples = [
             VisualTrailPoint(position: .zero, time: 0.10),
             VisualTrailPoint(position: CGPoint(x: 12, y: 0), time: 0.16),
             VisualTrailPoint(position: CGPoint(x: 220, y: 180), time: 0.22, breakBefore: true),
             VisualTrailPoint(position: CGPoint(x: 232, y: 180), time: 0.28),
         ]
-        let path = TrailRenderer.ribbon(samples: samples, now: 0.30, lifetime: 0.85, headWidth: 10)
-        var contours = 0
-        path.applyWithBlock { element in
-            if element.pointee.type == .moveToPoint { contours += 1 }
+        let tail = stations(samples, now: 0.30)
+        XCTAssertTrue(tail.contains { $0.position.x > 200 })
+        XCTAssertTrue(tail.contains { $0.position.x < 20 })
+        XCTAssertFalse(tail.contains { $0.position.x > 13 && $0.position.x < 219 }, "A teleport must not draw a tail across the gap")
+    }
+
+    func testCometStartsAsWideAsTheHeadAndFadesOut() {
+        XCTAssertGreaterThanOrEqual(TrailRenderer.puffSize(width: 30, age: 0), 30)
+        XCTAssertLessThan(TrailRenderer.puffSize(width: 30, age: 1), TrailRenderer.puffSize(width: 30, age: 0))
+        XCTAssertGreaterThan(TrailRenderer.puffAlpha(age: 0), TrailRenderer.puffAlpha(age: 0.5))
+        XCTAssertEqual(TrailRenderer.puffAlpha(age: 1), 0, accuracy: 0.0001)
+        XCTAssertEqual(TrailRenderer.streakAlpha(age: VisualStyle.cometStreakReach), 0, accuracy: 0.0001)
+    }
+
+    func testCometDustStaysNearThePathAndFades() {
+        let samples = (0..<60).map {
+            VisualTrailPoint(position: CGPoint(x: CGFloat($0) * 2.3, y: 0), time: Double($0) / 60)
         }
-        XCTAssertEqual(contours, 2, "A teleport must start a second ribbon, not one long strip")
+        let motes = TrailRenderer.motes(samples: samples, now: 1.0, lifetime: 0.8, width: 30)
+        XCTAssertFalse(motes.isEmpty)
+        for mote in motes {
+            XCTAssertLessThanOrEqual(abs(mote.position.y), 30 * 0.8)
+            XCTAssertGreaterThanOrEqual(mote.alpha, 0)
+            XCTAssertLessThanOrEqual(mote.alpha, 1)
+        }
     }
 
     func testEveryBonusPlateIsItsOwnTexture() {
@@ -72,7 +91,7 @@ final class GraphicsTests: XCTestCase {
             VisualTrailPoint(position: CGPoint(x: 91.25, y: 0), time: 0.22),
             VisualTrailPoint(position: CGPoint(x: 104, y: 0), time: 0.28),
         ]
-        XCTAssertEqual(contourCount(TrailRenderer.ribbon(samples: samples, now: 0.30, lifetime: 0.85, headWidth: 10)), 1)
+        XCTAssertTrue(stations(samples, now: 0.30).contains { $0.position.x > 25 && $0.position.x < 85 })
     }
 
     func testShortBlinkBreaksWhenTeleportIsSignaled() {
@@ -82,7 +101,7 @@ final class GraphicsTests: XCTestCase {
             VisualTrailPoint(position: CGPoint(x: 91.25, y: 0), time: 0.22, breakBefore: true),
             VisualTrailPoint(position: CGPoint(x: 104, y: 0), time: 0.28),
         ]
-        XCTAssertEqual(contourCount(TrailRenderer.ribbon(samples: samples, now: 0.30, lifetime: 0.85, headWidth: 10)), 2)
+        XCTAssertFalse(stations(samples, now: 0.30).contains { $0.position.x > 21 && $0.position.x < 90 })
     }
 
     func testTrailRecordsDisplacementEvenWhenMarkedStationary() {
@@ -91,22 +110,21 @@ final class GraphicsTests: XCTestCase {
         let trails = TrailRenderer(parent: parent)
         trails.sample(id: "player", position: .zero, time: 0, color: .white, headWidth: 10, moving: false)
         trails.sample(id: "player", position: CGPoint(x: 16, y: 0), time: 0.12, color: .white, headWidth: 10, moving: false)
-        XCTAssertFalse(trails.ribbonPath(id: "player")?.isEmpty ?? true)
+        XCTAssertGreaterThan(trails.visibleSpriteCount(id: "player"), 0)
     }
 
-    func testTrailRibbonLayersStayLocalAndUnderHazards() {
+    func testTrailLayersStayLocalAndUnderHazards() {
         let parent = SKNode()
         parent.zPosition = VisualLayer.trails
         let trails = TrailRenderer(parent: parent)
         trails.sample(id: "player", position: .zero, time: 0, color: .white, headWidth: 10, moving: true)
         trails.sample(id: "player", position: CGPoint(x: 12, y: 0), time: 0.08, color: .white, headWidth: 10, moving: true)
         let layers = trails.layerZPositions(id: "player")
-        XCTAssertEqual(layers.count, 3)
-        XCTAssertEqual(layers[0], VisualStyle.trailBloomZ, accuracy: 0.0001)
-        XCTAssertEqual(layers[1], VisualStyle.trailBandZ, accuracy: 0.0001)
-        XCTAssertEqual(layers[2], VisualStyle.trailCoreZ, accuracy: 0.0001)
-        XCTAssertLessThan(VisualLayer.trails + VisualStyle.trailCoreZ, VisualLayer.pickups)
-        XCTAssertLessThan(VisualLayer.trails + VisualStyle.trailCoreZ, VisualLayer.hazards)
+        XCTAssertGreaterThanOrEqual(layers.count, 2)
+        XCTAssertEqual(layers[0], VisualStyle.trailPuffZ, accuracy: 0.0001)
+        XCTAssertEqual(layers[1], VisualStyle.trailStreakZ, accuracy: 0.0001)
+        XCTAssertLessThan(VisualLayer.trails + VisualStyle.trailMoteZ, VisualLayer.pickups)
+        XCTAssertLessThan(VisualLayer.trails + VisualStyle.trailMoteZ, VisualLayer.hazards)
     }
 
     func testReplayCursorIsFrameRateIndependent() {
@@ -164,12 +182,8 @@ final class GraphicsTests: XCTestCase {
         XCTAssertEqual(diameter, expected, accuracy: 0.6)
     }
 
-    private func contourCount(_ path: CGPath) -> Int {
-        var contours = 0
-        path.applyWithBlock { element in
-            if element.pointee.type == .moveToPoint { contours += 1 }
-        }
-        return contours
+    private func stations(_ samples: [VisualTrailPoint], now: TimeInterval) -> [TrailRenderer.Station] {
+        TrailRenderer.stations(samples: samples, now: now, lifetime: 0.8) { _ in 2 }
     }
 
     private func pixelDigest(_ texture: SKTexture) -> [UInt8] {

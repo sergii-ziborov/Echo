@@ -40,6 +40,7 @@ enum ActorFactory {
 
         let body = SKShapeNode(circleOfRadius: radius)
         body.name = "body"
+        body.fillTexture = GlowTextures.nucleus
         body.fillColor = coreTint
         body.strokeColor = rimTint
         body.lineWidth = max(1.0, radius * 0.09)

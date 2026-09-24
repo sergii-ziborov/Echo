@@ -37,9 +37,10 @@ struct GameView: View {
         }
         let bounds = UIScreen.main.bounds.size
         let aspect = Double(bounds.height / max(bounds.width, 1))
-        let level = raw
+        let fitted = raw
             .difficultyAdjusted(for: request.difficultyCycle)
             .fitted(aspect: aspect)
+        let level = fitted.keepingBonusesInView(Self.interfaceBands(for: fitted, screen: bounds))
         let session = GameSession(level: level, daily: request.daily)
         _session = State(initialValue: session)
         _scene = State(initialValue: GameScene(session: session, size: bounds))
@@ -47,9 +48,36 @@ struct GameView: View {
         _hint = State(initialValue: hint)
     }
 
+    static func interfaceTopInset(_ insets: EdgeInsets) -> CGFloat {
+        insets.top > 20 ? insets.top : 62
+    }
+
+    /// The strips the HUD and the item bar cover, mirroring the layout in
+    /// `body`, in world units so no ability token is parked underneath. The
+    /// GeometryReader there ignores the safe area and reports zero insets.
+    static func interfaceBands(for level: LevelDefinition, screen: CGSize, insets: EdgeInsets = EdgeInsets()) -> InterfaceBands {
+        let scale = screen.width / max(CGFloat(level.worldWidth), 1)
+        let pickup = GameScene.pickupScale(worldScale: scale)
+        // HUD padding, then the 36 pt chip row.
+        let chipsBottom = interfaceTopInset(insets) + 4 + 36
+        // The 28 pt status row under the chips only shows while an effect
+        // runs, so it may cover a caption for a while but never the gem.
+        let statusBottom = chipsBottom + 7 + 28
+        let barTop = max(insets.bottom, 10) + 48
+        // On screens squarer than the fitted aspect the world runs past the top edge.
+        let overflow = max(0, CGFloat(level.worldHeight) * scale - screen.height)
+        // A token is a 44 pt gem with its caption pill reaching 44 pt above the centre.
+        let top = max(chipsBottom + 46 * pickup, statusBottom + 24 * pickup)
+        return InterfaceBands(
+            top: Double((overflow + top) / scale),
+            bottom: Double((barTop + 30 * pickup) / scale),
+            token: Double(30 * pickup / scale)
+        )
+    }
+
     var body: some View {
         GeometryReader { geo in
-            let interfaceTopInset = geo.safeAreaInsets.top > 20 ? geo.safeAreaInsets.top : 62
+            let interfaceTopInset = Self.interfaceTopInset(geo.safeAreaInsets)
 
             ZStack {
                 SpriteView(scene: scene, options: [.ignoresSiblingOrder])
@@ -187,9 +215,12 @@ struct GameView: View {
             }
         }
         .ignoresSafeArea()
+        .onDisappear { PhoneWatchLink.shared.detach(session: session) }
         .onAppear {
             session.configure(tuning: activeModel.progress.playerTuning)
             scene.onEvents = { events in handle(events) }
+            scene.cometStyle = activeModel.progress.usesTourbillonTail ? .tourbillon : .classic
+            PhoneWatchLink.shared.attach(session: session, scene: scene)
             session.autoReplay = activeModel.progress.autoReplayEnabled
             activeModel.audio.setHapticsEnabled(activeModel.progress.hapticsEnabled)
             activeModel.audio.enabled = activeModel.progress.soundEnabled

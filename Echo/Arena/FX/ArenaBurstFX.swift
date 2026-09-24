@@ -3,36 +3,6 @@ import SpriteKit
 import UIKit
 
 extension GameScene {
-    func asteroidFragments(at point: CGPoint, color: UIColor, count: Int, distance: CGFloat) {
-        for index in 0..<max(1, count) {
-            let angle = CGFloat(index) / CGFloat(max(1, count)) * .pi * 2 + CGFloat(index % 3) * 0.16
-            let radius = 2.2 + CGFloat(index % 3) * 1.35
-            let fragment = SKShapeNode(path: Self.polygonPath(radius: radius, sides: index.isMultiple(of: 2) ? 4 : 5))
-            fragment.position = CGPoint(
-
-                x: point.x + cos(angle) * 5,
-                y: point.y + sin(angle) * 5
-            )
-            fragment.fillColor = index.isMultiple(of: 4) ? .white : color
-            fragment.strokeColor = color.withAlphaComponent(0.55)
-            fragment.lineWidth = 0.8
-            fragment.glowWidth = 0
-            fragment.zPosition = 23
-            addChild(fragment)
-
-            let travel = distance * (0.72 + CGFloat(index % 4) * 0.11)
-            fragment.run(.sequence([
-                .group([
-                    .moveBy(x: cos(angle) * travel, y: sin(angle) * travel, duration: 0.38),
-                    .rotate(byAngle: index.isMultiple(of: 2) ? .pi : -.pi, duration: 0.38),
-                    .scale(to: 0.18, duration: 0.38),
-                    .fadeOut(withDuration: 0.38),
-                ]),
-                .removeFromParent(),
-            ]))
-        }
-    }
-
     func polygonWave(
         at point: CGPoint,
         sides: Int,

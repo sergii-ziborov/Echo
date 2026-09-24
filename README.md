@@ -33,7 +33,7 @@ A crash can **Paradox Rewind** three seconds. The failed branch stays as an unst
 ## Hazards and tools
 
 - **Echoes** — up to five copies. Double-tap to dash.
-- **Asteroids** — bounce, patrol, orbit, or sit as a fixed core with satellites. Cryo Ice, Chrono Crystal, and Basalt begin fracturing after hitting solid geometry; Void Alloy never breaks.
+- **Asteroids** — bounce, patrol, orbit, or sit as a fixed core with satellites. Every rock is generated procedurally. Cryo Ice, Chrono Crystal, and Basalt crack after hitting solid geometry and eventually split into physical debris along those cracks; Void Alloy never breaks.
 - **Temporal lasers** — emitters telegraph, charge, and fire. Freeze suspends and disarms every laser.
 - **Reality rifts** — calm tears freeze time, collapsing tears kill, Warp tears fold space, and Candy tears open a faster pocket timeline.
 - **Black holes** — bend movement and destroy the timeline at the core.
@@ -42,6 +42,17 @@ A crash can **Paradox Rewind** three seconds. The failed branch stays as an unst
 - **Timeline Archive** — in-game wiki for controls, clocks, hazards, research, and all 77 maps.
 
 The first time you meet an echo, a rock, a rift, a gate, freeze, phase, or a time collision, a short card explains it.
+
+## Apple Watch
+
+The download includes a watch app that runs the same rules on the wrist.
+
+- **Wrist Timeline** — twelve compact maps in three acts (Tick, Crown, Tourbillon). Each map opens after the previous one is cleared. Tap where the orb should fly; it keeps going after your finger lifts, so your thumb never hides it.
+- **Watch skills** — turn the Digital Crown back to rewind three seconds. Pulse Sense taps your wrist before each echo. Wrist Dash (double-tap) opens after 2 clears. Tick Freeze (button, or the double-tap hand gesture) opens after 6.
+- **Rewards on iPhone** — every first clear on the watch pays 25 research points in the phone game. Four clears unlock the ember-gold *Tourbillon Tail*, eight add a Paradox Rewind charge (*Crown Charge*), and all twelve make echoes arrive 0.5 s later (*Mainspring*). The Home screen tracks progress and has a switch for the tail.
+- **iPhone Remote** — while a map runs on the phone, open Remote on the watch. The whole screen becomes a thumbstick, a live radar of the phone's arena is drawn underneath, and a double-tap dashes. The phone HUD shows a WATCH chip while the wrist is steering.
+
+WatchConnectivity carries clears through the application context (plus a queued transfer for each first clear). Remote commands and the radar use live messages at about 12–20 Hz.
 
 ## Requirements
 
@@ -60,20 +71,23 @@ Bundle ID `com.sergiiziborov.Echo`.
 xcodebuild test -scheme Echo -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
 
+The `EchoWatch` scheme builds and runs the watch app alone. Debug builds accept `-wrist-map N`, `-wrist-autopilot`, `-wrist-remote`, `-wrist-remote-demo` and `-wrist-unlock-all` for reviews and screenshots, like the phone's `-shot-*` arguments.
 For Xcode Cloud, the checked-in project is discoverable at clone time and `ci_scripts/ci_post_clone.sh` regenerates it from `project.yml`. Use an iOS Archive action with **App Store Connect** distribution preparation and a **TestFlight Internal Testing** post-action. The exact release checklist is in the [App Store release guide](docs/APP_STORE_RELEASE.md).
 
 ## Layout
 
 ```
-Echo/App            launch and navigation
+Echo/App            launch, navigation, Apple Watch link
 Echo/Play           run session, HUD, encounter cards
-Echo/Arena          SpriteKit scene, trails, textures, FX
+Echo/Arena          SpriteKit scene, comet trails, procedural rocks and pickups, FX
 Echo/Simulation     rules, catalog, progress (no SpriteKit)
-Echo/Shell          home, atlas, lab, wiki, settings, legal
-EchoTests/          recorder, collision, catalog, graphics
+Echo/Shell          home, atlas, lab, wiki, settings, legal, wrist relics
+EchoWatch/          watch app: wrist campaign, run scene, iPhone remote
+Shared/             wrist maps, relic rules and the phone ↔ watch protocol
+EchoTests/          recorder, collision, catalog, graphics, wrist sync
 ```
 
-`WorldSimulation` is independent of SpriteKit so the rules run in tests. Source files stay at or under 400 lines, and each folder holds at most six files.
+`WorldSimulation` is independent of SpriteKit so the rules run in tests and on the watch. The comet trail, rock painter, ability tokens and `BitmapCanvas` use Core Graphics bitmaps instead of UIKit renderers, so the phone and the watch draw them identically. Source files stay at or under 400 lines, and each folder holds at most six files.
 
 ## Support
 

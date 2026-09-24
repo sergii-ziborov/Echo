@@ -56,13 +56,12 @@ final class RulesCoverageTests: XCTestCase {
             _ = ArenaTheme.forLevel(number)
             _ = ArenaAtmosphere.forLevel(number)
         }
-        for (rockID, material) in AsteroidMaterial.allCases.enumerated() {
+        for material in AsteroidMaterial.allCases {
             _ = material.title
             _ = material.shortLabel
             _ = material.wallHitsToShatter
             _ = material.fractureDuration
             _ = material.isBreakable
-            _ = AsteroidMaterial.appearanceSeed(levelNumber: 21, rockID: rockID)
         }
         let decoration = ArenaDecoration(
             id: 1,

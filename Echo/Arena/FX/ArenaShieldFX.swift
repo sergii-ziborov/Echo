@@ -270,11 +270,11 @@ extension GameScene {
         ]))
     }
 
-    func shockwave(at point: CGPoint, color: UIColor, start: CGFloat = 12, end: CGFloat = 86) {
+    func shockwave(at point: CGPoint, color: UIColor, start: CGFloat = 12, end: CGFloat = 86, lineWidth: CGFloat = 3) {
         let ring = SKShapeNode(circleOfRadius: start)
         ring.position = point
         ring.strokeColor = color
-        ring.lineWidth = 3
+        ring.lineWidth = lineWidth
         ring.glowWidth = 0
         ring.fillColor = .clear
         ring.zPosition = 21

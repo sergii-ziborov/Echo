@@ -2,6 +2,14 @@ import Foundation
 
 enum ArenaMetrics {
     static let satelliteRadius: Double = 34
+    /// The orb's own collision circle is 24, so a moving rock smaller than this
+    /// reads as a speck beside it on a phone.
+    static let minimumRockRadius: Double = 30
+    static let rockGrowth: Double = 1.2
+
+    static func readableRockRadius(_ authored: Double) -> Double {
+        max(minimumRockRadius, (authored * rockGrowth).rounded())
+    }
 }
 
 enum ArenaAtmosphere: String, Equatable, Sendable, CaseIterable {

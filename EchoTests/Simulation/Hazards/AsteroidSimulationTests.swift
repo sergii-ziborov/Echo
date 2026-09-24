@@ -179,7 +179,7 @@ extension WorldSimulationTests {
                 }
                 XCTAssertEqual(center, level.movers[0].position)
                 XCTAssertEqual(radius, 210)
-                XCTAssertEqual(satellite.radius, ArenaMetrics.satelliteRadius)
+                XCTAssertEqual(satellite.radius, ArenaMetrics.readableRockRadius(ArenaMetrics.satelliteRadius))
                 XCTAssertGreaterThan(radius, level.movers[0].radius + satellite.radius + 24)
             }
         }

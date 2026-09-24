@@ -171,10 +171,11 @@ extension ProgressStore {
             startsShielded: aegisLevel >= 5,
             shieldChargesPerUse: upgradeLevel(.shieldLattice) >= 5 ? 2 : 1,
             laserWarningBonus: Double(upgradeLevel(.beamForecast)) * 0.18,
-            echoDelayBonus: Double(upgradeLevel(.echoForecast)) * 0.45,
+            echoDelayBonus: Double(upgradeLevel(.echoForecast)) * 0.45
+                + (wrist.isUnlocked(.mainspring) ? WristProgress.echoDelayRelicBonus : 0),
             crystalRewardBonus: Double(upgradeLevel(.crystalMemory)) * 0.30,
             rewindSeconds: 3 + Double(rewindLevel) * 0.45,
-            rewindCharges: rewindLevel >= 5 ? 3 : rewindLevel >= 2 ? 2 : 1,
+            rewindCharges: (rewindLevel >= 5 ? 3 : rewindLevel >= 2 ? 2 : 1) + (wrist.isUnlocked(.crownCharge) ? 1 : 0),
             anchorTimeScale: max(0.24, 0.44 - Double(upgradeLevel(.anchorResearch)) * 0.05),
             anchorBonus: Double(upgradeLevel(.anchorResearch)) * 0.35,
             repulseRadius: 160 + Double(upgradeLevel(.repulseResearch)) * 24,

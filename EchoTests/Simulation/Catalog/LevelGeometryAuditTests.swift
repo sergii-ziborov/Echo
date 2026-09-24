@@ -3,9 +3,20 @@ import XCTest
 
 final class LevelGeometryAuditTests: XCTestCase {
     func testEveryAuthoredMapPassesGeometryAudit() {
+        let issues = audit(LevelCatalog.playable)
+        XCTAssertTrue(issues.isEmpty, issues.joined(separator: "\n"))
+    }
+
+    func testEveryWristMapPassesGeometryAuditOnTheWatchFace() {
+        let fitted = WristCatalog.maps.map { WristCatalog.fitted($0, aspect: 1.07) }
+        let issues = audit(WristCatalog.maps + fitted)
+        XCTAssertTrue(issues.isEmpty, issues.joined(separator: "\n"))
+    }
+
+    func audit(_ levels: [LevelDefinition]) -> [String] {
         var issues: [String] = []
 
-        for level in LevelCatalog.playable {
+        for level in levels {
             let prefix = "Map \(level.number) · \(level.name):"
 
             checkUnique(level.sparks.map(\.id), label: "spark", prefix: prefix, issues: &issues)
@@ -109,7 +120,7 @@ final class LevelGeometryAuditTests: XCTestCase {
             }
         }
 
-        XCTAssertTrue(issues.isEmpty, issues.joined(separator: "\n"))
+        return issues
     }
 
     func checkUnique(

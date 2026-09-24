@@ -6,7 +6,6 @@ extension GameScene {
     func syncMovers(_ states: [MoverState], frozen: Bool) {
         let liveIDs = Set(states.map(\.id))
         for id in Array(moverNodes.keys) where !liveIDs.contains(id) {
-            if dyingMoverIDs.contains(id) { continue }
             moverNodes.removeValue(forKey: id)?.removeFromParent()
         }
 
@@ -21,7 +20,7 @@ extension GameScene {
             let iceShell = root.childNode(withName: "freezeShell")
             if frozen, iceShell == nil {
                 let rockSize = CGFloat((root.userData?["diameter"] as? NSNumber)?.doubleValue ?? 64)
-                let shell = SKShapeNode(circleOfRadius: rockSize * 0.46)
+                let shell = SKShapeNode(circleOfRadius: rockSize * 0.62)
                 shell.name = "freezeShell"
                 shell.zPosition = 5
                 shell.fillColor = UIColor(red: 0.48, green: 0.83, blue: 1, alpha: 0.12)
@@ -32,7 +31,7 @@ extension GameScene {
                     let crystal = SKSpriteNode(texture: GlowTextures.snowflakeParticle)
                     crystal.size = CGSize(width: 8, height: 8)
                     let angle = CGFloat(index) / 5 * .pi * 2 + 0.3
-                    crystal.position = CGPoint(x: cos(angle) * rockSize * 0.39, y: sin(angle) * rockSize * 0.39)
+                    crystal.position = CGPoint(x: cos(angle) * rockSize * 0.55, y: sin(angle) * rockSize * 0.55)
                     crystal.alpha = 0.78
                     shell.addChild(crystal)
                 }
@@ -46,21 +45,15 @@ extension GameScene {
             }
 
             let progress = CGFloat(mover.fractureProgress)
-            let tint = Self.color(for: mover.material)
-            if let rock = root.childNode(withName: "rock") {
-                rock.setScale(1)
-            }
+            root.userData?["vx"] = NSNumber(value: mover.velocity.x * Double(worldScale))
+            root.userData?["vy"] = NSNumber(value: mover.velocity.y * Double(worldScale))
             if let glow = root.childNode(withName: "glow") {
-                glow.setScale(1)
-                glow.alpha = frozen ? 0.14 : (0.18 + progress * 0.10)
+                glow.setScale(1 + progress * 0.18)
+                glow.alpha = frozen ? 0.14 : (0.17 + progress * 0.14)
             }
-            if let cracks = root.childNode(withName: "rock")?.childNode(withName: "cracks") as? SKShapeNode {
-                cracks.alpha = max(0, min(1, progress * 1.45))
-                cracks.strokeColor = progress > 0.62
-                    ? UIColor.white
-                    : tint.withAlphaComponent(0.96)
+            if let rock = root.childNode(withName: "rock") {
+                syncFaults(rock, progress: progress, frozen: frozen)
             }
-            root.childNode(withName: "rock")?.childNode(withName: "chips")?.alpha = max(0, min(0.95, progress * 1.15))
             syncMotionEmitter(
                 root,
                 headingX: mover.velocity.x,
@@ -69,6 +62,19 @@ extension GameScene {
                 dashing: false
             )
         }
+    }
+
+    /// Faults open one after another as a brittle rock fractures; the last
+    /// stretch before it splits makes the whole body shiver.
+    func syncFaults(_ rock: SKNode, progress: CGFloat, frozen: Bool) {
+        for crack in rock.children where crack.name == "fault" {
+            let threshold = CGFloat((crack.userData?["threshold"] as? NSNumber)?.doubleValue ?? 1)
+            crack.alpha = max(0, min(1, (progress - threshold * 0.82) * 6))
+        }
+        let diameter = CGFloat((rock.parent?.userData?["diameter"] as? NSNumber)?.doubleValue ?? 40)
+        let tremor = frozen ? 0 : max(0, progress - 0.72) * diameter * 0.17
+        let beat = CGFloat(displayed?.time ?? 0)
+        rock.position = CGPoint(x: sin(beat * 53) * tremor, y: cos(beat * 47) * tremor)
     }
 
     func syncRealityBackdrop() {
@@ -121,12 +127,13 @@ extension GameScene {
         let breakBefore = pendingPlayerTrailBreak || jumped
         pendingPlayerTrailBreak = false
         let surging = displayed?.effects.isSurging ?? session.sim.effects.isSurging
+        let diameter = actorRadius * 2
         trails.sample(
             id: "player",
             position: playerNode.position,
             time: clock,
-            color: surging ? UIColor(red: 1, green: 0.86, blue: 0.40, alpha: 1) : VisualPalette.playerGlow,
-            headWidth: surging ? VisualStyle.trailSurgeWidth : VisualStyle.trailPlayerWidth,
+            color: surging ? UIColor(red: 1, green: 0.86, blue: 0.40, alpha: 1) : cometStyle.glow,
+            headWidth: diameter * (surging ? VisualStyle.cometSurgeWidth : VisualStyle.cometPlayerWidth),
             moving: gap >= 0.6,
             breakBefore: breakBefore && lastPlayerScene != .zero
         )
@@ -140,7 +147,7 @@ extension GameScene {
                 position: node.position,
                 time: clock,
                 color: VisualPalette.echoRim,
-                headWidth: VisualStyle.trailEchoWidth,
+                headWidth: diameter * 0.92 * VisualStyle.cometEchoWidth,
                 moving: true
             )
         }
@@ -152,7 +159,7 @@ extension GameScene {
                 position: node.position,
                 time: clock,
                 color: VisualPalette.ghostRim,
-                headWidth: VisualStyle.trailGhostWidth,
+                headWidth: diameter * 0.92 * VisualStyle.cometGhostWidth,
                 moving: true
             )
         }

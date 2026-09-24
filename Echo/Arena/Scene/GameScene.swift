@@ -36,10 +36,12 @@ final class GameScene: SKScene {
     var magnetLinks: SKShapeNode!
     var lastPlayerScene = CGPoint.zero
     var lastSampledSimTime: TimeInterval = 0
-    var dyingMoverIDs = Set<Int>()
+    var rockArtCache: [Int: RockArt] = [:]
+    var rockSeed = UInt64.random(in: .min ... .max)
     var wasExitOpen = false
     var displayed: RenderFrame!
     var pendingPlayerTrailBreak = false
+    var cometStyle: CometStyle = .classic
 
     init(session: GameSession, size: CGSize) {
         self.session = session
@@ -80,7 +82,8 @@ final class GameScene: SKScene {
         trailBudget = 0
         lastPlayerScene = .zero
         lastSampledSimTime = 0
-        dyingMoverIDs.removeAll()
+        rockArtCache.removeAll()
+        rockSeed = UInt64.random(in: .min ... .max)
         wasExitOpen = false
         pendingPlayerTrailBreak = false
         displayed = RenderFrame(simulation: session.sim)
@@ -131,6 +134,7 @@ final class GameScene: SKScene {
         decorationNode.zPosition = 1.72
         addChild(decorationNode)
         buildArena()
+        buildDebrisPhysics()
         buildAmbient()
         buildDecorations()
         buildExit()
@@ -170,6 +174,7 @@ final class GameScene: SKScene {
         }
         let dt = currentTime - lastTime
         lastTime = currentTime
+        PhoneWatchLink.shared.tick()
 
         syncPauseClock()
         switch session.phase {
@@ -286,6 +291,7 @@ final class GameScene: SKScene {
         for child in children {
             child.isPaused = halt
         }
+        physicsWorld.speed = halt ? 0 : 1
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

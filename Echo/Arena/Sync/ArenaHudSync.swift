@@ -3,31 +3,6 @@ import SpriteKit
 import UIKit
 
 extension GameScene {
-    func asteroidDust(at point: CGPoint, color: UIColor, count: Int) {
-        for index in 0..<max(1, count) {
-            let mote = SKSpriteNode(texture: GlowTextures.blob)
-            let size = CGFloat(7 + index % 4 * 3)
-            mote.size = CGSize(width: size, height: size)
-            mote.position = point
-            mote.blendMode = .add
-            mote.color = index.isMultiple(of: 3) ? .white : color
-            mote.colorBlendFactor = 0.9
-            mote.alpha = 0.72
-            mote.zPosition = 22
-            addChild(mote)
-            let angle = CGFloat(index) / CGFloat(max(1, count)) * .pi * 2 + CGFloat(index) * 0.13
-            let travel = CGFloat(18 + index % 5 * 8)
-            mote.run(.sequence([
-                .group([
-                    .moveBy(x: cos(angle) * travel, y: sin(angle) * travel, duration: 0.36),
-                    .fadeOut(withDuration: 0.36),
-                    .scale(to: 0.2, duration: 0.36),
-                ]),
-                .removeFromParent(),
-            ]))
-        }
-    }
-
     func fieldCaption(_ text: String, color: UIColor, y: CGFloat) -> SKLabelNode {
         let label = SKLabelNode(fontNamed: "AvenirNext-Heavy")
         label.text = text
@@ -146,15 +121,17 @@ extension GameScene {
                     label?.text = ""
                     reward?.text = ""
                     arc?.path = nil
-                    if let gem = root.childNode(withName: "gem") as? SKShapeNode {
-                        gem.fillColor = VisualPalette.spark
-                    }
+                    (root.childNode(withName: "gem") as? SKSpriteNode)?.texture = SpriteTextures.sparkGem
+                    (root.childNode(withName: "glow") as? SKSpriteNode)?.color = VisualPalette.spark
                 } else if let remaining = spark.timerRemaining {
                     let frac = max(0, min(1, remaining / duration))
-                    arc?.path = Self.arc(radius: 13, fraction: frac)
-                    arc?.strokeColor = VisualPalette.timedSpark
-                    label?.fontSize = 10
-                    label?.fontColor = VisualPalette.timedSpark
+                    // The ring and countdown warm toward red in the last quarter.
+                    let urgent = frac < 0.25
+                    let tone = urgent ? UIColor(red: 1, green: 0.42, blue: 0.3, alpha: 1) : VisualPalette.timedSpark
+                    arc?.path = Self.arc(radius: 16 * pickupScale, fraction: frac)
+                    arc?.strokeColor = tone
+                    label?.fontSize = 10 * pickupScale
+                    label?.fontColor = tone
                     label?.text = displayed.effects.isFrozen
                         ? String(format: "HOLD  %.0f", ceil(remaining))
                         : String(format: "%.0fs", ceil(remaining))

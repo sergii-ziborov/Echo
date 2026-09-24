@@ -25,6 +25,8 @@ final class ProgressStore {
     let equippedKey = "echo.progress.equipped.v1"
     let difficultyKey = "echo.progress.difficultyCycle.v1"
     let completedDifficultyKey = "echo.progress.completedDifficultyCycles.v1"
+    let wristKey = "echo.progress.wrist.v1"
+    let wristTrailKey = "echo.settings.wristTrail.v1"
 
     var starsByLevel: [String: LevelProgress]
     var shards: Int
@@ -42,6 +44,9 @@ final class ProgressStore {
     var equippedSkillIDs: [String]
     var difficultyCycle: Int
     var completedDifficultyCycles: Int
+    /// Clears earned on Apple Watch; they unlock relics in the iPhone game.
+    var wrist: WristProgress
+    var wristTrailEnabled: Bool
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -90,6 +95,13 @@ final class ProgressStore {
         }
         difficultyCycle = max(0, defaults.integer(forKey: difficultyKey))
         completedDifficultyCycles = max(0, defaults.integer(forKey: completedDifficultyKey))
+        if let data = defaults.data(forKey: wristKey),
+           let decoded = try? JSONDecoder().decode(WristProgress.self, from: data) {
+            wrist = decoded
+        } else {
+            wrist = WristProgress()
+        }
+        wristTrailEnabled = defaults.object(forKey: wristTrailKey) as? Bool ?? true
         sanitizeEquippedSkills()
     }
 
@@ -134,6 +146,10 @@ final class ProgressStore {
         }
         defaults.set(difficultyCycle, forKey: difficultyKey)
         defaults.set(completedDifficultyCycles, forKey: completedDifficultyKey)
+        if let data = try? JSONEncoder().encode(wrist) {
+            defaults.set(data, forKey: wristKey)
+        }
+        defaults.set(wristTrailEnabled, forKey: wristTrailKey)
     }
 
     func progressKey(for id: String, cycle: Int? = nil) -> String {

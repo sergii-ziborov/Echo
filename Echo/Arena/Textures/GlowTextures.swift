@@ -8,6 +8,8 @@ enum GlowTextures {
     static let echo: SKTexture = assembleOrb(color: UIColor(red: 0.78, green: 0.36, blue: 1, alpha: 1))
     static let spark: SKTexture = assembleOrb(color: UIColor(red: 0.45, green: 0.92, blue: 1, alpha: 1), size: 192)
     static let blob: SKTexture = glowMask
+    static var puff: SKTexture { SpriteTextures.puff }
+    static var nucleus: SKTexture { SpriteTextures.nucleus }
     static let spawnRing: SKTexture = makeRing(color: UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1), size: 160)
     static let asteroid: SKTexture = named("Asteroid") ?? orb(color: UIColor(red: 0.32, green: 0.48, blue: 0.65, alpha: 1), size: 256)
     private static let asteroidAtlas = UIImage(named: "AsteroidMaterialAtlas")
@@ -50,11 +52,6 @@ enum GlowTextures {
     static let frostVignette: SKTexture = frostVignetteTexture(size: 640)
     static let snowflakeParticle: SKTexture = snowflakeTexture(size: 96)
     static let shieldBubble: SKTexture = shieldBubbleTexture(size: 256)
-    private static let bonusTextures: [BonusKind: SKTexture] = {
-        Dictionary(uniqueKeysWithValues: BonusKind.allCases.map { kind in
-            (kind, abilityPlate(kind: kind, color: color(for: kind), size: 160))
-        })
-    }()
 
     static func asteroid(for material: AsteroidMaterial, variation: Int = 0) -> SKTexture {
         let skins: [SKTexture?] = switch material {
@@ -81,7 +78,7 @@ enum GlowTextures {
     }
 
     static func bonus(_ kind: BonusKind) -> SKTexture {
-        bonusTextures[kind] ?? abilityPlate(kind: kind, color: color(for: kind), size: 160)
+        SpriteTextures.token(kind)
     }
 
     static func color(for kind: BonusKind) -> UIColor {
@@ -99,25 +96,7 @@ enum GlowTextures {
         makeGlowMask(pixelSize: Int(size), tint: color)
     }
 
-    static func abilityGlyph(systemName: String, color: UIColor, size: CGFloat) -> SKTexture {
-        abilityPlate(kind: BonusKind.allCases.first { $0.icon == systemName } ?? .shield, color: color, size: size)
-    }
-
-    static func abilityPlate(kind: BonusKind, color: UIColor, size: CGFloat) -> SKTexture {
-        let image = transparentImage(size: size) { cg in
-            let bounds = CGRect(x: size * 0.08, y: size * 0.08, width: size * 0.84, height: size * 0.84)
-            let hex = hexPath(in: bounds)
-            cg.addPath(hex)
-            cg.setFillColor(UIColor(white: 0.08, alpha: 0.92).cgColor)
-            cg.fillPath()
-            cg.addPath(hex)
-            cg.setStrokeColor(color.withAlphaComponent(0.92).cgColor)
-            cg.setLineWidth(size * 0.035)
-            cg.strokePath()
-            AbilityGlyph.draw(kind: kind, in: bounds, color: .white, onto: cg)
-        }
-        let texture = SKTexture(image: image)
-        texture.filteringMode = .linear
-        return texture
+    static func abilityGlyph(systemName: String, color _: UIColor, size _: CGFloat) -> SKTexture {
+        SpriteTextures.token(BonusKind.allCases.first { $0.icon == systemName } ?? .shield)
     }
 }

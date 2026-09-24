@@ -41,11 +41,12 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
 
     static let worldSize: Double = 1000
 
-    /// Stretch the 1000×1000 layout to the screen aspect so the arena fills the phone.
-    func fitted(aspect: Double) -> LevelDefinition {
-        let a = min(max(aspect, 1.45), 2.25)
-        let height = Self.worldSize * a
-        let sy = height / Self.worldSize
+    /// Stretch the square layout to the screen aspect so the arena fills the
+    /// display. Phones use the tall default range; the watch is nearly square.
+    func fitted(aspect: Double, range: ClosedRange<Double> = 1.45...2.25) -> LevelDefinition {
+        let a = min(max(aspect, range.lowerBound), range.upperBound)
+        let height = worldSize * a
+        let sy = height / max(worldHeight, 1)
         var copy = self
         copy.worldHeight = height
         copy.playerStart = Vec2(x: playerStart.x, y: playerStart.y * sy)
@@ -150,6 +151,31 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
             }
             let index = abs(number * 5 + mover.id * 3) % palette.count
             next.material = palette[index]
+            return next
+        }
+        return copy
+    }
+
+    /// Moving rocks were authored small enough to vanish next to the orb. Grow
+    /// every moving body before fitting and sanitizing, so the collision circle,
+    /// the drawn silhouette and the wall nudges all use the same radius. Fixed
+    /// cores keep their authored size; a larger ricochet spawn is pushed clear
+    /// of the wall it would now overlap.
+    func withReadableAsteroids() -> LevelDefinition {
+        var copy = self
+        copy.movers = movers.map { mover in
+            guard mover.path != .stationary else { return mover }
+            var next = mover
+            next.radius = ArenaMetrics.readableRockRadius(mover.radius)
+            if case .bounce = mover.path {
+                next.position = LayoutSafety.clearSpot(
+                    near: mover.position,
+                    walls: walls,
+                    worldWidth: worldWidth,
+                    worldHeight: worldHeight,
+                    clearance: next.radius + 4
+                )
+            }
             return next
         }
         return copy
@@ -273,6 +299,34 @@ enum LayoutSafety {
         clearance: Double
     ) -> Bool {
         walls.allSatisfy { !$0.expanded(clearance).intersectsCircle(center: point, radius: 1) }
+    }
+
+    /// `nudge` resolves one wall at a time, so a gap narrower than the body can
+    /// pin the point between two walls. Then search outward for the nearest
+    /// spot that really has the requested clearance.
+    static func clearSpot(
+        near point: Vec2,
+        walls: [AABB],
+        worldWidth: Double,
+        worldHeight: Double,
+        clearance: Double
+    ) -> Vec2 {
+        let nudged = nudge(point, walls: walls, worldWidth: worldWidth, worldHeight: worldHeight, clearance: clearance)
+        // A resolved point sits exactly on the clearance boundary; allow that.
+        if isClear(nudged, walls: walls, clearance: clearance - 2) { return nudged }
+        let inset = clearance + 24
+        for ring in 1...32 {
+            let distance = Double(ring) * 8
+            for step in 0..<24 {
+                let angle = Double(step) / 24 * .pi * 2
+                let candidate = Vec2(x: point.x + cos(angle) * distance, y: point.y + sin(angle) * distance)
+                guard candidate.x >= inset, candidate.y >= inset,
+                      candidate.x <= worldWidth - inset, candidate.y <= worldHeight - inset,
+                      isClear(candidate, walls: walls, clearance: clearance) else { continue }
+                return candidate
+            }
+        }
+        return nudged
     }
 }
 

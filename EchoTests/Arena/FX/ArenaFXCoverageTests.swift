@@ -31,7 +31,6 @@ final class ArenaFXCoverageTests: XCTestCase {
             scene.realityShift(kind: kind, at: origin)
         }
 
-        scene.asteroidFragments(at: point, color: .orange, count: 6, distance: 40)
         scene.polygonWave(at: point, sides: 5, color: .white, radius: 18, scale: 2.4)
         scene.speedStreaks(at: point, color: .yellow)
         scene.electricArcBurst(at: point, color: .cyan, count: 5)

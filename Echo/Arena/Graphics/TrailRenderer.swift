@@ -1,41 +1,57 @@
 import SpriteKit
 
+/// Comet tails for the orb, its echoes and paradox ghosts. Each actor keeps a
+/// short, time-stamped history of where it has been. Every frame that history
+/// is laid out along its own path as soft additive puffs (the body of the
+/// tail), a hotter streak close to the head, and dust motes that drift out of
+/// the tail as they age. The tail starts as wide as the head, so the orb reads
+/// as a comet's nucleus instead of a ball on a string. Everything is a pure
+/// function of the samples and the clock, so replays, rewinds and pauses draw
+/// the same tail.
 @MainActor
 final class TrailRenderer {
+    struct Station: Equatable {
+        var position: CGPoint
+        /// 0 at the head, 1 where the tail's lifetime runs out.
+        var age: CGFloat
+    }
+
+    struct Mote: Equatable {
+        var position: CGPoint
+        var size: CGFloat
+        var alpha: CGFloat
+    }
+
     @MainActor
     private final class Actor {
         var samples: [VisualTrailPoint] = []
         var lastPosition: CGPoint?
-        let bloom = SKShapeNode()
-        let colorBand = SKShapeNode()
-        let core = SKShapeNode()
+        let layer = SKNode()
+        var puffs: [SKSpriteNode] = []
+        var streak: [SKSpriteNode] = []
+        var motes: [SKSpriteNode] = []
 
-        init(color: UIColor, parent: SKNode) {
-            bloom.zPosition = VisualStyle.trailBloomZ
-            colorBand.zPosition = VisualStyle.trailBandZ
-            core.zPosition = VisualStyle.trailCoreZ
-            for node in [bloom, colorBand, core] {
-                node.fillColor = .clear
-                node.strokeColor = .clear
-                node.lineWidth = 0
-                node.glowWidth = 0
-                parent.addChild(node)
-            }
-            bloom.blendMode = .add
-            bloom.fillColor = color.withAlphaComponent(0.05)
-            colorBand.blendMode = .alpha
-            colorBand.fillColor = color.withAlphaComponent(0.26)
-            core.blendMode = .alpha
-            core.fillColor = UIColor.white.withAlphaComponent(0.62)
+        init(parent: SKNode) {
+            parent.addChild(layer)
         }
 
         func remove() {
-            bloom.removeFromParent()
-            colorBand.removeFromParent()
-            core.removeFromParent()
+            layer.removeFromParent()
         }
     }
 
+    /// How many sprites a comet may use; the watch draws a lighter tail.
+    struct Budget: Sendable {
+        var spacing: CGFloat = 1
+        var puffs = VisualStyle.cometPuffCap
+        var streak = VisualStyle.cometStreakCap
+        var motes = VisualStyle.cometMoteCap
+
+        static let phone = Budget()
+        static let watch = Budget(spacing: 1.6, puffs: 28, streak: 14, motes: 12)
+    }
+
+    var budget = Budget.phone
     private weak var parent: SKNode?
     private var actors: [String: Actor] = [:]
 
@@ -65,17 +81,15 @@ final class TrailRenderer {
     ) {
         guard let parent else { return }
         let actor = actors[id] ?? {
-            let created = Actor(color: color, parent: parent)
+            let created = Actor(parent: parent)
             actors[id] = created
             return created
         }()
-        actor.bloom.fillColor = color.withAlphaComponent(0.05)
-        actor.colorBand.fillColor = color.withAlphaComponent(0.26)
 
         if breakBefore {
             actor.samples.append(VisualTrailPoint(position: position, time: time, breakBefore: true))
             actor.lastPosition = position
-            redraw(actor, now: time, headWidth: headWidth)
+            redraw(actor, now: time, width: headWidth, color: color)
             return
         }
 
@@ -83,13 +97,13 @@ final class TrailRenderer {
         if let last = actor.lastPosition {
             let gap = hypot(position.x - last.x, position.y - last.y)
             if gap < 0.6 {
-                redraw(actor, now: time, headWidth: headWidth)
+                redraw(actor, now: time, width: headWidth, color: color)
                 return
             }
             if gap > VisualStyle.teleportGap {
                 actor.samples.append(VisualTrailPoint(position: position, time: time, breakBefore: true))
                 actor.lastPosition = position
-                redraw(actor, now: time, headWidth: headWidth)
+                redraw(actor, now: time, width: headWidth, color: color)
                 return
             }
             var remaining = gap
@@ -107,7 +121,7 @@ final class TrailRenderer {
         if actor.samples.count > VisualStyle.trailCapacity {
             actor.samples.removeFirst(actor.samples.count - VisualStyle.trailCapacity)
         }
-        redraw(actor, now: time, headWidth: headWidth)
+        redraw(actor, now: time, width: headWidth, color: color)
     }
 
     func prune(ids: Set<String>) {
@@ -116,105 +130,175 @@ final class TrailRenderer {
         }
     }
 
-    func ribbonPath(id: String) -> CGPath? {
-        actors[id]?.core.path
+    func visibleSpriteCount(id: String) -> Int {
+        guard let actor = actors[id] else { return 0 }
+        return (actor.puffs + actor.streak + actor.motes).filter { !$0.isHidden }.count
     }
 
     func layerZPositions(id: String) -> [CGFloat] {
         guard let actor = actors[id] else { return [] }
-        return [actor.bloom.zPosition, actor.colorBand.zPosition, actor.core.zPosition]
+        return [actor.puffs, actor.streak, actor.motes].compactMap { $0.first?.zPosition }
     }
 
-    static func ribbon(
+    // MARK: - Layout
+
+    /// Evenly spaced points along the recorded path, newest first. `spacing`
+    /// maps a station's age to the gap before the next one, so wide puffs near
+    /// the head stay sparse and the thin end of the tail stays dense.
+    static func stations(
         samples: [VisualTrailPoint],
         now: TimeInterval,
         lifetime: TimeInterval,
-        headWidth: CGFloat
-    ) -> CGPath {
-        let result = CGMutablePath()
-        guard now.isFinite, lifetime > 0, headWidth > 0 else { return result }
-
-        var strip: [VisualTrailPoint] = []
-        strip.reserveCapacity(min(samples.count, VisualStyle.trailCapacity))
-
-        func appendStrip(_ points: [VisualTrailPoint]) {
-            guard points.count >= 2 else { return }
-            var left: [CGPoint] = []
-            var right: [CGPoint] = []
-            left.reserveCapacity(points.count)
-            right.reserveCapacity(points.count)
-
-            for index in points.indices {
-                let point = points[index]
-                let previous = points[max(0, index - 1)].position
-                let next = points[min(points.count - 1, index + 1)].position
-                let incoming = unit(from: previous, to: point.position)
-                let outgoing = unit(from: point.position, to: next)
-                let directionIn = incoming ?? outgoing ?? CGVector(dx: 1, dy: 0)
-                let directionOut = outgoing ?? incoming ?? CGVector(dx: 1, dy: 0)
-                let nIn = CGVector(dx: -directionIn.dy, dy: directionIn.dx)
-                let nOut = CGVector(dx: -directionOut.dy, dy: directionOut.dx)
-                let sum = CGVector(dx: nIn.dx + nOut.dx, dy: nIn.dy + nOut.dy)
-                let length = hypot(sum.dx, sum.dy)
-                let normal = length > 0.001
-                    ? CGVector(dx: sum.dx / length, dy: sum.dy / length)
-                    : nOut
-                let age = max(0, now - point.time)
-                let u = min(1, age / lifetime)
-                let half = headWidth * CGFloat(pow(1 - u, VisualStyle.trailTaper)) * 0.5
-                let alignment = max(0.5, abs(normal.dx * nOut.dx + normal.dy * nOut.dy))
-                let offset = min(half / alignment, half * 2)
-                left.append(CGPoint(x: point.position.x + normal.dx * offset, y: point.position.y + normal.dy * offset))
-                right.append(CGPoint(x: point.position.x - normal.dx * offset, y: point.position.y - normal.dy * offset))
-            }
-
-            guard let first = left.first else { return }
-            result.move(to: first)
-            for point in left.dropFirst() { result.addLine(to: point) }
-            for point in right.reversed() { result.addLine(to: point) }
-            result.closeSubpath()
-        }
-
-        for sample in samples {
+        reach: CGFloat = 1,
+        spacing: (CGFloat) -> CGFloat
+    ) -> [Station] {
+        guard now.isFinite, lifetime > 0, reach > 0 else { return [] }
+        var result: [Station] = []
+        var newer: VisualTrailPoint?
+        var carry: CGFloat = 0
+        for sample in samples.reversed() {
             guard sample.time.isFinite,
                   sample.position.x.isFinite,
                   sample.position.y.isFinite,
                   sample.time <= now + 0.000_001 else {
-                appendStrip(strip)
-                strip.removeAll(keepingCapacity: true)
+                newer = nil
                 continue
             }
-            if now - sample.time > lifetime {
-                appendStrip(strip)
-                strip.removeAll(keepingCapacity: true)
-                continue
+            if let head = newer, !head.breakBefore, sample.time <= head.time {
+                let dx = sample.position.x - head.position.x
+                let dy = sample.position.y - head.position.y
+                let length = hypot(dx, dy)
+                if length > 0.0001 {
+                    var travelled = carry
+                    while travelled <= length {
+                        let t = travelled / length
+                        let age = CGFloat((now - (head.time + (sample.time - head.time) * Double(t))) / lifetime)
+                        guard age <= reach else { break }
+                        result.append(Station(
+                            position: CGPoint(x: head.position.x + dx * t, y: head.position.y + dy * t),
+                            age: max(0, age)
+                        ))
+                        travelled += max(0.5, spacing(max(0, age)))
+                    }
+                    carry = travelled - length
+                }
+            } else {
+                carry = 0
             }
-            if sample.breakBefore || (strip.last.map { sample.time < $0.time } ?? false) {
-                appendStrip(strip)
-                strip.removeAll(keepingCapacity: true)
-            }
-            if let last = strip.last,
-               hypot(sample.position.x - last.position.x, sample.position.y - last.position.y) < 0.001 {
-                continue
-            }
-            strip.append(sample)
+            newer = CGFloat((now - sample.time) / lifetime) > reach ? nil : sample
         }
-        appendStrip(strip)
         return result
     }
 
-    private func redraw(_ actor: Actor, now: TimeInterval, headWidth: CGFloat) {
-        let life = VisualStyle.trailLifetime
-        actor.bloom.path = Self.ribbon(samples: actor.samples, now: now, lifetime: life, headWidth: headWidth * 1.35)
-        actor.colorBand.path = Self.ribbon(samples: actor.samples, now: now, lifetime: life, headWidth: headWidth * 0.72)
-        actor.core.path = Self.ribbon(samples: actor.samples, now: now, lifetime: life, headWidth: headWidth * 0.28)
+    /// Dust shed from the tail. Each mote belongs to one recorded sample, so it
+    /// stays put in the world while the comet moves on, then drifts outward and
+    /// back as it ages and twinkles out.
+    static func motes(samples: [VisualTrailPoint], now: TimeInterval, lifetime: TimeInterval, width: CGFloat, cap: Int = VisualStyle.cometMoteCap) -> [Mote] {
+        guard now.isFinite, lifetime > 0, width > 0, samples.count > 1 else { return [] }
+        var result: [Mote] = []
+        for index in samples.indices.reversed() {
+            let sample = samples[index]
+            let age = CGFloat((now - sample.time) / lifetime)
+            guard sample.time.isFinite, sample.position.x.isFinite, sample.position.y.isFinite,
+                  age >= 0, age <= 1 else { continue }
+            let grain = grain(sample.position)
+            guard grain % 3 == 0 else { continue }
+            let ahead = index + 1 < samples.count && !samples[index + 1].breakBefore ? samples[index + 1].position : sample.position
+            let behind = index > 0 && !sample.breakBefore ? samples[index - 1].position : sample.position
+            let length = hypot(ahead.x - behind.x, ahead.y - behind.y)
+            guard length > 0.0001 else { continue }
+            let tx = (ahead.x - behind.x) / length
+            let ty = (ahead.y - behind.y) / length
+            let side = CGFloat((grain >> 8) & 0xFF) / 127.5 - 1
+            let lift = CGFloat((grain >> 16) & 0xFF) / 255
+            let spread = width * (0.16 + 0.62 * age) * side
+            let lag = width * 0.4 * age
+            let twinkle = 0.5 + 0.5 * sin(CGFloat(grain & 0xFF) * 0.37 + age * 21)
+            result.append(Mote(
+                position: CGPoint(x: sample.position.x - ty * spread - tx * lag, y: sample.position.y + tx * spread - ty * lag),
+                size: width * (0.1 + 0.12 * lift) * (1 - 0.45 * age),
+                alpha: (0.35 + 0.65 * twinkle) * pow(1 - age, 1.3)
+            ))
+            if result.count >= cap { break }
+        }
+        return result
     }
 
-    private static func unit(from a: CGPoint, to b: CGPoint) -> CGVector? {
-        let dx = b.x - a.x
-        let dy = b.y - a.y
-        let length = hypot(dx, dy)
-        guard length > 0.000_001 else { return nil }
-        return CGVector(dx: dx / length, dy: dy / length)
+    static func puffSize(width: CGFloat, age: CGFloat) -> CGFloat {
+        width * 1.75 * (1 - 0.5 * age)
+    }
+
+    static func puffAlpha(age: CGFloat) -> CGFloat {
+        0.32 * pow(max(0, 1 - age), 1.6)
+    }
+
+    static func streakSize(width: CGFloat, age: CGFloat) -> CGFloat {
+        width * 0.78 * pow(max(0, 1 - age / VisualStyle.cometStreakReach), 0.6)
+    }
+
+    static func streakAlpha(age: CGFloat) -> CGFloat {
+        0.5 * pow(max(0, 1 - age / VisualStyle.cometStreakReach), 1.2)
+    }
+
+    private static func grain(_ point: CGPoint) -> UInt32 {
+        var hash = UInt32(truncatingIfNeeded: Int((point.x * 8).rounded()) &* 73_856_093)
+        hash ^= UInt32(truncatingIfNeeded: Int((point.y * 8).rounded()) &* 19_349_663)
+        hash = (hash ^ (hash >> 13)) &* 0x5BD1_E995
+        return hash ^ (hash >> 15)
+    }
+
+    // MARK: - Drawing
+
+    private func redraw(_ actor: Actor, now: TimeInterval, width: CGFloat, color: UIColor) {
+        let life = VisualStyle.trailLifetime
+        let spread = budget.spacing
+        let body = Self.stations(samples: actor.samples, now: now, lifetime: life) { age in
+            Self.puffSize(width: width, age: age) * VisualStyle.cometPuffSpacing * spread
+        }
+        let puffs = min(body.count, budget.puffs)
+        fill(&actor.puffs, in: actor.layer, count: puffs, texture: SpriteTextures.puff, z: VisualStyle.trailPuffZ, color: color)
+        for index in 0..<puffs {
+            let size = Self.puffSize(width: width, age: body[index].age)
+            actor.puffs[index].position = body[index].position
+            actor.puffs[index].size = CGSize(width: size, height: size)
+            actor.puffs[index].alpha = Self.puffAlpha(age: body[index].age)
+        }
+
+        let reach = VisualStyle.cometStreakReach
+        let core = Self.stations(samples: actor.samples, now: now, lifetime: life, reach: reach) { age in
+            max(1.5, Self.streakSize(width: width, age: age) * 0.25 * spread)
+        }
+        let hot = color.blended(with: .white, amount: 0.6)
+        let streaks = min(core.count, budget.streak)
+        fill(&actor.streak, in: actor.layer, count: streaks, texture: SpriteTextures.puff, z: VisualStyle.trailStreakZ, color: hot)
+        for index in 0..<streaks {
+            let size = Self.streakSize(width: width, age: core[index].age)
+            actor.streak[index].position = core[index].position
+            actor.streak[index].size = CGSize(width: size, height: size)
+            actor.streak[index].alpha = Self.streakAlpha(age: core[index].age)
+        }
+
+        let dust = Self.motes(samples: actor.samples, now: now, lifetime: life, width: width, cap: budget.motes)
+        fill(&actor.motes, in: actor.layer, count: dust.count, texture: SpriteTextures.glint, z: VisualStyle.trailMoteZ, color: color.blended(with: .white, amount: 0.5))
+        for (index, mote) in dust.enumerated() {
+            actor.motes[index].position = mote.position
+            actor.motes[index].size = CGSize(width: mote.size, height: mote.size)
+            actor.motes[index].alpha = mote.alpha
+        }
+    }
+
+    private func fill(_ pool: inout [SKSpriteNode], in layer: SKNode, count: Int, texture: SKTexture, z: CGFloat, color: UIColor) {
+        while pool.count < count {
+            let sprite = SKSpriteNode(texture: texture)
+            sprite.blendMode = .add
+            sprite.colorBlendFactor = 1
+            sprite.zPosition = z
+            layer.addChild(sprite)
+            pool.append(sprite)
+        }
+        for (index, sprite) in pool.enumerated() {
+            sprite.isHidden = index >= count
+            sprite.color = color
+        }
     }
 }

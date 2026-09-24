@@ -30,6 +30,10 @@ final class AppModel {
     }
 
     func appear() {
+        PhoneWatchLink.shared.onProgress = { [weak self] incoming in
+            self?.progress.mergeWrist(incoming)
+        }
+        PhoneWatchLink.shared.activate()
         audio.enabled = progress.soundEnabled
         audio.setMasterVolume(progress.soundVolume)
         audio.setHapticsEnabled(progress.hapticsEnabled)

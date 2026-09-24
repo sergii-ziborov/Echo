@@ -22,6 +22,13 @@ struct HUDBar: View {
                 }
                 .accessibilityLabel("\(session.sim.rewindCharges) rewind charges")
 
+                if PhoneWatchLink.shared.isSteering {
+                    HUDChip(icon: "applewatch", tint: EchoTheme.gold) {
+                        Text("WATCH")
+                    }
+                    .accessibilityLabel("Steering from Apple Watch")
+                }
+
                 Spacer(minLength: 4)
 
                 Button(action: onPause) {
