@@ -72,6 +72,8 @@ xcodebuild test -scheme Echo -destination 'platform=iOS Simulator,name=iPhone 17
 ```
 
 The `EchoWatch` scheme builds and runs the watch app alone. Debug builds accept `-wrist-map N`, `-wrist-autopilot`, `-wrist-remote`, `-wrist-remote-demo` and `-wrist-unlock-all` for reviews and screenshots, like the phone's `-shot-*` arguments.
+
+`scripts/install-device.sh [device-id]` builds a signed Debug copy and installs it on a connected iPhone, the first available one by default. The watch app rides inside `Echo.app`, so the iPhone's Watch app puts it on the paired Apple Watch.
 For Xcode Cloud, the checked-in project is discoverable at clone time and `ci_scripts/ci_post_clone.sh` regenerates it from `project.yml`. Use an iOS Archive action with **App Store Connect** distribution preparation and a **TestFlight Internal Testing** post-action. The exact release checklist is in the [App Store release guide](docs/APP_STORE_RELEASE.md).
 
 ## Layout
