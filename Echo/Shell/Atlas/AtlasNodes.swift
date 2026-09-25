@@ -112,18 +112,27 @@ struct ActLevelDetailCard: View {
                     .frame(width: 88, height: 96)
 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("MAP \(String(format: "%02d", level.number)) · \(act.title)")
+                    Text("MAP \(String(format: "%02d", level.number)) · \((LevelLore.entry(for: level.number)?.place ?? act.title).uppercased())")
                         .font(.system(size: 8, weight: .black, design: .rounded))
                         .tracking(1.1)
                         .foregroundStyle(act.atlasTint)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                     Text(level.name)
                         .font(.system(size: 21, weight: .black, design: .rounded))
                         .foregroundStyle(unlocked ? .white : EchoTheme.muted)
                         .lineLimit(1)
                         .minimumScaleFactor(0.72)
+                    if unlocked, let lore = LevelLore.entry(for: level.number) {
+                        Text(lore.log)
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .foregroundStyle(Color.white.opacity(0.72))
+                            .lineLimit(3)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                     Text(unlocked ? level.subtitle : "Clear map \(max(1, level.number - 1)) to stabilize this route.")
-                        .font(.system(size: 10, weight: .medium, design: .rounded))
-                        .foregroundStyle(unlocked ? Color.white.opacity(0.60) : EchoTheme.gold)
+                        .font(.system(size: 9, weight: .semibold, design: .rounded))
+                        .foregroundStyle(unlocked ? act.atlasTint.opacity(0.85) : EchoTheme.gold)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
 

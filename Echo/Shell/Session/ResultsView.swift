@@ -79,10 +79,10 @@ struct ResultsView: View {
                         Image(systemName: "infinity.circle.fill")
                             .foregroundStyle(EchoTheme.gold)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("77 EPOCHS COMPLETE")
+                            Text("THE LOOP CLOSES · 77 STOPS")
                                 .font(.system(size: 10, weight: .black, design: .rounded))
                                 .foregroundStyle(.white)
-                            Text("Next: \(nextDifficulty.shortTitle) · +777 research points")
+                            Text("Next lap: \(nextDifficulty.shortTitle) · +777 research points")
                                 .font(.system(size: 10, weight: .medium, design: .rounded))
                                 .foregroundStyle(EchoTheme.muted)
                         }

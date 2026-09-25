@@ -4,7 +4,7 @@ struct WikiView: View {
     @Environment(AppModel.self) private var model
     @State var section: WikiSection
 
-    init(section: WikiSection = ProcessInfo.processInfo.arguments.contains("-shot-wiki-research") ? .research : .basics) {
+    init(section: WikiSection = .launch) {
         _section = State(initialValue: section)
     }
 
@@ -216,6 +216,8 @@ struct WikiView: View {
                     tint: EchoTheme.magenta
                 )
             ]
+        case .story:
+            return WikiEntry.story
         case .threats:
             return [
                 WikiEntry(icon: "hexagon.fill", eyebrow: "KINETIC · MATERIAL SYSTEM", title: "Asteroids", detail: "Every rock is drawn fresh from one of eight materials. All of them except alloy fracture after wall impacts; alloy never breaks. Some maps have a large fixed core with smaller satellites; others use ricochets, patrols or paired orbits. Moving rocks leave a faint trail. Watch for spreading cracks and loose chips: the rock is about to break.", facts: ["Freeze pauses movement and fracture", "A fixed core resists Repulse while its satellites circle", "Damage is shown on the rock, without a countdown"], tint: .orange),
@@ -347,10 +349,10 @@ struct WikiView: View {
                             .font(.system(size: 24, weight: .black, design: .rounded))
                             .foregroundStyle(act.wikiColor)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(act.title)
+                            Text(act.region)
                                 .font(.system(size: 14, weight: .black, design: .rounded))
                                 .tracking(1)
-                            Text("MAPS \(act.range.lowerBound)–\(act.range.upperBound)")
+                            Text("\(act.title) · MAPS \(act.range.lowerBound)–\(act.range.upperBound)")
                                 .font(.system(size: 9, weight: .bold, design: .rounded))
                                 .tracking(1.2)
                                 .foregroundStyle(EchoTheme.muted)
@@ -361,9 +363,10 @@ struct WikiView: View {
                             .foregroundStyle(act.wikiColor)
                     }
 
-                    Text(act.blurb)
+                    Text(act.intro)
                         .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.white.opacity(0.7))
+                        .fixedSize(horizontal: false, vertical: true)
 
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .leading, spacing: 6) {
                         ForEach(levels) { level in

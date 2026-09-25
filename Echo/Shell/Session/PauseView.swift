@@ -8,6 +8,9 @@ struct PauseView: View {
     var onShop: () -> Void
     var onSettings: () -> Void
     var onMenu: () -> Void
+    /// Where on the Fold Road the map lies, and what the Signal found there.
+    var place: String?
+    var log: String?
 
     var body: some View {
         GameModalShell(tint: EchoTheme.cyan) {
@@ -32,6 +35,20 @@ struct PauseView: View {
                         .foregroundStyle(EchoTheme.muted)
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
+                    if let place {
+                        Text(place.uppercased())
+                            .font(.system(size: 9, weight: .black, design: .rounded))
+                            .tracking(1.4)
+                            .foregroundStyle(EchoTheme.cyan.opacity(0.85))
+                            .padding(.top, 4)
+                    }
+                    if let log {
+                        Text(log)
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundStyle(Color.white.opacity(0.62))
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
 
                 HStack(spacing: 8) {

@@ -18,6 +18,8 @@ extension RemoteScopeScene {
             size: size,
             palette: Backdrop.Palette(sky: WatchArenaScene.color(theme.sky), glow: WatchArenaScene.color(theme.nebula), accent: WatchArenaScene.color(theme.wallStroke)),
             seed: UInt64(RemoteLevel.token(of: Data(level.id.utf8))),
+            landmark: level.region.landmark,
+            progress: level.regionProgress,
             budget: .watch,
             motion: !WKAccessibilityIsReduceMotionEnabled()
         )

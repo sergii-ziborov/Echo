@@ -276,7 +276,7 @@ extension LevelCatalog {
         if !level.sparks.contains(where: { $0.position.distance(to: Vec2(x: 500, y: 500)) < 1 }) {
             level.sparks[0].position = Vec2(x: 500, y: 500)
         }
-        level.theme = ArenaTheme.forLevel(Int(rng.next() % 6) + 1)
+        // The Daily Rift reopens a known stop of the Road, so it keeps that region's look.
         return level.sanitized()
     }
 }

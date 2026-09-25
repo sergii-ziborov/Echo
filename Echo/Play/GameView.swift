@@ -22,6 +22,7 @@ struct GameView: View {
     @State var scene: GameScene
     @State var overlay: InRunOverlay = .none
     @State var awardedPoints = 0
+    @State var arrival: ArrivalCard.Arrival?
     @State var hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
     @Environment(\.scenePhase) var scenePhase
 
@@ -140,7 +141,7 @@ struct GameView: View {
                 .padding(.top, interfaceTopInset + 4)
                 .padding(.bottom, max(geo.safeAreaInsets.bottom, 10))
 
-                if case .paused = session.phase, overlay == .none {
+                if case .paused = session.phase, overlay == .none, arrival == nil {
                     PauseView(
                         levelName: session.level.name,
                         rewindCharges: session.sim.rewindCharges,
@@ -148,7 +149,9 @@ struct GameView: View {
                         onRestart: { restart() },
                         onShop: { overlay = .shop },
                         onSettings: { overlay = .settings },
-                        onMenu: { activeModel.goHome() }
+                        onMenu: { activeModel.goHome() },
+                        place: storyPlace,
+                        log: storyLog
                     )
                 }
 
@@ -206,6 +209,12 @@ struct GameView: View {
                     }
                 }
 
+                if let arrival {
+                    ArrivalCard(arrival: arrival) {
+                        enterRegion()
+                    }
+                }
+
                 if session.phase == .replaying {
                     VStack {
                         Spacer()
@@ -224,6 +233,10 @@ struct GameView: View {
         .onDisappear { PhoneWatchLink.shared.detach(session: session) }
         .onAppear {
             session.configure(tuning: activeModel.progress.playerTuning)
+            arrival = ArrivalCard.Arrival.first(for: request, level: session.level, seen: activeModel.progress.seenHints)
+            if arrival != nil, session.phase == .playing {
+                session.togglePause()
+            }
             if let key = request.endless {
                 session.banner = "Deep Time · Depth \(key.depth)"
             }

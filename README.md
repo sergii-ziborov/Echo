@@ -4,7 +4,7 @@ ECHO is a top-down temporal survival puzzle for iPhone and iPad. You steer a glo
 
 > You don't cooperate with your past. You survive it.
 
-Seventy-seven maps sit in eleven seven-map epochs. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later epochs add moving debris, timed crystals, laser arrays, spatial folds, gravity wells, and a temporary Candy Timeline pocket. The in-game Wiki documents every rule. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio preferences.
+Seventy-seven maps sit in eleven seven-map regions of space, strung along one road through a broken galaxy. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later regions add moving debris, timed crystals, laser arrays, spatial folds, gravity wells, and a temporary Candy Timeline pocket. The in-game Wiki documents every rule. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio preferences.
 
 The App Store build is a **$1.99 one-time download**. No ads, accounts, or in-app purchases. Progress stays on the device.
 
@@ -22,11 +22,33 @@ The App Store build is a **$1.99 one-time download**. No ads, accounts, or in-ap
 
 See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
 
+## The story
+
+At the rim of the galaxy the Keepers built the Lighthouse to hold time steady. Time broke anyway: everything that moves is now replayed a few seconds later, and those replays are the echoes. The orb is the Signal, the last light the Keepers lit, carrying an unbroken present down the **Fold Road**. Sparks are loose seconds of the present; gathering them opens the exit, a fold that throws the Signal to the next stop.
+
+Each act is one region of space along the Road. That is why the sky, the walls and the hazards change between acts, and why they stay the same inside one:
+
+| Act | Region | What is out there |
+|---|---|---|
+| TRACE | The Lighthouse | The Keepers' station. The Signal wakes on the lamp deck. |
+| DRIFT | Drift Gardens | Greenhouse domes adrift under a red sun, airlocks on broken timers. |
+| FRACTURE | Tessera Shelf | A frozen moon split by the first time scars. Loose rock starts to drift. |
+| DEBRIS | Hollow Belt | What is left of the world Cinder: basalt crust, magma, meteoric iron. |
+| PARADOX | Proving Grounds | The Keepers' test chambers. Beams fire on a dead pulsar's beat. |
+| SINGULARITY | Ashcrown Corona | A giant star collapsing. Flares, and heavy cores holding shards in orbit. |
+| RIFT | The Riftlands | Ashcrown's collapse tore space. Warp tears fold you across the arena. |
+| GRAVITY | The Undertow | Black holes left by Ashcrown. Every straight route bends. |
+| MIRAGE | Glass Nebula | Light bent around the Undertow shows mirrored copies of space. |
+| CONFECTION | Candy Timeline | A sweeter, faster reality the broken timeline dreams for itself. |
+| ETERNITY | Last Dawn | The Lighthouse at the end of time, where the break began. |
+
+Every map names its place on the Road and carries a one-line log that matches its hazards; both show in the Atlas and on the pause card, and the first map of each region opens with an arrival card. The Road ends where it began, so clearing all 77 opens another, harder lap. Deep Time lies below the Road, the Daily Rift reopens one stop each day, and the watch is the Keepers' chronometer. The whole story is also in the Archive under **Story**.
+
 ## The loop
 
 Drag anywhere. The orb seeks your finger. Lift your finger and the orb pulses so you can find it again. Sparks open the exit. Echoes replay your path and kill on contact. After the first move, the purple ring at spawn counts down to the next copy.
 
-Seventy-seven maps in eleven seven-map epochs: TRACE, DRIFT, FRACTURE, DEBRIS, PARADOX, SINGULARITY, RIFT, GRAVITY, MIRAGE, CONFECTION, and ETERNITY. Each map has three Temporal Seals — CLEAR, CONTROL, PARADOX. Play continues from the next unbeaten level. Clearing all 77 begins a harder named cycle with faster hazards and a fresh seal record.
+Seventy-seven maps in eleven seven-map acts, one per region: TRACE, DRIFT, FRACTURE, DEBRIS, PARADOX, SINGULARITY, RIFT, GRAVITY, MIRAGE, CONFECTION, and ETERNITY. Each map has three Temporal Seals — CLEAR, CONTROL, PARADOX. Play continues from the next unbeaten level. Clearing all 77 begins a harder named cycle with faster hazards and a fresh seal record.
 
 A crash can **Paradox Rewind** three seconds. The failed branch stays as an unstable echo. After a clear, a short **Temporal Replay** plays the whole route at once.
 
@@ -41,9 +63,9 @@ A crash can **Paradox Rewind** three seconds. The failed branch stays as an unst
 - **Lab** — equip a limited loadout and research a 24-node Timeline Matrix.
 - **Timeline Archive** — in-game wiki for controls, clocks, hazards, research, and all 77 maps.
 
-The first time you meet an echo, a rock, a rift, a gate, freeze, phase, or a time collision, a short card explains it.
+The first time you meet an echo, a rock, a rift, a gate, freeze, phase, or a time collision, a short card explains it. The first time you reach a region, an arrival card says where the Signal has landed.
 
-Behind every arena a distant sky moves slowly: a banded planet turning at the edge of the view, a spiral galaxy, twinkling stars, the odd meteor, and a soft light that breathes and sweeps past. It holds still when Reduce Motion is on.
+Behind every arena a distant sky moves slowly, and it tells you where you are. Each region has its own landmark that draws nearer as you cross it: the Lighthouse's ringed giant, the red sun over the gardens, cracked Tessera, the broken world of the Hollow Belt, a sweeping pulsar, collapsing Ashcrown, a tear across the sky, a black hole with its disc, mirrored giants, a candy world with its moon, and the light of Last Dawn rising at the edge. Around it drift a galaxy, twinkling stars, the odd meteor and a soft light that breathes and sweeps past. It all holds still when Reduce Motion is on.
 
 ## Deep Time
 

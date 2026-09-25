@@ -228,36 +228,12 @@ extension Act {
         }
     }
 
-    var atlasRegion: String {
-        switch self {
-        case .trace: "ORIGIN GRID"
-        case .drift: "ION EXPANSE"
-        case .fracture: "BROKEN VEIL"
-        case .debris: "METEOR BELT"
-        case .paradox: "FROZEN PARADOX"
-        case .singularity: "EVENT HORIZON"
-        case .rift: "FOLDED VEIL"
-        case .gravity: "DARK TIDE"
-        case .mirage: "MIRROR GARDEN"
-        case .confection: "CANDY TIMELINE"
-        case .eternity: "ETERNAL LOOP"
-        }
-    }
+    var atlasRegion: String { region }
 
+    /// The region's own light, the colour its walls glow in the arena.
     var atlasTint: Color {
-        switch self {
-        case .trace: EchoTheme.cyan
-        case .drift: Color(red: 0.32, green: 0.88, blue: 0.70)
-        case .fracture: EchoTheme.violet
-        case .debris: Color(red: 1.0, green: 0.55, blue: 0.28)
-        case .paradox: Color(red: 0.55, green: 0.78, blue: 1.0)
-        case .singularity: EchoTheme.magenta
-        case .rift: Color(red: 0.40, green: 0.62, blue: 1.0)
-        case .gravity: Color(red: 1.0, green: 0.72, blue: 0.28)
-        case .mirage: Color(red: 0.44, green: 0.96, blue: 0.86)
-        case .confection: Color(red: 1.0, green: 0.40, blue: 0.76)
-        case .eternity: Color(red: 0.92, green: 0.92, blue: 1.0)
-        }
+        let rgb = theme.wallStroke
+        return Color(red: rgb.r, green: rgb.g, blue: rgb.b)
     }
 
     var atlasIcon: String {
@@ -278,17 +254,17 @@ extension Act {
 
     var atlasTraits: [String] {
         switch self {
-        case .trace: ["ECHOES", "ROUTES", "TIMERS"]
-        case .drift: ["FIELDS", "ORBIT", "DASH"]
-        case .fracture: ["RIFTS", "GATES", "SCARS"]
-        case .debris: ["ROCKS", "BOUNCE", "PATROL"]
-        case .paradox: ["FREEZE", "PHASE", "CHAINS"]
-        case .singularity: ["LASERS", "SWEEPS", "ALL RULES"]
-        case .rift: ["WARP", "BACKSTEP", "MIRROR"]
-        case .gravity: ["PULL", "ORBIT", "DARK CORE"]
-        case .mirage: ["INVERT", "PHASE", "FALSE ROUTES"]
+        case .trace: ["ECHOES", "TIMERS", "MIRE"]
+        case .drift: ["AIRLOCKS", "BONUSES", "MIRE"]
+        case .fracture: ["LANES", "SCARS", "ROCKS"]
+        case .debris: ["ROCKS", "PATROLS", "MAGMA"]
+        case .paradox: ["BEAMS", "LOCKS", "FREEZE"]
+        case .singularity: ["FLARES", "CORE", "ALL LAWS"]
+        case .rift: ["WARP", "FOLDS", "COMETS"]
+        case .gravity: ["PULL", "ORBITS", "DARK CORE"]
+        case .mirage: ["MIRROR", "PHASE", "FALSE ROUTES"]
         case .confection: ["CANDY", "SPEED", "RESONANCE"]
-        case .eternity: ["77", "CYCLES", "ASCENSION"]
+        case .eternity: ["ALL LAWS", "ALL PASTS", "THE LOOP"]
         }
     }
 }

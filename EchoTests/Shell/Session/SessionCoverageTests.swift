@@ -41,8 +41,14 @@ final class SessionCoverageTests: XCTestCase {
                 onRestart: {},
                 onShop: {},
                 onSettings: {},
-                onMenu: {}
+                onMenu: {},
+                place: "The Lighthouse · Lamp Deck",
+                log: LevelLore.entry(for: 1)?.log
             )
         )
+        let level = LevelCatalog.playable[21]
+        if let arrival = ArrivalCard.Arrival.first(for: PlayRequest(levelID: level.id, daily: false), level: level, seen: []) {
+            CoverageHost.render(ArrivalCard(arrival: arrival, onEnter: {}))
+        }
     }
 }

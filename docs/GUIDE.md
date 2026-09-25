@@ -2,6 +2,10 @@
 
 ECHO is a route-planning survival game. Your orb is the **bright cyan core**; violet orbs are your recorded past. Collect every required spark, then reach the illuminated exit without touching an Echo or a lethal hazard. When you lift your finger, the orb pulses so you can find it again.
 
+## Why you are out here
+
+The orb is the Signal, the last light of the Lighthouse, sent down the Fold Road after time broke. Sparks are loose seconds of the present; collecting them opens the exit, a fold into the next place. Each act is a different region of space, so its sky, walls and hazards change with it. The Archive's **Story** page has the full account, and every map's place and log appear in the Atlas and on the pause card.
+
 ## Your first run
 
 1. Drag anywhere on the arena to steer. The orb seeks your finger; releasing lets it coast.
@@ -37,7 +41,7 @@ Asteroids have distinct material shells and faint movement trails. Their routes 
 
 ## Atlas, difficulty and saves
 
-The Timeline Atlas contains **77 maps in 11 seven-map epochs**. Swipe between regions or tap a region icon, then tap a map node to inspect it. Locked maps are shown for orientation; clear the preceding route to progress. Each map has three optional seals: Clear, Control and Paradox. Finishing all 77 starts a harder named difficulty cycle with its own seal and record set, while completed cycles remain recorded.
+The Timeline Atlas contains **77 maps in 11 seven-map regions**. Swipe between regions or tap a region icon, then tap a map node to inspect it. Locked maps are shown for orientation; clear the preceding route to progress. Each map has three optional seals: Clear, Control and Paradox. Finishing all 77 starts a harder named difficulty cycle with its own seal and record set, while completed cycles remain recorded.
 
 Progress is stored on the device. Settings lets you change sound volume, haptics and replay preferences. **Reset progress** requires confirmation and erases maps, difficulty, records, points, inventory and research while preserving sound and haptic preferences.
 

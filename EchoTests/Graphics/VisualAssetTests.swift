@@ -29,14 +29,15 @@ final class VisualAssetTests: XCTestCase {
         }
     }
 
-    func testThemeFinishesCycleAcrossMaps() throws {
-        for theme in ArenaTheme.allCases {
-            let firstLevel = theme.rawValue + 1
-            let first = try XCTUnwrap(GlowTextures.wall(for: theme, levelNumber: firstLevel))
-            let second = try XCTUnwrap(GlowTextures.wall(for: theme, levelNumber: firstLevel + 6))
-            let third = try XCTUnwrap(GlowTextures.wall(for: theme, levelNumber: firstLevel + 12))
-            XCTAssertFalse(first === second, "First and second \(theme) finishes match")
-            XCTAssertFalse(second === third, "Second and third \(theme) finishes match")
+    func testRegionWallsChangeFinishAcrossTheRegion() throws {
+        for act in Act.allCases {
+            let start = act.range.lowerBound
+            let finishes = try [start, start + 3, start + 6].map {
+                try XCTUnwrap(GlowTextures.wall(for: act.theme, levelNumber: $0))
+            }
+            XCTAssertFalse(finishes[0] === finishes[1], "\(act.region) keeps one finish at its middle")
+            XCTAssertFalse(finishes[1] === finishes[2], "\(act.region) keeps one finish at its end")
+            XCTAssertFalse(finishes[0] === finishes[2], "\(act.region) ends where it began")
         }
     }
 

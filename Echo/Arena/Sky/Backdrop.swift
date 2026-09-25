@@ -1,8 +1,9 @@
 import SpriteKit
 import UIKit
 
-/// A slow, distant sky behind the arena: a planet turning at the edge of the
-/// view, a spiral galaxy wheeling far away, twinkling stars, now and then a
+/// A slow, distant sky behind the arena: the region's landmark (a planet, a
+/// star, a black hole, a tear) that says where on the Fold Road the Signal
+/// is, a spiral galaxy wheeling far away, twinkling stars, now and then a
 /// meteor, and a soft light that breathes and sweeps past. It sits behind
 /// everything, stays dim, and moves far too slowly to read as a hazard.
 @MainActor
@@ -28,25 +29,31 @@ final class Backdrop {
     }
 
     let root = SKNode()
-    private let size: CGSize
-    private let palette: Palette
-    private let budget: Budget
-    private let motion: Bool
-    private var rng: SplitMix64
+    let size: CGSize
+    let palette: Palette
+    let budget: Budget
+    let motion: Bool
+    let landmark: SkyLandmark
+    /// How far through its region the map lies; the landmark draws nearer.
+    let progress: CGFloat
+    var rng: SplitMix64
     private var nextMeteor: TimeInterval = 0
-    private var planetCorner = 0
+    /// Meteors fall away from the side the landmark hangs on.
+    var landmarkOnLeft = true
 
-    init(size: CGSize, palette: Palette, seed: UInt64, budget: Budget = .phone, motion: Bool = true) {
+    init(size: CGSize, palette: Palette, seed: UInt64, landmark: SkyLandmark, progress: Double = 0.5, budget: Budget = .phone, motion: Bool = true) {
         self.size = size
         self.palette = palette
         self.budget = budget
         self.motion = motion
+        self.landmark = landmark
+        self.progress = CGFloat(min(1, max(0, progress)))
         rng = SplitMix64(seed: seed ^ 0xBAC6_D509)
         root.name = "backdrop"
         buildLight()
         buildGalaxy()
         buildStars()
-        buildPlanet()
+        buildLandmark()
         if budget.lightSweep { buildSweep() }
     }
 
@@ -82,7 +89,16 @@ final class Backdrop {
     }
 
     private func buildGalaxy() {
-        let radius = min(size.width, size.height) * CGFloat.random(in: 0.17...0.24, using: &rng)
+        // From the rim the home galaxy fills a good part of the sky; next to
+        // Ashcrown the star drowns it out.
+        let scale: CGFloat = switch landmark {
+        case .giant, .dawn: 1.5
+        case .sun(_, _, let size): size > 0.4 ? 0 : 1
+        case .blackHole, .tear: 0.7
+        default: 1
+        }
+        guard scale > 0 else { return }
+        let radius = min(size.width, size.height) * CGFloat.random(in: 0.17...0.24, using: &rng) * scale
         let tilt = SKNode()
         tilt.position = CGPoint(x: size.width * CGFloat.random(in: 0.2...0.8, using: &rng), y: size.height * CGFloat.random(in: 0.3...0.75, using: &rng))
         tilt.zRotation = CGFloat.random(in: 0..<(.pi), using: &rng)
@@ -121,67 +137,6 @@ final class Backdrop {
         }
     }
 
-    /// Bands scrolling inside a round mask, under a fixed terminator, read as
-    /// a gas giant slowly turning. Most of it hangs past a corner of the view.
-    private func buildPlanet() {
-        let radius = min(size.width, size.height) * CGFloat.random(in: 0.22...0.3, using: &rng) * budget.planetScale
-        planetCorner = Int.random(in: 0..<4, using: &rng)
-        let right = planetCorner % 2 == 1
-        let top = planetCorner >= 2
-        let planet = SKNode()
-        planet.position = CGPoint(
-            x: right ? size.width - radius * 0.12 : radius * 0.12,
-            y: top ? size.height - radius * 0.5 - size.height * 0.1 : radius * 0.5 + size.height * 0.1
-        )
-        planet.alpha = budget.planetAlpha
-        planet.zPosition = -2
-        root.addChild(planet)
-
-        let crop = SKCropNode()
-        let mask = SKShapeNode(circleOfRadius: radius)
-        mask.fillColor = .white
-        mask.strokeColor = .clear
-        crop.maskNode = mask
-        let base = palette.glow.blended(with: UIColor(white: 0.45, alpha: 1), amount: 0.45)
-        let tile = CGSize(width: radius * 4, height: radius * 2)
-        let bands = Self.bandTexture(size: tile, base: base, accent: palette.accent, scale: budget.textureScale, rng: &rng)
-        let strip = SKNode()
-        for index in 0..<2 {
-            let sprite = SKSpriteNode(texture: bands, size: tile)
-            sprite.anchorPoint = CGPoint(x: 0, y: 0.5)
-            sprite.position = CGPoint(x: -radius + CGFloat(index) * tile.width, y: 0)
-            strip.addChild(sprite)
-        }
-        crop.addChild(strip)
-        planet.addChild(crop)
-        if motion {
-            strip.run(.repeatForever(.sequence([
-                .moveBy(x: -tile.width, y: 0, duration: TimeInterval.random(in: 110...150, using: &rng)),
-                .moveBy(x: tile.width, y: 0, duration: 0),
-            ])))
-        }
-
-        // Light falls from the arena's centre, so the lit limb faces inward.
-        let facing = atan2(size.height / 2 - planet.position.y, size.width / 2 - planet.position.x)
-        let shade = SKSpriteNode(texture: Self.terminatorTexture(sky: palette.sky, scale: budget.textureScale), size: CGSize(width: radius * 2.02, height: radius * 2.02))
-        shade.zRotation = facing
-        planet.addChild(shade)
-        let rim = SKSpriteNode(texture: Self.rimTexture, size: CGSize(width: radius * 2.5, height: radius * 2.5))
-        rim.color = palette.glow
-        rim.colorBlendFactor = 1
-        rim.blendMode = .add
-        rim.alpha = 0.55
-        rim.zRotation = facing
-        planet.addChild(rim)
-
-        guard Bool.random(using: &rng) else { return }
-        let ring = SKShapeNode(ellipseOf: CGSize(width: radius * 3.3, height: radius * 0.7))
-        ring.strokeColor = palette.accent.withAlphaComponent(0.28)
-        ring.lineWidth = max(1.5, radius * 0.05)
-        ring.zRotation = CGFloat.random(in: -0.5...0.5, using: &rng)
-        planet.addChild(ring)
-    }
-
     /// Once in a while a broad, faint band of light crosses the whole sky.
     private func buildSweep() {
         let span = hypot(size.width, size.height)
@@ -218,7 +173,7 @@ final class Backdrop {
         meteor.alpha = 0
         meteor.zPosition = -1.5
         // Fall across the upper sky, away from the side the planet sits on.
-        let leftward = planetCorner % 2 == 0
+        let leftward = !landmarkOnLeft
         let heading = (leftward ? .pi + 0.35 : -0.35) + CGFloat.random(in: -0.25...0.25, using: &rng)
         let start = CGPoint(
             x: size.width * CGFloat.random(in: 0.2...0.8, using: &rng),

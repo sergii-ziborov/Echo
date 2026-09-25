@@ -2,6 +2,7 @@ import SwiftUI
 
 enum WikiSection: String, CaseIterable, Identifiable {
     case basics
+    case story
     case threats
     case abilities
     case research
@@ -9,9 +10,16 @@ enum WikiSection: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    /// The page a screenshot run opens on (`-shot-wiki-story` and so on).
+    static var launch: WikiSection {
+        let args = ProcessInfo.processInfo.arguments
+        return allCases.first { args.contains("-shot-wiki-\($0.rawValue)") } ?? .basics
+    }
+
     var title: String {
         switch self {
         case .basics: "Basics"
+        case .story: "Story"
         case .threats: "Threats"
         case .abilities: "Skills"
         case .research: "Research"
@@ -22,6 +30,7 @@ enum WikiSection: String, CaseIterable, Identifiable {
     var icon: String {
         switch self {
         case .basics: "sparkles"
+        case .story: "book.closed.fill"
         case .threats: "exclamationmark.triangle.fill"
         case .abilities: "bolt.circle.fill"
         case .research: "point.3.filled.connected.trianglepath.dotted"
@@ -32,6 +41,7 @@ enum WikiSection: String, CaseIterable, Identifiable {
     var tint: Color {
         switch self {
         case .basics: EchoTheme.cyan
+        case .story: EchoTheme.gold
         case .threats: .orange
         case .abilities: EchoTheme.magenta
         case .research: EchoTheme.violet
@@ -94,6 +104,60 @@ struct WikiEntryCard: View {
         .background(EchoTheme.panel.opacity(0.94), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(entry.tint.opacity(0.15), lineWidth: 1))
     }
+}
+
+extension WikiEntry {
+    /// Why the Signal is out here, and why each map sits where it does.
+    static let story: [WikiEntry] = [
+        WikiEntry(
+            icon: "light.beacon.max.fill",
+            eyebrow: "PREMISE",
+            title: "The last Signal",
+            detail: RegionLore.premise,
+            facts: ["You are the Signal, the white orb", "Echoes are moments replayed by broken time"],
+            tint: EchoTheme.gold
+        ),
+        WikiEntry(
+            icon: "point.3.connected.trianglepath.dotted",
+            eyebrow: "THE FOLD ROAD",
+            title: "Why the sky changes",
+            detail: RegionLore.foldRoad,
+            facts: ["Sparks: loose seconds of the present", "The exit: a fold to the next stop", "Eleven regions, seventy-seven stops"],
+            tint: EchoTheme.cyan
+        ),
+        WikiEntry(
+            icon: "infinity.circle.fill",
+            eyebrow: "THE LOOP",
+            title: "Where the Road ends",
+            detail: RegionLore.loop,
+            facts: ["Each difficulty cycle is one more lap", "Last Dawn is the Lighthouse at the end of time"],
+            tint: EchoTheme.violet
+        ),
+        WikiEntry(
+            icon: "water.waves",
+            eyebrow: "BELOW THE ROAD",
+            title: "Deep Time",
+            detail: RegionLore.deepTime,
+            facts: ["Separate from the campaign", "Each depth borrows one region's sky"],
+            tint: EchoTheme.magenta
+        ),
+        WikiEntry(
+            icon: "calendar",
+            eyebrow: "DAILY RIFT",
+            title: "A stop reopened",
+            detail: RegionLore.dailyRift,
+            facts: ["Same place, new sparks", "Pays bonus fragments"],
+            tint: .orange
+        ),
+        WikiEntry(
+            icon: "applewatch",
+            eyebrow: "THE KEEPERS' CHRONOMETER",
+            title: "The watch",
+            detail: RegionLore.wrist,
+            facts: ["Relics after 4, 8 and 12 rooms", "It can also steer the phone"],
+            tint: .green
+        ),
+    ]
 }
 
 extension UpgradeBranch {

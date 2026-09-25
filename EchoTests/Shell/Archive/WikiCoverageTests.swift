@@ -9,6 +9,7 @@ final class WikiCoverageTests: XCTestCase {
             CoverageHost.render(WikiView(section: section).environment(model))
         }
         CoverageHost.render(CoverageFixtures.rooted(.wiki, model: CoverageFixtures.model(rich: false)))
-        XCTAssertEqual(WikiSection.allCases.count, 5)
+        XCTAssertEqual(WikiSection.allCases.count, 6)
+        XCTAssertEqual(WikiSection.launch, .basics)
     }
 }

@@ -186,6 +186,35 @@ extension GameView {
         }
     }
 
+    /// The Signal has read where it landed; any encounter card waiting
+    /// underneath comes next.
+    func enterRegion() {
+        guard let arrival else { return }
+        activeModel.progress.markHint(arrival.key)
+        activeModel.audio.play(.tap)
+        self.arrival = nil
+        if hint == nil, session.phase == .paused {
+            session.togglePause()
+        }
+    }
+
+    /// Where on the Fold Road this run takes place, for the pause card.
+    var storyPlace: String? {
+        let region = session.level.region.region
+        if request.endless != nil { return "Deep Time · below \(region)" }
+        guard let entry = LevelLore.entry(for: session.level.number) else { return nil }
+        return request.daily ? "Daily Rift · \(entry.place)" : "\(region) · \(entry.place)"
+    }
+
+    /// What the Signal found here.
+    var storyLog: String? {
+        if request.endless != nil {
+            return "Uncharted time under the Road. It borrows the sky of \(session.level.region.region.capitalized) and never repeats."
+        }
+        if request.daily { return RegionLore.dailyRift }
+        return LevelLore.entry(for: session.level.number)?.log
+    }
+
     /// Deep Time: a crash with nothing left to rewind ends the run for good.
     func newEndlessRun() {
         if let key = request.endless { activeModel.progress.endEndlessRun(key) }

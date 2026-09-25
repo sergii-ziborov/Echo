@@ -28,7 +28,7 @@ struct EndlessCard: View {
                 Text("Deep Time")
                     .font(.system(size: 21, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
-                Text("Random arenas that never repeat. Every clear goes one depth deeper, with more rocks, beams and echoes. A crash you cannot rewind ends the run.")
+                Text("Uncharted time below the Fold Road. Random arenas that never repeat; every clear goes one depth deeper, with more rocks, beams and echoes. A crash you cannot rewind ends the run.")
                     .font(.system(size: 12, weight: .medium, design: .rounded))
                     .foregroundStyle(Color.white.opacity(0.58))
                     .fixedSize(horizontal: false, vertical: true)

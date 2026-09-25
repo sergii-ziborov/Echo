@@ -43,6 +43,22 @@ final class AppModel {
     }
 
     func applyLaunchArgs(_ args: [String]) {
+        if let flag = args.firstIndex(of: "-shot-level"), flag + 1 < args.count, let number = Int(args[flag + 1]),
+           let level = LevelCatalog.level(number: number) {
+            progress.markTutorialSeen()
+            for hint in [
+                EncounterHint.echo, .asteroid, .rift, .freeze, .phase, .collision, .gate,
+                .laser, .timeCrystal, .resonance, .blackHole, .realityShift, .surge,
+                .pulse, .magnet, .chrono, .anchor, .repulse, .prism, .blink,
+            ] {
+                _ = progress.markHint(hint.rawValue)
+            }
+            if !args.contains("-shot-arrival") {
+                for key in ArrivalCard.Arrival.allKeys { _ = progress.markHint(key) }
+            }
+            screen = .playing(PlayRequest(levelID: level.id, daily: false))
+            return
+        }
         if args.contains("-shot-splash") {
             screen = .splash
         } else if args.contains("-shot-tutorial") {
@@ -68,7 +84,7 @@ final class AppModel {
             || args.contains("-shot-ability") {
             progress.markTutorialSeen()
             screen = .shop
-        } else if args.contains("-shot-wiki") || args.contains("-shot-wiki-research") {
+        } else if args.contains(where: { $0.hasPrefix("-shot-wiki") }) {
             progress.markTutorialSeen()
             screen = .wiki
         } else if args.contains("-shot-settings") {

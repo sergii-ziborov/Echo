@@ -144,7 +144,7 @@ extension LevelCatalog {
         make(
             number: 29,
             name: "Sluice",
-            subtitle: "Green water. Grey rock. Same delay.",
+            subtitle: "Grey rock. Two patrols. The same delay.",
             playerStart: Vec2(x: 180, y: 180),
             exit: Vec2(x: 820, y: 820),
             walls: [

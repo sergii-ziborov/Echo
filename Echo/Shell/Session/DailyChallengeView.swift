@@ -135,11 +135,11 @@ struct DailyChallengeView: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("RIFT \(key)")
+                    Text("RIFT \(key) · \(daily.region.region)")
                         .font(.system(size: 9, weight: .black, design: .rounded))
                         .tracking(1.3)
                         .foregroundStyle(EchoTheme.cyan)
-                    Text("EPOCH \(String(format: "%02d", daily.number)) · \(daily.name)")
+                    Text("STOP \(String(format: "%02d", daily.number)) · \(daily.name)")
                         .font(.system(size: 19, weight: .black, design: .rounded))
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)

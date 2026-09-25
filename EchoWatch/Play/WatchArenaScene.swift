@@ -97,6 +97,9 @@ final class WatchArenaScene: SKScene {
             size: size,
             palette: Backdrop.Palette(sky: Self.color(theme.sky), glow: Self.color(theme.nebula), accent: Self.color(theme.wallStroke)),
             seed: UInt64(RemoteLevel.token(of: Data(run.level.id.utf8))),
+            // The wrist maps are the Keepers' chronometer: a brass pulsar ticks overhead.
+            landmark: .pulsar(color: RGB(1.0, 0.8, 0.45)),
+            progress: Double(max(0, run.level.number - 1)) / 11,
             budget: .watch,
             motion: !WKAccessibilityIsReduceMotionEnabled()
         )

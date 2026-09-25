@@ -104,19 +104,20 @@ enum Act: Int, CaseIterable, Sendable {
         }
     }
 
+    /// One line about the place, short enough for an atlas card.
     var blurb: String {
         switch self {
-        case .trace: "Learn to fear your own path."
-        case .drift: "Space starts to move."
-        case .fracture: "Rifts, gates, scars."
-        case .debris: "Outside hazards enter the timeline."
-        case .paradox: "Every law at once."
-        case .singularity: "The arena learns to fire back."
-        case .rift: "Reality develops exits of its own."
-        case .gravity: "Every route bends toward the dark."
-        case .mirage: "The map lies before your echoes do."
-        case .confection: "A beautiful timeline with dangerous rules."
-        case .eternity: "Master every law, then survive it faster."
+        case .trace: "Where the Signal was lit."
+        case .drift: "Greenhouse domes adrift under a red sun."
+        case .fracture: "A frozen moon split by the first scars."
+        case .debris: "All that is left of Cinder."
+        case .paradox: "The Keepers' tests never stopped."
+        case .singularity: "A giant star falling in on itself."
+        case .rift: "Space with exits of its own."
+        case .gravity: "Black holes where Ashcrown fell."
+        case .mirage: "Light that shows false copies."
+        case .confection: "A sweet dream with lethal rules."
+        case .eternity: "The end of time, where it began."
         }
     }
 

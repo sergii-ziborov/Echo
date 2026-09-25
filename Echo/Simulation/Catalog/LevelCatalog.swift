@@ -15,5 +15,5 @@ enum LevelCatalog {
     }
 
     static let playable: [LevelDefinition] = (handcrafted + (37...77).map(expandedLevel))
-        .map { $0.assigningAsteroidMaterials().withReadableAsteroids() }
+        .map { $0.assigningAsteroidMaterials().withReadableAsteroids().inRegion() }
 }

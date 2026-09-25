@@ -77,6 +77,14 @@ enum ArenaTheme: Int, Equatable, Sendable, CaseIterable {
     case ion
     case ice
     case dust
+    /// The Riftlands: wine-dark space around hot pink tears.
+    case tear
+    /// The Undertow: near-black, lit only by accretion amber.
+    case abyss
+    /// The Candy Timeline: sugar pink.
+    case candy
+    /// Last Dawn: the Lighthouse's blue under a golden light.
+    case dawn
 
     static func forLevel(_ number: Int) -> ArenaTheme {
         ArenaTheme(rawValue: (max(1, number) - 1) % allCases.count) ?? .void
@@ -90,6 +98,10 @@ enum ArenaTheme: Int, Equatable, Sendable, CaseIterable {
         case .ion: RGB(0.05, 0.02, 0.10)
         case .ice: RGB(0.03, 0.06, 0.12)
         case .dust: RGB(0.07, 0.05, 0.02)
+        case .tear: RGB(0.08, 0.02, 0.07)
+        case .abyss: RGB(0.012, 0.01, 0.025)
+        case .candy: RGB(0.09, 0.03, 0.08)
+        case .dawn: RGB(0.035, 0.035, 0.09)
         }
     }
 
@@ -101,6 +113,10 @@ enum ArenaTheme: Int, Equatable, Sendable, CaseIterable {
         case .ion: RGB(0.16, 0.06, 0.28)
         case .ice: RGB(0.08, 0.16, 0.28)
         case .dust: RGB(0.24, 0.16, 0.07)
+        case .tear: RGB(0.26, 0.05, 0.18)
+        case .abyss: RGB(0.10, 0.08, 0.14)
+        case .candy: RGB(0.32, 0.12, 0.28)
+        case .dawn: RGB(0.14, 0.12, 0.26)
         }
     }
 
@@ -112,6 +128,10 @@ enum ArenaTheme: Int, Equatable, Sendable, CaseIterable {
         case .ion: RGB(0.85, 0.45, 1.00)
         case .ice: RGB(0.55, 0.85, 1.00)
         case .dust: RGB(1.00, 0.78, 0.35)
+        case .tear: RGB(1.00, 0.38, 0.72)
+        case .abyss: RGB(1.00, 0.62, 0.30)
+        case .candy: RGB(1.00, 0.64, 0.88)
+        case .dawn: RGB(1.00, 0.84, 0.50)
         }
     }
 

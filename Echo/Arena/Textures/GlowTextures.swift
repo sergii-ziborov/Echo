@@ -76,9 +76,14 @@ enum GlowTextures {
         case .ion: [crystalWall, forceWall, techWall]
         case .ice: [iceWall, forceWall, glassWall]
         case .dust: [ancientWall, carvedWall, crackedWall]
+        case .tear: [crystalWall, forceWall, glassWall]
+        case .abyss: [metalWall, crackedWall, techWall]
+        case .candy: [glassWall, crystalWall, forceWall]
+        case .dawn: [metalWall, techWall, glassWall]
         }
-        let epoch = (max(1, levelNumber) - 1) / ArenaTheme.allCases.count
-        return finishes[epoch % finishes.count] ?? finishes[0]
+        // A region keeps its colours; its walls change finish as the Road goes on.
+        let stretch = ((max(1, levelNumber) - 1) % 7) / 3
+        return finishes[stretch % finishes.count] ?? finishes[0]
     }
 
     static func bonus(_ kind: BonusKind) -> SKTexture {

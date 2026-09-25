@@ -150,7 +150,7 @@ enum EndlessGenerator {
             atmosphere: ArenaAtmosphere.allCases[Int.random(in: 0..<ArenaAtmosphere.allCases.count, using: &rng)]
         )
         level.id = key.levelID
-        level = level.withReadableAsteroids()
+        level = level.withReadableAsteroids().inRegion()
         return EndlessReach.isSolvable(level) ? level : nil
     }
 
@@ -188,6 +188,6 @@ enum EndlessGenerator {
             theme: ArenaTheme(rawValue: (depth - 1) % ArenaTheme.allCases.count)
         )
         level.id = key.levelID
-        return level.withReadableAsteroids()
+        return level.withReadableAsteroids().inRegion()
     }
 }
