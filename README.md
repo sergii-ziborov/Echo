@@ -9,15 +9,22 @@ Seventy-seven maps sit in eleven seven-map regions of space, strung along one ro
 The App Store build is a **$1.99 one-time download**. No ads, accounts, or in-app purchases. Progress stays on the device.
 
 <p align="center">
-  <img src="docs/app-store/iphone/play/01-gameplay.jpg" width="220" alt="Gameplay with a highlighted player orb, asteroids and timed crystals">
-  <img src="docs/app-store/iphone/play/02-lasers.jpg" width="220" alt="Laser arena">
-  <img src="docs/app-store/iphone/menu/03-atlas.jpg" width="220" alt="Timeline Atlas">
+  <img src="docs/app-store/iphone/play/01-gameplay.jpg" width="220" alt="A run in the Undertow under a black hole, with rocks, beams and sparks">
+  <img src="docs/app-store/iphone/menu/03-atlas.jpg" width="220" alt="Atlas: the Hollow Belt route under its broken world, the Signal looping round the selected stop">
+  <img src="docs/app-store/iphone/play/05-arrival.jpg" width="220" alt="Arrival card for the Riftlands">
   <br>
-  <img src="docs/app-store/iphone/menu/04-research.jpg" width="220" alt="Timeline Matrix research tree">
-  <img src="docs/app-store/iphone/menu/05-lab.jpg" width="220" alt="Temporal Lab">
-  <img src="docs/app-store/iphone/menu/06-wiki.jpg" width="220" alt="Timeline Archive wiki">
+  <img src="docs/app-store/iphone/play/02-lasers.jpg" width="220" alt="Laser arena under Ashcrown">
+  <img src="docs/app-store/iphone/play/04-deep-time.jpg" width="220" alt="Deep Time, the endless mode">
+  <img src="docs/app-store/iphone/menu/08-wiki.jpg" width="220" alt="Timeline Archive: the story">
   <br>
-  <img src="docs/app-store/iphone/menu/07-home.jpg" width="220" alt="Home screen">
+  <img src="docs/app-store/iphone/menu/06-research.jpg" width="220" alt="Timeline Matrix research tree">
+  <img src="docs/app-store/iphone/menu/07-lab.jpg" width="220" alt="Temporal Lab loadout">
+  <img src="docs/app-store/iphone/menu/09-home.jpg" width="220" alt="Home screen with Deep Time">
+  <br>
+  <img src="docs/app-store/watch/01-wrist-run.jpg" width="150" alt="A wrist map on Apple Watch">
+  <img src="docs/app-store/watch/02-wrist-maps.jpg" width="150" alt="Wrist Timeline maps">
+  <img src="docs/app-store/watch/03-relics.jpg" width="150" alt="Relics that carry over to iPhone">
+  <img src="docs/app-store/watch/04-skills.jpg" width="150" alt="Watch skills">
 </p>
 
 See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).

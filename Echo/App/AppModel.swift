@@ -43,6 +43,13 @@ final class AppModel {
     }
 
     func applyLaunchArgs(_ args: [String]) {
+        // Screenshot runs skip the region arrival cards unless asked for one.
+        if args.contains("-shot-arrival") {
+            progress.seenHints.subtract(ArrivalCard.Arrival.allKeys)
+            progress.persist()
+        } else if args.contains(where: { $0.hasPrefix("-shot-") }) {
+            for key in ArrivalCard.Arrival.allKeys { _ = progress.markHint(key) }
+        }
 #if DEBUG
         if let flag = args.firstIndex(of: "-shot-progress"), flag + 1 < args.count, let count = Int(args[flag + 1]) {
             progress.debugShowcase(cleared: count)
@@ -57,9 +64,6 @@ final class AppModel {
                 .pulse, .magnet, .chrono, .anchor, .repulse, .prism, .blink,
             ] {
                 _ = progress.markHint(hint.rawValue)
-            }
-            if !args.contains("-shot-arrival") {
-                for key in ArrivalCard.Arrival.allKeys { _ = progress.markHint(key) }
             }
             screen = .playing(PlayRequest(levelID: level.id, daily: false))
             return
