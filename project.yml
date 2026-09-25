@@ -86,12 +86,14 @@ targets:
       - path: Shared
       - path: Echo/Simulation
       - path: Echo/Arena/Graphics/TrailRenderer.swift
+      - path: Echo/Arena/Graphics/Backdrop.swift
       - path: Echo/Arena/Graphics/VisualStyle.swift
       - path: Echo/Arena/Graphics/AbilityGlyph.swift
       - path: Echo/Arena/Geometry/RockShape.swift
       - path: Echo/Arena/Textures/BitmapCanvas.swift
       - path: Echo/Arena/Textures/SpriteTextures.swift
       - path: Echo/Arena/Textures/RockPainter.swift
+      - path: Echo/Arena/Textures/RockSurfaces.swift
     info:
       path: EchoWatch/Info.plist
       properties:

@@ -59,9 +59,13 @@ extension GameScene {
             squash.timingMode = .easeOut
             root.run(squash, withKey: "impact")
         }
-        if material == .alloy {
+        if material.isMetallic {
             sparkBurst(at: point, color: Self.crackColor(for: material), count: 16, speed: radius * 7, heading: normal, spread: 1.1)
-        } else if let art = rockArtCache[id] {
+        }
+        if material == .magma {
+            sparkBurst(at: point, color: Self.secondaryColor(for: material), count: 8, speed: radius * 4, heading: normal, spread: 1.3)
+        }
+        if material.isBreakable, let art = rockArtCache[id] {
             // Start the splinters just off the surface so they never spawn inside the wall's body.
             let spawn = CGPoint(x: point.x + normal.dx * radius * 0.2, y: point.y + normal.dy * radius * 0.2)
             for _ in 0..<Int.random(in: 3...5) {
@@ -108,12 +112,40 @@ extension GameScene {
             .removeFromParent(),
         ]))
         rockDust(at: point, color: tint, radius: radius, count: 22)
-        sparkBurst(at: point, color: accent, count: material == .ice ? 10 : 18, speed: radius * 6, heading: nil, spread: .pi)
-        if material == .ice {
-            frostBurst(at: point, radius: radius)
+        sparkBurst(at: point, color: accent, count: material == .ice || material == .comet ? 10 : 18, speed: radius * 6, heading: nil, spread: .pi)
+        switch material {
+        case .ice: frostBurst(at: point, radius: radius)
+        case .comet: frostBurst(at: point, radius: radius * 1.35)
+        case .magma: emberBurst(at: point, radius: radius)
+        case .geode: sparkBurst(at: point, color: Self.secondaryColor(for: material), count: 14, speed: radius * 3.5, heading: nil, spread: .pi)
+        default: break
         }
         shockwave(at: point, color: accent.withAlphaComponent(0.8), start: radius * 0.9, end: radius * 3, lineWidth: 1.3)
         screenFlash(color: tint, alpha: 0.08)
+    }
+
+    /// Molten rock leaves embers that drift outward and cool for a moment.
+    func emberBurst(at point: CGPoint, radius: CGFloat) {
+        for _ in 0..<14 {
+            let ember = SKSpriteNode(texture: GlowTextures.blob)
+            let size = radius * CGFloat.random(in: 0.18...0.34)
+            ember.size = CGSize(width: size, height: size)
+            ember.color = UIColor(red: 1, green: CGFloat.random(in: 0.45...0.8), blue: 0.15, alpha: 1)
+            ember.colorBlendFactor = 1
+            ember.blendMode = .add
+            ember.position = point
+            ember.zPosition = VisualLayer.events - 0.5
+            addChild(ember)
+            let angle = CGFloat.random(in: 0..<(2 * .pi))
+            let reach = radius * CGFloat.random(in: 1.2...2.8)
+            let life = TimeInterval.random(in: 0.8...1.4)
+            let drift = SKAction.moveBy(x: cos(angle) * reach, y: sin(angle) * reach, duration: life)
+            drift.timingMode = .easeOut
+            ember.run(.sequence([
+                .group([drift, .fadeOut(withDuration: life), .scale(to: 0.3, duration: life)]),
+                .removeFromParent(),
+            ]))
+        }
     }
 
     // MARK: - Debris

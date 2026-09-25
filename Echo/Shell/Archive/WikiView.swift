@@ -206,12 +206,20 @@ struct WikiView: View {
                     detail: "Finish maps and optional objectives to earn Seals. Fragments are spent on abilities and research; neither is lost when a single run fractures.",
                     facts: ["Research applies to every act", "Daily routes award bonus fragments"],
                     tint: .green
+                ),
+                WikiEntry(
+                    icon: "infinity",
+                    eyebrow: "ENDLESS MODE",
+                    title: "Deep Time",
+                    detail: "A run of random arenas that never repeat, separate from the campaign. Each clear goes one depth deeper and pays fragments; rocks, beams, echoes and new materials ramp up as you descend. Paradox Rewind still works, but a crash you cannot rewind ends the run.",
+                    facts: ["Every map is checked to be solvable", "Leave after a clear and resume from Home"],
+                    tint: EchoTheme.magenta
                 )
             ]
         case .threats:
             return [
-                WikiEntry(icon: "hexagon.fill", eyebrow: "KINETIC · MATERIAL SYSTEM", title: "Asteroids", detail: "Twelve rock appearances share four material rules: basalt, ice and crystal can fracture after wall impacts; alloy never breaks. Some maps have a large fixed core with smaller satellites; others use ricochets, patrols or paired orbits. Moving rocks leave a faint trail. Watch for spreading cracks and loose chips: the rock is about to break.", facts: ["Freeze pauses movement and fracture", "A fixed core resists Repulse while its satellites circle", "Damage is shown on the rock, without a countdown"], tint: .orange),
-                WikiEntry(icon: "square.3.layers.3d", eyebrow: "DEBRIS INDEX", title: "Four materials", detail: "Cyan Cryo Ice breaks in 2 impacts, violet Chrono Crystal in 3, and amber Basalt in 4. Silver Void Alloy is permanent and keeps ricocheting, so color changes the route strategy.", facts: ["ICE 5.2s · CHR 7.0s · BAS 9.0s", "ALLOY never fractures"], tint: EchoTheme.cyan),
+                WikiEntry(icon: "hexagon.fill", eyebrow: "KINETIC · MATERIAL SYSTEM", title: "Asteroids", detail: "Every rock is drawn fresh from one of eight materials. All of them except alloy fracture after wall impacts; alloy never breaks. Some maps have a large fixed core with smaller satellites; others use ricochets, patrols or paired orbits. Moving rocks leave a faint trail. Watch for spreading cracks and loose chips: the rock is about to break.", facts: ["Freeze pauses movement and fracture", "A fixed core resists Repulse while its satellites circle", "Damage is shown on the rock, without a countdown"], tint: .orange),
+                WikiEntry(icon: "square.3.layers.3d", eyebrow: "DEBRIS INDEX", title: "Eight materials", detail: "Cyan Cryo Ice breaks in 2 impacts, violet Chrono Crystal in 3, and amber Basalt in 4. Silver Void Alloy is permanent and keeps ricocheting, so color changes the route strategy. From DEBRIS on, glowing Magma Cores break in 3 and scatter embers, and pitted Meteoric Iron takes 6 hits. From RIFT on, sandy Hollow Geodes split in 2 to show crystal inside, and Comet Frost trails vapour and bursts after its first hit.", facts: ["COM 4.0s · ICE 5.2s · MAG 6.0s · GEO 6.5s", "CHR 7.0s · BAS 9.0s · IRON 12s", "ALLOY never fractures"], tint: EchoTheme.cyan),
                 WikiEntry(icon: "laser.burst", eyebrow: "ENERGY", title: "Laser arrays", detail: "Emitter pairs telegraph, charge, fire and cool down. Sweep arrays rotate through a marked arc; pulse arrays alternate their timing.", facts: ["Thin line = telegraph", "Solid core = lethal beam"], tint: EchoTheme.danger),
                 WikiEntry(icon: "hurricane", eyebrow: "TEMPORAL", title: "Reality rifts", detail: "Calm tears freeze hostile time, collapsing tears kill, Warp tears fold your position and controls, and Candy tears open a ten-second pocket timeline.", facts: ["Warp rewinds the Echo clock", "Candy raises speed and Resonance time"], tint: EchoTheme.violet),
                 WikiEntry(icon: "circle.circle.fill", eyebrow: "GRAVITY", title: "Black holes", detail: "A lensing ring marks the pull radius around a lethal dark core. The force grows as you approach and can bend a route into walls or old Echoes.", facts: ["Freeze suspends gravity", "Surge helps escape the outer pull"], tint: EchoTheme.gold),

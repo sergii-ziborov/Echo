@@ -15,6 +15,7 @@ struct ResultsView: View {
     var onNext: () -> Void
     var onNextCycle: (() -> Void)? = nil
     var onMenu: () -> Void
+    var nextTitle = "Next"
 
     var body: some View {
         GameModalShell(tint: EchoTheme.gold) {
@@ -129,7 +130,7 @@ struct ResultsView: View {
                     if cycleComplete, let onNextCycle {
                         PrimaryButton(title: "Next Cycle", systemImage: "infinity", action: onNextCycle)
                     } else {
-                        PrimaryButton(title: "Next", systemImage: "arrow.right", action: onNext)
+                        PrimaryButton(title: nextTitle, systemImage: "arrow.right", action: onNext)
                     }
                 }
                 HStack(spacing: 10) {

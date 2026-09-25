@@ -76,7 +76,7 @@ extension ProgressStore {
     func resetProgress() {
         let progressKeys = [
             starsKey, shardsKey, inventoryKey, livesKey, lastLevelKey, tutorialKey,
-            dailyKey, hintsKey, upgradesKey, equippedKey, difficultyKey, completedDifficultyKey,
+            dailyKey, hintsKey, upgradesKey, equippedKey, difficultyKey, completedDifficultyKey, endlessKey,
         ]
         progressKeys.forEach { defaults.removeObject(forKey: $0) }
         starsByLevel = [:]
@@ -91,6 +91,7 @@ extension ProgressStore {
         equippedSkillIDs = [BonusKind.shield.rawValue, BonusKind.freeze.rawValue]
         difficultyCycle = 0
         completedDifficultyCycles = 0
+        endless = EndlessRecord()
         sanitizeEquippedSkills()
         persist()
     }

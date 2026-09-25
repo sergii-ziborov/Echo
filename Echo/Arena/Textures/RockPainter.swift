@@ -26,7 +26,7 @@ struct RockArt {
 /// Paints asteroids procedurally, so no two rocks share a silhouette or a
 /// surface. Light comes from the upper left; the colour families keep every
 /// material readable (basalt breaks slowly, ice fast, crystal glows, alloy
-/// never breaks).
+/// never breaks). The later families live in RockSurfaces.
 @MainActor
 enum RockPainter {
     struct Palette {
@@ -46,7 +46,7 @@ enum RockPainter {
         let shards = material.isBreakable
             ? shape.shards.map { shard(of: image, polygon: $0, half: half, scale: scale) }
             : []
-        let slow = material == .alloy
+        let slow = material.isMetallic
         return RockArt(
             shape: shape,
             texture: texture,
@@ -72,6 +72,14 @@ enum RockPainter {
             return Palette(light: tone(0.88, 0.70, 1.00), mid: tone(0.55, 0.30, 0.86), dark: tone(0.18, 0.06, 0.36), accent: UIColor(red: 0.45, green: 0.96, blue: 1, alpha: 1))
         case .alloy:
             return Palette(light: tone(0.72, 0.80, 0.92), mid: tone(0.27, 0.32, 0.41), dark: tone(0.05, 0.06, 0.09), accent: UIColor(red: 1, green: 0.78, blue: 0.32, alpha: 1))
+        case .magma:
+            return Palette(light: tone(0.50, 0.30, 0.22), mid: tone(0.23, 0.11, 0.08), dark: tone(0.06, 0.03, 0.03), accent: UIColor(red: 1, green: 0.50, blue: 0.10, alpha: 1))
+        case .geode:
+            return Palette(light: tone(0.84, 0.74, 0.60), mid: tone(0.55, 0.45, 0.34), dark: tone(0.22, 0.17, 0.13), accent: UIColor(red: 0.74, green: 0.42, blue: 1, alpha: 1))
+        case .iron:
+            return Palette(light: tone(0.80, 0.79, 0.78), mid: tone(0.35, 0.34, 0.34), dark: tone(0.08, 0.08, 0.09), accent: UIColor(red: 0.82, green: 0.42, blue: 0.18, alpha: 1))
+        case .comet:
+            return Palette(light: tone(0.97, 0.99, 1.00), mid: tone(0.66, 0.74, 0.82), dark: tone(0.20, 0.23, 0.30), accent: UIColor(red: 0.58, green: 0.92, blue: 1, alpha: 1))
         }
     }
 
@@ -87,12 +95,16 @@ enum RockPainter {
             cg.saveGState()
             cg.addPath(body)
             cg.clip()
-            radial(cg, [colors.light, colors.mid, colors.dark], at: CGPoint(x: -r * 0.42, y: r * 0.46), to: CGPoint(x: r * 0.1, y: -r * 0.1), radius: r * (material == .alloy ? 1.45 : 1.9))
+            radial(cg, [colors.light, colors.mid, colors.dark], at: CGPoint(x: -r * 0.42, y: r * 0.46), to: CGPoint(x: r * 0.1, y: -r * 0.1), radius: r * (material.isMetallic ? 1.45 : 1.9))
             switch material {
             case .basalt: basaltSurface(cg, shape: shape, colors: colors, rng: &rng)
             case .ice: facetedSurface(cg, shape: shape, colors: colors, glow: 0.18, rng: &rng)
             case .crystal: facetedSurface(cg, shape: shape, colors: colors, glow: 0.62, rng: &rng)
             case .alloy: alloySurface(cg, shape: shape, colors: colors, rng: &rng)
+            case .magma: magmaSurface(cg, shape: shape, colors: colors, rng: &rng)
+            case .geode: geodeSurface(cg, shape: shape, colors: colors, rng: &rng)
+            case .iron: ironSurface(cg, shape: shape, colors: colors, rng: &rng)
+            case .comet: cometSurface(cg, shape: shape, colors: colors, rng: &rng)
             }
             speckle(cg, radius: r, count: Int(r * 1.4), light: colors.light, dark: colors.dark, rng: &rng)
             // Ambient occlusion toward the rim, then the terminator on the lower right.

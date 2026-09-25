@@ -23,6 +23,7 @@ final class RemoteScopeScene: SKScene {
     let markers = SKNode()
     var markerPool: [SKShapeNode] = []
     let exitMarker = SKShapeNode()
+    var backdrop: Backdrop?
     private var built = false
     private var hasFrame = false
     private var trails: TrailRenderer?
@@ -74,6 +75,7 @@ final class RemoteScopeScene: SKScene {
         if !built { build() }
         let dt = lastTime == 0 ? 1.0 / 60 : min(currentTime - lastTime, 0.1)
         lastTime = currentTime
+        backdrop?.tick(now: currentTime)
         guard let (frame, stamp) = source() else { return }
         sync(frame, age: max(0, ProcessInfo.processInfo.systemUptime - stamp), dt: dt, clock: currentTime)
     }
@@ -101,6 +103,7 @@ final class RemoteScopeScene: SKScene {
         markers.zPosition = 50
         lens.addChild(markers)
         buildMarkers()
+        buildBackdrop()
 
         let arena = CGRect(x: 0, y: 0, width: level.worldWidth * Double(scale), height: level.worldHeight * Double(scale))
         let border = SKShapeNode(rect: arena, cornerRadius: 12)

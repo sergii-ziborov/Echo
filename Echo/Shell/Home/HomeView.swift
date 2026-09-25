@@ -36,6 +36,9 @@ struct HomeView: View {
                     continueCard
                         .homeEntrance(appeared, delay: 0.19, reduceMotion: reduceMotion)
 
+                    EndlessCard(appeared: appeared, reduceMotion: reduceMotion)
+                        .homeEntrance(appeared, delay: 0.205, reduceMotion: reduceMotion)
+
                     if PhoneWatchLink.isAvailable {
                         WristRelicsCard(appeared: appeared, reduceMotion: reduceMotion)
                             .homeEntrance(appeared, delay: 0.22, reduceMotion: reduceMotion)

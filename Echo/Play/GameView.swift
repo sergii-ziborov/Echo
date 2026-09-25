@@ -36,7 +36,8 @@ struct GameView: View {
             id: request.levelID,
             daily: request.daily ? Date() : nil,
             cycle: request.difficultyCycle,
-            aspect: Double(bounds.height / max(bounds.width, 1))
+            aspect: Double(bounds.height / max(bounds.width, 1)),
+            endless: request.endless
         )
         let fitted = recipe.fitted()
         let bands = Self.interfaceBands(for: fitted, screen: bounds)
@@ -154,7 +155,7 @@ struct GameView: View {
                 if case .won(let result) = session.phase {
                     let seals = LevelCatalog.seals(for: session.level.number)
                     ResultsView(
-                        levelName: session.level.name,
+                        levelName: request.endless.map { "Deep Time · Depth \($0.depth)" } ?? session.level.name,
                         result: result,
                         controlSeal: seals.control,
                         paradoxSeal: seals.paradox,
@@ -170,7 +171,8 @@ struct GameView: View {
                         onNextCycle: session.level.number == LevelCatalog.playable.count
                             ? { activeModel.startNextCycle() }
                             : nil,
-                        onMenu: { activeModel.goHome() }
+                        onMenu: { activeModel.goHome() },
+                        nextTitle: request.endless.map { "Depth \($0.depth + 1)" } ?? "Next"
                     )
                 }
 
@@ -180,8 +182,10 @@ struct GameView: View {
                         rewindCharges: session.sim.rewindCharges,
                         rewindSeconds: session.tuning.rewindSeconds,
                         onRewind: paradoxRewind,
-                        onRestart: { restart() },
-                        onMenu: { activeModel.goHome() }
+                        onRestart: { request.endless == nil ? restart() : newEndlessRun() },
+                        onMenu: { leaveAfterCrash() },
+                        restartTitle: request.endless == nil ? "Restart level" : "New run",
+                        note: request.endless.map { "Deep Time · depth \($0.depth) · best \(activeModel.progress.endless.bestDepth)" }
                     )
                 }
 
@@ -220,6 +224,9 @@ struct GameView: View {
         .onDisappear { PhoneWatchLink.shared.detach(session: session) }
         .onAppear {
             session.configure(tuning: activeModel.progress.playerTuning)
+            if let key = request.endless {
+                session.banner = "Deep Time · Depth \(key.depth)"
+            }
             scene.onEvents = { events in handle(events) }
             scene.cometStyle = activeModel.progress.usesTourbillonTail ? .tourbillon : .classic
             PhoneWatchLink.shared.attach(

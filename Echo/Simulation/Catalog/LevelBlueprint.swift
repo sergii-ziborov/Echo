@@ -141,7 +141,7 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
     /// changing authored routes. The palette rotates between maps so players
     /// cannot assume that every moving body will eventually disappear.
     func assigningAsteroidMaterials() -> LevelDefinition {
-        let palette: [AsteroidMaterial] = [.basalt, .ice, .crystal, .alloy]
+        let palette = AsteroidMaterial.palette(forLevel: number)
         var copy = self
         copy.movers = movers.map { mover in
             var next = mover
@@ -165,20 +165,59 @@ struct LevelDefinition: Equatable, Sendable, Identifiable {
         var copy = self
         copy.movers = movers.map { mover in
             guard mover.path != .stationary else { return mover }
+            // The full growth first; if the bigger rock would spawn on a rift
+            // or a black hole, the earlier, smaller growth that fits.
             var next = mover
-            next.radius = ArenaMetrics.readableRockRadius(mover.radius)
-            if case .bounce = mover.path {
-                next.position = LayoutSafety.clearSpot(
-                    near: mover.position,
-                    walls: walls,
-                    worldWidth: worldWidth,
-                    worldHeight: worldHeight,
-                    clearance: next.radius + 4
-                )
+            for grown in [ArenaMetrics.readableRockRadius(mover.radius), ArenaMetrics.formerRockRadius(mover.radius)] {
+                next = mover
+                // A patrol or orbit grows only as far as its route stays off the walls.
+                next.radius = min(grown, max(mover.radius, routeAllowance(for: mover)))
+                if case .bounce = mover.path {
+                    next.position = LayoutSafety.clearSpot(
+                        near: mover.position,
+                        walls: walls,
+                        worldWidth: worldWidth,
+                        worldHeight: worldHeight,
+                        clearance: next.radius + 4
+                    )
+                }
+                if hazardRoom(at: next.position) >= next.radius { break }
             }
             return next
         }
         return copy
+    }
+
+    /// How large a body at `point` can be before it touches a rift or a black hole.
+    func hazardRoom(at point: Vec2) -> Double {
+        let rifts = rifts.map { point.distance(to: $0.position) - $0.radius - 5 }
+        let wells = gravityWells.map { point.distance(to: $0.position) - $0.coreRadius - 5 }
+        return (rifts + wells).min() ?? .infinity
+    }
+
+    /// The largest body that can follow a fixed route without touching a wall
+    /// or the arena edge, and that starts clear of rifts and black holes.
+    func routeAllowance(for mover: MoverSpawn) -> Double {
+        var limit = hazardRoom(at: mover.position)
+        let samples: [Vec2]
+        switch mover.path {
+        case .patrol(let start, let end):
+            samples = (0...24).map { start.lerp(end, Double($0) / 24) }
+        case .orbit(let center, let radius, _, _):
+            samples = (0..<48).map { index in
+                let angle = Double(index) / 48 * .pi * 2
+                return center + Vec2(x: cos(angle), y: sin(angle)) * radius
+            }
+        case .bounce, .stationary:
+            return limit
+        }
+        for point in samples {
+            limit = min(limit, point.x - 5, point.y - 5, worldWidth - 5 - point.x, worldHeight - 5 - point.y)
+            for wall in walls {
+                limit = min(limit, point.distance(to: wall.closestPoint(to: point)) - 3)
+            }
+        }
+        return limit
     }
 
     /// Push sparks, the exit, and the start out of walls so pickups are always reachable.

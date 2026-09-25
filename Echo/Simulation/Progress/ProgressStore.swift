@@ -27,6 +27,7 @@ final class ProgressStore {
     let completedDifficultyKey = "echo.progress.completedDifficultyCycles.v1"
     let wristKey = "echo.progress.wrist.v1"
     let wristTrailKey = "echo.settings.wristTrail.v1"
+    let endlessKey = "echo.progress.endless.v1"
 
     var starsByLevel: [String: LevelProgress]
     var shards: Int
@@ -47,6 +48,8 @@ final class ProgressStore {
     /// Clears earned on Apple Watch; they unlock relics in the iPhone game.
     var wrist: WristProgress
     var wristTrailEnabled: Bool
+    /// Deep Time: best depth, runs, and the run waiting to be resumed.
+    var endless: EndlessRecord
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -102,6 +105,12 @@ final class ProgressStore {
             wrist = WristProgress()
         }
         wristTrailEnabled = defaults.object(forKey: wristTrailKey) as? Bool ?? true
+        if let data = defaults.data(forKey: endlessKey),
+           let decoded = try? JSONDecoder().decode(EndlessRecord.self, from: data) {
+            endless = decoded
+        } else {
+            endless = EndlessRecord()
+        }
         sanitizeEquippedSkills()
     }
 
@@ -150,6 +159,9 @@ final class ProgressStore {
             defaults.set(data, forKey: wristKey)
         }
         defaults.set(wristTrailEnabled, forKey: wristTrailKey)
+        if let data = try? JSONEncoder().encode(endless) {
+            defaults.set(data, forKey: endlessKey)
+        }
     }
 
     func progressKey(for id: String, cycle: Int? = nil) -> String {

@@ -48,7 +48,12 @@ extension GameScene {
         glow.blendMode = .add
         glow.color = Self.secondaryColor(for: mover.material)
         glow.colorBlendFactor = 0.55
-        glow.alpha = mover.material == .crystal ? 0.24 : 0.17
+        glow.alpha = switch mover.material {
+        case .crystal: 0.24
+        case .magma: 0.3
+        case .comet: 0.22
+        default: 0.17
+        }
         glow.name = "glow"
         glow.run(.repeatForever(.sequence([
             .fadeAlpha(to: glow.alpha + 0.08, duration: 0.9),
@@ -93,6 +98,9 @@ extension GameScene {
         root.addChild(glow)
         root.addChild(body)
         root.addChild(makeMotionEmitter(color: tint, emphasis: min(3.2, max(1.6, radius / 8))))
+        if mover.material == .comet {
+            root.addChild(makeVaporTail(radius: radius))
+        }
         addChild(root)
         moverNodes[mover.id] = root
     }
@@ -103,6 +111,36 @@ extension GameScene {
         case .ice: UIColor(red: 0.86, green: 0.98, blue: 1, alpha: 1)
         case .crystal: UIColor(red: 0.50, green: 0.97, blue: 1, alpha: 1)
         case .alloy: UIColor(red: 1, green: 0.80, blue: 0.36, alpha: 1)
+        case .magma: UIColor(red: 1, green: 0.80, blue: 0.32, alpha: 1)
+        case .geode: UIColor(red: 0.84, green: 0.56, blue: 1, alpha: 1)
+        case .iron: UIColor(red: 1, green: 0.72, blue: 0.44, alpha: 1)
+        case .comet: UIColor(red: 0.80, green: 0.97, blue: 1, alpha: 1)
         }
+    }
+
+    /// Comets shed vapour that hangs where it left the rock, so the trail
+    /// follows the rock's real path rather than its current heading.
+    func makeVaporTail(radius: CGFloat) -> SKEmitterNode {
+        let vapor = SKEmitterNode()
+        vapor.name = "vapor"
+        vapor.particleTexture = GlowTextures.blob
+        vapor.particleBirthRate = 34
+        vapor.particleLifetime = 1.1
+        vapor.particleLifetimeRange = 0.3
+        vapor.particleAlpha = 0.34
+        vapor.particleAlphaSpeed = -0.3
+        vapor.particleScale = radius / 70
+        vapor.particleScaleRange = radius / 200
+        vapor.particleScaleSpeed = 0.12
+        vapor.particleColor = UIColor(red: 0.72, green: 0.94, blue: 1, alpha: 1)
+        vapor.particleColorBlendFactor = 1
+        vapor.particleBlendMode = .add
+        vapor.particleSpeed = 8
+        vapor.particleSpeedRange = 6
+        vapor.emissionAngleRange = .pi * 2
+        vapor.particlePositionRange = CGVector(dx: radius * 0.6, dy: radius * 0.6)
+        vapor.targetNode = self
+        vapor.zPosition = -1.2
+        return vapor
     }
 }

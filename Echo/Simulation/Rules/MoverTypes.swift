@@ -9,6 +9,14 @@ enum AsteroidMaterial: String, CaseIterable, Equatable, Sendable {
     case ice
     case crystal
     case alloy
+    /// A molten body under a thin crust; cracks glow and it bursts into embers.
+    case magma
+    /// Plain stone outside, lined with crystal inside; it splits quickly.
+    case geode
+    /// A nickel-iron meteorite: the toughest shell that still breaks.
+    case iron
+    /// A dusty snowball trailing vapour; the first impact dooms it.
+    case comet
 
     var title: String {
         switch self {
@@ -16,6 +24,10 @@ enum AsteroidMaterial: String, CaseIterable, Equatable, Sendable {
         case .ice: "Cryo ice"
         case .crystal: "Chrono crystal"
         case .alloy: "Void alloy"
+        case .magma: "Magma core"
+        case .geode: "Hollow geode"
+        case .iron: "Meteoric iron"
+        case .comet: "Comet frost"
         }
     }
 
@@ -25,6 +37,10 @@ enum AsteroidMaterial: String, CaseIterable, Equatable, Sendable {
         case .ice: "ICE"
         case .crystal: "CHR"
         case .alloy: "ALLOY"
+        case .magma: "MAG"
+        case .geode: "GEO"
+        case .iron: "IRON"
+        case .comet: "COM"
         }
     }
 
@@ -37,6 +53,10 @@ enum AsteroidMaterial: String, CaseIterable, Equatable, Sendable {
         case .ice: 2
         case .crystal: 3
         case .alloy: nil
+        case .magma: 3
+        case .geode: 2
+        case .iron: 6
+        case .comet: 1
         }
     }
 
@@ -46,10 +66,27 @@ enum AsteroidMaterial: String, CaseIterable, Equatable, Sendable {
         case .ice: 5.2
         case .crystal: 7.0
         case .alloy: nil
+        case .magma: 6.0
+        case .geode: 6.5
+        case .iron: 12.0
+        case .comet: 4.0
         }
     }
 
     var isBreakable: Bool { wallHitsToShatter != nil }
+
+    /// Metal shells ring and throw sparks when they hit something.
+    var isMetallic: Bool { self == .alloy || self == .iron }
+
+    /// The materials a map may use. The first three acts keep the original
+    /// four; DEBRIS brings molten and iron rocks, RIFT geodes and comets.
+    static func palette(forLevel number: Int) -> [AsteroidMaterial] {
+        switch number {
+        case ..<22: [.basalt, .ice, .crystal, .alloy]
+        case ..<43: [.basalt, .ice, .magma, .alloy, .crystal, .iron]
+        default: [.basalt, .ice, .magma, .alloy, .crystal, .geode, .iron, .comet]
+        }
+    }
 }
 
 enum MoverPath: Equatable, Sendable {

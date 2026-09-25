@@ -33,7 +33,7 @@ A crash can **Paradox Rewind** three seconds. The failed branch stays as an unst
 ## Hazards and tools
 
 - **Echoes** — up to five copies. Double-tap to dash.
-- **Asteroids** — bounce, patrol, orbit, or sit as a fixed core with satellites. Every rock is generated procedurally. Cryo Ice, Chrono Crystal, and Basalt crack after hitting solid geometry and eventually split into physical debris along those cracks; Void Alloy never breaks.
+- **Asteroids** — bounce, patrol, orbit, or sit as a fixed core with satellites. Every rock is generated procedurally from one of eight materials. Cryo Ice, Chrono Crystal, and Basalt crack after hitting solid geometry and eventually split into physical debris along those cracks; Void Alloy never breaks. From DEBRIS on, glowing Magma Cores shed embers and pitted Meteoric Iron takes six hits; from RIFT on, Hollow Geodes split open on crystal and Comet Frost trails vapour and bursts on its first hit.
 - **Temporal lasers** — emitters telegraph, charge, and fire. Freeze suspends and disarms every laser.
 - **Reality rifts** — calm tears freeze time, collapsing tears kill, Warp tears fold space, and Candy tears open a faster pocket timeline.
 - **Black holes** — bend movement and destroy the timeline at the core.
@@ -42,6 +42,12 @@ A crash can **Paradox Rewind** three seconds. The failed branch stays as an unst
 - **Timeline Archive** — in-game wiki for controls, clocks, hazards, research, and all 77 maps.
 
 The first time you meet an echo, a rock, a rift, a gate, freeze, phase, or a time collision, a short card explains it.
+
+Behind every arena a distant sky moves slowly: a banded planet turning at the edge of the view, a spiral galaxy, twinkling stars, the odd meteor, and a soft light that breathes and sweeps past. It holds still when Reduce Motion is on.
+
+## Deep Time
+
+An endless mode, separate from the campaign and open from Home. Every depth is a random arena drawn from the run's seed and checked to be solvable before it is played; rocks, beams, echoes, black holes and rifts ramp up as the run goes deeper. Each clear pays fragments and records the best depth. Paradox Rewind still works, but a crash with nothing left to rewind ends the run, and a run left after a clear can be resumed from Home.
 
 ## Apple Watch
 

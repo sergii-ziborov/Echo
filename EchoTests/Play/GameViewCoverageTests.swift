@@ -28,6 +28,36 @@ final class GameViewCoverageTests: XCTestCase {
         CoverageHost.render(GameView(request: CoverageFixtures.playRequest(1, daily: true)).environment(model))
     }
 
+    func testEndlessDepthCrashesAndClears() {
+        let model = CoverageFixtures.model()
+        let key = EndlessKey(seed: 0xEC40_D17E, depth: 7)
+        let request = PlayRequest(levelID: key.levelID, daily: false, endless: key)
+        let result = SessionResult(time: 20, moves: 12, stars: 2, sparks: 6, echoesFaced: 2)
+
+        var dead = GameView(request: request)
+        XCTAssertEqual(dead.session.level.id, key.levelID)
+        dead.session.phase = .dead(.laser)
+        dead.session.deathCause = .laser
+        CoverageHost.render(dead.environment(model))
+
+        var won = GameView(request: request)
+        won.session.phase = .won(result)
+        CoverageHost.render(won.environment(model))
+
+        won.modelOverride = model
+        won.nextLevel()
+        XCTAssertEqual(model.screen, .playing(PlayRequest(levelID: key.next.levelID, daily: false, endless: key.next)))
+
+        dead.modelOverride = model
+        model.progress.endless.current = key
+        dead.newEndlessRun()
+        guard case .playing(let fresh) = model.screen, let run = fresh.endless else {
+            return XCTFail("A new run should start")
+        }
+        XCTAssertEqual(run.depth, 1)
+        XCTAssertNotEqual(run.seed, key.seed)
+    }
+
     func testDeadWonReplayBallet() {
         let model = CoverageFixtures.model()
         let request = CoverageFixtures.playRequest(1)

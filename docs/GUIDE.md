@@ -33,7 +33,7 @@ Earn research points by clearing maps, pursuing the three optional Temporal Seal
 
 Freeze stops moving hazards and their clocks while you keep moving. Surge accelerates the orb. Shield absorbs a hit. Magnet draws sparks. Phase crosses Echoes and other eligible hazards. Pulse and Shift postpone the next Echo; Anchor slows the hostile world; Repulse pushes nearby threats; Prism protects against lasers; Blink jumps forward across danger. The Lab and in-game Wiki show each ability's exact timing and recommended use.
 
-Asteroids have distinct material shells and faint movement trails. Their routes vary by map: ricochets, patrols, paired orbits, and large stationary cores with three smaller orbiters. Cryo Ice, Chrono Crystal and Basalt crack after wall impacts and may eventually break; Void Alloy does not. Lasers telegraph before firing. Black holes pull toward a lethal core. Rifts can stop time, collapse, warp space or lead into the faster Candy Timeline. These systems arrive gradually across the atlas, so inspect a region and its map before entering.
+Asteroids have distinct material shells and faint movement trails. Their routes vary by map: ricochets, patrols, paired orbits, and large stationary cores with three smaller orbiters. Cryo Ice, Chrono Crystal and Basalt crack after wall impacts and may eventually break; Void Alloy does not. Later acts add Magma Cores, Meteoric Iron, Hollow Geodes and Comet Frost, each with its own look and toughness. Lasers telegraph before firing. Black holes pull toward a lethal core. Rifts can stop time, collapse, warp space or lead into the faster Candy Timeline. These systems arrive gradually across the atlas, so inspect a region and its map before entering.
 
 ## Atlas, difficulty and saves
 

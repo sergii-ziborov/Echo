@@ -6,10 +6,14 @@ final class AsteroidScaleTests: XCTestCase {
         let movers = LevelCatalog.playable.flatMap(\.movers)
         XCTAssertFalse(movers.isEmpty)
         for mover in movers {
-            if case .stationary = mover.path {
+            switch mover.path {
+            case .stationary:
                 XCTAssertEqual(mover.radius, 130, "Fixed cores keep their authored size")
-            } else {
+            case .bounce:
                 XCTAssertGreaterThanOrEqual(mover.radius, ArenaMetrics.minimumRockRadius)
+            case .patrol, .orbit:
+                // A rock on a fixed route grows only as far as the route stays clear.
+                XCTAssertGreaterThanOrEqual(mover.radius, 28)
                 XCTAssertGreaterThan(mover.radius, SimConfig().playerRadius)
             }
         }

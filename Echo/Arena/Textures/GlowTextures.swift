@@ -59,6 +59,10 @@ enum GlowTextures {
         case .ice: [iceAsteroid, iceShardAsteroid]
         case .crystal: [crystalAsteroid, crystalShardAsteroid]
         case .alloy: [alloyAsteroid, obsidianAsteroid, relicAsteroid]
+        case .magma: [volcanicAsteroid, basaltAsteroid]
+        case .geode: [porousAsteroid, clusterAsteroid]
+        case .iron: [relicAsteroid, obsidianAsteroid]
+        case .comet: [iceShardAsteroid, iceAsteroid]
         }
         let index = ((variation % skins.count) + skins.count) % skins.count
         return circularized(skins[index] ?? skins[0] ?? asteroid)

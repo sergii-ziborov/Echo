@@ -89,6 +89,10 @@ struct AtlasLevelPreview: View {
                 case .ice: EchoTheme.cyan
                 case .crystal: EchoTheme.magenta
                 case .alloy: .white
+                case .magma: Color(red: 1, green: 0.42, blue: 0.12)
+                case .geode: Color(red: 0.8, green: 0.64, blue: 0.46)
+                case .iron: Color(red: 0.62, green: 0.6, blue: 0.58)
+                case .comet: Color(red: 0.8, green: 0.95, blue: 1)
                 }
                 let dot = Path(ellipseIn: CGRect(x: p.x - diameter / 2, y: p.y - diameter / 2, width: diameter, height: diameter))
                 context.fill(dot, with: .color(rockColor.opacity(0.78)))

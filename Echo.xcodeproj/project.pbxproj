@@ -29,6 +29,7 @@
 		10FB7182AE0E9E78E1173F09 /* HandcraftedPressureMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466A52F15D6C8CCC7A7BFC42 /* HandcraftedPressureMaps.swift */; };
 		1144EA9C991914CBD4253667 /* ChromePrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1FCA0CF8B2E737C91E5C9C /* ChromePrimitives.swift */; };
 		1183A46A88366B941FD5098B /* LevelGeometryAuditTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC1128466E6D1D25C3DA68D /* LevelGeometryAuditTests.swift */; };
+		13630FC89924AC1B6BCD959A /* EndlessRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBF0759E4E7238B47AF096B /* EndlessRun.swift */; };
 		1369403B28086FA04A9EE178 /* AppModelCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77FDFB6FA0A364BE0A349A3 /* AppModelCoverageTests.swift */; };
 		13B54DAE528A6F2F73A323C5 /* WorldSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4810701140A99AD8C82337F /* WorldSimulation.swift */; };
 		1644B97ECCB223B9A3B22647 /* DeathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29CA521555759205D0AF7C2 /* DeathView.swift */; };
@@ -90,12 +91,15 @@
 		54DB425122F6538168388E88 /* ShopNodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE13BA38D6A4415C1B2E35B8 /* ShopNodes.swift */; };
 		54DCF3B46AFCB3810E551343 /* GameViewActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A4D203BE59B7CFCA32F71C /* GameViewActions.swift */; };
 		566D5E705F2BB6BA5F373E32 /* ProgressWrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDBAE3F2C03F5AEF559E131 /* ProgressWrist.swift */; };
+		58664EE18AF24F2E63FECC22 /* EndlessReach.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9978C3F37CBA8D257461A3E /* EndlessReach.swift */; };
 		5A05E885EBCB03B789C1FB07 /* LegalPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB051394D708E5A7B8DEA2B /* LegalPages.swift */; };
 		5A1C1E457210A531F446F81E /* ArenaFloorBuild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D26CD4F4D27454FF1E1D8 /* ArenaFloorBuild.swift */; };
 		5B28B54941B0B386B1E4530C /* ProgressEconomy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0804D2A287FF3667A2FC8F8A /* ProgressEconomy.swift */; };
 		5BB15A8552D95C8D826F26FE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535E3F797B7DD5BF9B9305F /* Theme.swift */; };
+		5C49E8193374C1815635B788 /* EndlessReach.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9978C3F37CBA8D257461A3E /* EndlessReach.swift */; };
 		5ED77CCC722857702E9A6351 /* LevelFraming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2284B415450680799E6045D1 /* LevelFraming.swift */; };
 		5F94693B14B0042B2319DACA /* BonusFramingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41B7758D6DC186E8B1AABF8 /* BonusFramingTests.swift */; };
+		5F9DBC34B74542C333A01279 /* ProgressEndless.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5BE26834DBF71BBB38E3C /* ProgressEndless.swift */; };
 		5FF4B8EACCC111152BB4771E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D4F10181A7E16F79F9D9CF /* HomeView.swift */; };
 		605C60FDEAF63459FA328D65 /* ArenaBonusBuild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907A25A26A8F5267B60AC13B /* ArenaBonusBuild.swift */; };
 		60F78625A2260E37CE2F143B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CA734C52C9F53B6659873 /* RootView.swift */; };
@@ -114,6 +118,7 @@
 		6A2E7CFCF8BA528689779CA3 /* RemoteHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F382707B17E73A4923C1E5 /* RemoteHUD.swift */; };
 		6A4A0A36AF9A19C132DE1BD0 /* LevelFraming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2284B415450680799E6045D1 /* LevelFraming.swift */; };
 		6A8FCE222A89F6BE07E503CE /* Vec2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F308A1BD37FDF59FE84C7B8 /* Vec2.swift */; };
+		6C9BAC25D1ACDC14BFB62315 /* EndlessGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79D7B046833830F8A448D1F /* EndlessGenerator.swift */; };
 		70B4C19F53291D1C20E9FCE3 /* HandcraftedEarlyMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09FFFA30794C939184CC161 /* HandcraftedEarlyMaps.swift */; };
 		723C2866D5FFE2F8BEC48378 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE5001C82C0B23775698A0B /* TutorialView.swift */; };
 		740D348D8BD9507B8715834E /* PauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99917F4C6A4C28E610E18779 /* PauseView.swift */; };
@@ -163,18 +168,24 @@
 		A9A390C351490527031A3F21 /* ArenaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A40A6505EC86386FF2BA23 /* ArenaTheme.swift */; };
 		ABB36B0EDAD1FD010902F29A /* ArenaActorSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B485A9977770EA82757E999 /* ArenaActorSync.swift */; };
 		AD94C249042F7D7B4EA35B87 /* WatchLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0CBF2BCF743385875DCB9 /* WatchLink.swift */; };
+		AE3868016C6C9DB26DAFD675 /* ArenaSkyBuild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984E02A863BD7E4ED0EAEA13 /* ArenaSkyBuild.swift */; };
 		AE760031B7D039814773C064 /* SimulationHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9E17379F3E1134A1BF7C15 /* SimulationHistory.swift */; };
+		B0181F6BD6B5ED37DBBE486A /* EndlessGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79D7B046833830F8A448D1F /* EndlessGenerator.swift */; };
 		B14AF48EFDAB73F610B04CD7 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF74137B0385C0F008759FA0 /* SoundPlayer.swift */; };
 		B299CB86B66BE7530C1573AE /* WatchStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB79EFAAC7E2F87E520913F /* WatchStore.swift */; };
 		B446EED21CC164A55741A837 /* HandcraftedLateMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF8D8E3127179ED6B14B9B6 /* HandcraftedLateMaps.swift */; };
 		B49EFC7F7E7A5E8FCBDF63FD /* SimulationMovers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B3631ED2D35E519C0249CA /* SimulationMovers.swift */; };
 		B606A85ECF8A4AA4595743D7 /* UpgradeTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844264196A1E2E2706C7214E /* UpgradeTree.swift */; };
+		B628FA1E011B7FFF96018EB0 /* RockSurfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A48760183DADCE5FB4185C6 /* RockSurfaces.swift */; };
 		B9AE7240E2B4CCAF2EDF7C8D /* WorldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EFF3329D5260EDDFC05BE8 /* WorldsView.swift */; };
 		BA50238DECBD2F202A1E9AF9 /* ArenaShieldFX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D6A6565D40004A688135FF /* ArenaShieldFX.swift */; };
 		BBDDB5836BB1C745E2F375AD /* WristCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82835A97653DD8DCF3BDC266 /* WristCatalog.swift */; };
+		C1D69788D51A8E04362F9B13 /* RockSurfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A48760183DADCE5FB4185C6 /* RockSurfaces.swift */; };
+		C24B8BB9D0216BB1E5960CB0 /* EndlessModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A4D426D96CE63A432BA055 /* EndlessModeTests.swift */; };
 		C49FCC7C9D16600BE4F6E616 /* HomeCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD8C451BAACF240537DF469 /* HomeCoverageTests.swift */; };
 		C575B35F242243FFD54DE66D /* HUDChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53544675A08D1C4DACBF72AF /* HUDChrome.swift */; };
 		C77DEF100B8BEB5CC11E469D /* ArenaHazardSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D8A11DBDF53926A3CDCA18 /* ArenaHazardSync.swift */; };
+		C8976B55A95788BD666D95FE /* EndlessRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBF0759E4E7238B47AF096B /* EndlessRun.swift */; };
 		C997F3152FB000FF2FC1704B /* VisualStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57D107E34C022C855BA62A6 /* VisualStyle.swift */; };
 		CA40B60D07600E805B772AA1 /* LevelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D1DB628C13446D3A5DEE719 /* LevelCatalog.swift */; };
 		CC4D69455B4103CD908D871A /* RenderFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A681C76BA1D848C2345267C /* RenderFrame.swift */; };
@@ -204,17 +215,23 @@
 		E1CB7453281120D879D92337 /* SimulationEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DAF1CFE5BFE48F1E490145 /* SimulationEffects.swift */; };
 		E1DDDA7228B6B1BEA7F1854D /* death.wav in Resources */ = {isa = PBXBuildFile; fileRef = 86F39031729D042A590BC8A5 /* death.wav */; };
 		E218C04CE7031304673E5005 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354EBB57B4313E203FE67AAD /* ShopView.swift */; };
+		E3CDE7E37D518DB2770AFF86 /* Backdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C9C990E69E9A0654B4EA0B /* Backdrop.swift */; };
+		E416DF36B715283752C6221B /* EndlessLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C8291B4E00A50E56D6C09 /* EndlessLayouts.swift */; };
 		E444C6216EE9380371B9CC2B /* ProgressWrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDBAE3F2C03F5AEF559E131 /* ProgressWrist.swift */; };
 		E5E4E4FFEA2F109BBFA62317 /* ArenaHudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B170F5955A9497EA739886 /* ArenaHudSync.swift */; };
+		E6390D983C4120A1CA5C0AF6 /* Backdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C9C990E69E9A0654B4EA0B /* Backdrop.swift */; };
 		E71D21C0789662BC2750F9FA /* ShopResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006CDF1D900C49FFCEDAF198 /* ShopResearch.swift */; };
 		E8E68ED2D91D0D177F34C32A /* ArenaFXCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2B33CC7E41404A49EF12BA /* ArenaFXCoverageTests.swift */; };
 		EA387393DDF57B40E4CF9530 /* HandcraftedCoreMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FEB5A044C7338F0383C2CE /* HandcraftedCoreMaps.swift */; };
+		EAA106438A25ACF2DE984918 /* EndlessCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF822F51A0C1D1D791783A9 /* EndlessCard.swift */; };
 		EAFCC99A4E6FF79CB833F621 /* GameSessionCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33273365323639FA0684F212 /* GameSessionCoverageTests.swift */; };
 		EB233D462C418C41E071A647 /* LevelSeals.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C14A82EE315B6F4C339ACA /* LevelSeals.swift */; };
 		EB415A835C6250108F5F9610 /* HandcraftedLateMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF8D8E3127179ED6B14B9B6 /* HandcraftedLateMaps.swift */; };
 		ED0A9F89DDE77DBF89D33D8C /* MechanicDemoScenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1023225E50EDD60963331457 /* MechanicDemoScenario.swift */; };
 		EF0C9E017288833DE5CA2852 /* MechanicDemoBrushes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA73AFF25F9E074A8F015A6 /* MechanicDemoBrushes.swift */; };
 		F11721EF6CE1850473E9B2E4 /* MechanicDemoCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B9D900D124EB075E28C6BB /* MechanicDemoCanvas.swift */; };
+		F1752E9C948138035EBC02D2 /* EndlessLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C8291B4E00A50E56D6C09 /* EndlessLayouts.swift */; };
+		F288B9CB6CA840E270ED2DB0 /* ProgressEndless.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5BE26834DBF71BBB38E3C /* ProgressEndless.swift */; };
 		F37E37E9DBF14D1CBACC8F5A /* EchoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D2C2A8CA81A77FB457A82F /* EchoApp.swift */; };
 		F6B26ECB2F4138628267E44F /* AtlasChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60910B41D7257B0BDAC3CCE /* AtlasChrome.swift */; };
 		F7475419BA8C72F06120415A /* WristLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546EBFBF375921A03E8B29A /* WristLink.swift */; };
@@ -315,8 +332,10 @@
 		448E748591A86C32373B9AC7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		466A52F15D6C8CCC7A7BFC42 /* HandcraftedPressureMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedPressureMaps.swift; sourceTree = "<group>"; };
 		46FD678187E4D332436505D6 /* RulesCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesCoverageTests.swift; sourceTree = "<group>"; };
+		47A4D426D96CE63A432BA055 /* EndlessModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndlessModeTests.swift; sourceTree = "<group>"; };
 		47AFC3F947350BBF5733A0AB /* TrailRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailRenderer.swift; sourceTree = "<group>"; };
 		4AB1A3E656D347B9FF08D274 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		4AF822F51A0C1D1D791783A9 /* EndlessCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndlessCard.swift; sourceTree = "<group>"; };
 		4F6F0CC039E3C2F8D3307012 /* BonusKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusKind.swift; sourceTree = "<group>"; };
 		51F23F50D5ECF7A8AA3FF4A4 /* WatchProgressViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchProgressViews.swift; sourceTree = "<group>"; };
 		523E9017762DADD19D37A2EC /* OverlayCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayCoverageTests.swift; sourceTree = "<group>"; };
@@ -344,6 +363,7 @@
 		76740A1D46ECB4CB7CAFB8D5 /* ArenaSceneCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaSceneCoverageTests.swift; sourceTree = "<group>"; };
 		773ADD1F9CD1243A41F4FC70 /* ArenaHazardBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaHazardBuild.swift; sourceTree = "<group>"; };
 		7A11F590D2F45DB12A844B14 /* tap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tap.wav; sourceTree = "<group>"; };
+		7A48760183DADCE5FB4185C6 /* RockSurfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockSurfaces.swift; sourceTree = "<group>"; };
 		7B2494146AE8C6E2EA8C3486 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7B69C55FD5477A8C168DA8D4 /* HandcraftedMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedMaps.swift; sourceTree = "<group>"; };
 		7BD8C451BAACF240537DF469 /* HomeCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoverageTests.swift; sourceTree = "<group>"; };
@@ -373,6 +393,7 @@
 		9740D1BCE9319217DB7E2979 /* WorldSimulationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSimulationTests.swift; sourceTree = "<group>"; };
 		97696FFCBF8755B6D306340E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		982D9E33D56A1301EA6B03DA /* HandcraftedMidMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedMidMaps.swift; sourceTree = "<group>"; };
+		984E02A863BD7E4ED0EAEA13 /* ArenaSkyBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaSkyBuild.swift; sourceTree = "<group>"; };
 		98D0C51062E23678F045FBC7 /* ExpandedMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedMaps.swift; sourceTree = "<group>"; };
 		99917F4C6A4C28E610E18779 /* PauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseView.swift; sourceTree = "<group>"; };
 		9A26F69846F9F6CCD3953AF3 /* WatchRemoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRemoteView.swift; sourceTree = "<group>"; };
@@ -394,6 +415,7 @@
 		B1243E5572CEE34546A84D7C /* VisualAssetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualAssetTests.swift; sourceTree = "<group>"; };
 		B3C72B518D24FD1F057BF3F1 /* spawn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = spawn.wav; sourceTree = "<group>"; };
 		B5B3631ED2D35E519C0249CA /* SimulationMovers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationMovers.swift; sourceTree = "<group>"; };
+		B79D7B046833830F8A448D1F /* EndlessGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndlessGenerator.swift; sourceTree = "<group>"; };
 		B8EFDB3B471C2B17D0EFD057 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		BDD213FC3B66EE94F9571429 /* ArenaBurstFX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaBurstFX.swift; sourceTree = "<group>"; };
 		C19A0C00FB40E9F9FB766ACC /* PhoneWatchLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneWatchLink.swift; sourceTree = "<group>"; };
@@ -413,6 +435,7 @@
 		D4C1A6DF1DC3D998C18AFA61 /* WikiPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiPages.swift; sourceTree = "<group>"; };
 		D55E24D73D57D5CFD9179266 /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
 		D7C14A82EE315B6F4C339ACA /* LevelSeals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSeals.swift; sourceTree = "<group>"; };
+		D9978C3F37CBA8D257461A3E /* EndlessReach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndlessReach.swift; sourceTree = "<group>"; };
 		DC5924108C5B874313935282 /* RemoteFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFrame.swift; sourceTree = "<group>"; };
 		DD101603746F700D0003BD92 /* RockPainter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPainter.swift; sourceTree = "<group>"; };
 		DF74137B0385C0F008759FA0 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
@@ -421,10 +444,12 @@
 		E35EBCD7B6E1E123F2574627 /* HUDBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDBar.swift; sourceTree = "<group>"; };
 		E535E3F797B7DD5BF9B9305F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		E608F41D23605EE08078031E /* SpriteTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteTextures.swift; sourceTree = "<group>"; };
+		E7C9C990E69E9A0654B4EA0B /* Backdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backdrop.swift; sourceTree = "<group>"; };
 		E9418282F22A74AA5C49EE99 /* SimulationClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationClock.swift; sourceTree = "<group>"; };
 		E9F584D422044F8474ED7824 /* EchoTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = EchoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA04E64E2D54305E24EFDAD4 /* ProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStore.swift; sourceTree = "<group>"; };
 		EA08B8518A2930C7816535CE /* TechnologyPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechnologyPreviewView.swift; sourceTree = "<group>"; };
+		EEBF0759E4E7238B47AF096B /* EndlessRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndlessRun.swift; sourceTree = "<group>"; };
 		EF1FCA0CF8B2E737C91E5C9C /* ChromePrimitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromePrimitives.swift; sourceTree = "<group>"; };
 		EFC1727AEFE7793A4828DE30 /* MoverTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoverTypes.swift; sourceTree = "<group>"; };
 		EFF8D8E3127179ED6B14B9B6 /* HandcraftedLateMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedLateMaps.swift; sourceTree = "<group>"; };
@@ -433,6 +458,8 @@
 		F77FDFB6FA0A364BE0A349A3 /* AppModelCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelCoverageTests.swift; sourceTree = "<group>"; };
 		F85F62EF7C58D511077F5DE7 /* HomeDecor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDecor.swift; sourceTree = "<group>"; };
 		FBC1128466E6D1D25C3DA68D /* LevelGeometryAuditTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelGeometryAuditTests.swift; sourceTree = "<group>"; };
+		FF2C8291B4E00A50E56D6C09 /* EndlessLayouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndlessLayouts.swift; sourceTree = "<group>"; };
+		FFE5BE26834DBF71BBB38E3C /* ProgressEndless.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressEndless.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -510,6 +537,7 @@
 				773ADD1F9CD1243A41F4FC70 /* ArenaHazardBuild.swift */,
 				8D4DC9A94DCA28AC82DAED26 /* ArenaPickupBuild.swift */,
 				359089611FDBDE265B760D7B /* ArenaRockBuild.swift */,
+				984E02A863BD7E4ED0EAEA13 /* ArenaSkyBuild.swift */,
 			);
 			path = Build;
 			sourceTree = "<group>";
@@ -559,6 +587,14 @@
 			path = Preview;
 			sourceTree = "<group>";
 		};
+		3A152B1F5A90D5393F261FE0 /* Endless */ = {
+			isa = PBXGroup;
+			children = (
+				4AF822F51A0C1D1D791783A9 /* EndlessCard.swift */,
+			);
+			path = Endless;
+			sourceTree = "<group>";
+		};
 		3AE1AECF53CD66B762F129A5 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -576,6 +612,7 @@
 				099AA9444D83881806E130C7 /* GlowTextureDrawing.swift */,
 				2C155CA4430C5F512C247CF0 /* GlowTextures.swift */,
 				DD101603746F700D0003BD92 /* RockPainter.swift */,
+				7A48760183DADCE5FB4185C6 /* RockSurfaces.swift */,
 				E608F41D23605EE08078031E /* SpriteTextures.swift */,
 			);
 			path = Textures;
@@ -621,6 +658,7 @@
 			children = (
 				A9EA584CD649517E60179389 /* ProgressCampaign.swift */,
 				0804D2A287FF3667A2FC8F8A /* ProgressEconomy.swift */,
+				FFE5BE26834DBF71BBB38E3C /* ProgressEndless.swift */,
 				708A35F5D7C71F4BC6648B16 /* ProgressModels.swift */,
 				EA04E64E2D54305E24EFDAD4 /* ProgressStore.swift */,
 				DFDBAE3F2C03F5AEF559E131 /* ProgressWrist.swift */,
@@ -784,6 +822,7 @@
 			children = (
 				7C7DF815999D0D7953BF10C9 /* AbilityGlyph.swift */,
 				F1E629412D14789B950FF9CF /* ActorFactory.swift */,
+				E7C9C990E69E9A0654B4EA0B /* Backdrop.swift */,
 				47AFC3F947350BBF5733A0AB /* TrailRenderer.swift */,
 				C57D107E34C022C855BA62A6 /* VisualStyle.swift */,
 			);
@@ -856,6 +895,7 @@
 				BDFC051F2EC5FE8DE0A14A99 /* Archive */,
 				8AE265BE32A8F35E9CC96EB2 /* Atlas */,
 				B513952B2114598DA060A164 /* Chrome */,
+				3A152B1F5A90D5393F261FE0 /* Endless */,
 				CC70ABB600EC64AC8A4287FA /* Home */,
 				CDB5A4079DC59B3F6FA51AAA /* Lab */,
 				D180DF77E01587E32B580C0C /* Legal */,
@@ -1070,6 +1110,7 @@
 			children = (
 				3EA87C83674C75BFA109F5C9 /* AsteroidScaleTests.swift */,
 				D41B7758D6DC186E8B1AABF8 /* BonusFramingTests.swift */,
+				47A4D426D96CE63A432BA055 /* EndlessModeTests.swift */,
 				FBC1128466E6D1D25C3DA68D /* LevelGeometryAuditTests.swift */,
 			);
 			path = Catalog;
@@ -1086,6 +1127,17 @@
 				7667BFF4E65A6C68B48445A8 /* win.wav */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		EF9CF4F504216DEBC32DE4FF /* Endless */ = {
+			isa = PBXGroup;
+			children = (
+				B79D7B046833830F8A448D1F /* EndlessGenerator.swift */,
+				FF2C8291B4E00A50E56D6C09 /* EndlessLayouts.swift */,
+				D9978C3F37CBA8D257461A3E /* EndlessReach.swift */,
+				EEBF0759E4E7238B47AF096B /* EndlessRun.swift */,
+			);
+			path = Endless;
 			sourceTree = "<group>";
 		};
 		F30E5EEBBFAFB448D7F54B04 /* Simulation */ = {
@@ -1105,6 +1157,7 @@
 			children = (
 				27105C55B6AC8F3B31AB4347 /* Catalog */,
 				75A0F579C0EAF2825CD8F35A /* Core */,
+				EF9CF4F504216DEBC32DE4FF /* Endless */,
 				4F5E1F04A765385202197F60 /* Progress */,
 				B84EBE4EDD6AB686D8E630BC /* Rules */,
 				A78779EA16087FEC72D35D63 /* World */,
@@ -1279,10 +1332,12 @@
 				10B1FF5D286684A8117362D0 /* ArenaRockBuild.swift in Sources */,
 				0F9E5EB3892A59B60704FD18 /* ArenaShapeKit.swift in Sources */,
 				BA50238DECBD2F202A1E9AF9 /* ArenaShieldFX.swift in Sources */,
+				AE3868016C6C9DB26DAFD675 /* ArenaSkyBuild.swift in Sources */,
 				CDFA37B737DD0E471387BA09 /* ArenaTheme.swift in Sources */,
 				3CB407BE21751D7778CB4A3B /* AtlasCards.swift in Sources */,
 				F6B26ECB2F4138628267E44F /* AtlasChrome.swift in Sources */,
 				7E67F4F3BDE7061094799451 /* AtlasNodes.swift in Sources */,
+				E6390D983C4120A1CA5C0AF6 /* Backdrop.swift in Sources */,
 				F76ECE0B9BD579DA82A90784 /* BitmapCanvas.swift in Sources */,
 				8D9B7D2A034B434B547611F6 /* BonusKind.swift in Sources */,
 				1144EA9C991914CBD4253667 /* ChromePrimitives.swift in Sources */,
@@ -1290,6 +1345,11 @@
 				1644B97ECCB223B9A3B22647 /* DeathView.swift in Sources */,
 				F37E37E9DBF14D1CBACC8F5A /* EchoApp.swift in Sources */,
 				4AA0097BFB6CBD0D5F18364F /* EncounterCard.swift in Sources */,
+				EAA106438A25ACF2DE984918 /* EndlessCard.swift in Sources */,
+				6C9BAC25D1ACDC14BFB62315 /* EndlessGenerator.swift in Sources */,
+				F1752E9C948138035EBC02D2 /* EndlessLayouts.swift in Sources */,
+				58664EE18AF24F2E63FECC22 /* EndlessReach.swift in Sources */,
+				C8976B55A95788BD666D95FE /* EndlessRun.swift in Sources */,
 				DAE8BD7F4BE4C169E7ACC5A9 /* ExpandedMaps.swift in Sources */,
 				917318EFBB7FF1D8A3A0D949 /* GameScene.swift in Sources */,
 				D9303642DC611E6BA44465F8 /* GameSession.swift in Sources */,
@@ -1327,6 +1387,7 @@
 				24CB4FDC27546A6A3A05B910 /* PhoneWatchLink.swift in Sources */,
 				4D13842EC751F06ECC2AC72F /* ProgressCampaign.swift in Sources */,
 				5B28B54941B0B386B1E4530C /* ProgressEconomy.swift in Sources */,
+				5F9DBC34B74542C333A01279 /* ProgressEndless.swift in Sources */,
 				A54E7F615786FB977DE98F16 /* ProgressModels.swift in Sources */,
 				A221F5FBAE313AF11D70C02B /* ProgressStore.swift in Sources */,
 				E444C6216EE9380371B9CC2B /* ProgressWrist.swift in Sources */,
@@ -1337,6 +1398,7 @@
 				FA8B3162365193C5141616B0 /* ResultsView.swift in Sources */,
 				66C6C4E977AEC4056C6D05EF /* RockPainter.swift in Sources */,
 				A223650F6D11E8B7753A7519 /* RockShape.swift in Sources */,
+				C1D69788D51A8E04362F9B13 /* RockSurfaces.swift in Sources */,
 				60F78625A2260E37CE2F143B /* RootView.swift in Sources */,
 				A27F474B806E8A4FBDA8E956 /* SettingsView.swift in Sources */,
 				80E80FEF83173799202B95CE /* ShopInspectors.swift in Sources */,
@@ -1381,9 +1443,14 @@
 			files = (
 				7BD255331B669F50DB8AE861 /* AbilityGlyph.swift in Sources */,
 				A9A390C351490527031A3F21 /* ArenaTheme.swift in Sources */,
+				E3CDE7E37D518DB2770AFF86 /* Backdrop.swift in Sources */,
 				7BE523C308B98A8F8F42EF75 /* BitmapCanvas.swift in Sources */,
 				D584B9C5B10A774EA77A5329 /* BonusKind.swift in Sources */,
 				87245C7D455EB46FEA839470 /* EchoWatchApp.swift in Sources */,
+				B0181F6BD6B5ED37DBBE486A /* EndlessGenerator.swift in Sources */,
+				E416DF36B715283752C6221B /* EndlessLayouts.swift in Sources */,
+				5C49E8193374C1815635B788 /* EndlessReach.swift in Sources */,
+				13630FC89924AC1B6BCD959A /* EndlessRun.swift in Sources */,
 				D1D3974B5F53EC364FB8FCE1 /* ExpandedMaps.swift in Sources */,
 				620A811AA84FC54C3788B21E /* HandcraftedCoreMaps.swift in Sources */,
 				DE84D46929EDB2FC4343385A /* HandcraftedEarlyMaps.swift in Sources */,
@@ -1402,6 +1469,7 @@
 				1CC17C46D1EC6CB8FC4EA363 /* PathRecorder.swift in Sources */,
 				4C7C735DCCA7039C596543D1 /* ProgressCampaign.swift in Sources */,
 				359EC5CAA2281D266FC4D7D0 /* ProgressEconomy.swift in Sources */,
+				F288B9CB6CA840E270ED2DB0 /* ProgressEndless.swift in Sources */,
 				1930A180673249A6A59F3576 /* ProgressModels.swift in Sources */,
 				3B0031A0B5EF061934AE10D2 /* ProgressStore.swift in Sources */,
 				566D5E705F2BB6BA5F373E32 /* ProgressWrist.swift in Sources */,
@@ -1413,6 +1481,7 @@
 				CC4D69455B4103CD908D871A /* RenderFrame.swift in Sources */,
 				863E07CC8F4043895FC6891D /* RockPainter.swift in Sources */,
 				D45EE4F1F23F0D5F5EF47DCF /* RockShape.swift in Sources */,
+				B628FA1E011B7FFF96018EB0 /* RockSurfaces.swift in Sources */,
 				07E57E5D723BA533FD2F22C1 /* SimulationClock.swift in Sources */,
 				39B551F941C7C64DCAC8B1BA /* SimulationCollect.swift in Sources */,
 				E1CB7453281120D879D92337 /* SimulationEffects.swift in Sources */,
@@ -1461,6 +1530,7 @@
 				2414EBC8C2F1E5ED62CBD73C /* ChromeCoverageTests.swift in Sources */,
 				A44D3CAD2FF956A2DD447674 /* CoverageHost.swift in Sources */,
 				43740F9113CDF31DC78BEBF4 /* DemoCoverageTests.swift in Sources */,
+				C24B8BB9D0216BB1E5960CB0 /* EndlessModeTests.swift in Sources */,
 				EAFCC99A4E6FF79CB833F621 /* GameSessionCoverageTests.swift in Sources */,
 				D109FF443ADEB98B8B470D55 /* GameViewCoverageTests.swift in Sources */,
 				00F8A65497EF66F620EDF593 /* GraphicsTests.swift in Sources */,

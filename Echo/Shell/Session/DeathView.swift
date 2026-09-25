@@ -7,6 +7,9 @@ struct DeathView: View {
     var onRewind: () -> Void
     var onRestart: () -> Void
     var onMenu: () -> Void
+    /// Deep Time ends the run instead of restarting the map.
+    var restartTitle = "Restart level"
+    var note: String?
 
     var body: some View {
         GameModalShell(tint: EchoTheme.danger) {
@@ -27,6 +30,11 @@ struct DeathView: View {
                         .font(.system(size: 23, weight: .ultraLight))
                         .tracking(2.7)
                         .multilineTextAlignment(.center)
+                    if let note {
+                        Text(note)
+                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .foregroundStyle(EchoTheme.muted)
+                    }
                 }
 
                 VStack(alignment: .leading, spacing: 7) {
@@ -68,12 +76,12 @@ struct DeathView: View {
                             systemImage: "clock.arrow.circlepath",
                             action: onRewind
                         )
-                        SecondaryButton(title: "Restart level", systemImage: "arrow.counterclockwise", action: onRestart)
+                        SecondaryButton(title: restartTitle, systemImage: "arrow.counterclockwise", action: onRestart)
                     } else {
                         Text("No rewind charges remain on this run.")
                             .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundStyle(EchoTheme.muted)
-                        PrimaryButton(title: "Restart level", systemImage: "arrow.counterclockwise", action: onRestart)
+                        PrimaryButton(title: restartTitle, systemImage: "arrow.counterclockwise", action: onRestart)
                     }
                     GhostButton(title: "Main Menu", action: onMenu)
                 }

@@ -116,6 +116,8 @@ struct WristRelicsCard: View {
                 Text(unlocked ? "ACTIVE" : "\(relic.requiredClears) MAPS")
                     .font(.system(size: 9, weight: .black, design: .rounded))
                     .tracking(0.8)
+                    .lineLimit(1)
+                    .fixedSize()
                     .foregroundStyle(unlocked ? EchoTheme.gold : EchoTheme.muted)
                     .padding(.horizontal, 9)
                     .padding(.vertical, 5)

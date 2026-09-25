@@ -1,5 +1,6 @@
 import SpriteKit
 import UIKit
+import WatchKit
 
 /// Draws a wrist run with the phone's comet, gems, ability tokens and
 /// procedural rocks, trimmed for the watch GPU. The scene is built on its
@@ -23,6 +24,7 @@ final class WatchArenaScene: SKScene {
     private let exitNode = SKNode()
     private var lastTime: TimeInterval = 0
     private let seed = UInt64.random(in: .min ... .max)
+    private var backdrop: Backdrop?
 
     init(run: WatchRun, size: CGSize) {
         self.run = run
@@ -56,6 +58,7 @@ final class WatchArenaScene: SKScene {
         if !built { rebuild() }
         let dt = lastTime == 0 ? 0 : min(currentTime - lastTime, 1.0 / 20)
         lastTime = currentTime
+        backdrop?.tick(now: currentTime)
         if run.phase != .paused {
             run.step(dt: dt)
         }
@@ -89,6 +92,17 @@ final class WatchArenaScene: SKScene {
         border.strokeColor = Self.color(run.level.theme.wallStroke).withAlphaComponent(0.35)
         border.lineWidth = 1.5
         addChild(border)
+        let theme = run.level.theme
+        let sky = Backdrop(
+            size: size,
+            palette: Backdrop.Palette(sky: Self.color(theme.sky), glow: Self.color(theme.nebula), accent: Self.color(theme.wallStroke)),
+            seed: UInt64(RemoteLevel.token(of: Data(run.level.id.utf8))),
+            budget: .watch,
+            motion: !WKAccessibilityIsReduceMotionEnabled()
+        )
+        sky.root.zPosition = -20
+        addChild(sky.root)
+        backdrop = sky
         let edge = SKNode()
         edge.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(origin: .zero, size: size))
         addChild(edge)

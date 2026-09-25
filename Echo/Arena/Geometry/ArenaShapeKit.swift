@@ -67,6 +67,34 @@ extension GameScene {
                 path.move(to: CGPoint(x: cos(angle) * radius * 0.38, y: sin(angle) * radius * 0.38))
                 path.addLine(to: CGPoint(x: cos(angle) * radius * 0.76, y: sin(angle) * radius * 0.76))
             }
+        case .magma:
+            for index in 0..<3 {
+                var angle = offset + CGFloat(index) * 2.1
+                var point = CGPoint(x: cos(angle) * radius * 0.12, y: sin(angle) * radius * 0.12)
+                path.move(to: point)
+                for step in 0..<3 {
+                    angle += step.isMultiple(of: 2) ? 0.45 : -0.35
+                    point = CGPoint(x: point.x + cos(angle) * radius * 0.24, y: point.y + sin(angle) * radius * 0.24)
+                    path.addLine(to: point)
+                }
+            }
+        case .geode:
+            for ring in [0.3, 0.52, 0.74] as [CGFloat] {
+                path.addEllipse(in: CGRect(x: -radius * ring, y: -radius * ring * 0.8, width: radius * ring * 2, height: radius * ring * 1.6))
+            }
+        case .iron:
+            for index in 0..<3 {
+                let angle = offset + CGFloat(index) * .pi / 3
+                path.move(to: CGPoint(x: -cos(angle) * radius * 0.7, y: -sin(angle) * radius * 0.7))
+                path.addLine(to: CGPoint(x: cos(angle) * radius * 0.7, y: sin(angle) * radius * 0.7))
+            }
+        case .comet:
+            path.addEllipse(in: CGRect(x: -radius * 0.4, y: -radius * 0.4, width: radius * 0.8, height: radius * 0.8))
+            for index in -1...1 {
+                let spread = CGFloat(index) * 0.18
+                path.move(to: CGPoint(x: -radius * 0.4, y: radius * spread))
+                path.addLine(to: CGPoint(x: -radius * 0.95, y: radius * spread * 2.2))
+            }
         }
         return path
     }
@@ -217,8 +245,15 @@ extension GameScene {
         case .crystal:
             UIColor(red: 0.58, green: 0.32, blue: 0.78, alpha: 1)
         case .alloy:
-
             UIColor(red: 0.40, green: 0.46, blue: 0.52, alpha: 1)
+        case .magma:
+            UIColor(red: 0.58, green: 0.24, blue: 0.12, alpha: 1)
+        case .geode:
+            UIColor(red: 0.62, green: 0.52, blue: 0.40, alpha: 1)
+        case .iron:
+            UIColor(red: 0.46, green: 0.44, blue: 0.43, alpha: 1)
+        case .comet:
+            UIColor(red: 0.62, green: 0.78, blue: 0.90, alpha: 1)
         }
     }
 
@@ -232,6 +267,14 @@ extension GameScene {
             UIColor(red: 0.18, green: 0.10, blue: 0.26, alpha: 1)
         case .alloy:
             UIColor(red: 0.12, green: 0.14, blue: 0.17, alpha: 1)
+        case .magma:
+            UIColor(red: 0.16, green: 0.06, blue: 0.04, alpha: 1)
+        case .geode:
+            UIColor(red: 0.26, green: 0.20, blue: 0.15, alpha: 1)
+        case .iron:
+            UIColor(red: 0.13, green: 0.13, blue: 0.14, alpha: 1)
+        case .comet:
+            UIColor(red: 0.30, green: 0.36, blue: 0.44, alpha: 1)
         }
     }
 
@@ -245,6 +288,14 @@ extension GameScene {
             UIColor(red: 0.42, green: 0.92, blue: 1.00, alpha: 1)
         case .alloy:
             UIColor(red: 1.00, green: 0.78, blue: 0.32, alpha: 1)
+        case .magma:
+            UIColor(red: 1.00, green: 0.45, blue: 0.12, alpha: 1)
+        case .geode:
+            UIColor(red: 0.78, green: 0.50, blue: 1.00, alpha: 1)
+        case .iron:
+            UIColor(red: 1.00, green: 0.66, blue: 0.40, alpha: 1)
+        case .comet:
+            UIColor(red: 0.70, green: 0.95, blue: 1.00, alpha: 1)
         }
     }
 

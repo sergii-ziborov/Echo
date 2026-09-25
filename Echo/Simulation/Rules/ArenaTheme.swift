@@ -4,11 +4,19 @@ enum ArenaMetrics {
     static let satelliteRadius: Double = 34
     /// The orb's own collision circle is 24, so a moving rock smaller than this
     /// reads as a speck beside it on a phone.
-    static let minimumRockRadius: Double = 30
-    static let rockGrowth: Double = 1.2
+    static let minimumRockRadius: Double = 33
+    /// Authored radii are grown by this much: first a fifth for readability,
+    /// then another tenth so rocks hold their own beside the enlarged orb.
+    static let rockGrowth: Double = 1.32
 
     static func readableRockRadius(_ authored: Double) -> Double {
         max(minimumRockRadius, (authored * rockGrowth).rounded())
+    }
+
+    /// The growth before the latest tenth, kept for the few rocks whose spawn
+    /// has no room for the full size next to a rift or a black hole.
+    static func formerRockRadius(_ authored: Double) -> Double {
+        max(30, (authored * 1.2).rounded())
     }
 }
 

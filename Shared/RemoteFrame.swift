@@ -11,10 +11,17 @@ struct RemoteLevel: Codable, Equatable, Sendable {
     var aspect: Double
     /// What the phone HUD covers, so ability tokens move exactly as they do there.
     var bands: InterfaceBands?
+    /// Set for Deep Time, whose arenas come from the run's seed and depth.
+    var endless: EndlessKey?
 
     /// The run's level before tokens are moved out from under the HUD.
     func fitted() -> LevelDefinition {
-        let raw = daily.map { LevelCatalog.daily(on: $0) } ?? LevelCatalog.level(id: id) ?? LevelCatalog.prototype
+        let raw: LevelDefinition
+        if let endless {
+            raw = EndlessGenerator.level(endless)
+        } else {
+            raw = daily.map { LevelCatalog.daily(on: $0) } ?? LevelCatalog.level(id: id) ?? LevelCatalog.prototype
+        }
         return raw.difficultyAdjusted(for: cycle).fitted(aspect: aspect)
     }
 
@@ -31,12 +38,13 @@ struct RemoteLevel: Codable, Equatable, Sendable {
         return bytes
     }
 
-    init(id: String, daily: Date? = nil, cycle: Int, aspect: Double, bands: InterfaceBands? = nil) {
+    init(id: String, daily: Date? = nil, cycle: Int, aspect: Double, bands: InterfaceBands? = nil, endless: EndlessKey? = nil) {
         self.id = id
         self.daily = daily
         self.cycle = cycle
         self.aspect = aspect
         self.bands = bands
+        self.endless = endless
     }
 
     init?(data: Data) {

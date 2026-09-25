@@ -16,6 +16,8 @@ struct PlayRequest: Equatable {
     var levelID: String
     var daily: Bool
     var difficultyCycle: Int = 0
+    /// Set for a Deep Time depth instead of a campaign or daily map.
+    var endless: EndlessKey?
 }
 
 @MainActor
@@ -109,6 +111,17 @@ final class AppModel {
             _ = progress.markHint(EncounterHint.rift.rawValue)
             _ = progress.markHint(EncounterHint.collision.rawValue)
             screen = .playing(PlayRequest(levelID: LevelCatalog.level(number: 36)?.id ?? LevelCatalog.prototype.id, daily: false))
+        } else if args.contains("-shot-endless") || args.contains("-shot-endless-deep") {
+            progress.markTutorialSeen()
+            for hint in [
+                EncounterHint.echo, .asteroid, .rift, .freeze, .phase, .collision, .gate,
+                .laser, .timeCrystal, .resonance, .blackHole, .realityShift, .surge,
+                .pulse, .magnet, .chrono, .anchor, .repulse, .prism, .blink,
+            ] {
+                _ = progress.markHint(hint.rawValue)
+            }
+            let key = EndlessKey(seed: 0xEC40_D17E, depth: args.contains("-shot-endless-deep") ? 14 : 1)
+            screen = .playing(PlayRequest(levelID: key.levelID, daily: false, endless: key))
         } else if args.contains("-shot-play") {
             progress.markTutorialSeen()
             _ = progress.markHint(EncounterHint.timeCrystal.rawValue)
@@ -184,6 +197,28 @@ final class AppModel {
 
     func goHome() {
         screen = .home
+    }
+
+    /// Opens Deep Time: a fresh run, or the one waiting at its next depth.
+    func playEndless(resume: Bool = false) {
+        audio.play(.confirm)
+        let key = resume ? (progress.endless.current ?? progress.startEndlessRun()) : progress.startEndlessRun()
+        play(endless: key)
+    }
+
+    func play(endless key: EndlessKey) {
+        let request = PlayRequest(levelID: key.levelID, daily: false, difficultyCycle: 0, endless: key)
+        if progress.hasSeenTutorial {
+            screen = .playing(request)
+        } else {
+            screen = .tutorial(thenPlay: request)
+        }
+    }
+
+    func recordEndlessWin(_ key: EndlessKey, result: SessionResult) -> Int {
+        let awarded = progress.recordEndlessClear(key, result: result)
+        audio.play(.win)
+        return awarded
     }
 
     func startNextCycle() {

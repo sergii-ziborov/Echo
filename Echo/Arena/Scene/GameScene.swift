@@ -28,6 +28,8 @@ final class GameScene: SKScene {
     var ghostNodes: [SKNode] = []
     var frostOverlay: SKSpriteNode!
     var realityBackdrop: SKSpriteNode!
+    /// The distant sky: planet, galaxy, stars and meteors behind the arena.
+    var backdrop: Backdrop?
     var lastTime: TimeInterval = 0
     var trailAcc: TimeInterval = 0
     var trailBudget = 0
@@ -127,6 +129,7 @@ final class GameScene: SKScene {
             ]),
         ])))
         addChild(realityBackdrop)
+        buildBackdrop()
         ambienceNode = SKNode()
         ambienceNode.zPosition = 1.5
         addChild(ambienceNode)
@@ -175,6 +178,7 @@ final class GameScene: SKScene {
         let dt = currentTime - lastTime
         lastTime = currentTime
         PhoneWatchLink.shared.tick()
+        backdrop?.tick(now: currentTime)
 
         syncPauseClock()
         switch session.phase {

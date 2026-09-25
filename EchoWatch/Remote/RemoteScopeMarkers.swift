@@ -1,5 +1,6 @@
 import SpriteKit
 import UIKit
+import WatchKit
 
 /// Rim markers. Anything worth knowing about past the edge of the face is
 /// pinned to the rim on the side it lies, and grows brighter as it closes in:
@@ -8,6 +9,23 @@ import UIKit
 extension RemoteScopeScene {
     static let markerCount = 10
     static let rockMarker = UIColor(red: 1, green: 0.55, blue: 0.28, alpha: 1)
+
+    /// The distant sky rides on the camera, so it stays put while the arena
+    /// slides past underneath the orb.
+    func buildBackdrop() {
+        let theme = level.theme
+        let sky = Backdrop(
+            size: size,
+            palette: Backdrop.Palette(sky: WatchArenaScene.color(theme.sky), glow: WatchArenaScene.color(theme.nebula), accent: WatchArenaScene.color(theme.wallStroke)),
+            seed: UInt64(RemoteLevel.token(of: Data(level.id.utf8))),
+            budget: .watch,
+            motion: !WKAccessibilityIsReduceMotionEnabled()
+        )
+        sky.root.position = CGPoint(x: -size.width / 2, y: -size.height / 2)
+        sky.root.zPosition = -20
+        lens.addChild(sky.root)
+        backdrop = sky
+    }
 
     func buildMarkers() {
         markerPool = (0..<Self.markerCount).map { _ in

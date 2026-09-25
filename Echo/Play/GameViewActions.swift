@@ -53,8 +53,8 @@ extension GameView {
                 activeModel.audio.haptic(.rigid)
                 scene.laserDischarge(id: id)
             case .asteroidImpacted(let id, let material, let position):
-                activeModel.audio.play(.asteroidImpact, volume: material == .alloy ? 1.15 : 0.88, pan: audioPan(for: position))
-                activeModel.audio.haptic(material == .alloy ? .rigid : .soft)
+                activeModel.audio.play(.asteroidImpact, volume: material.isMetallic ? 1.15 : 0.88, pan: audioPan(for: position))
+                activeModel.audio.haptic(material.isMetallic ? .rigid : .soft)
                 scene.asteroidImpact(id: id, material: material, at: position)
             case .asteroidShattered(let id, let material, let position):
                 activeModel.audio.play(.asteroidShatter, pan: audioPan(for: position))
@@ -97,12 +97,16 @@ extension GameView {
                 activeModel.audio.play(.death)
                 activeModel.audio.notify(.error)
             case .won(let result):
-                awardedPoints = activeModel.recordWin(
-                    levelID: session.level.id,
-                    result: result,
-                    daily: request.daily,
-                    dayKey: session.dailyKey
-                )
+                if let key = request.endless {
+                    awardedPoints = activeModel.recordEndlessWin(key, result: result)
+                } else {
+                    awardedPoints = activeModel.recordWin(
+                        levelID: session.level.id,
+                        result: result,
+                        daily: request.daily,
+                        dayKey: session.dailyKey
+                    )
+                }
                 activeModel.audio.notify(.success)
             }
         }
@@ -182,8 +186,23 @@ extension GameView {
         }
     }
 
+    /// Deep Time: a crash with nothing left to rewind ends the run for good.
+    func newEndlessRun() {
+        if let key = request.endless { activeModel.progress.endEndlessRun(key) }
+        activeModel.playEndless()
+    }
+
+    func leaveAfterCrash() {
+        if let key = request.endless { activeModel.progress.endEndlessRun(key) }
+        activeModel.goHome()
+    }
+
     func nextLevel() {
         activeModel.audio.play(.tap)
+        if let key = request.endless {
+            activeModel.play(endless: key.next)
+            return
+        }
         if request.daily {
             activeModel.goHome()
             return

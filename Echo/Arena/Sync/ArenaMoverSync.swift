@@ -225,6 +225,9 @@ extension GameScene {
     }
 
     func syncMotionEmitter(_ node: SKNode, headingX: Double, headingY: Double, speed: Double, dashing: Bool) {
+        if let vapor = node.childNode(withName: "vapor") as? SKEmitterNode {
+            vapor.particleBirthRate = session.sim.effects.isFrozen ? 0 : 34
+        }
         guard let emitter = node.childNode(withName: "motionTrail") as? SKEmitterNode else { return }
         let emphasis = CGFloat((emitter.userData?["emphasis"] as? NSNumber)?.doubleValue ?? 1)
         guard !session.sim.effects.isFrozen,

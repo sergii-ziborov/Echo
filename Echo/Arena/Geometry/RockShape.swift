@@ -71,6 +71,14 @@ struct RockShape {
                 self = Style(corners: 6...9, lumps: 0.08, bumps: 0.07, jitter: 0.09, smoothing: 0, grit: 0, faults: 5...7)
             case .alloy:
                 self = Style(corners: 15...18, lumps: 0.05, bumps: 0.025, jitter: 0.02, smoothing: 2, grit: 0.006, faults: 5...6)
+            case .magma:
+                self = Style(corners: 10...14, lumps: 0.10, bumps: 0.07, jitter: 0.06, smoothing: 1, grit: 0.03, faults: 6...8)
+            case .geode:
+                self = Style(corners: 12...16, lumps: 0.06, bumps: 0.04, jitter: 0.04, smoothing: 2, grit: 0.045, faults: 4...6)
+            case .iron:
+                self = Style(corners: 13...17, lumps: 0.13, bumps: 0.04, jitter: 0.025, smoothing: 2, grit: 0.01, faults: 4...5)
+            case .comet:
+                self = Style(corners: 9...13, lumps: 0.14, bumps: 0.08, jitter: 0.05, smoothing: 1, grit: 0.02, faults: 3...5)
             }
         }
 
