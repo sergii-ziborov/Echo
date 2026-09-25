@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 enum LegalDocument: String, Identifiable, CaseIterable {
     case about
@@ -19,7 +20,8 @@ enum LegalDocument: String, Identifiable, CaseIterable {
         switch self {
         case .about:
             [
-                "ECHO is a one-time iPhone and iPad puzzle. Steer a glowing orb, collect sparks, and outlive the route you just drew.",
+                "ECHO is a one-time puzzle for iPhone, iPad and Apple Watch. You are the Signal, the last light of the Lighthouse: carry it down the Fold Road through eleven regions of space, collect sparks, and outlive the route you just drew.",
+                "Seventy-seven campaign maps, the endless Deep Time, a Daily Rift, and twelve clockwork rooms on the watch, which can also steer a run on the phone.",
                 "The App Store build is a paid download. There are no ads, subscriptions, or in-app purchases. Progress stays on this device.",
                 "Version \(LegalDocument.shortVersion) (\(LegalDocument.buildNumber)). © 2026 Sergii Ziborov.",
                 "Support: sergii.ziborov@gmail.com",
@@ -38,6 +40,8 @@ enum LegalDocument: String, Identifiable, CaseIterable {
                 "ECHO does not collect personal data and does not require an account.",
                 "Stars, shards, inventory, research, last map, and audio or haptic preferences are stored only on this device with Apple’s standard UserDefaults.",
                 "The app does not include analytics, advertising, tracking, or network calls required to play.",
+                "With a paired Apple Watch, wrist clears and relics pass between your iPhone and the watch through Apple’s WatchConnectivity, and a run steered from the watch sends its controls the same way. That stays between your own devices.",
+                "Report a bug opens your mail app with a message to the developer that already names the app version, device model and system version. Nothing is sent unless you send it, and the message is used only to answer you and fix the problem.",
                 "If this policy changes, the App Store listing and the public PRIVACY.md file will be updated together.",
                 "Contact: sergii.ziborov@gmail.com",
             ]
@@ -49,7 +53,35 @@ enum LegalDocument: String, Identifiable, CaseIterable {
     }
 
     static var buildNumber: String {
-        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "17"
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "18"
+    }
+}
+
+/// A bug report is an email the player sends themselves, with the details
+/// that help reproduce the problem filled in; GitHub Issues is the fallback
+/// when no mail account is set up.
+enum BugReport {
+    static let address = "sergii.ziborov@gmail.com"
+    static let issues = URL(string: "https://github.com/sergii-ziborov/Echo/issues")!
+
+    static var mail: URL? {
+        var parts = URLComponents()
+        parts.scheme = "mailto"
+        parts.path = address
+        parts.queryItems = [
+            URLQueryItem(name: "subject", value: "ECHO bug report (\(LegalDocument.shortVersion) build \(LegalDocument.buildNumber))"),
+            URLQueryItem(name: "body", value: "What happened:\n\n\nWhat you expected:\n\n\nMap or screen:\n\n—\nECHO \(LegalDocument.shortVersion) (\(LegalDocument.buildNumber)) · \(model) · iOS \(UIDevice.current.systemVersion)"),
+        ]
+        return parts.url
+    }
+
+    /// The hardware identifier, such as iPhone14,4, which names the exact model.
+    static var model: String {
+        var info = utsname()
+        uname(&info)
+        return withUnsafeBytes(of: &info.machine) { raw in
+            String(decoding: raw.prefix { $0 != 0 }, as: UTF8.self)
+        }
     }
 }
 

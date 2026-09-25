@@ -56,6 +56,7 @@
 		2F412920E82FEF3866484F3B /* RenderFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A681C76BA1D848C2345267C /* RenderFrame.swift */; };
 		2F8844C5DC7C500F52E0D982 /* GlowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C155CA4430C5F512C247CF0 /* GlowTextures.swift */; };
 		30159F13946E4D487EA38DBC /* ResearchIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901ECEB573CC31175A6BF3B1 /* ResearchIconView.swift */; };
+		30D7BE1DB00300AEEAE68337 /* AtlasRouteSky.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E1E0BC5D6982CD6EFB5180 /* AtlasRouteSky.swift */; };
 		3287403A993FD982F9281BFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 448E748591A86C32373B9AC7 /* Assets.xcassets */; };
 		341B90888538ECE2A1A67C5E /* StarRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1B53A7A4F2DD44FC69055 /* StarRating.swift */; };
 		3470A879985C2D4E68293C1B /* spawn.wav in Resources */ = {isa = PBXBuildFile; fileRef = B3C72B518D24FD1F057BF3F1 /* spawn.wav */; };
@@ -155,6 +156,7 @@
 		9B02BCA54CECB5F56B39300D /* BackdropLandmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88ACE9A9808D6EF273289BB2 /* BackdropLandmarks.swift */; };
 		9B99298CBEACDAF891D09A5A /* TrailRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AFC3F947350BBF5733A0AB /* TrailRenderer.swift */; };
 		9C2632358B1A2B77A7BAD5F0 /* ArrivalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3453094880E49053C78496F /* ArrivalCard.swift */; };
+		9D251193E6712F6F54C802BB /* AtlasMobius.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F82A4D86452ECE7BF83428 /* AtlasMobius.swift */; };
 		9F1243D08B7EDA3270CB413C /* RemoteScopeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813A0FE1FF8590A45599E3D1 /* RemoteScopeScene.swift */; };
 		A19648EA476F5FD14D27DD0F /* ArenaProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B46F657ABB0B8315E62BD93 /* ArenaProjection.swift */; };
 		A221F5FBAE313AF11D70C02B /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA04E64E2D54305E24EFDAD4 /* ProgressStore.swift */; };
@@ -252,6 +254,7 @@
 		FB318D2AA85DFBDD5ED0CB5A /* LevelLore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E838D2866B649C39C66247 /* LevelLore.swift */; };
 		FD3F4531889DB0812ADF7A76 /* RulesCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FD678187E4D332436505D6 /* RulesCoverageTests.swift */; };
 		FDC337D6B155353DC514ED14 /* SimulationFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454E4319D2B5C285ACC7405 /* SimulationFields.swift */; };
+		FDEA7EE078B10C20AD333563 /* AtlasRouteArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5A69E592273DD6E2E9B03D /* AtlasRouteArt.swift */; };
 		FE69A150F06D207374D5AE84 /* LaserTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812D55F81564754B4D96DDB3 /* LaserTypes.swift */; };
 /* End PBXBuildFile section */
 
@@ -399,6 +402,7 @@
 		8CC812D7BB5ADBCC7D4821AF /* warn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = warn.wav; sourceTree = "<group>"; };
 		8CFF98DC5F7F30DEC21B48FF /* WikiCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiCoverageTests.swift; sourceTree = "<group>"; };
 		8D4DC9A94DCA28AC82DAED26 /* ArenaPickupBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaPickupBuild.swift; sourceTree = "<group>"; };
+		8E5A69E592273DD6E2E9B03D /* AtlasRouteArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasRouteArt.swift; sourceTree = "<group>"; };
 		8E994E2278BDD80A0B4EA056 /* RemoteScopeMarkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteScopeMarkers.swift; sourceTree = "<group>"; };
 		8E99D7D804B1F8DDF58061AB /* RemoteWire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWire.swift; sourceTree = "<group>"; };
 		901ECEB573CC31175A6BF3B1 /* ResearchIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchIconView.swift; sourceTree = "<group>"; };
@@ -441,6 +445,7 @@
 		C57D107E34C022C855BA62A6 /* VisualStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualStyle.swift; sourceTree = "<group>"; };
 		C59AF29CD354D92A490DC877 /* HUDCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDCoverageTests.swift; sourceTree = "<group>"; };
 		C775A89FF648497E53942D1C /* RockShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockShapeTests.swift; sourceTree = "<group>"; };
+		C9E1E0BC5D6982CD6EFB5180 /* AtlasRouteSky.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasRouteSky.swift; sourceTree = "<group>"; };
 		CE13BA38D6A4415C1B2E35B8 /* ShopNodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopNodes.swift; sourceTree = "<group>"; };
 		CE9DB9F1FBC0A92388DDCF51 /* ChromeCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromeCoverageTests.swift; sourceTree = "<group>"; };
 		CEE09E4FA371A2BC87C84895 /* SplitMix64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMix64.swift; sourceTree = "<group>"; };
@@ -461,6 +466,7 @@
 		E35EBCD7B6E1E123F2574627 /* HUDBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDBar.swift; sourceTree = "<group>"; };
 		E535E3F797B7DD5BF9B9305F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		E608F41D23605EE08078031E /* SpriteTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteTextures.swift; sourceTree = "<group>"; };
+		E8F82A4D86452ECE7BF83428 /* AtlasMobius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasMobius.swift; sourceTree = "<group>"; };
 		E9418282F22A74AA5C49EE99 /* SimulationClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationClock.swift; sourceTree = "<group>"; };
 		E9F584D422044F8474ED7824 /* EchoTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = EchoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA04E64E2D54305E24EFDAD4 /* ProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStore.swift; sourceTree = "<group>"; };
@@ -718,6 +724,16 @@
 			path = Arena;
 			sourceTree = "<group>";
 		};
+		5CAAADC00E20A0E6CC082D90 /* Route */ = {
+			isa = PBXGroup;
+			children = (
+				E8F82A4D86452ECE7BF83428 /* AtlasMobius.swift */,
+				8E5A69E592273DD6E2E9B03D /* AtlasRouteArt.swift */,
+				C9E1E0BC5D6982CD6EFB5180 /* AtlasRouteSky.swift */,
+			);
+			path = Route;
+			sourceTree = "<group>";
+		};
 		5DD6B4BA303D7E38F566A36C /* Play */ = {
 			isa = PBXGroup;
 			children = (
@@ -876,6 +892,7 @@
 				A60910B41D7257B0BDAC3CCE /* AtlasChrome.swift */,
 				1DC170D672FEA98EDB7D72EB /* AtlasNodes.swift */,
 				18EFF3329D5260EDDFC05BE8 /* WorldsView.swift */,
+				5CAAADC00E20A0E6CC082D90 /* Route */,
 			);
 			path = Atlas;
 			sourceTree = "<group>";
@@ -1383,7 +1400,10 @@
 				9C2632358B1A2B77A7BAD5F0 /* ArrivalCard.swift in Sources */,
 				3CB407BE21751D7778CB4A3B /* AtlasCards.swift in Sources */,
 				F6B26ECB2F4138628267E44F /* AtlasChrome.swift in Sources */,
+				9D251193E6712F6F54C802BB /* AtlasMobius.swift in Sources */,
 				7E67F4F3BDE7061094799451 /* AtlasNodes.swift in Sources */,
+				FDEA7EE078B10C20AD333563 /* AtlasRouteArt.swift in Sources */,
+				30D7BE1DB00300AEEAE68337 /* AtlasRouteSky.swift in Sources */,
 				E9DEE9291D413964741254F9 /* Backdrop.swift in Sources */,
 				69CEBCFF48687F00655CDFF5 /* BackdropLandmarks.swift in Sources */,
 				F76ECE0B9BD579DA82A90784 /* BitmapCanvas.swift in Sources */,
@@ -1710,7 +1730,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = XMS5ZC28UJ;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1796,7 +1816,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XMS5ZC28UJ;
 				ENABLE_NS_ASSERTIONS = NO;

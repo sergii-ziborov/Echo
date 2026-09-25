@@ -1,8 +1,8 @@
 # Terms of Use — ECHO
 
-Last updated: 20 September 2026
+Last updated: 25 September 2026
 
-A paid App Store download of ECHO grants a personal, non-transferable license to play the compiled app on devices associated with your Apple ID, subject to [Apple’s Licensed Application End User License Agreement](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/).
+A paid App Store download of ECHO grants a personal, non-transferable license to play the compiled app, including its Apple Watch app, on devices associated with your Apple ID, subject to [Apple’s Licensed Application End User License Agreement](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/).
 
 ## Purchase
 

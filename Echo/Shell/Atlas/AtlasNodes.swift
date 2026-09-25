@@ -1,39 +1,7 @@
 import SwiftUI
 
-struct AtlasRouteBackdrop: View {
-    let act: Act
-
-    var body: some View {
-        Canvas { context, size in
-            for x in stride(from: CGFloat(20), through: size.width, by: 54) {
-                var line = Path()
-                line.move(to: CGPoint(x: x, y: 0))
-                line.addLine(to: CGPoint(x: x, y: size.height))
-                context.stroke(line, with: .color(act.atlasTint.opacity(0.035)), lineWidth: 1)
-            }
-            for y in stride(from: CGFloat(18), through: size.height, by: 52) {
-                var line = Path()
-                line.move(to: CGPoint(x: 0, y: y))
-                line.addLine(to: CGPoint(x: size.width, y: y))
-                context.stroke(line, with: .color(act.atlasTint.opacity(0.035)), lineWidth: 1)
-            }
-
-            for index in 0..<3 {
-                let x = size.width * CGFloat(0.22 + Double((index * 31 + act.rawValue * 7) % 55) / 100)
-                let y = size.height * CGFloat(0.20 + Double((index * 23 + act.rawValue * 11) % 60) / 100)
-                let radius = CGFloat(34 + index * 15)
-                let rect = CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)
-                context.fill(Circle().path(in: rect), with: .color(act.atlasTint.opacity(0.028)))
-                context.stroke(Circle().path(in: rect), with: .color(act.atlasTint.opacity(0.08)), style: StrokeStyle(lineWidth: 1, dash: [3, 8]))
-            }
-        }
-        .background(
-            RadialGradient(colors: [act.atlasTint.opacity(0.09), .clear], center: .center, startRadius: 2, endRadius: 220)
-        )
-        .allowsHitTesting(false)
-    }
-}
-
+/// One stop on a region's route. The disc is opaque so the road beneath
+/// never shows through, and its centre sits exactly on the route point.
 struct AtlasLevelNode: View {
     let level: LevelDefinition
     let progress: LevelProgress
@@ -42,55 +10,59 @@ struct AtlasLevelNode: View {
     let tint: Color
     let action: () -> Void
 
+    private var cleared: Bool { progress.stars > 0 }
+
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 5) {
-                ZStack {
-                    if selected {
-                        Circle()
-                            .fill(tint.opacity(0.16))
-                            .frame(width: 62, height: 62)
-                            .blur(radius: 2)
-                    }
+            ZStack {
+                Circle().fill(EchoTheme.navyDeep)
+                Circle().fill(
+                    RadialGradient(
+                        colors: cleared
+                            ? [tint.opacity(0.95), tint.opacity(0.42), tint.opacity(0.12)]
+                            : unlocked
+                                ? [tint.opacity(0.5), tint.opacity(0.16), .clear]
+                                : [Color.white.opacity(0.1), Color.white.opacity(0.03), .clear],
+                        center: UnitPoint(x: 0.35, y: 0.3),
+                        startRadius: 1,
+                        endRadius: 30
+                    )
+                )
+                Circle()
+                    .inset(by: 4.5)
+                    .stroke(unlocked ? Color.white.opacity(cleared ? 0.28 : 0.14) : Color.white.opacity(0.05), lineWidth: 0.8)
+                Circle()
+                    .strokeBorder(
+                        selected ? Color.white : unlocked ? tint.opacity(cleared ? 0.9 : 0.6) : Color.white.opacity(0.14),
+                        lineWidth: selected ? 2.2 : 1.3
+                    )
 
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    unlocked ? tint.opacity(progress.stars > 0 ? 0.72 : 0.28) : Color.white.opacity(0.04),
-                                    EchoTheme.navyDeep,
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 47, height: 47)
-
-                    Circle()
-                        .stroke(selected ? tint : unlocked ? tint.opacity(0.52) : Color.white.opacity(0.12), lineWidth: selected ? 2.4 : 1.2)
-                        .frame(width: 47, height: 47)
-                        .shadow(color: selected ? tint.opacity(0.75) : .clear, radius: 9)
-
-                    if unlocked {
-                        Text(String(format: "%02d", level.number))
-                            .font(.system(size: 12, weight: .black, design: .rounded))
-                            .foregroundStyle(.white)
-                    } else {
-                        Image(systemName: "lock.fill")
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundStyle(EchoTheme.muted)
-                    }
+                if unlocked {
+                    Text(String(format: "%02d", level.number))
+                        .font(.system(size: 13, weight: .black, design: .rounded))
+                        .foregroundStyle(cleared ? EchoTheme.navyDeep : .white)
+                        .shadow(color: cleared ? Color.white.opacity(0.4) : .clear, radius: 3)
+                } else {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(EchoTheme.muted)
                 }
-
+            }
+            .frame(width: 48, height: 48)
+            .shadow(color: selected ? tint.opacity(0.8) : cleared ? tint.opacity(0.35) : .clear, radius: selected ? 10 : 6)
+            .overlay(alignment: .bottom) {
                 HStack(spacing: 3) {
                     ForEach(0..<3, id: \.self) { index in
                         Circle()
-                            .fill(index < progress.stars ? EchoTheme.gold : Color.white.opacity(0.12))
+                            .fill(index < progress.stars ? EchoTheme.gold : Color.white.opacity(0.16))
                             .frame(width: 4, height: 4)
+                            .shadow(color: index < progress.stars ? EchoTheme.gold.opacity(0.7) : .clear, radius: 2)
                     }
                 }
+                .offset(y: 11)
             }
-            .frame(width: 66, height: 68)
+            .frame(width: 58, height: 58)
+            .contentShape(Circle())
         }
         .buttonStyle(PressStyle())
         .accessibilityLabel(unlocked ? "Map \(level.number), \(level.name), \(progress.stars) seals" : "Locked map \(level.number)")

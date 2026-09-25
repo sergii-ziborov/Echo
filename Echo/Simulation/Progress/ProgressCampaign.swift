@@ -96,4 +96,21 @@ extension ProgressStore {
         persist()
     }
 
+
+#if DEBUG
+    /// Screenshot aid: the first `count` maps cleared with a believable mix
+    /// of seals and best times, and some research points to spend.
+    func debugShowcase(cleared count: Int) {
+        for (index, level) in LevelCatalog.playable.prefix(count).enumerated() {
+            let stars = [3, 3, 2, 3, 1, 3, 2][index % 7]
+            starsByLevel[progressKey(for: level.id)] = LevelProgress(
+                stars: stars,
+                bestTime: level.parTime * (0.8 + Double(index % 5) * 0.05),
+                bestMoves: level.parMoves
+            )
+        }
+        shards = max(shards, 640)
+        persist()
+    }
+#endif
 }

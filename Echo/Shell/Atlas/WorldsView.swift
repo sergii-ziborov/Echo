@@ -55,6 +55,13 @@ struct WorldsView: View {
             let level = model.continueLevel
             selectedActID = Act.containing(level: level.number).rawValue
             selectedLevelNumber = level.number
+#if DEBUG
+            // Screenshot aid: open on a given region.
+            let args = ProcessInfo.processInfo.arguments
+            if let flag = args.firstIndex(of: "-shot-region"), flag + 1 < args.count, let act = Int(args[flag + 1]).flatMap(Act.init(rawValue:)) {
+                selectedActID = act.rawValue
+            }
+#endif
             appeared = true
         }
         .onDisappear { appeared = false }
@@ -168,6 +175,7 @@ struct WorldsView: View {
                     act: act,
                     levels: levels,
                     selectedLevelNumber: selectedLevel.number,
+                    reduceMotion: reduceMotion,
                     progressFor: { model.progress.progress(for: $0.id) },
                     isUnlocked: { model.progress.isUnlocked($0) },
                     onSelect: { level in

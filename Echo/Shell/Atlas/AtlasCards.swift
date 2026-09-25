@@ -113,24 +113,32 @@ struct ActHeroCard: View {
     }
 }
 
+/// The seven stops of a region on the Fold Road, under the region's own
+/// sky, with the Signal looping round the selected stop.
 struct ActRouteCard: View {
     let act: Act
     let levels: [LevelDefinition]
     let selectedLevelNumber: Int
+    var reduceMotion = false
     let progressFor: (LevelDefinition) -> LevelProgress
     let isUnlocked: (LevelDefinition) -> Bool
     let onSelect: (LevelDefinition) -> Void
+    @State private var selectedAt = Date()
 
     var body: some View {
+        let stops = levels.map { AtlasStop(cleared: progressFor($0).stars > 0, unlocked: isUnlocked($0)) }
+        let selected = levels.firstIndex { $0.number == selectedLevelNumber }
+        let cleared = stops.filter(\.cleared).count
+
         VStack(spacing: 7) {
-            HStack {
+            HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("REGION ROUTE")
+                    Text("FOLD ROAD")
                         .font(.system(size: 11, weight: .black, design: .rounded))
                         .tracking(1.5)
-                    Text("Select a map node to inspect it")
+                    Text("\(act.region.capitalized) · \(cleared)/\(levels.count) stops cleared")
                         .font(.system(size: 9, weight: .medium, design: .rounded))
-                        .foregroundStyle(EchoTheme.muted)
+                        .foregroundStyle(Color.white.opacity(0.62))
                 }
                 Spacer()
                 Label("SWIPE REGION", systemImage: "hand.draw.fill")
@@ -142,55 +150,35 @@ struct ActRouteCard: View {
 
             GeometryReader { geometry in
                 let points = AtlasRouteLayout.points(for: act, in: geometry.size)
-                let completions = levels.map { progressFor($0).stars > 0 }
 
                 ZStack {
-                    AtlasRouteBackdrop(act: act)
-
-                    Canvas { context, _ in
-                        for index in 0..<max(0, points.count - 1) {
-                            let start = points[index]
-                            let end = points[index + 1]
-                            let direction: CGFloat = index.isMultiple(of: 2) ? 1 : -1
-                            let bend = min(35, abs(end.x - start.x) * 0.25 + 12) * direction
-                            var path = Path()
-                            path.move(to: start)
-                            path.addCurve(
-                                to: end,
-                                control1: CGPoint(x: start.x + bend, y: (start.y + end.y) / 2),
-                                control2: CGPoint(x: end.x - bend, y: (start.y + end.y) / 2)
-                            )
-
-                            let active = completions.indices.contains(index) && completions[index]
-                            if active {
-                                context.stroke(path, with: .color(act.atlasTint.opacity(0.16)), style: StrokeStyle(lineWidth: 9, lineCap: .round))
-                                context.stroke(path, with: .color(act.atlasTint.opacity(0.85)), style: StrokeStyle(lineWidth: 2.4, lineCap: .round))
-                            } else {
-                                context.stroke(path, with: .color(Color.white.opacity(0.13)), style: StrokeStyle(lineWidth: 1.4, lineCap: .round, dash: [5, 6]))
-                            }
-                        }
-                    }
-                    .allowsHitTesting(false)
+                    AtlasRouteLayer(pass: .under, points: points, stops: stops, selected: selected, selectedAt: selectedAt, tint: act.atlasTint, reduceMotion: reduceMotion)
 
                     ForEach(Array(levels.enumerated()), id: \.element.id) { index, level in
                         AtlasLevelNode(
                             level: level,
                             progress: progressFor(level),
-                            unlocked: isUnlocked(level),
+                            unlocked: stops[index].unlocked,
                             selected: selectedLevelNumber == level.number,
                             tint: act.atlasTint,
                             action: { onSelect(level) }
                         )
                         .position(points[index])
                     }
+
+                    AtlasRouteLayer(pass: .over, points: points, stops: stops, selected: selected, selectedAt: selectedAt, tint: act.atlasTint, reduceMotion: reduceMotion)
                 }
             }
             .frame(height: 302)
         }
         .padding(13)
-        .background(EchoTheme.navyDeep.opacity(0.82), in: RoundedRectangle(cornerRadius: 25, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 25, style: .continuous).stroke(act.atlasTint.opacity(0.20), lineWidth: 1))
+        .background {
+            AtlasRouteSky(act: act, progress: Double(cleared) / Double(max(1, levels.count)), motion: !reduceMotion)
+        }
+        .overlay(RoundedRectangle(cornerRadius: 25, style: .continuous).stroke(act.atlasTint.opacity(0.24), lineWidth: 1))
         .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+        .onChange(of: selectedLevelNumber) { _, _ in
+            selectedAt = Date()
+        }
     }
 }
-

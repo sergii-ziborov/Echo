@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.openURL) private var openURL
     var onBack: (() -> Void)? = nil
     @State var showingResetConfirmation: Bool
     @State var legalDocument: LegalDocument?
@@ -249,10 +250,34 @@ struct SettingsView: View {
                     .frame(height: 58)
                 }
                 .buttonStyle(PressStyle())
-                if document != LegalDocument.allCases.last {
-                    Rectangle().fill(Color.white.opacity(0.06)).frame(height: 1).padding(.leading, 61)
-                }
+                Rectangle().fill(Color.white.opacity(0.06)).frame(height: 1).padding(.leading, 61)
             }
+            Button {
+                model.audio.play(.select)
+                guard let mail = BugReport.mail else { return openURL(BugReport.issues) }
+                openURL(mail) { opened in
+                    if !opened { openURL(BugReport.issues) }
+                }
+            } label: {
+                HStack(spacing: 11) {
+                    Image(systemName: "ladybug.fill")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(EchoTheme.gold)
+                        .frame(width: 36, height: 36)
+                        .background(EchoTheme.gold.opacity(0.12), in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+                    Text("REPORT A BUG")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                    Spacer()
+                    Image(systemName: "envelope.fill")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(Color.white.opacity(0.35))
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 14)
+                .frame(height: 58)
+            }
+            .buttonStyle(PressStyle())
+            .accessibilityHint("Opens an email to the developer with the app version and device filled in")
         }
         .background(EchoTheme.panel.opacity(0.94), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(Color.white.opacity(0.08), lineWidth: 1))

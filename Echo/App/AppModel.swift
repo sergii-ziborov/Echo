@@ -43,6 +43,11 @@ final class AppModel {
     }
 
     func applyLaunchArgs(_ args: [String]) {
+#if DEBUG
+        if let flag = args.firstIndex(of: "-shot-progress"), flag + 1 < args.count, let count = Int(args[flag + 1]) {
+            progress.debugShowcase(cleared: count)
+        }
+#endif
         if let flag = args.firstIndex(of: "-shot-level"), flag + 1 < args.count, let number = Int(args[flag + 1]),
            let level = LevelCatalog.level(number: number) {
             progress.markTutorialSeen()

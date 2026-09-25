@@ -1,12 +1,14 @@
 # About ECHO
 
-ECHO is a one-time iPhone and iPad temporal puzzle. Steer a glowing orb, collect sparks, and outlive the route you just drew.
+ECHO is a one-time temporal puzzle for iPhone, iPad and Apple Watch. You are the Signal, the last light of the Lighthouse: carry it down the Fold Road through eleven regions of space, collect sparks, and outlive the route you just drew.
 
-The App Store build is a paid download. There are no ads, subscriptions, or in-app purchases. Progress stays on the device.
+It has 77 campaign maps, the endless Deep Time, a Daily Rift, and twelve clockwork rooms on the watch, which can also steer a run on the phone.
 
-- Version: 1.0.0
+The App Store build is a paid download. There are no ads, subscriptions, or in-app purchases. Progress stays on your devices.
+
+- Version: 1.0.0 (18)
 - Bundle ID: `com.sergiiziborov.Echo`
 - Developer: Sergii Ziborov
-- Support: [sergii.ziborov@gmail.com](mailto:sergii.ziborov@gmail.com)
+- Support and bug reports: [sergii.ziborov@gmail.com](mailto:sergii.ziborov@gmail.com), **Settings → Report a bug** in the app, or [GitHub Issues](https://github.com/sergii-ziborov/Echo/issues)
 
 See [Terms of Use](TERMS.md) and the [Privacy Policy](PRIVACY.md).
