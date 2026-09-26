@@ -10,6 +10,7 @@ enum Screen: Equatable {
     case playing(PlayRequest)
     case settings
     case shop
+    case records
 }
 
 struct PlayRequest: Equatable {
@@ -99,6 +100,9 @@ final class AppModel {
         } else if args.contains("-shot-settings") {
             progress.markTutorialSeen()
             screen = .settings
+        } else if args.contains("-shot-records") || args.contains("-shot-records-watch") {
+            progress.markTutorialSeen()
+            screen = .records
         } else if args.contains("-shot-vfx-freeze")
             || args.contains("-shot-vfx-surge")
             || args.contains("-shot-vfx-shield") {
@@ -193,6 +197,11 @@ final class AppModel {
     func openShop() {
         audio.play(.select)
         screen = .shop
+    }
+
+    func openRecords() {
+        audio.play(.select)
+        screen = .records
     }
 
     func play(level: LevelDefinition, daily: Bool) {

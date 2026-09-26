@@ -36,6 +36,9 @@ struct HomeView: View {
                     continueCard
                         .homeEntrance(appeared, delay: 0.19, reduceMotion: reduceMotion)
 
+                    RecordsCard()
+                        .homeEntrance(appeared, delay: 0.2, reduceMotion: reduceMotion)
+
                     EndlessCard(appeared: appeared, reduceMotion: reduceMotion)
                         .homeEntrance(appeared, delay: 0.205, reduceMotion: reduceMotion)
 

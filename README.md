@@ -72,6 +72,7 @@ A crash can **Paradox Rewind** three seconds. The discarded branch replays once 
 - **Timed gates**, **echo collision scars**, and **paradox ghosts** after a rewind.
 - **Signal Lab** — equip a limited loadout and research the 24-node Signal Matrix. Every number a node shows is read from the same tuning the run applies.
 - **Keeper Archive** — the in-game manual for controls, clocks, hazards, skills, research, regions and the recovered story.
+- **Ratings** — two ratings on Home, one per device. iPhone: Route Seals × 100, best Deep Time depth × 250, completed passes × 1000, with seals per region. Apple Watch: cleared rooms × 100 plus 10 for every second of a best time under par, with every room's best time.
 
 The first time you meet an echo, a rock, a rift, a gate, Freeze, Phase, or an echo collision, a short card explains it. The first time you reach a region, an arrival card says where the Signal has landed.
 
@@ -85,12 +86,13 @@ An endless expedition, separate from the campaign and open from Home. Every dept
 
 The download includes a watch app that runs the same rules on the wrist.
 
-- **Chronometer rooms** — twelve compact rooms in three acts (Tick, Crown, Tourbillon) that tune the Keeper Chronometer. They help the campaign but are not required to finish it. Each room opens after the previous one is cleared and starts with its own log line. Tap where the orb should fly; it keeps going after your finger lifts, so your thumb never hides it.
+- **Chronometer rooms** — thirty-six compact rooms in three movements (Calibration, Regulation, Certification) that tune the Keeper Chronometer, each named after a part or trial of a watch. They help the campaign but are not required to finish it. Each room opens after the previous one is cleared and starts with its own log line.
+- **Controls** — wherever the finger lands becomes a thumbstick: the orb flies the way the finger leans and stops when it lifts, so the thumb never covers the orb. Beams show dim emitters and a dashed guide at rest, and a fuse runs along the line while they charge, so the time left before they fire can be read at a glance.
 - **Watch skills** — turn the Digital Crown back to rewind three seconds. Pulse Sense taps your wrist before each echo. Wrist Dash (double-tap) opens after 2 clears. Tick Freeze (button, or the double-tap hand gesture) opens after 6.
-- **Chronometer Rewards** — every first clear on the watch pays 25 research points in the phone game. Four clears unlock the ember-gold *Tourbillon Tail*, eight add a Paradox Rewind charge (*Crown Charge*), and all twelve make echoes arrive 0.5 s later (*Mainspring*). The Home screen tracks progress and has a switch for the tail.
+- **Chronometer Rewards** — every first clear on the watch pays 25 research points in the phone game. Four clears unlock the ember-gold *Tourbillon Tail*, eight add a Paradox Rewind charge (*Crown Charge*), and twelve make echoes arrive 0.5 s later (*Mainspring*). The Home screen tracks progress and has a switch for the tail.
 - **iPhone Remote** — while a map runs on the phone, open Remote on the watch. The whole face becomes a thumbstick and a double-tap dashes. Underneath, a close-up of the phone's arena follows the orb, and rocks, echoes, the next spark and the exit that are off the face show up as markers on its rim. The wrist taps for sparks, echoes, the exit opening and a rock or echo closing in, and after a crash a backward turn of the Crown rewinds the phone. The phone HUD shows a WATCH chip while the wrist is steering.
 
-WatchConnectivity carries clears through the application context (plus a queued transfer for each first clear). Remote play sends a few bytes of binary per message: the phone names its level once and the watch builds the same arena from its own catalog, then only the moving parts travel, up to 20 frames a second. Each side keeps just a couple of messages waiting for replies and always sends the newest state, so a slow Bluetooth link drops stale stick positions instead of queueing lag, and the phone keeps steering from the held stick every frame.
+WatchConnectivity carries clears through the application context (plus a queued transfer for each first clear). Remote play sends a few bytes of binary per message: the phone names its level once and the watch builds the same arena from its own catalog, then only the moving parts travel, up to 20 frames a second. Each side keeps just a few messages waiting for replies and always sends the newest state, so a slow Bluetooth link drops stale stick positions instead of queueing lag, and the phone keeps steering from the held stick every frame. Letting go, dash, pause, rewind and retry skip that window and leave at once, so the orb stops as soon as the release lands; if a release is ever lost, the phone lets go of a stick that has been quiet for 0.6 s.
 
 ## Requirements
 

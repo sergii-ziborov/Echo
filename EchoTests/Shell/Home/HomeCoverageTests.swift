@@ -12,6 +12,7 @@ final class HomeCoverageTests: XCTestCase {
         model.openWiki()
         model.openSettings()
         model.openShop()
+        model.openRecords()
         model.goHome()
         model.playPrimary()
         model.finishTutorial(then: nil)
@@ -31,7 +32,7 @@ final class HomeCoverageTests: XCTestCase {
         model.startNextCycle()
 
         for screen in [
-            Screen.splash, .home, .worlds, .daily, .wiki, .settings, .shop,
+            Screen.splash, .home, .worlds, .daily, .wiki, .settings, .shop, .records,
             .tutorial(thenPlay: nil),
             .tutorial(thenPlay: CoverageFixtures.playRequest(1)),
             .playing(CoverageFixtures.playRequest(1)),

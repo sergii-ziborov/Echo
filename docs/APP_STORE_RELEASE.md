@@ -68,7 +68,8 @@ Suggested description:
 > • Deep Time: a separate expedition of generated arenas, each checked for a connected route
 > • A Daily Rift that reopens one stop of the Road every day
 > • A loadout of timed skills and the 24-node Signal Matrix
-> • Apple Watch: twelve Keeper Chronometer rooms, rewards for the phone game, and a remote that steers your iPhone run
+> • Apple Watch: thirty-six Keeper Chronometer rooms, rewards for the phone game, and a remote that steers your iPhone run
+> • Two ratings, one for iPhone and one for Apple Watch
 > • The Keeper Archive explains every rule, and science notes separate real physics from fiction
 > • In English and Russian
 >
@@ -83,7 +84,8 @@ Russian listing (add **Russian** under App Store Connect → the version's local
 > • Глубокое время: отдельная экспедиция по сгенерированным аренам, у каждой проверен связный маршрут
 > • Ежедневный разрыв каждый день заново открывает одну остановку Дороги
 > • Способности с таймером и Матрица Сигнала из 24 узлов
-> • Apple Watch: двенадцать комнат Хронометра Хранителей, награды для игры на iPhone и пульт, который управляет попыткой на телефоне
+> • Apple Watch: тридцать шесть комнат Хронометра Хранителей, награды для игры на iPhone и пульт, который управляет попыткой на телефоне
+> • Два рейтинга: для iPhone и для Apple Watch
 > • Архив Хранителей объясняет каждое правило, а научные заметки отделяют настоящую физику от вымысла
 >
 > Прогресс хранится на устройстве. Без аккаунта, рекламы, встроенных покупок и подключения к сети.

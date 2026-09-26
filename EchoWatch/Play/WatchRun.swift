@@ -28,8 +28,9 @@ final class WatchRun {
     private(set) var freezeReadyIn: TimeInterval = 0
     private(set) var flash = 0
 
-    /// World point the orb is seeking; it keeps going after the finger lifts.
-    @ObservationIgnored var target: Vec2?
+    /// The held stick: the orb flies the way it points and stops when the
+    /// finger lifts, like the Signal on the iPhone.
+    @ObservationIgnored var stick: Vec2?
     @ObservationIgnored var onEvents: (([SimEvent]) -> Void)?
     @ObservationIgnored var onRewind: (() -> Void)?
 
@@ -48,9 +49,10 @@ final class WatchRun {
     func step(dt: TimeInterval) {
         guard isLive else { return }
 #if DEBUG
-        if autopilot { target = autopilotTarget() }
+        if autopilot { stick = autopilotStick() }
 #endif
         if freezeReadyIn > 0 { freezeReadyIn = max(0, freezeReadyIn - dt) }
+        let target = stick.flatMap { RemoteSteering.target(stick: $0, player: sim.playerPosition) }
         let events = sim.step(dt: dt, target: target)
         if phase == .ready, sim.hasStarted { phase = .playing }
         let sparks = sim.sparks.filter(\.collected).count
@@ -75,7 +77,7 @@ final class WatchRun {
     func rewind() -> Bool {
         guard canRewind, sim.rewind(seconds: Self.rewindSeconds) else { return false }
         phase = sim.hasStarted ? .playing : .ready
-        target = nil
+        stick = nil
         collected = sim.sparks.filter(\.collected).count
         echoCount = sim.echoCount
         flash += 1
@@ -104,7 +106,7 @@ final class WatchRun {
     func restart() {
         sim = Self.makeSimulation(level, skills: skills)
         phase = .ready
-        target = nil
+        stick = nil
         collected = 0
         echoCount = 0
         nextEchoSecond = nil
@@ -142,11 +144,13 @@ final class WatchRun {
 #if DEBUG
     @ObservationIgnored private let autopilot = ProcessInfo.processInfo.arguments.contains("-wrist-autopilot")
 
-    /// Review aid: fly to the nearest spark, then to the exit.
-    private func autopilotTarget() -> Vec2 {
+    /// Review aid: steer to the nearest spark, then to the exit.
+    private func autopilotStick() -> Vec2? {
         let open = sim.sparks.filter { !$0.collected }
         let here = sim.playerPosition
-        return open.min { $0.position.distance(to: here) < $1.position.distance(to: here) }?.position ?? level.exit
+        let goal = open.min { $0.position.distance(to: here) < $1.position.distance(to: here) }?.position ?? level.exit
+        let way = goal - here
+        return way.length > 1 ? way / way.length : nil
     }
 #endif
 

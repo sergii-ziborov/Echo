@@ -19,8 +19,9 @@ final class PhoneWatchLink: NSObject {
         var retry: (@MainActor () -> Void)?
     }
 
-    /// The watch sends its stick at least this often while a finger holds it.
-    static let stickTimeout: TimeInterval = 1
+    /// The watch repeats a held stick four times a second; if nothing comes
+    /// for this long (a lost release, a dropped link) the orb stops.
+    static let stickTimeout: TimeInterval = 0.6
     static let frameInterval: TimeInterval = 1.0 / 20
     /// Frames allowed to wait for their replies at once.
     static let frameWindow = 3

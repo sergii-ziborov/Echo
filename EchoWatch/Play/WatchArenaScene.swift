@@ -19,7 +19,7 @@ final class WatchArenaScene: SKScene {
     private var bonusNodes: [Int: SKNode] = [:]
     var rockNodes: [Int: SKNode] = [:]
     var rockArt: [Int: RockArt] = [:]
-    private var laserNodes: [Int: SKShapeNode] = [:]
+    private var laserNodes: [Int: WatchLaserNode] = [:]
     private var gateNodes: [Int: SKShapeNode] = [:]
     private let exitNode = SKNode()
     private var lastTime: TimeInterval = 0
@@ -137,10 +137,8 @@ final class WatchArenaScene: SKScene {
         buildPickups()
         buildRocks()
         for laser in run.level.lasers {
-            let beam = SKShapeNode()
-            beam.lineCap = .round
-            beam.zPosition = 9
-            addChild(beam)
+            let beam = WatchLaserNode()
+            addChild(beam.root)
             laserNodes[laser.id] = beam
         }
 
@@ -302,22 +300,13 @@ final class WatchArenaScene: SKScene {
         }
 
         for laser in sim.lasers {
-            guard let beam = laserNodes[laser.id] else { continue }
-            let path = CGMutablePath()
-            path.move(to: point(laser.start))
-            path.addLine(to: point(laser.end))
-            beam.path = path
-            switch laser.phase {
-            case .idle:
-                beam.strokeColor = UIColor(red: 1, green: 0.3, blue: 0.5, alpha: 0.12)
-                beam.lineWidth = 1
-            case .charging(let progress):
-                beam.strokeColor = UIColor(red: 1, green: 0.35, blue: 0.55, alpha: 0.25 + CGFloat(progress) * 0.5)
-                beam.lineWidth = 1 + CGFloat(progress) * 1.5
-            case .firing:
-                beam.strokeColor = UIColor(red: 1, green: 0.55, blue: 0.7, alpha: 1)
-                beam.lineWidth = max(2, CGFloat(laser.beamWidth) * scale)
-            }
+            laserNodes[laser.id]?.update(
+                start: point(laser.start),
+                end: point(laser.end),
+                phase: laser.phase,
+                width: max(2.5, CGFloat(laser.beamWidth) * scale),
+                clock: clock
+            )
         }
         for gate in sim.gates {
             guard let node = gateNodes[gate.id] else { continue }

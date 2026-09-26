@@ -2,12 +2,14 @@ import SpriteKit
 import SwiftUI
 import WatchKit
 
-/// A wrist run. Touch a point and the orb flies there, even after the finger
-/// lifts, so it never hides under your thumb. Double-tap to dash, turn the
-/// Digital Crown back to rewind.
+/// A wrist run. Wherever the finger lands becomes a thumbstick: the orb flies
+/// the way it points and stops when the finger lifts, so the thumb never has
+/// to cover the orb. Double-tap to dash, turn the Digital Crown back to rewind.
 struct WatchRunView: View {
     /// Space above the arena for the HUD and the system clock.
     static let band: CGFloat = 28
+    /// How far the finger travels from where it landed for full speed.
+    static let travel: CGFloat = 26
 
     /// The Crown winds through a short loop; only the direction of each turn
     /// matters. watchOS lays out every detent of the range, so a huge range
@@ -29,6 +31,8 @@ struct WatchRunView: View {
     @State private var crownPull = 0.0
     @State private var touchBegan: Date?
     @State private var lastTap = Date.distantPast
+    @State private var anchor: CGPoint?
+    @State private var knob: CGPoint?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
 
@@ -44,7 +48,8 @@ struct WatchRunView: View {
                 if let run, let scene {
                     SpriteView(scene: scene, preferredFramesPerSecond: 60)
                         .frame(width: arena.width, height: arena.height)
-                        .gesture(steering(size: arena, run: run, scene: scene))
+                        .overlay(alignment: .topLeading) { stickRing }
+                        .gesture(steering(run: run))
                         .padding(.top, Self.band)
                     WatchRunHUD(run: run, onFreeze: { run.freeze() }, onPause: { run.togglePause() })
                     overlay(run)
@@ -71,17 +76,33 @@ struct WatchRunView: View {
         scene = WatchArenaScene(run: fresh, size: size)
     }
 
-    private func steering(size: CGSize, run: WatchRun, scene: WatchArenaScene) -> some Gesture {
+    private func steering(run: WatchRun) -> some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                if touchBegan == nil { touchBegan = value.time }
+                if anchor == nil {
+                    anchor = value.startLocation
+                    touchBegan = value.time
+                }
+                guard let anchor else { return }
+                var dx = value.location.x - anchor.x
+                var dy = value.location.y - anchor.y
+                let length = hypot(dx, dy)
+                if length > Self.travel {
+                    dx *= Self.travel / length
+                    dy *= Self.travel / length
+                }
+                knob = CGPoint(x: anchor.x + dx, y: anchor.y + dy)
                 guard run.isLive else { return }
-                run.target = scene.world(CGPoint(x: value.location.x, y: size.height - value.location.y))
+                // Screen y grows downward; the arena's grows upward.
+                run.stick = Vec2(x: Double(dx / Self.travel), y: Double(-dy / Self.travel))
             }
             .onEnded { value in
                 let quick = value.time.timeIntervalSince(touchBegan ?? value.time) < 0.25
                 let still = hypot(value.translation.width, value.translation.height) < 10
+                anchor = nil
+                knob = nil
                 touchBegan = nil
+                run.stick = nil
                 guard quick, still else { return }
                 if value.time.timeIntervalSince(lastTap) < 0.35 {
                     run.dash()
@@ -90,6 +111,24 @@ struct WatchRunView: View {
                     lastTap = value.time
                 }
             }
+    }
+
+    /// Where the finger landed and how far it leans, drawn faintly so the
+    /// stick is felt without hiding the arena.
+    @ViewBuilder
+    private var stickRing: some View {
+        if let anchor {
+            Circle()
+                .stroke(Color.cyan.opacity(0.35), lineWidth: 1.2)
+                .frame(width: Self.travel * 2, height: Self.travel * 2)
+                .position(anchor)
+                .allowsHitTesting(false)
+            Circle()
+                .fill(Color.cyan.opacity(0.55))
+                .frame(width: 14, height: 14)
+                .position(knob ?? anchor)
+                .allowsHitTesting(false)
+        }
     }
 
     /// A deliberate backward turn of the crown rewinds; forward turns reset it.

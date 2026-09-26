@@ -2,7 +2,7 @@
 
 ECHO is a route-planning survival puzzle for iPhone, iPad and Apple Watch, in English and Russian. After the Break, the Keepers' recovery network replays recorded movement. Guide the Signal down the Fold Road through eleven regions, collect every spark, and outlive the route you just drew.
 
-It has 77 campaign maps, the Deep Time expedition, a Daily Rift, and twelve Keeper Chronometer rooms on the watch, which can also steer a run on the phone.
+It has 77 campaign maps, the Deep Time expedition, a Daily Rift, and thirty-six Keeper Chronometer rooms on the watch, which can also steer a run on the phone. Home keeps two ratings, one per device.
 
 The App Store build is a paid download. There are no ads, subscriptions, or in-app purchases. Progress stays on your devices.
 

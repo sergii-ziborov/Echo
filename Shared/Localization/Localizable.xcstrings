@@ -13045,6 +13045,380 @@
         }
       }
     },
+    "records.back": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Назад"
+          }
+        }
+      }
+    },
+    "records.card.a11y": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ratings: iPhone %1$@, Apple Watch %2$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рейтинг: iPhone %1$@, Apple Watch %2$@"
+          }
+        }
+      }
+    },
+    "records.card.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RATINGS"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "РЕЙТИНГ"
+          }
+        }
+      }
+    },
+    "records.line.depth": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best Deep Time depth"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лучшая глубина Глубокого времени"
+          }
+        }
+      }
+    },
+    "records.line.passes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passes completed"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пройденные обходы"
+          }
+        }
+      }
+    },
+    "records.line.rooms": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rooms cleared"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пройденные комнаты"
+          }
+        }
+      }
+    },
+    "records.line.seals": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Route Seals"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Знаки маршрута"
+          }
+        }
+      }
+    },
+    "records.line.speed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seconds under par"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Секунды быстрее нормы"
+          }
+        }
+      }
+    },
+    "records.phone.note": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seals count on every pass of the Road; Deep Time counts your deepest expedition."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Знаки считаются во всех обходах Дороги, Глубокое время — по самой глубокой экспедиции."
+          }
+        }
+      }
+    },
+    "records.rating": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RATING"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "РЕЙТИНГ"
+          }
+        }
+      }
+    },
+    "records.region.detail": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld seals · %3$lld/%4$lld maps"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Знаков: %1$lld/%2$lld · карт: %3$lld/%4$lld"
+          }
+        }
+      }
+    },
+    "records.regions": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REGIONS"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "РЕГИОНЫ"
+          }
+        }
+      }
+    },
+    "records.room.open": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not cleared yet"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ещё не пройдена"
+          }
+        }
+      }
+    },
+    "records.room.par": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Par %@ s"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Норма %@ с"
+          }
+        }
+      }
+    },
+    "records.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RECORDS ON EACH DEVICE"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "РЕКОРДЫ НА КАЖДОМ УСТРОЙСТВЕ"
+          }
+        }
+      }
+    },
+    "records.tab.phone": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone"
+          }
+        }
+      }
+    },
+    "records.tab.watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch"
+          }
+        }
+      }
+    },
+    "records.times": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ × %2$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ × %2$@"
+          }
+        }
+      }
+    },
+    "records.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RATINGS"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "РЕЙТИНГ"
+          }
+        }
+      }
+    },
+    "records.watch.empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear rooms on Apple Watch to build this rating. Clears sync to this iPhone."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проходи комнаты на Apple Watch, чтобы набрать этот рейтинг. Прохождения синхронизируются с этим iPhone."
+          }
+        }
+      }
+    },
+    "records.watch.note": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every cleared room is worth 100, and every second of the best time under par adds 10."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждая пройденная комната — 100, и каждая секунда лучшего времени быстрее нормы — ещё 10."
+          }
+        }
+      }
+    },
+    "records.watch.summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld ROOMS · %3$lld/%4$lld REWARDS"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "КОМНАТ: %1$lld/%2$lld · НАГРАД: %3$lld/%4$lld"
+          }
+        }
+      }
+    },
     "region.confection.act": {
       "extractionState": "manual",
       "localizations": {
@@ -20063,13 +20437,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tap where to fly"
+            "value": "Drag anywhere to steer"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Коснись, куда лететь"
+            "value": "Веди пальцем в любом месте"
           }
         }
       }
@@ -22005,13 +22379,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Twelve compact rooms tune the Keeper Chronometer. Their rewards support the main campaign; they are not required to finish it."
+            "value": "Thirty-six compact rooms in three movements tune the Keeper Chronometer: calibration, regulation and certification. Their rewards support the main campaign; they are not required to finish it."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Двенадцать компактных комнат настраивают Хронометр Хранителей. Их награды помогают основной кампании, но не требуются для её завершения."
+            "value": "Тридцать шесть компактных комнат в трёх частях настраивают Хронометр Хранителей: калибровка, регулировка и сертификация. Их награды помогают основной кампании, но не требуются для её завершения."
           }
         }
       }
@@ -22804,13 +23178,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Satellites turn around a fixed core. The last chronometer room asks you to read motion without mistaking the center for a safe place."
+            "value": "Satellites turn around a fixed core. Calibration ends here: read the motion without mistaking the center for a safe place."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Спутники движутся вокруг неподвижного ядра. Последняя комната хронометра требует читать движение, не принимая центр за безопасное место."
+            "value": "Спутники движутся вокруг неподвижного ядра. Здесь калибровка заканчивается: читай движение и не принимай центр за безопасное место."
           }
         }
       }
@@ -22845,6 +23219,363 @@
           "stringUnit": {
             "state": "translated",
             "value": "Всё вращается разом."
+          }
+        }
+      }
+    },
+    "wrist.13.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A hairspring coils through the chamber. Every turn of the route passes close to the one before it."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Волосок свивается через всю камеру. Каждый виток маршрута проходит рядом с предыдущим."
+          }
+        }
+      }
+    },
+    "wrist.13.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hairspring"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Волосок"
+          }
+        }
+      }
+    },
+    "wrist.13.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The coil turns back on itself."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Виток поворачивает обратно."
+          }
+        }
+      }
+    },
+    "wrist.14.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Like the pallets of an escapement, two gates take turns holding the way. One is always closing when the other opens."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как палеты анкерной вилки, два шлюза по очереди держат проход. Когда один открывается, другой уже закрывается."
+          }
+        }
+      }
+    },
+    "wrist.14.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pallet Fork"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Анкерная вилка"
+          }
+        }
+      }
+    },
+    "wrist.14.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two gates lock and release in turn."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Два шлюза запирают и отпускают по очереди."
+          }
+        }
+      }
+    },
+    "wrist.15.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The barrel holds its tension in two rings of fragments. The rim is safe only until your own route returns along it."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Барабан держит напряжение в двух кольцах обломков. Ободок безопасен, пока по нему не вернётся твой собственный маршрут."
+          }
+        }
+      }
+    },
+    "wrist.15.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barrel"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Барабан"
+          }
+        }
+      }
+    },
+    "wrist.15.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two rings wind around the core."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Два кольца вращаются вокруг ядра."
+          }
+        }
+      }
+    },
+    "wrist.16.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A ratchet lets the wheel turn only one way. The crystals expire in order; follow the teeth around the core."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Храповик позволяет колесу вращаться только в одну сторону. Кристаллы истекают по порядку — иди по зубцам вокруг ядра."
+          }
+        }
+      }
+    },
+    "wrist.16.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ratchet"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Храповик"
+          }
+        }
+      }
+    },
+    "wrist.16.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Four crystals, one way round."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Четыре кристалла, один путь по кругу."
+          }
+        }
+      }
+    },
+    "wrist.17.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Three wheels turn in one train. Each hub holds a record; enter between the teeth, not against them."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Три колеса вращаются в одной передаче. На каждой оси лежит запись: входи между зубцами, а не навстречу им."
+          }
+        }
+      }
+    },
+    "wrist.17.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gear Train"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Колёсная передача"
+          }
+        }
+      }
+    },
+    "wrist.17.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collect the hubs between the teeth."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Забирай оси между зубцами."
+          }
+        }
+      }
+    },
+    "wrist.18.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The center wheel drives the hands. Here the hand is a beam, and its sweep covers every record in the room."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Центральное колесо ведёт стрелки. Здесь стрелка — луч, и её взмах накрывает все записи комнаты."
+          }
+        }
+      }
+    },
+    "wrist.18.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Center Wheel"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Центральное колесо"
+          }
+        }
+      }
+    },
+    "wrist.18.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hand sweeps the dial; cross while it is dark."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Стрелка обходит циферблат; проходи, пока она не горит."
+          }
+        }
+      }
+    },
+    "wrist.19.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The fourth wheel counts the seconds. Two beams fire on alternate beats; the lane between them is never quiet for long."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Секундное колесо отсчитывает секунды. Два луча стреляют через такт, и проход между ними недолго остаётся тихим."
+          }
+        }
+      }
+    },
+    "wrist.19.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fourth Wheel"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Секундное колесо"
+          }
+        }
+      }
+    },
+    "wrist.19.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two beams keep alternate seconds."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Два луча отбивают секунды по очереди."
           }
         }
       }
@@ -22900,6 +23631,516 @@
         }
       }
     },
+    "wrist.20.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The cannon pinion carries the minute hand on a sleeve. A fragment runs its length; the record inside waits for it to pass."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Минутный триб несёт стрелку на втулке. По ней ходит обломок, и запись внутри ждёт, пока он пройдёт."
+          }
+        }
+      }
+    },
+    "wrist.20.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cannon Pinion"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Минутный триб"
+          }
+        }
+      }
+    },
+    "wrist.20.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A piston rock runs the tube."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Камень-поршень ходит по трубе."
+          }
+        }
+      }
+    },
+    "wrist.21.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A rotor winds the chronometer with every movement of the wrist. Two records ride it around a beam in the hub."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ротор заводит хронометр каждым движением запястья. На нём едут две записи — вокруг луча в центре."
+          }
+        }
+      }
+    },
+    "wrist.21.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotor"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ротор"
+          }
+        }
+      }
+    },
+    "wrist.21.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catch the sparks riding the rotor."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лови искры, что едут на роторе."
+          }
+        }
+      }
+    },
+    "wrist.22.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The power reserve runs down from left to right. Each crystal holds a little longer than the one before it."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запас хода убывает слева направо. Каждый кристалл держится чуть дольше предыдущего."
+          }
+        }
+      }
+    },
+    "wrist.22.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Power Reserve"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запас хода"
+          }
+        }
+      }
+    },
+    "wrist.22.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The gauge drains; take it in order."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шкала тает — собирай по порядку."
+          }
+        }
+      }
+    },
+    "wrist.23.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A chronograph measures intervals. Cross the beam in its pause, then catch the gate on its next opening."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Хронограф измеряет промежутки. Пересеки луч в паузе, затем поймай шлюз на следующем открытии."
+          }
+        }
+      }
+    },
+    "wrist.23.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chronograph"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Хронограф"
+          }
+        }
+      }
+    },
+    "wrist.23.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start, stop, reset: a beam and a gate."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Старт, стоп, сброс: луч и шлюз."
+          }
+        }
+      }
+    },
+    "wrist.24.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A flyback resets the hand without stopping the watch. Two fragments run their lanes; the beam in the middle is the reset."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Флайбэк сбрасывает стрелку, не останавливая часы. Два обломка ходят по дорожкам, а луч посередине и есть сброс."
+          }
+        }
+      }
+    },
+    "wrist.24.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flyback"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Флайбэк"
+          }
+        }
+      }
+    },
+    "wrist.24.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two runs and a reset beam."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Два хода и луч сброса."
+          }
+        }
+      }
+    },
+    "wrist.25.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The split-seconds hand stops while its twin runs on. Two beams share one axis and take turns sweeping the quarters."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сплит-стрелка останавливается, пока её пара бежит дальше. Два луча делят одну ось и по очереди метут четверти циферблата."
+          }
+        }
+      }
+    },
+    "wrist.25.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rattrapante"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Раттрапант"
+          }
+        }
+      }
+    },
+    "wrist.25.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two hands split the dial."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Две стрелки делят циферблат."
+          }
+        }
+      }
+    },
+    "wrist.26.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A tachymeter turns elapsed time into speed. The crystals here reward a route that is fast and short."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тахиметр превращает прошедшее время в скорость. Кристаллы здесь награждают быстрый и короткий маршрут."
+          }
+        }
+      }
+    },
+    "wrist.26.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tachymeter"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тахиметр"
+          }
+        }
+      }
+    },
+    "wrist.26.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measure speed by distance."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скорость меряют расстоянием."
+          }
+        }
+      }
+    },
+    "wrist.27.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A minute repeater chimes the time on demand: hours, quarters, minutes. Three gates open in the same order."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Минутный репетир отбивает время по запросу: часы, четверти, минуты. Три шлюза открываются в том же порядке."
+          }
+        }
+      }
+    },
+    "wrist.27.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minute Repeater"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Минутный репетир"
+          }
+        }
+      }
+    },
+    "wrist.27.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Three gates chime in turn."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Три шлюза отбивают по очереди."
+          }
+        }
+      }
+    },
+    "wrist.28.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A perpetual calendar keeps months of every length. Four wheels turn at four speeds around four records."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вечный календарь помнит месяцы любой длины. Четыре колеса вращаются с четырьмя скоростями вокруг четырёх записей."
+          }
+        }
+      }
+    },
+    "wrist.28.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perpetual Calendar"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вечный календарь"
+          }
+        }
+      }
+    },
+    "wrist.28.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Four wheels, four lengths of month."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Четыре колеса, четыре длины месяца."
+          }
+        }
+      }
+    },
+    "wrist.29.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The equation of time is the gap between the sun's time and the clock's. Two beams mark the two noons; cross between them."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уравнение времени — разница между солнечным временем и временем часов. Два луча отмечают два полудня; проходи между ними."
+          }
+        }
+      }
+    },
+    "wrist.29.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equation of Time"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уравнение времени"
+          }
+        }
+      }
+    },
+    "wrist.29.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two beams disagree about noon."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Два луча спорят о полудне."
+          }
+        }
+      }
+    },
     "wrist.3.log": {
       "extractionState": "manual",
       "localizations": {
@@ -22947,6 +24188,363 @@
           "stringUnit": {
             "state": "translated",
             "value": "Медленный камень обходит циферблат."
+          }
+        }
+      }
+    },
+    "wrist.30.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sidereal time follows the stars, not the sun, and gains a few minutes every day. The records here ride a slow orbit of their own."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Звёздное время идёт за звёздами, а не за солнцем, и каждый день убегает на несколько минут. Записи здесь движутся по своей медленной орбите."
+          }
+        }
+      }
+    },
+    "wrist.30.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sidereal Time"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Звёздное время"
+          }
+        }
+      }
+    },
+    "wrist.30.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The stars turn a little faster."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Звёзды вращаются чуть быстрее."
+          }
+        }
+      }
+    },
+    "wrist.31.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A remontoire rewinds a small spring at regular intervals so the force never fades. The gates reset on the same schedule."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ремонтуар подзаводит маленькую пружину через равные промежутки, чтобы сила не угасала. Шлюзы перезапускаются по тому же расписанию."
+          }
+        }
+      }
+    },
+    "wrist.31.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remontoire"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ремонтуар"
+          }
+        }
+      }
+    },
+    "wrist.31.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wait for the force to be restored."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дождись, пока сила восстановится."
+          }
+        }
+      }
+    },
+    "wrist.32.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A fusee and chain even out the pull of the mainspring. The route unwinds the same way: through two narrow beams, one turn at a time."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фузея с цепью выравнивает тягу заводной пружины. Маршрут разматывается так же: через два узких луча, виток за витком."
+          }
+        }
+      }
+    },
+    "wrist.32.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fusee"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фузея"
+          }
+        }
+      }
+    },
+    "wrist.32.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The chain unwinds through two beams."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цепь разматывается через два луча."
+          }
+        }
+      }
+    },
+    "wrist.33.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A detent escapement releases the wheel once per beat and asks for precision in return. The gate and the beam keep the same beat."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Хронометровый спуск отпускает колесо раз в такт и требует взамен точности. Шлюз и луч держат один и тот же такт."
+          }
+        }
+      }
+    },
+    "wrist.33.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detent Escapement"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Хронометровый спуск"
+          }
+        }
+      }
+    },
+    "wrist.33.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One gate, one beam, one moment."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Один шлюз, один луч, один момент."
+          }
+        }
+      }
+    },
+    "wrist.34.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A constant-force mechanism keeps the drive even from full wind to empty. Four fragments keep the same pace; the room never settles."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Механизм постоянной силы держит тягу ровной от полного завода до пустого. Четыре обломка не сбавляют темп, и комната никогда не успокаивается."
+          }
+        }
+      }
+    },
+    "wrist.34.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Constant Force"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Постоянная сила"
+          }
+        }
+      }
+    },
+    "wrist.34.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Four fragments that never slow down."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Четыре обломка, которые не замедляются."
+          }
+        }
+      }
+    },
+    "wrist.35.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A grand complication gathers every function in one movement. The beam, the gate and the wheel have to be read together."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Большое усложнение собирает все функции в одном механизме. Луч, шлюз и колесо нужно читать вместе."
+          }
+        }
+      }
+    },
+    "wrist.35.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grand Complication"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Большое усложнение"
+          }
+        }
+      }
+    },
+    "wrist.35.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every mechanism at once."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все механизмы разом."
+          }
+        }
+      }
+    },
+    "wrist.36.log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chronometers were once certified in observatories, tested in every position. This room tests the Signal the same way; pass it, and the chronometer is ready."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Когда-то хронометры сертифицировали в обсерваториях, проверяя во всех положениях. Эта комната так же испытывает Сигнал; пройди её — и хронометр готов."
+          }
+        }
+      }
+    },
+    "wrist.36.name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Observatory Trial"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обсерваторское испытание"
+          }
+        }
+      }
+    },
+    "wrist.36.tip": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last test: read everything."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последнее испытание: читай всё."
           }
         }
       }
@@ -23263,13 +24861,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tick"
+            "value": "Calibration"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Тик"
+            "value": "Калибровка"
           }
         }
       }
@@ -23280,13 +24878,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Crown"
+            "value": "Regulation"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Головка"
+            "value": "Регулировка"
           }
         }
       }
@@ -23297,13 +24895,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tourbillon"
+            "value": "Certification"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Турбийон"
+            "value": "Сертификация"
           }
         }
       }
@@ -23365,13 +24963,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pair an Apple Watch to play twelve rooms on your wrist. Every new clear pays %lld research points here."
+            "value": "Pair an Apple Watch to play thirty-six rooms on your wrist. Every new clear pays %lld research points here."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Подключи Apple Watch, чтобы пройти двенадцать комнат на запястье. Каждое новое прохождение даёт здесь %lld очков исследований."
+            "value": "Подключи Apple Watch, чтобы пройти тридцать шесть комнат на запястье. Каждое новое прохождение даёт здесь %lld очков исследований."
           }
         }
       }

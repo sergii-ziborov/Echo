@@ -34,7 +34,7 @@ final class RemoteScopeScene: SKScene {
     private var sparkNodes: [Int: SKNode] = [:]
     private var bonusNodes: [Int: SKNode] = [:]
     private var rockNodes: [Int: SKNode] = [:]
-    private var laserNodes: [Int: SKShapeNode] = [:]
+    private var laserNodes: [Int: WatchLaserNode] = [:]
     private var gateNodes: [Int: SKShapeNode] = [:]
     private let exitRing = SKShapeNode()
     private let exitSpin = SKShapeNode()
@@ -155,10 +155,8 @@ final class RemoteScopeScene: SKScene {
         buildPickups()
         for mover in layout.movers { buildRock(mover) }
         for laser in layout.lasers {
-            let beam = SKShapeNode()
-            beam.lineCap = .round
-            beam.zPosition = 9
-            addChild(beam)
+            let beam = WatchLaserNode()
+            addChild(beam.root)
             laserNodes[laser.id] = beam
         }
 
@@ -326,22 +324,13 @@ final class RemoteScopeScene: SKScene {
     }
 
     private func style(_ beam: RemoteFrame.Beam) {
-        guard let node = laserNodes[beam.id] else { return }
-        let path = CGMutablePath()
-        path.move(to: point(beam.start))
-        path.addLine(to: point(beam.end))
-        node.path = path
-        switch beam.phase {
-        case .idle:
-            node.strokeColor = UIColor(red: 1, green: 0.3, blue: 0.5, alpha: 0.14)
-            node.lineWidth = 1
-        case .charging(let progress):
-            node.strokeColor = UIColor(red: 1, green: 0.35, blue: 0.55, alpha: 0.25 + CGFloat(progress) * 0.55)
-            node.lineWidth = 1 + CGFloat(progress) * 1.5
-        case .firing:
-            node.strokeColor = UIColor(red: 1, green: 0.55, blue: 0.7, alpha: 1)
-            node.lineWidth = max(2.5, 18 * scale)
-        }
+        laserNodes[beam.id]?.update(
+            start: point(beam.start),
+            end: point(beam.end),
+            phase: beam.phase,
+            width: max(2.5, 18 * scale),
+            clock: ProcessInfo.processInfo.systemUptime
+        )
     }
 
     /// Keep the orb centred, but never show much beyond the arena's walls.

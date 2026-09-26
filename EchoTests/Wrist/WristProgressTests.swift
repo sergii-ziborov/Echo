@@ -2,15 +2,33 @@ import XCTest
 @testable import Echo
 
 final class WristProgressTests: XCTestCase {
-    func testTwelveWristMapsOpenOneAfterAnother() {
-        XCTAssertEqual(WristCatalog.maps.count, 12)
-        XCTAssertEqual(Set(WristCatalog.maps.map(\.id)).count, 12)
+    func testThirtySixWristRoomsOpenOneAfterAnother() {
+        XCTAssertEqual(WristCatalog.maps.count, 36)
+        XCTAssertEqual(WristCatalog.maps.map(\.number), Array(1...36), "Rooms are listed in play order")
+        XCTAssertEqual(WristCatalog.maps.map(\.id), (1...36).map { "wrist-\($0)" }, "Room IDs are save data")
         var progress = WristProgress()
         XCTAssertTrue(progress.isPlayable(WristCatalog.maps[0]))
         XCTAssertFalse(progress.isPlayable(WristCatalog.maps[1]))
         progress.record(clear: WristCatalog.maps[0].id, time: 12)
         XCTAssertTrue(progress.isPlayable(WristCatalog.maps[1]))
-        XCTAssertEqual(WristCatalog.act(of: WristCatalog.maps[11]), 2)
+        XCTAssertEqual(WristCatalog.act(of: WristCatalog.maps[11]), 0)
+        XCTAssertEqual(WristCatalog.act(of: WristCatalog.maps[12]), 1)
+        XCTAssertEqual(WristCatalog.act(of: WristCatalog.maps[35]), 2)
+    }
+
+    /// Every spark, bonus and the exit can be reached past the walls, on the
+    /// authored square and on the faces the rooms are stretched to.
+    func testEveryWristRoomCanBeCleared() {
+        for level in WristCatalog.maps {
+            for aspect in [1.0, 1.07, 1.25] {
+                let face = WristCatalog.fitted(level, aspect: aspect)
+                XCTAssertTrue(EndlessReach.isSolvable(face), "Room \(level.number) \(level.name) at \(aspect) has an objective cut off")
+            }
+            XCTAssertGreaterThanOrEqual(level.sparks.count, 3, "Room \(level.number) needs a route, not a dash")
+            for laser in level.lasers {
+                XCTAssertGreaterThanOrEqual(laser.period - laser.activeFor - laser.chargeFor, 2, "Room \(level.number) beam \(laser.id) leaves too little quiet time")
+            }
+        }
     }
 
     func testMergeKeepsTheFasterTimeAndReportsOnlyNewClears() {

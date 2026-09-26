@@ -38,7 +38,7 @@ final class WristLinkTests: XCTestCase {
         outbox.post(.stick(Vec2(x: -1, y: 0)))
         XCTAssertEqual(outbox.next(now: 0.1), .dash, "Commands go ahead of the stick")
         outbox.post(.stick(Vec2(x: 0, y: -1)))
-        XCTAssertNil(outbox.next(now: 0.2), "No more than two messages wait for replies")
+        XCTAssertNil(outbox.next(now: 0.2), "No more than two sticks wait for replies")
         XCTAssertEqual(outbox.waiting, 2)
 
         outbox.delivered()
@@ -53,9 +53,17 @@ final class WristLinkTests: XCTestCase {
         XCTAssertEqual(outbox.next(now: 0.5), .release, "Letting go cancels a stick that never left")
         outbox.post(.hello(level: 1))
         XCTAssertEqual(outbox.next(now: 0.6), .hello(level: 1))
+        outbox.post(.stick(Vec2(x: 0, y: 1)))
+        XCTAssertNil(outbox.next(now: 0.65), "The window is full for sticks")
+        outbox.post(.release)
+        XCTAssertEqual(outbox.next(now: 0.7), .release, "Letting go never waits behind the window")
         outbox.post(.pause)
-        XCTAssertNil(outbox.next(now: 0.7))
-        XCTAssertEqual(outbox.next(now: 0.5 + RemoteOutbox.replyTimeout + 0.01), .pause, "A lost reply frees its slot")
+        XCTAssertEqual(outbox.next(now: 0.75), .pause, "Neither does pause")
+        XCTAssertNil(outbox.next(now: 0.8))
+        XCTAssertEqual(outbox.waiting, 4)
+        outbox.post(.hello(level: 2))
+        XCTAssertNil(outbox.next(now: 0.5 + RemoteOutbox.replyTimeout + 0.01), "Only the oldest reply has timed out")
+        XCTAssertEqual(outbox.next(now: 0.75 + RemoteOutbox.replyTimeout + 0.01), .hello(level: 2), "Lost replies free their slots")
     }
 
     func testFramesCarryTheMovingPartsInAFewDozenBytes() throws {

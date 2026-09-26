@@ -79,6 +79,8 @@ struct RootView: View {
             SettingsView()
         case .shop:
             ShopView()
+        case .records:
+            RecordsView()
         }
     }
 
@@ -93,6 +95,7 @@ struct RootView: View {
         case .playing(let r): "play-\(r.levelID)"
         case .settings: "settings"
         case .shop: "shop"
+        case .records: "records"
         }
     }
 }

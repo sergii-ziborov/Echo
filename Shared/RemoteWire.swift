@@ -60,25 +60,27 @@ enum RemoteCommand: Equatable, Sendable {
     }
 }
 
-/// What the watch sends next: commands in order, then only the newest stick
-/// position, with no more than `window` messages waiting for their replies.
-/// A small window keeps the stick flowing on a slow link without letting a
-/// queue of stale positions build up behind it.
+/// What the watch sends next. Letting go, dash, pause, rewind and retry go
+/// out at once, ahead of everything, because waiting behind stick positions
+/// is what made the orb coast on after the finger lifted. After them come
+/// hellos, then only the newest stick position, with no more than `window`
+/// messages waiting for their replies so stale positions never queue up.
 struct RemoteOutbox: Sendable {
     /// A reply that never comes (a dropped link) frees its slot after this long.
     static let replyTimeout: TimeInterval = 1
 
     let window: Int
     private var inFlight: [TimeInterval] = []
+    private var urgent: [RemoteCommand] = []
     private var queue: [RemoteCommand] = []
     private var stick: Vec2?
     private var stickDirty = false
 
-    init(window: Int = 2) {
+    init(window: Int = 3) {
         self.window = max(1, window)
     }
 
-    var isIdle: Bool { queue.isEmpty && !stickDirty }
+    var isIdle: Bool { urgent.isEmpty && queue.isEmpty && !stickDirty }
     var waiting: Int { inFlight.count }
 
     mutating func post(_ command: RemoteCommand) {
@@ -89,21 +91,24 @@ struct RemoteOutbox: Sendable {
         case .release:
             stick = nil
             stickDirty = false
-            queue.append(.release)
+            urgent.append(.release)
         case .hello:
             queue.removeAll { if case .hello = $0 { true } else { false } }
             queue.append(command)
         default:
-            queue.append(command)
+            urgent.append(command)
         }
     }
 
-    /// The message to send now, if a slot is free; marks it in flight.
+    /// The message to send now, if there is one and it may go; marks it in flight.
     mutating func next(now: TimeInterval) -> RemoteCommand? {
         inFlight.removeAll { now - $0 >= Self.replyTimeout }
-        guard inFlight.count < window else { return nil }
         let command: RemoteCommand
-        if !queue.isEmpty {
+        if !urgent.isEmpty {
+            command = urgent.removeFirst()
+        } else if inFlight.count >= window {
+            return nil
+        } else if !queue.isEmpty {
             command = queue.removeFirst()
         } else if stickDirty, let stick {
             stickDirty = false

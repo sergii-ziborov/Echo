@@ -70,3 +70,9 @@ def put_plural(catalog, key, en, ru, comment=None):
     if comment:
         entry["comment"] = comment
     catalog["strings"][key] = entry
+
+
+def put_many(catalog, rows, prefix=""):
+    """Several plain lines at once: (key, English, Russian) rows."""
+    for key, en, ru in rows:
+        put(catalog, prefix + key, en, ru)
