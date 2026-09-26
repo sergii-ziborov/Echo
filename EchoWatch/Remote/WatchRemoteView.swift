@@ -44,12 +44,13 @@ struct WatchRemoteView: View {
             .gesture(stickGesture)
             .onAppear { prepare(size: arena) }
             .onChange(of: link.levelToken) { prepare(size: arena) }
+            .onChange(of: arena) { _, size in prepare(size: size) }
         }
         .ignoresSafeArea()
         .toolbar(.hidden, for: .navigationBar)
         .focusable()
-        .digitalCrownRotation($crown, from: -1_000_000, through: 1_000_000, by: 0.05, sensitivity: .medium, isContinuous: true, isHapticFeedbackEnabled: true)
-        .onChange(of: crown) { old, new in crownTurned(by: new - old) }
+        .digitalCrownRotation($crown, from: 0, through: WatchRunView.crownLoop, by: 0.05, sensitivity: .medium, isContinuous: true, isHapticFeedbackEnabled: true)
+        .onChange(of: crown) { old, new in crownTurned(by: WatchRunView.crownStep(from: old, to: new)) }
         .onChange(of: link.frame) { _, frame in haptics.feel(frame, level: scene?.level) }
         .onAppear(perform: startKeepAlive)
         .onDisappear {

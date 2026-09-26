@@ -9,6 +9,19 @@ struct WatchRunView: View {
     /// Space above the arena for the HUD and the system clock.
     static let band: CGFloat = 28
 
+    /// The Crown winds through a short loop; only the direction of each turn
+    /// matters. watchOS lays out every detent of the range, so a huge range
+    /// at a fine step costs hundreds of megabytes and gets the app killed.
+    static let crownLoop = 100.0
+
+    /// A turn between two Crown readings, unwrapping the loop's seam.
+    static func crownStep(from old: Double, to new: Double) -> Double {
+        let delta = new - old
+        if delta > crownLoop / 2 { return delta - crownLoop }
+        if delta < -crownLoop / 2 { return delta + crownLoop }
+        return delta
+    }
+
     @State private var level: LevelDefinition
     @State private var run: WatchRun?
     @State private var scene: WatchArenaScene?
@@ -38,12 +51,14 @@ struct WatchRunView: View {
                 }
             }
             .onAppear { start(size: arena) }
+            // The first layout pass can report no size yet on a real watch.
+            .onChange(of: arena) { _, size in start(size: size) }
         }
         .ignoresSafeArea()
         .toolbar(.hidden, for: .navigationBar)
         .focusable()
-        .digitalCrownRotation($crown, from: -1_000_000, through: 1_000_000, by: 0.05, sensitivity: .medium, isContinuous: true, isHapticFeedbackEnabled: true)
-        .onChange(of: crown) { old, new in crownTurned(by: new - old) }
+        .digitalCrownRotation($crown, from: 0, through: WatchRunView.crownLoop, by: 0.05, sensitivity: .medium, isContinuous: true, isHapticFeedbackEnabled: true)
+        .onChange(of: crown) { old, new in crownTurned(by: Self.crownStep(from: old, to: new)) }
         .onChange(of: scenePhase) { _, phase in
             if phase != .active, run?.phase == .playing { run?.togglePause() }
         }
