@@ -14,7 +14,7 @@ settings:
     # One version for the phone app and its embedded watch app: App Store
     # validation rejects an archive whose two bundles disagree.
     MARKETING_VERSION: 1.0.0
-    CURRENT_PROJECT_VERSION: 18
+    CURRENT_PROJECT_VERSION: 19
     DEVELOPMENT_TEAM: XMS5ZC28UJ
     IPHONEOS_DEPLOYMENT_TARGET: "18.0"
     TARGETED_DEVICE_FAMILY: "1,2"

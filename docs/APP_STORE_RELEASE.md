@@ -14,7 +14,7 @@ After signing in to App Store Connect:
 
 1. Connect an Xcode Cloud workflow to `sergii-ziborov/Echo` on `main`.
 2. Use **Archive - iOS**, **App Store Connect** distribution, and **TestFlight Internal Testing**.
-3. Confirm the processed build is 1.0.0 (18) or later before assigning testers.
+3. Confirm the processed build is 1.0.0 (19) or later before assigning testers.
 
 Suggested **What to Test**: region arrival cards and the Atlas route (Möbius loop, region skies); Deep Time; the Apple Watch app on its own and as a remote for a phone run; Settings → About / Terms / Privacy / Report a bug.
 
@@ -95,7 +95,7 @@ App Review notes: no sign-in. Settings contains About, Terms, Privacy, Report a 
 ## Submission sequence
 
 1. Confirm the explicit App ID and the iOS app record. English (U.S.) primary language.
-2. Archive 1.0.0 (18) with a release Xcode (or let Xcode Cloud archive it), validate, and upload. Wait for processing.
+2. Archive 1.0.0 (19) with a release Xcode (or let Xcode Cloud archive it), validate, and upload. Wait for processing.
 3. Attach screenshots, listing copy, support and privacy URLs, age rating, and content rights. Export compliance: the app uses only exempt encryption (`ITSAppUsesNonExemptEncryption` is false).
 4. Choose **Paid** only after the Paid Apps Agreement is accepted. Set $1.99 and the intended countries.
 5. Review the product page and submit. “Prepare for Submission” is not a public release.

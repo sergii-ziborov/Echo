@@ -6,7 +6,7 @@ It has 77 campaign maps, the Deep Time expedition, a Daily Rift, and twelve Keep
 
 The App Store build is a paid download. There are no ads, subscriptions, or in-app purchases. Progress stays on your devices.
 
-- Version: 1.0.0 (18)
+- Version: 1.0.0 (19)
 - Bundle ID: `com.sergiiziborov.Echo`
 - Developer: Sergii Ziborov
 - Support and bug reports: [sergii.ziborov@gmail.com](mailto:sergii.ziborov@gmail.com), **Settings → Report a bug** in the app, or [GitHub Issues](https://github.com/sergii-ziborov/Echo/issues)
