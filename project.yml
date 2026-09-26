@@ -2,6 +2,7 @@ name: Echo
 
 options:
   bundleIdPrefix: com.sergiiziborov
+  developmentLanguage: en
   deploymentTarget:
     iOS: "18.0"
   createIntermediateGroups: true
@@ -36,6 +37,8 @@ targets:
       path: Echo/Resources/Info.plist
       properties:
         CFBundleDisplayName: ECHO
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, ru]
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         ITSAppUsesNonExemptEncryption: false
@@ -98,6 +101,8 @@ targets:
       path: EchoWatch/Info.plist
       properties:
         CFBundleDisplayName: ECHO
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, ru]
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         WKApplication: true

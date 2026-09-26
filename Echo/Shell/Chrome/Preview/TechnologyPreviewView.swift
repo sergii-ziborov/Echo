@@ -25,7 +25,7 @@ struct TechnologyPreviewView: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { timeline in
             let rawTime = reduceMotion ? 3.8 : max(0, timeline.date.timeIntervalSince(loopStartedAt))
-            let progress = rawTime.truncatingRemainder(dividingBy: 5.4) / 5.4
+            let progress = rawTime.truncatingRemainder(dividingBy: Self.loop) / Self.loop
             let phase = min(2, Int(progress * 3))
 
             ZStack {
@@ -46,7 +46,7 @@ struct TechnologyPreviewView: View {
                             Text(kind.title.uppercased())
                                 .font(.system(size: 9, weight: .black, design: .rounded))
                                 .tracking(0.7)
-                            Text("ANIMATED EFFECT DEMO · 5.4S LOOP")
+                            Text(Copy.format("tech.loop", Copy.seconds(Self.loop)))
                                 .font(.system(size: 8, weight: .bold, design: .rounded))
                                 .tracking(0.4)
                                 .foregroundStyle(tint)
@@ -62,16 +62,16 @@ struct TechnologyPreviewView: View {
                                 .background(tint.opacity(0.20), in: Circle())
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("Replay technology demonstration")
+                        .accessibilityLabel(Copy.text("tech.replay"))
                     }
                     .foregroundStyle(.white.opacity(0.90))
 
                     HStack(spacing: 8) {
-                        previewValue("NOW", value: currentValue, tint: EchoTheme.muted)
+                        previewValue(Copy.text("tech.now"), value: currentValue, tint: EchoTheme.muted)
                         Image(systemName: "arrow.right")
                             .font(.system(size: 10, weight: .black))
                             .foregroundStyle(tint)
-                        previewValue(level >= kind.maxLevel ? "STATUS" : "NEXT", value: nextValue, tint: tint)
+                        previewValue(Copy.text(level >= kind.maxLevel ? "lab.card.status" : "tech.next"), value: nextValue, tint: tint)
                     }
                     .padding(.top, 9)
 
@@ -89,9 +89,9 @@ struct TechnologyPreviewView: View {
                         .background(EchoTheme.navyDeep.opacity(0.88), in: RoundedRectangle(cornerRadius: 11))
 
                     HStack(spacing: 5) {
-                        stagePill("1 · WITHOUT", active: phase == 0)
-                        stagePill("2 · UPGRADE", active: phase == 1)
-                        stagePill("3 · WITH", active: phase == 2)
+                        stagePill(Copy.text("tech.stage.without"), active: phase == 0)
+                        stagePill(Copy.text("tech.stage.upgrade"), active: phase == 1)
+                        stagePill(Copy.text("tech.stage.with"), active: phase == 2)
                     }
                     .padding(.top, 7)
                 }
@@ -119,7 +119,7 @@ struct TechnologyPreviewView: View {
         )
         .shadow(color: tint.opacity(0.14), radius: 16, y: 8)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Animated comparison for \(kind.title). \(kind.detail)")
+        .accessibilityLabel(Copy.format("tech.a11y", kind.title, kind.detail))
     }
 
     func previewValue(_ eyebrow: String, value: String, tint: Color) -> some View {
@@ -152,71 +152,19 @@ struct TechnologyPreviewView: View {
 
     func stageCopy(_ phase: Int) -> String {
         if phase == 0 { return baselineCopy }
-        if phase == 1 { return "UPGRADE APPLIED · WATCH THE SAME SCENE CHANGE" }
+        if phase == 1 { return Copy.text("tech.applied") }
         return resultCopy
     }
 
-    var baselineCopy: String {
-        switch kind {
-        case .velocity: "BEFORE · THE CRYSTAL IS JUST OUT OF REACH"
-        case .sparkSense: "BEFORE · YOU MUST TOUCH EVERY SPARK"
-        case .dashCapacitor: "BEFORE · DASH IS STILL RECHARGING"
-        case .surgeMastery: "BEFORE · THE SPEED BOOST ENDS EARLY"
-        case .dashImpulse: "BEFORE · ONE DASH STOPS INSIDE DANGER"
-        case .slots: "BEFORE · ONLY CURRENT ABILITY BUTTONS FIT"
-        case .reserves: "BEFORE · CHARGES RUN OUT SOONER"
-        case .fabricator: "BEFORE · EACH CHARGE COSTS MORE"
-        case .aegis: "BEFORE · SHIELD RECOVERY ENDS SOONER"
-        case .shieldLattice:
-            level + 1 >= kind.maxLevel
-                ? "BEFORE · ONE IMPACT BREAKS THE SHIELD"
-                : "BEFORE · THE SAFE WINDOW FADES SOONER"
-        case .fieldAmplifier: "BEFORE · TIMED EFFECTS EXPIRE SOONER"
-        case .recharge: "BEFORE · ABILITIES STAY LOCKED LONGER"
-        case .beamForecast: "BEFORE · THE LASER WARNING COMES LATE"
-        case .cryostasis: "BEFORE · HAZARDS START MOVING SOONER"
-        case .echoForecast: "BEFORE · YOUR ECHO FOLLOWS CLOSER"
-        case .crystalMemory: "BEFORE · THE CRYSTAL FREEZES A SMALL WINDOW"
-        case .magnetism: "BEFORE · DISTANT SPARKS STAY PUT"
-        case .phaseResearch: "BEFORE · SOLID HAZARDS BLOCK THE ROUTE"
-        case .chronoResearch: "BEFORE · THE NEXT EVENT ARRIVES SOONER"
-        case .rewind: "BEFORE · ONLY A SHORT ROUTE CAN BE UNDONE"
-        case .anchorResearch: "BEFORE · THE WHOLE WORLD MOVES AT FULL SPEED"
-        case .repulseResearch: "BEFORE · NEARBY HAZARDS KEEP CLOSING IN"
-        case .prismResearch: "BEFORE · LASERS CROSS YOUR POSITION"
-        case .blinkResearch: "BEFORE · THE JUMP ENDS BEFORE SAFETY"
-        }
+    var baselineCopy: String { Copy.text(sceneKey("before")) }
+
+    var resultCopy: String { Copy.text(sceneKey("after")) }
+
+    /// Shield Lattice's last rank adds a second layer, so its scene changes there.
+    func sceneKey(_ side: String) -> String {
+        let key = "tech.\(kind.rawValue).\(side)"
+        return kind == .shieldLattice && level + 1 >= kind.maxLevel ? key + ".final" : key
     }
 
-    var resultCopy: String {
-        switch kind {
-        case .velocity: "AFTER · YOU REACH THE CRYSTAL SOONER"
-        case .sparkSense: "AFTER · THE WIDER RING COLLECTS IT FOR YOU"
-        case .dashCapacitor: "AFTER · DASH BECOMES READY SOONER"
-        case .surgeMastery: "AFTER · THE SPEED BOOST LASTS LONGER"
-        case .dashImpulse: "AFTER · ONE DASH CLEARS THE ENTIRE HAZARD"
-        case .slots: "AFTER · ONE MORE ABILITY CAN BE EQUIPPED"
-        case .reserves: "AFTER · EVERY ABILITY GAINS TWO CHARGES"
-        case .fabricator: "AFTER · FUTURE CHARGES COST FEWER POINTS"
-        case .aegis: "AFTER · THE SAFE RECOVERY WINDOW IS LONGER"
-        case .shieldLattice:
-            level + 1 >= kind.maxLevel
-                ? "AFTER · TWO LAYERS CAN ABSORB TWO HITS"
-                : "AFTER · THE SAFE WINDOW HOLDS LONGER"
-        case .fieldAmplifier: "AFTER · EVERY TIMED FIELD LASTS LONGER"
-        case .recharge: "AFTER · THE NEXT ACTIVATION ARRIVES SOONER"
-        case .beamForecast: "AFTER · THE WARNING APPEARS EARLIER"
-        case .cryostasis: "AFTER · FROZEN HAZARDS WAIT LONGER"
-        case .echoForecast: "AFTER · MORE SPACE OPENS BEHIND YOU"
-        case .crystalMemory: "AFTER · THE CRYSTAL FREEZES FOR LONGER"
-        case .magnetism: "AFTER · THE FIELD PULLS DISTANT SPARKS IN"
-        case .phaseResearch: "AFTER · YOU PASS THROUGH THE HAZARD"
-        case .chronoResearch: "AFTER · THE TIMELINE IS PUSHED BACK"
-        case .rewind: "AFTER · MORE OF YOUR ROUTE RETURNS"
-        case .anchorResearch: "AFTER · HAZARDS SLOW WHILE YOU STAY FAST"
-        case .repulseResearch: "AFTER · THE WIDER BLAST CLEARS THE ROOM"
-        case .prismResearch: "AFTER · THE PRISM BENDS THE BEAM AWAY"
-        case .blinkResearch: "AFTER · THE LONGER JUMP REACHES SAFETY"
-        }
-    }
+    static let loop: TimeInterval = 5.4
 }

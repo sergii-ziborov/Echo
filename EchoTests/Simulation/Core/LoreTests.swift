@@ -5,17 +5,20 @@ import XCTest
 /// Fold Road, and a region never changes its look halfway through.
 @MainActor
 final class LoreTests: XCTestCase {
-    func testEveryCampaignMapHasItsOwnPlaceAndLog() {
-        XCTAssertEqual(LevelLore.entries.count, LevelCatalog.playable.count)
-        for level in LevelCatalog.playable {
-            let entry = LevelLore.entry(for: level.number)
-            XCTAssertFalse(entry?.place.isEmpty ?? true, "Map \(level.number) has no place")
-            XCTAssertFalse(entry?.log.isEmpty ?? true, "Map \(level.number) has no log")
+    func testEveryCampaignMapHasItsOwnNameAndLog() throws {
+        XCTAssertEqual(LevelLore.count, LevelCatalog.playable.count)
+        let entries = try LevelCatalog.playable.map { level in
+            try XCTUnwrap(LevelLore.entry(for: level.number), "Map \(level.number) has no lore")
         }
-        XCTAssertEqual(Set(LevelLore.entries.map(\.place)).count, LevelLore.entries.count, "Two maps share a place")
-        XCTAssertEqual(Set(LevelLore.entries.map(\.log)).count, LevelLore.entries.count, "Two maps share a log")
+        for (level, entry) in zip(LevelCatalog.playable, entries) {
+            XCTAssertFalse(entry.title.isEmpty, "Map \(level.number) has no name")
+            XCTAssertFalse(entry.log.isEmpty, "Map \(level.number) has no log")
+            XCTAssertEqual(level.title, entry.title)
+            XCTAssertFalse(level.tip.isEmpty, "Map \(level.number) has no tip")
+        }
+        XCTAssertEqual(Set(entries.map(\.log)).count, entries.count, "Two maps share a log")
         XCTAssertNil(LevelLore.entry(for: 0))
-        XCTAssertNil(LevelLore.entry(for: LevelCatalog.playable.count + 1))
+        XCTAssertNil(LevelLore.entry(for: LevelLore.count + 1))
     }
 
     func testEachRegionKeepsOneLook() {
@@ -66,7 +69,7 @@ final class LoreTests: XCTestCase {
         let request = PlayRequest(levelID: level.id, daily: false)
         let arrival = try XCTUnwrap(ArrivalCard.Arrival.first(for: request, level: level, seen: []))
         XCTAssertEqual(arrival.key, "region.\(Act.fracture.rawValue)")
-        XCTAssertEqual(arrival.title, Act.fracture.region)
+        XCTAssertEqual(arrival.title, Act.fracture.region.uppercased())
         XCTAssertNil(ArrivalCard.Arrival.first(for: request, level: level, seen: [arrival.key]))
         XCTAssertNil(ArrivalCard.Arrival.first(for: PlayRequest(levelID: "daily", daily: true), level: level, seen: []))
 
@@ -75,9 +78,22 @@ final class LoreTests: XCTestCase {
         XCTAssertEqual(Set(ArrivalCard.Arrival.allKeys).count, Act.allCases.count + 1)
     }
 
-    func testStoryIsInTheArchive() {
+    func testStoryRecordsOpenAsRegionsAreCleared() {
         XCTAssertTrue(WikiSection.allCases.contains(.story))
-        XCTAssertEqual(WikiEntry.story.count, 6)
-        XCTAssertTrue(WikiEntry.story.allSatisfy { !$0.detail.isEmpty })
+        let name = "echo.test.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: name)!
+        defaults.removePersistentDomain(forName: name)
+        let store = ProgressStore(defaults: defaults)
+
+        let open = StoryRecord.allCases.filter { $0.isRecovered(in: store) }
+        XCTAssertEqual(open, [.lighthouse], "A new save only holds the Lighthouse record")
+        XCTAssertTrue(StoryRecord.allCases.filter(\.isEnding).allSatisfy { $0.region == nil })
+
+        store.debugShowcase(cleared: Act.drift.range.upperBound)
+        XCTAssertTrue(StoryRecord.gardens.isRecovered(in: store))
+        XCTAssertFalse(StoryRecord.final.isRecovered(in: store))
+
+        store.debugShowcase(cleared: LevelCatalog.playable.count)
+        XCTAssertTrue(StoryRecord.allCases.allSatisfy { $0.isRecovered(in: store) })
     }
 }

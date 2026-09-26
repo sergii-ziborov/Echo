@@ -133,7 +133,7 @@ extension GameView {
     func useItem(_ kind: BonusKind) {
         guard session.phase == .playing else { return }
         guard session.cooldownRemaining(for: kind) <= 0 else {
-            session.banner = String(format: "Recharging %.1fs", session.cooldownRemaining(for: kind))
+            session.banner = Copy.format("play.recharging", Copy.seconds(session.cooldownRemaining(for: kind)))
             activeModel.audio.play(.denied)
             return
         }
@@ -201,17 +201,18 @@ extension GameView {
     /// Where on the Fold Road this run takes place, for the pause card.
     var storyPlace: String? {
         let region = session.level.region.region
-        if request.endless != nil { return "Deep Time · below \(region)" }
+        if request.endless != nil { return Copy.format("play.place.deep", region) }
         guard let entry = LevelLore.entry(for: session.level.number) else { return nil }
-        return request.daily ? "Daily Rift · \(entry.place)" : "\(region) · \(entry.place)"
+        let place = entry.place ?? entry.title
+        return request.daily ? Copy.format("play.place.daily", place) : Copy.format("play.place.region", region, place)
     }
 
     /// What the Signal found here.
     var storyLog: String? {
         if request.endless != nil {
-            return "Uncharted time under the Road. It borrows the sky of \(session.level.region.region.capitalized) and never repeats."
+            return Copy.text("mode.deepTime.description")
         }
-        if request.daily { return RegionLore.dailyRift }
+        if request.daily { return Copy.text("mode.daily.description") }
         return LevelLore.entry(for: session.level.number)?.log
     }
 

@@ -21,7 +21,7 @@ struct ArrivalCard: View {
                 HStack {
                     Label(arrival.eyebrow, systemImage: "location.north.circle.fill")
                     Spacer()
-                    Text("THE FOLD ROAD")
+                    Text(Copy.text("arrival.road"))
                 }
                 .font(.system(size: 9, weight: .black, design: .rounded))
                 .tracking(2)
@@ -43,7 +43,7 @@ struct ArrivalCard: View {
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
 
-                PrimaryButton(title: "Enter", systemImage: "arrow.right", action: onEnter)
+                PrimaryButton(title: Copy.text("arrival.continue"), systemImage: "arrow.right", action: onEnter)
             }
             .foregroundStyle(.white)
             .padding(22)
@@ -66,15 +66,15 @@ extension ArrivalCard.Arrival {
     static func first(for request: PlayRequest, level: LevelDefinition, seen: Set<String>) -> Self? {
         let arrival: Self
         if request.endless != nil {
-            arrival = Self(key: "region.deep", eyebrow: "DIVE", title: "DEEP TIME", story: RegionLore.deepTime, tint: EchoTheme.magenta)
+            arrival = Self(key: "region.deep", eyebrow: Copy.text("arrival.deepEyebrow"), title: Copy.text("mode.deepTime.title").uppercased(), story: Copy.text("mode.deepTime.description"), tint: EchoTheme.magenta)
         } else if request.daily {
             return nil
         } else {
             let act = level.region
             arrival = Self(
                 key: "region.\(act.rawValue)",
-                eyebrow: "ARRIVAL · REGION \(String(format: "%02d", act.rawValue))",
-                title: act.region,
+                eyebrow: Copy.format("arrival.eyebrow", String(format: "%02d", act.rawValue)),
+                title: act.region.uppercased(),
                 story: act.intro,
                 tint: act.atlasTint
             )

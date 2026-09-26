@@ -10,41 +10,33 @@ enum LegalDocument: String, Identifiable, CaseIterable {
 
     var title: String {
         switch self {
-        case .about: "About"
-        case .terms: "Terms of Use"
-        case .privacy: "Privacy"
+        case .about: Copy.text("legal.about")
+        case .terms: Copy.text("legal.terms")
+        case .privacy: Copy.text("legal.privacy")
         }
     }
 
+    /// About tells what the game is and how far the story begins, never how
+    /// it ends; Terms and Privacy stay plain facts in the app's language.
     var paragraphs: [String] {
         switch self {
         case .about:
             [
-                "ECHO is a one-time puzzle for iPhone, iPad and Apple Watch. You are the Signal, the last light of the Lighthouse: carry it down the Fold Road through eleven regions of space, collect sparks, and outlive the route you just drew.",
-                "Seventy-seven campaign maps, the endless Deep Time, a Daily Rift, and twelve clockwork rooms on the watch, which can also steer a run on the phone.",
-                "The App Store build is a paid download. There are no ads, subscriptions, or in-app purchases. Progress stays on this device.",
-                "Version \(LegalDocument.shortVersion) (\(LegalDocument.buildNumber)). © 2026 Sergii Ziborov.",
-                "Support: sergii.ziborov@gmail.com",
+                Copy.text("about.game"),
+                Copy.text("about.world"),
+                Copy.format("about.features", LevelCatalog.playable.count, Act.allCases.count, WristCatalog.maps.count),
+                Copy.text("about.science"),
+                Copy.text("about.purchase"),
+                Copy.text("about.data"),
+                Copy.text("about.credits") + " " + Copy.format("about.version", LegalDocument.shortVersion, LegalDocument.buildNumber),
+                Copy.format("legal.support", BugReport.address),
             ]
         case .terms:
-            [
-                "A paid App Store download of ECHO grants a personal, non-transferable license to play the compiled app on devices associated with your Apple ID, subject to Apple’s Licensed Application End User License Agreement.",
-                "The purchase is a one-time app download. The current build does not offer subscriptions, consumable items, or advertising. Features, maps, and balance may change in later updates.",
-                "You may not copy, reverse engineer, redistribute, or reuse the app, source, artwork, or audio except as allowed by law or a separate written license from the copyright holder.",
-                "Progress, settings, and records are stored on this device. Uninstalling the app or using Reset progress permanently removes that local data.",
-                "ECHO is provided as-is. To the extent permitted by law, the developer is not liable for lost progress, device issues, or indirect damages. Your statutory consumer rights remain unchanged.",
-                "Questions: sergii.ziborov@gmail.com",
-            ]
+            ["terms.license", "terms.purchase", "terms.limits", "terms.progress", "terms.disclaimer"].map { Copy.text($0) }
+                + [Copy.format("legal.questions", BugReport.address)]
         case .privacy:
-            [
-                "ECHO does not collect personal data and does not require an account.",
-                "Stars, shards, inventory, research, last map, and audio or haptic preferences are stored only on this device with Apple’s standard UserDefaults.",
-                "The app does not include analytics, advertising, tracking, or network calls required to play.",
-                "With a paired Apple Watch, wrist clears and relics pass between your iPhone and the watch through Apple’s WatchConnectivity, and a run steered from the watch sends its controls the same way. That stays between your own devices.",
-                "Report a bug opens your mail app with a message to the developer that already names the app version, device model and system version. Nothing is sent unless you send it, and the message is used only to answer you and fix the problem.",
-                "If this policy changes, the App Store listing and the public PRIVACY.md file will be updated together.",
-                "Contact: sergii.ziborov@gmail.com",
-            ]
+            ["privacy.none", "privacy.local", "privacy.network", "privacy.watch", "privacy.report", "privacy.changes"].map { Copy.text($0) }
+                + [Copy.format("legal.contact", BugReport.address)]
         }
     }
 
@@ -64,13 +56,14 @@ enum BugReport {
     static let address = "sergii.ziborov@gmail.com"
     static let issues = URL(string: "https://github.com/sergii-ziborov/Echo/issues")!
 
+    @MainActor
     static var mail: URL? {
         var parts = URLComponents()
         parts.scheme = "mailto"
         parts.path = address
         parts.queryItems = [
-            URLQueryItem(name: "subject", value: "ECHO bug report (\(LegalDocument.shortVersion) build \(LegalDocument.buildNumber))"),
-            URLQueryItem(name: "body", value: "What happened:\n\n\nWhat you expected:\n\n\nMap or screen:\n\n—\nECHO \(LegalDocument.shortVersion) (\(LegalDocument.buildNumber)) · \(model) · iOS \(UIDevice.current.systemVersion)"),
+            URLQueryItem(name: "subject", value: Copy.format("support.subject", LegalDocument.shortVersion, LegalDocument.buildNumber)),
+            URLQueryItem(name: "body", value: Copy.text("support.body") + "\n\n\n—\nECHO \(LegalDocument.shortVersion) (\(LegalDocument.buildNumber)) · \(model) · iOS \(UIDevice.current.systemVersion) · \(Bundle.main.preferredLocalizations.first ?? "en")"),
         ]
         return parts.url
     }

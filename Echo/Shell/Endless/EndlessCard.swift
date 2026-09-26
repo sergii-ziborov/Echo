@@ -13,40 +13,40 @@ struct EndlessCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Label("ENDLESS", systemImage: "infinity")
+                Label(Copy.text("endless.card.eyebrow"), systemImage: "infinity")
                     .font(.system(size: 11, weight: .black, design: .rounded))
                     .tracking(1.5)
                     .foregroundStyle(EchoTheme.magenta)
                 Spacer()
-                Text(record.bestDepth > 0 ? "BEST DEPTH \(record.bestDepth)" : "NEW MODE")
+                Text(record.bestDepth > 0 ? Copy.format("endless.card.best", record.bestDepth) : Copy.text("endless.card.new"))
                     .font(.system(size: 9, weight: .bold, design: .rounded))
                     .tracking(0.7)
                     .foregroundStyle(EchoTheme.muted)
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Deep Time")
+                Text(Copy.text("mode.deepTime.title"))
                     .font(.system(size: 21, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
-                Text("Uncharted time below the Fold Road. Random arenas that never repeat; every clear goes one depth deeper, with more rocks, beams and echoes. A crash you cannot rewind ends the run.")
+                Text(Copy.text("endless.card.body"))
                     .font(.system(size: 12, weight: .medium, design: .rounded))
                     .foregroundStyle(Color.white.opacity(0.58))
                     .fixedSize(horizontal: false, vertical: true)
             }
 
             HStack(spacing: 10) {
-                PrimaryButton(title: "New run", systemImage: "infinity") {
+                PrimaryButton(title: Copy.text("button.newExpedition"), systemImage: "infinity") {
                     model.playEndless()
                 }
                 if let current = record.current, current.depth > 1 {
-                    SecondaryButton(title: "Depth \(current.depth)", systemImage: "arrow.right") {
+                    SecondaryButton(title: Copy.format("endless.depth", current.depth), systemImage: "arrow.right") {
                         model.playEndless(resume: true)
                     }
                 }
             }
 
             if record.runs > 0 {
-                Text("\(record.runs) \(record.runs == 1 ? "RUN" : "RUNS") · \(record.depthsCleared) \(record.depthsCleared == 1 ? "DEPTH" : "DEPTHS") CLEARED")
+                Text(Copy.format("endless.card.runs", record.runs) + " · " + Copy.format("endless.card.depths", record.depthsCleared))
                     .font(.system(size: 9, weight: .black, design: .rounded))
                     .tracking(0.8)
                     .foregroundStyle(EchoTheme.muted)

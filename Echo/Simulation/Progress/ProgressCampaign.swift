@@ -68,7 +68,7 @@ extension ProgressStore {
         completedDifficultyCycles = max(completedDifficultyCycles, difficultyCycle + 1)
         difficultyCycle += 1
         lastLevelID = LevelCatalog.prototype.id
-        shards += 777
+        shards += Self.passCompletionReward
         persist()
         return true
     }
@@ -96,6 +96,22 @@ extension ProgressStore {
         persist()
     }
 
+
+    /// Research points for finishing a whole recovery pass.
+    static let passCompletionReward = 777
+
+    /// Every map of the region has been cleared at least once, on any pass.
+    func hasCleared(_ act: Act) -> Bool {
+        completedDifficultyCycles > 0 || act.range.allSatisfy { number in
+            LevelCatalog.level(number: number).map { progress(for: $0.id, cycle: 0).stars > 0 } ?? false
+        }
+    }
+
+    /// The first recovery pass is complete: the last map was cleared once.
+    var hasFinishedCampaign: Bool {
+        completedDifficultyCycles > 0
+            || (LevelCatalog.playable.last.map { progress(for: $0.id, cycle: 0).stars > 0 } ?? false)
+    }
 
 #if DEBUG
     /// Screenshot aid: the first `count` maps cleared with a believable mix

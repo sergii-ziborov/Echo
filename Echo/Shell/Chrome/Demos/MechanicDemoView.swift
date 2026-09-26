@@ -7,17 +7,19 @@ struct MechanicDemoView: View {
     var height: CGFloat = 156
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    static let loop: TimeInterval = 4
+
     var body: some View {
         TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { timeline in
             let rawTime = reduceMotion ? 1.9 : timeline.date.timeIntervalSinceReferenceDate
-            let progress = rawTime.truncatingRemainder(dividingBy: 4) / 4
+            let progress = rawTime.truncatingRemainder(dividingBy: Self.loop) / Self.loop
 
             Canvas { context, size in
                 drawGrid(context: &context, size: size)
                 drawScenario(context: &context, size: size, progress: progress)
             }
             .overlay(alignment: .topLeading) {
-                Label("4S LIVE LOOP", systemImage: "play.fill")
+                Label(Copy.format("demo.loop", Copy.seconds(Self.loop)), systemImage: "play.fill")
                     .font(.system(size: 8, weight: .black, design: .rounded))
                     .tracking(1)
                     .foregroundStyle(.white.opacity(0.86))

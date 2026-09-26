@@ -216,7 +216,7 @@ extension LevelCatalog {
         ),
         make(
             number: 36,
-            name: "Event Horizon",
+            name: "Firing Core",
             subtitle: "Clear the four sectors, then cross the firing core.",
             playerStart: Vec2(x: 500, y: 110),
             exit: Vec2(x: 500, y: 500),

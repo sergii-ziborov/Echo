@@ -16,16 +16,7 @@ enum WikiSection: String, CaseIterable, Identifiable {
         return allCases.first { args.contains("-shot-wiki-\($0.rawValue)") } ?? .basics
     }
 
-    var title: String {
-        switch self {
-        case .basics: "Basics"
-        case .story: "Story"
-        case .threats: "Threats"
-        case .abilities: "Skills"
-        case .research: "Research"
-        case .acts: "Acts"
-        }
-    }
+    var title: String { Copy.text("archive.section.\(rawValue)") }
 
     var icon: String {
         switch self {
@@ -50,14 +41,31 @@ enum WikiSection: String, CaseIterable, Identifiable {
     }
 }
 
+/// One article. `id` is its stable catalog key, never the translated text.
 struct WikiEntry: Identifiable {
-    let id = UUID()
+    let id: String
     let icon: String
     let eyebrow: String
     let title: String
     let detail: String
     let facts: [String]
     let tint: Color
+}
+
+extension WikiEntry {
+    /// An article whose words live under `key` in the catalog: eyebrow,
+    /// title, body and `facts` numbered lines.
+    init(_ key: String, icon: String, tint: Color, facts: Int = 2, body: String? = nil, factLines: [String]? = nil) {
+        self.init(
+            id: key,
+            icon: icon,
+            eyebrow: Copy.text("\(key).eyebrow"),
+            title: Copy.text("\(key).title"),
+            detail: body ?? Copy.text("\(key).body"),
+            facts: factLines ?? (0..<facts).map { Copy.text("\(key).fact\($0 + 1)") },
+            tint: tint
+        )
+    }
 }
 
 struct WikiEntryCard: View {
@@ -84,7 +92,7 @@ struct WikiEntryCard: View {
                     .fixedSize(horizontal: false, vertical: true)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    ForEach(entry.facts, id: \.self) { fact in
+                    ForEach(Array(entry.facts.enumerated()), id: \.offset) { _, fact in
                         HStack(alignment: .firstTextBaseline, spacing: 6) {
                             Circle()
                                 .fill(entry.tint)
@@ -106,71 +114,9 @@ struct WikiEntryCard: View {
     }
 }
 
-extension WikiEntry {
-    /// Why the Signal is out here, and why each map sits where it does.
-    static let story: [WikiEntry] = [
-        WikiEntry(
-            icon: "light.beacon.max.fill",
-            eyebrow: "PREMISE",
-            title: "The last Signal",
-            detail: RegionLore.premise,
-            facts: ["You are the Signal, the white orb", "Echoes are moments replayed by broken time"],
-            tint: EchoTheme.gold
-        ),
-        WikiEntry(
-            icon: "point.3.connected.trianglepath.dotted",
-            eyebrow: "THE FOLD ROAD",
-            title: "Why the sky changes",
-            detail: RegionLore.foldRoad,
-            facts: ["Sparks: loose seconds of the present", "The exit: a fold to the next stop", "Eleven regions, seventy-seven stops"],
-            tint: EchoTheme.cyan
-        ),
-        WikiEntry(
-            icon: "infinity.circle.fill",
-            eyebrow: "THE LOOP",
-            title: "Where the Road ends",
-            detail: RegionLore.loop,
-            facts: ["Each difficulty cycle is one more lap", "Last Dawn is the Lighthouse at the end of time"],
-            tint: EchoTheme.violet
-        ),
-        WikiEntry(
-            icon: "water.waves",
-            eyebrow: "BELOW THE ROAD",
-            title: "Deep Time",
-            detail: RegionLore.deepTime,
-            facts: ["Separate from the campaign", "Each depth borrows one region's sky"],
-            tint: EchoTheme.magenta
-        ),
-        WikiEntry(
-            icon: "calendar",
-            eyebrow: "DAILY RIFT",
-            title: "A stop reopened",
-            detail: RegionLore.dailyRift,
-            facts: ["Same place, new sparks", "Pays bonus fragments"],
-            tint: .orange
-        ),
-        WikiEntry(
-            icon: "applewatch",
-            eyebrow: "THE KEEPERS' CHRONOMETER",
-            title: "The watch",
-            detail: RegionLore.wrist,
-            facts: ["Relics after 4, 8 and 12 rooms", "It can also steer the phone"],
-            tint: .green
-        ),
-    ]
-}
-
 extension UpgradeBranch {
     var wikiColor: Color {
         Color(red: tint.r, green: tint.g, blue: tint.b)
-    }
-
-    var wikiSummary: String {
-        switch self {
-        case .motion: "Speed, steering and route recovery."
-        case .loadout: "Slots, reserves and new skill types."
-        case .temporal: "Cooldowns, lasers and time control."
-        }
     }
 }
 

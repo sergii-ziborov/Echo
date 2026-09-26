@@ -9,9 +9,9 @@ struct EncounterCard: View {
             Color.black.opacity(0.55).ignoresSafeArea()
             VStack(spacing: 12) {
                 HStack {
-                    Label("FIRST CONTACT", systemImage: "play.rectangle.fill")
+                    Label(Copy.text("encounter.eyebrow"), systemImage: "play.rectangle.fill")
                     Spacer()
-                    Text("WATCH THE LOOP")
+                    Text(Copy.text("encounter.demo"))
                 }
                     .font(.system(size: 9, weight: .black, design: .rounded))
                     .tracking(3)
@@ -19,6 +19,9 @@ struct EncounterCard: View {
                 Text(hint.title)
                     .font(.system(size: 25, weight: .bold, design: .rounded))
                     .tracking(1)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.7)
                 MechanicDemoView(scenario: MechanicDemoScenario(hint: hint), height: 162)
                 Text(hint.action)
                     .font(.system(size: 11, weight: .black, design: .rounded))
@@ -30,7 +33,7 @@ struct EncounterCard: View {
                     .multilineTextAlignment(.center)
                     .lineLimit(3)
                     .fixedSize(horizontal: false, vertical: true)
-                PrimaryButton(title: "Try it", systemImage: "play.fill", action: onDismiss)
+                PrimaryButton(title: Copy.text("encounter.button"), systemImage: "play.fill", action: onDismiss)
             }
             .padding(20)
             .background(

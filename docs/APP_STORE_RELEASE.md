@@ -61,17 +61,32 @@ Apple Watch (`watch/`): `01-wrist-run.jpg`, `02-wrist-maps.jpg`, `03-relics.jpg`
 
 Suggested description:
 
-> Your path comes back to hunt you. You are the Signal, the last light of the Lighthouse, sent down the Fold Road after time broke. Steer the bright orb, collect sparks, and reach the fold before your recorded route returns as a dangerous Echo.
+> Your route becomes the hazard. After the Break, the Keepers' recovery network replays every recorded movement a few seconds late — including yours. Guide the Signal down the Fold Road, collect every spark, and reach the exit before your own route returns as an echo.
 >
-> • 77 handcrafted maps across 11 regions of space, each with its own sky, walls, hazards and story
-> • Shattering asteroids of eight materials, pulsing lasers, black holes, time gates and reality rifts
-> • Deep Time: an endless mode of random arenas, each checked to be solvable
+> • 77 handcrafted maps across 11 regions, each with its own sky, walls, hazards and recovered story records
+> • Shattering asteroids of eight materials, beams, field wells, timed gates and fold faults
+> • Deep Time: a separate expedition of generated arenas, each checked for a connected route
 > • A Daily Rift that reopens one stop of the Road every day
-> • A loadout of timed abilities and a 24-node research tree
-> • Apple Watch: twelve clockwork rooms on your wrist, relics for the phone game, and a remote that steers your iPhone run
-> • An in-game archive that explains every rule and the whole story
+> • A loadout of timed skills and the 24-node Signal Matrix
+> • Apple Watch: twelve Keeper Chronometer rooms, rewards for the phone game, and a remote that steers your iPhone run
+> • The Keeper Archive explains every rule, and science notes separate real physics from fiction
+> • In English and Russian
 >
 > Progress stays on your device. No account, ads, in-app purchases or network connection needed.
+
+Russian listing (add **Russian** under App Store Connect → the version's localizations). Subtitle: «Твой маршрут — твоя опасность».
+
+> Твой маршрут становится опасностью. После Разлада сеть восстановления Хранителей повторяет каждое записанное движение с опозданием в несколько секунд — и твоё тоже. Веди Сигнал по Дороге складок, собирай все искры и доберись до выхода, пока твой же маршрут не вернулся эхом.
+>
+> • 77 карт в 11 регионах — у каждого своё небо, стены, опасности и восстановленные записи
+> • Астероиды из восьми материалов, лучи, полевые ловушки, циклические шлюзы и разрывы Дороги
+> • Глубокое время: отдельная экспедиция по сгенерированным аренам, у каждой проверен связный маршрут
+> • Ежедневный разрыв каждый день заново открывает одну остановку Дороги
+> • Способности с таймером и Матрица Сигнала из 24 узлов
+> • Apple Watch: двенадцать комнат Хронометра Хранителей, награды для игры на iPhone и пульт, который управляет попыткой на телефоне
+> • Архив Хранителей объясняет каждое правило, а научные заметки отделяют настоящую физику от вымысла
+>
+> Прогресс хранится на устройстве. Без аккаунта, рекламы, встроенных покупок и подключения к сети.
 
 App Privacy answers: **no data collected**. Confirm against `PRIVACY.md` and the shipped binary before publishing.
 

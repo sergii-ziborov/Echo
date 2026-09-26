@@ -194,7 +194,7 @@ struct PressStyle: ButtonStyle {
 }
 
 struct Wordmark: View {
-    var subtitle: String = "YOU SURVIVE THE TIMELINE YOU CREATED"
+    var subtitle: String = Copy.text("home.tagline")
     var titleSize: CGFloat = 54
     var subtitleSize: CGFloat = 11
 

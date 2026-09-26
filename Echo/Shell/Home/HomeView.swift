@@ -68,7 +68,7 @@ struct HomeView: View {
                     .tracking(1.8)
                 HStack(spacing: 5) {
                     HomePulseDot(tint: .green, reduceMotion: reduceMotion)
-                    Text("TIMELINE ONLINE")
+                    Text(Copy.text("home.online"))
                         .font(.system(size: 8, weight: .bold, design: .rounded))
                         .tracking(1.1)
                         .foregroundStyle(EchoTheme.cyan)
@@ -84,16 +84,16 @@ struct HomeView: View {
 
     private var routeBar: some View {
         HStack(spacing: 9) {
-            HomeRouteButton(title: "Daily", systemImage: "calendar", tint: EchoTheme.gold) {
+            HomeRouteButton(title: Copy.text("home.route.daily"), systemImage: "calendar", tint: EchoTheme.gold) {
                 model.openDaily()
             }
-            HomeRouteButton(title: "Acts", systemImage: "square.grid.2x2", tint: EchoTheme.cyan) {
+            HomeRouteButton(title: Copy.text("home.route.atlas"), systemImage: "square.grid.2x2", tint: EchoTheme.cyan) {
                 model.openWorlds()
             }
-            HomeRouteButton(title: "Lab", systemImage: "hexagon.fill", tint: EchoTheme.magenta) {
+            HomeRouteButton(title: Copy.text("home.route.lab"), systemImage: "hexagon.fill", tint: EchoTheme.magenta) {
                 model.openShop()
             }
-            HomeRouteButton(title: "Wiki", systemImage: "books.vertical.fill", tint: EchoTheme.cyanBright) {
+            HomeRouteButton(title: Copy.text("home.route.archive"), systemImage: "books.vertical.fill", tint: EchoTheme.cyanBright) {
                 model.openWiki()
             }
         }
@@ -112,12 +112,12 @@ struct HomeView: View {
 
                 VStack(alignment: .leading, spacing: 13) {
                     HStack {
-                        Label("CONTINUE", systemImage: "play.fill")
+                        Label(Copy.text("home.continue"), systemImage: "play.fill")
                             .font(.system(size: 11, weight: .black, design: .rounded))
                             .tracking(1.5)
                             .foregroundStyle(act.homeTint)
                         Spacer()
-                        Text("\(cleared)/\(LevelCatalog.playable.count) CLEARED")
+                        Text(Copy.format("home.cleared", cleared, LevelCatalog.playable.count))
                             .font(.system(size: 9, weight: .bold, design: .rounded))
                             .tracking(0.7)
                             .foregroundStyle(EchoTheme.muted)
@@ -128,14 +128,17 @@ struct HomeView: View {
                             .frame(width: 76, height: 76)
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("ACT \(String(format: "%02d", act.rawValue)) · \(act.title)")
+                            Text(Copy.format("home.actLine", String(format: "%02d", act.rawValue), act.title))
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
                                 .tracking(1.2)
                                 .foregroundStyle(EchoTheme.muted)
-                            Text(level.name)
+                            // Two lines at most, shrinking rather than breaking a long word.
+                            Text(level.title)
                                 .font(.system(size: 24, weight: .bold, design: .rounded))
                                 .foregroundStyle(.white)
-                            Text(level.subtitle)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.6)
+                            Text(level.tip)
                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                                 .foregroundStyle(Color.white.opacity(0.58))
                                 .lineLimit(2)
@@ -155,7 +158,7 @@ struct HomeView: View {
 
                     VStack(spacing: 6) {
                         HStack {
-                            Text("WORLD PROGRESS")
+                            Text(Copy.text("home.progress"))
                             Spacer()
                             Text("\(Int((Double(cleared) / Double(LevelCatalog.playable.count) * 100).rounded()))%")
                         }
@@ -194,7 +197,7 @@ struct HomeView: View {
             )
         }
         .buttonStyle(PressStyle())
-        .accessibilityLabel("Continue with level \(level.number), \(level.name)")
+        .accessibilityLabel(Copy.format("home.a11y.continue", level.number, level.title))
     }
 
     private var tagline: some View {

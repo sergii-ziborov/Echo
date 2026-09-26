@@ -99,7 +99,7 @@ extension GameScene {
                 arc.zRotation = .pi / 2
                 arc.name = "timer"
                 root.addChild(arc)
-                let reward = fieldCaption("BONUS", color: gold, y: 22 * scale)
+                let reward = fieldCaption(Copy.text("arena.crystal.bonus"), color: gold, y: 22 * scale)
                 reward.name = "timerReward"
                 reward.fontSize = 9 * scale
                 let label = fieldCaption("", color: gold, y: -22 * scale)

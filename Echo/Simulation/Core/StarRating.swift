@@ -50,14 +50,14 @@ enum SealKind: Equatable, Sendable {
 
     var label: String {
         switch self {
-        case .beforeEcho(let n): "Before echo \(n)"
-        case .noDash: "No dash"
-        case .maxEchoes(let n): "≤\(n) echoes"
-        case .noShop: "No arsenal"
-        case .causeScar: "Cause a scar"
-        case .avoidScar: "No scar"
-        case .parTime: "Under par"
-        case .useRift: "Enter a rift"
+        case .beforeEcho(let n): Copy.format("seal.beforeEcho", n)
+        case .noDash: Copy.text("seal.noDash")
+        case .maxEchoes(let n): Copy.format("seal.maxEchoes", n)
+        case .noShop: Copy.text("seal.noShop")
+        case .causeScar: Copy.text("seal.causeScar")
+        case .avoidScar: Copy.text("seal.avoidScar")
+        case .parTime: Copy.text("seal.parTime")
+        case .useRift: Copy.text("seal.useRift")
         }
     }
 
@@ -88,38 +88,11 @@ enum Act: Int, CaseIterable, Sendable {
     case confection
     case eternity
 
-    var title: String {
-        switch self {
-        case .trace: "TRACE"
-        case .drift: "DRIFT"
-        case .fracture: "FRACTURE"
-        case .debris: "DEBRIS"
-        case .paradox: "PARADOX"
-        case .singularity: "SINGULARITY"
-        case .rift: "RIFT"
-        case .gravity: "GRAVITY"
-        case .mirage: "MIRAGE"
-        case .confection: "CONFECTION"
-        case .eternity: "ETERNITY"
-        }
-    }
+    /// The act's chapter heading, such as TRACE.
+    var title: String { Copy.text("region.\(key).act") }
 
-    /// One line about the place, short enough for an atlas card.
-    var blurb: String {
-        switch self {
-        case .trace: "Where the Signal was lit."
-        case .drift: "Greenhouse domes adrift under a red sun."
-        case .fracture: "A frozen moon split by the first scars."
-        case .debris: "All that is left of Cinder."
-        case .paradox: "The Keepers' tests never stopped."
-        case .singularity: "A giant star falling in on itself."
-        case .rift: "Space with exits of its own."
-        case .gravity: "Black holes where Ashcrown fell."
-        case .mirage: "Light that shows false copies."
-        case .confection: "A sweet dream with lethal rules."
-        case .eternity: "The end of time, where it began."
-        }
-    }
+    /// One line about the region for the Atlas.
+    var blurb: String { Copy.text("region.\(key).blurb") }
 
     var range: ClosedRange<Int> {
         let start = (rawValue - 1) * 7 + 1
@@ -137,26 +110,12 @@ struct DifficultyProfile: Equatable, Sendable {
     var number: Int { max(0, cycle) + 1 }
 
     var title: String {
-        switch max(0, cycle) {
-        case 0: "AWAKENING"
-        case 1: "FRACTURED"
-        case 2: "PARADOX"
-        case 3: "SINGULARITY"
-        default: "ETERNAL +\(cycle - 3)"
-        }
+        max(0, cycle) <= 3 ? Copy.text("difficulty.\(max(0, cycle)).title") : Copy.format("difficulty.eternal", cycle - 3)
     }
 
-    var shortTitle: String { "D\(number) · \(title)" }
+    var shortTitle: String { Copy.format("difficulty.short", number, title) }
 
-    var detail: String {
-        switch max(0, cycle) {
-        case 0: "The original 77-epoch timeline."
-        case 1: "Faster echoes and more aggressive hazards."
-        case 2: "Short laser cycles and stronger gravity."
-        case 3: "Maximum echo pressure and unstable rifts."
-        default: "An endless escalation beyond the stable timeline."
-        }
-    }
+    var detail: String { Copy.text("difficulty.\(min(4, max(0, cycle))).detail") }
 
     var hazardMultiplier: Double { 1 + Double(max(0, cycle)) * 0.12 }
 }
@@ -177,26 +136,30 @@ enum DeathCause: Equatable, Sendable {
         }
     }
 
+    /// Stable key of the cause's texts; `.blackHole` reads as a field well.
+    var key: String {
+        switch self {
+        case .echo: "echo"
+        case .asteroid: "asteroid"
+        case .rift: "rift"
+        case .collision: "collision"
+        case .ghost: "ghost"
+        case .laser: "laser"
+        case .blackHole: "blackHole"
+        }
+    }
+
     var headline: String {
         switch self {
         case .echo(let index, let delay):
-            let seconds = Int(delay.rounded())
-            return "You met echo \(index + 1)"
-                + " — your path from \(seconds)s ago"
-        case .asteroid:
-            return "An asteroid cut your line"
-        case .rift:
-            return "You stepped into a collapsing rift"
-        case .collision:
-            return "A time collision left a scar"
-        case .ghost:
-            return "You met the timeline you discarded"
-        case .laser:
-            return "A temporal beam erased your route"
-        case .blackHole:
-            return "A gravity well swallowed your timeline"
+            Copy.format("death.cause.echo", index + 1, Int(delay.rounded()))
+        default:
+            Copy.text("death.cause.\(key)")
         }
     }
+
+    /// What to do differently next time.
+    var tip: String { Copy.text("death.tip.\(key)") }
 }
 
 struct EchoThreat: Equatable, Sendable {

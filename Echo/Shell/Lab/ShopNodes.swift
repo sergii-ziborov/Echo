@@ -14,7 +14,7 @@ extension ShopView {
         return Button {
             guard available else {
                 model.audio.play(.denied)
-                show(model.progress.upgradeRequirement(kind) ?? "Finish the marked prerequisites")
+                show(model.progress.upgradeRequirement(kind) ?? Copy.text("lab.node.prerequisites"))
                 return
             }
             inspectedUpgrade = kind
@@ -37,16 +37,16 @@ extension ShopView {
                     .frame(width: 60, height: 60)
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("NODE \(String(format: "%02d", index + 1)) · \(kind.branch.title)")
+                        Text(Copy.format("lab.node.index", String(format: "%02d", index + 1), kind.branch.title))
                             .font(.system(size: 8, weight: .black, design: .rounded))
                             .tracking(1)
                             .foregroundStyle(tint)
-                        Text(revealed ? kind.title : "Undiscovered technology")
+                        Text(revealed ? kind.title : Copy.text("lab.node.hidden"))
                             .font(.system(size: 15, weight: .bold, design: .rounded))
                             .foregroundStyle(revealed ? .white : EchoTheme.muted)
                             .lineLimit(1)
                             .minimumScaleFactor(0.78)
-                        Text(revealed ? "Rank \(level) / \(kind.maxLevel)" : "Complete all requirements to reveal")
+                        Text(revealed ? Copy.format("lab.node.rank", level, kind.maxLevel) : Copy.text("lab.node.reveal"))
                             .font(.system(size: 10, weight: .medium, design: .rounded))
                             .foregroundStyle(EchoTheme.muted)
                     }
@@ -64,7 +64,7 @@ extension ShopView {
                 }
 
                 if !kind.prerequisites.isEmpty {
-                    Text("REQUIRES ALL")
+                    Text(Copy.text("lab.node.requiresAll"))
                         .font(.system(size: 8, weight: .black, design: .rounded))
                         .tracking(1.0)
                         .foregroundStyle(EchoTheme.muted)
@@ -75,25 +75,25 @@ extension ShopView {
                             HStack(spacing: 6) {
                                 Image(systemName: met ? "checkmark.circle.fill" : "lock.circle.fill")
                                     .foregroundStyle(met ? .green : EchoTheme.gold)
-                                Text("\(requirement.kind.branch.title.uppercased()) · \(requirement.kind.title) · rank \(requirement.level)")
+                                Text(Copy.format("lab.node.requirement", requirement.kind.branch.title.uppercased(), requirement.kind.title, requirement.level))
                                     .foregroundStyle(met ? .white.opacity(0.82) : EchoTheme.muted)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.78)
                                 Spacer(minLength: 0)
-                                Text(met ? "DONE" : "MISSING")
+                                Text(Copy.text(met ? "lab.node.done" : "lab.node.missing"))
                                     .foregroundStyle(met ? .green : EchoTheme.gold)
                             }
                             .font(.system(size: 9, weight: .semibold, design: .rounded))
                         }
                     }
                 } else {
-                    Label("STARTING TECHNOLOGY", systemImage: "sparkle")
+                    Label(Copy.text("lab.node.start"), systemImage: "sparkle")
                         .font(.system(size: 9, weight: .bold, design: .rounded))
                         .foregroundStyle(tint)
                 }
 
                 HStack {
-                    Text(complete ? "FULLY RESEARCHED" : revealed ? affordable ? "TAP TO WATCH & UPGRADE" : "TAP TO WATCH" : "LOCKED")
+                    Text(Copy.text(complete ? "lab.node.complete" : revealed ? affordable ? "lab.node.watchUpgrade" : "lab.node.watch" : "lab.locked"))
                         .font(.system(size: 8, weight: .black, design: .rounded))
                         .tracking(0.5)
                         .foregroundStyle(revealed ? tint : EchoTheme.muted)
@@ -117,8 +117,8 @@ extension ShopView {
             )
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(revealed ? "\(kind.title), rank \(level) of \(kind.maxLevel)" : "Undiscovered technology")
-        .accessibilityHint(revealed ? "Open animated preview" : model.progress.upgradeRequirement(kind) ?? "Locked")
+        .accessibilityLabel(revealed ? Copy.format("lab.node.a11y", kind.title, level, kind.maxLevel) : Copy.text("lab.node.hidden"))
+        .accessibilityHint(revealed ? Copy.text("lab.node.a11yHint") : model.progress.upgradeRequirement(kind) ?? Copy.text("lab.locked"))
     }
 
     func researchOrder(for branch: UpgradeBranch) -> [UpgradeKind] {
@@ -157,7 +157,7 @@ extension ShopView {
                         .foregroundStyle(tint)
                     Text(kind.title)
                         .font(.system(size: 18, weight: .semibold))
-                    Text("RANK \(level) / \(kind.maxLevel)")
+                    Text(Copy.format("lab.card.rank", level, kind.maxLevel))
                         .font(.system(size: 9, weight: .bold, design: .rounded))
                         .foregroundStyle(EchoTheme.muted)
                 }
@@ -178,13 +178,13 @@ extension ShopView {
 
             HStack(spacing: 9) {
                 researchEffectCard(
-                    eyebrow: "CURRENT",
-                    value: researchEffect(kind, level: level),
+                    eyebrow: Copy.text("lab.card.current"),
+                    value: kind.effect(atRank: level),
                     tint: tint.opacity(0.72)
                 )
                 researchEffectCard(
-                    eyebrow: level == kind.maxLevel ? "STATUS" : "NEXT RANK",
-                    value: level == kind.maxLevel ? "Fully synchronized" : researchEffect(kind, level: level + 1),
+                    eyebrow: Copy.text(level == kind.maxLevel ? "lab.card.status" : "lab.card.next"),
+                    value: level == kind.maxLevel ? Copy.text("lab.maxed") : kind.effect(atRank: level + 1),
                     tint: level == kind.maxLevel ? EchoTheme.gold : tint
                 )
             }
@@ -206,10 +206,10 @@ extension ShopView {
                         Image(systemName: available ? "arrow.up.circle.fill" : "lock.fill")
                         Text(
                             !available
-                                ? "NODE LOCKED"
+                                ? Copy.text("lab.card.nodeLocked")
                                 : affordable
-                                    ? "UPGRADE TO RANK \(level + 1)"
-                                    : "NEED \(missingPoints) MORE"
+                                    ? Copy.format("lab.card.upgrade", level + 1)
+                                    : Copy.format("lab.card.needMore", missingPoints)
                         )
                             .font(.system(size: 11, weight: .bold))
                             .tracking(0.7)
@@ -231,13 +231,13 @@ extension ShopView {
                 .disabled(!available || !affordable)
 
                 if available, !affordable {
-                    Text("Clear levels and Daily challenges to earn research points.")
+                    Text(Copy.text("lab.card.earn"))
                         .font(.system(size: 9, weight: .medium))
                         .foregroundStyle(EchoTheme.muted)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
             } else {
-                Label("RESEARCH COMPLETE", systemImage: "checkmark.seal.fill")
+                Label(Copy.text("lab.card.complete"), systemImage: "checkmark.seal.fill")
                     .font(.system(size: 11, weight: .bold))
                     .tracking(0.8)
                     .foregroundStyle(tint)

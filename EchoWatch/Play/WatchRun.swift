@@ -15,7 +15,7 @@ final class WatchRun {
     }
 
     static let freezeCooldown: TimeInterval = 18
-    static let rewindSeconds: TimeInterval = 3
+    static let rewindSeconds = WristSkill.crownRewindSeconds
 
     let source: LevelDefinition
     let level: LevelDefinition

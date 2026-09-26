@@ -21,7 +21,7 @@ struct SplashView: View {
             VStack(spacing: 0) {
                 Spacer(minLength: 48)
 
-                Text("A TEMPORAL SIGNAL")
+                Text(Copy.text("splash.eyebrow"))
                     .font(.system(size: 9, weight: .black, design: .rounded))
                     .tracking(3.2)
                     .foregroundStyle(EchoTheme.cyan.opacity(0.72))
@@ -40,7 +40,7 @@ struct SplashView: View {
                             .fill(stage >= 3 ? Color.green : EchoTheme.gold)
                             .frame(width: 5, height: 5)
                             .shadow(color: stage >= 3 ? Color.green.opacity(0.8) : EchoTheme.gold.opacity(0.8), radius: 5)
-                        Text(stage >= 3 ? "TIMELINE LINK STABLE" : "SYNCHRONIZING TIMELINE")
+                        Text(Copy.text(stage >= 3 ? "splash.stable" : "splash.syncing"))
                             .font(.system(size: 9, weight: .black, design: .rounded))
                             .tracking(1.5)
                     }
@@ -64,7 +64,7 @@ struct SplashView: View {
         .contentShape(Rectangle())
         .onTapGesture { enter() }
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel(stage >= 3 ? "Timeline ready. Tap to begin" : "Intro playing. Tap to skip")
+        .accessibilityLabel(Copy.text(stage >= 3 ? "splash.a11y.ready" : "splash.a11y.intro"))
         .opacity(leaving ? 0 : 1)
         .scaleEffect(leaving && !reduceMotion ? 1.035 : 1)
         .blur(radius: leaving && !reduceMotion ? 5 : 0)
@@ -211,7 +211,7 @@ private struct SplashEnterPrompt: View {
                 Image(systemName: "chevron.right.2")
                     .font(.system(size: 10, weight: .black))
                     .offset(x: reduceMotion ? 0 : CGFloat(sin(time * 2.4) * 2))
-                Text("TAP TO ENTER")
+                Text(Copy.text("splash.tap"))
                     .font(.system(size: 11, weight: .black, design: .rounded))
                     .tracking(2.3)
             }

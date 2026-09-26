@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
-    @Environment(\.openURL) private var openURL
     var onBack: (() -> Void)? = nil
     @State var showingResetConfirmation: Bool
     @State var legalDocument: LegalDocument?
@@ -25,13 +24,13 @@ struct SettingsView: View {
 
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 14) {
-                        sectionLabel("PREFERENCES")
+                        sectionLabel(Copy.text("settings.prefs"))
                         preferencesCard
 
-                        sectionLabel("TIMELINE PROGRESSION")
+                        sectionLabel(Copy.text("settings.progression"))
                         difficultyCard
 
-                        sectionLabel("ECHO")
+                        sectionLabel(Copy.text("settings.echo"))
                         legalCard
 
                         resetButton
@@ -69,14 +68,14 @@ struct SettingsView: View {
         .fullScreenCover(item: $legalDocument) { document in
             LegalPageView(document: document, onBack: { legalDocument = nil })
         }
-        .alert("Reset the timeline?", isPresented: $showingResetConfirmation) {
-            Button("Cancel", role: .cancel) {}
-            Button("Reset progress", role: .destructive) {
+        .alert(Copy.text("settings.reset.title"), isPresented: $showingResetConfirmation) {
+            Button(Copy.text("settings.reset.cancel"), role: .cancel) {}
+            Button(Copy.text("settings.reset.confirm"), role: .destructive) {
                 model.progress.resetProgress()
                 model.goHome()
             }
         } message: {
-            Text("Maps, difficulty, records, shards, inventory and research will be erased. Sound and haptic settings stay unchanged.")
+            Text(Copy.text("settings.reset.message"))
         }
     }
 
@@ -94,10 +93,10 @@ struct SettingsView: View {
             IconCircle(system: "chevron.left") { goBack() }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("SETTINGS")
+                Text(Copy.text("settings.title"))
                     .font(.system(size: 14, weight: .black, design: .rounded))
                     .tracking(2.5)
-                Text("TUNE YOUR TIMELINE")
+                Text(Copy.text("settings.subtitle"))
                     .font(.system(size: 8, weight: .bold, design: .rounded))
                     .tracking(1.4)
                     .foregroundStyle(EchoTheme.muted)
@@ -117,8 +116,8 @@ struct SettingsView: View {
     private var preferencesCard: some View {
         VStack(spacing: 0) {
             settingsToggle(
-                "Sound",
-                detail: "Interface and gameplay cues",
+                Copy.text("settings.sound"),
+                detail: Copy.text("settings.sound.detail"),
                 systemImage: "speaker.wave.2.fill",
                 tint: EchoTheme.cyan,
                 isOn: Bindable(model.progress).soundEnabled
@@ -126,20 +125,22 @@ struct SettingsView: View {
             volumeControl
             preferenceDivider
             settingsToggle(
-                "Haptics",
-                detail: "Touch feedback for collisions and rewards",
+                Copy.text("settings.haptics"),
+                detail: Copy.text("settings.haptics.detail"),
                 systemImage: "hand.tap.fill",
                 tint: EchoTheme.violet,
                 isOn: Bindable(model.progress).hapticsEnabled
             )
             preferenceDivider
             settingsToggle(
-                "Collision replay",
-                detail: "Show the last seconds after an impact",
+                Copy.text("settings.replay"),
+                detail: Copy.text("settings.replay.detail"),
                 systemImage: "backward.end.alt.fill",
                 tint: EchoTheme.magenta,
                 isOn: Bindable(model.progress).autoReplayEnabled
             )
+            preferenceDivider
+            LanguageRow()
         }
         .background(EchoTheme.panel.opacity(0.92), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(EchoTheme.panelStroke, lineWidth: 1))
@@ -162,8 +163,8 @@ struct SettingsView: View {
             Slider(value: Bindable(model.progress).soundVolume, in: 0...1)
                 .tint(EchoTheme.cyan)
                 .disabled(!model.progress.soundEnabled)
-                .accessibilityLabel("Effects volume")
-                .accessibilityValue("\(Int((model.progress.soundVolume * 100).rounded())) percent")
+                .accessibilityLabel(Copy.text("settings.volume"))
+                .accessibilityValue(Copy.format("settings.volume.value", Int((model.progress.soundVolume * 100).rounded())))
 
             Text("\(Int((model.progress.soundVolume * 100).rounded()))%")
                 .font(.system(size: 9, weight: .black, design: .monospaced))
@@ -186,7 +187,7 @@ struct SettingsView: View {
                     .background(EchoTheme.magenta.opacity(0.13), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("DIFFICULTY \(model.progress.difficulty.number)")
+                    Text(Copy.format("settings.difficulty", model.progress.difficulty.number))
                         .font(.system(size: 9, weight: .black, design: .rounded))
                         .tracking(1.1)
                         .foregroundStyle(EchoTheme.magenta)
@@ -196,7 +197,7 @@ struct SettingsView: View {
 
                 Spacer()
 
-                Text("77 MAPS · 11 EPOCHS")
+                Text(Copy.format("settings.mapsRegions", LevelCatalog.playable.count, Act.allCases.count))
                     .font(.system(size: 8, weight: .black, design: .rounded))
                     .tracking(0.8)
                     .foregroundStyle(EchoTheme.gold)
@@ -208,7 +209,7 @@ struct SettingsView: View {
             Text(model.progress.difficulty.detail)
                 .font(.system(size: 12, weight: .medium, design: .rounded))
                 .foregroundStyle(Color.white.opacity(0.72))
-            Text("Clear the complete atlas to awaken the next difficulty. Each cycle keeps a separate set of seals and records.")
+            Text(Copy.text("settings.passNote"))
                 .font(.system(size: 10, weight: .medium, design: .rounded))
                 .foregroundStyle(EchoTheme.muted)
                 .fixedSize(horizontal: false, vertical: true)
@@ -252,32 +253,7 @@ struct SettingsView: View {
                 .buttonStyle(PressStyle())
                 Rectangle().fill(Color.white.opacity(0.06)).frame(height: 1).padding(.leading, 61)
             }
-            Button {
-                model.audio.play(.select)
-                guard let mail = BugReport.mail else { return openURL(BugReport.issues) }
-                openURL(mail) { opened in
-                    if !opened { openURL(BugReport.issues) }
-                }
-            } label: {
-                HStack(spacing: 11) {
-                    Image(systemName: "ladybug.fill")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(EchoTheme.gold)
-                        .frame(width: 36, height: 36)
-                        .background(EchoTheme.gold.opacity(0.12), in: RoundedRectangle(cornerRadius: 11, style: .continuous))
-                    Text("REPORT A BUG")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
-                    Spacer()
-                    Image(systemName: "envelope.fill")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(Color.white.opacity(0.35))
-                }
-                .foregroundStyle(.white)
-                .padding(.horizontal, 14)
-                .frame(height: 58)
-            }
-            .buttonStyle(PressStyle())
-            .accessibilityHint("Opens an email to the developer with the app version and device filled in")
+            BugReportRow()
         }
         .background(EchoTheme.panel.opacity(0.94), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(Color.white.opacity(0.08), lineWidth: 1))
@@ -290,10 +266,10 @@ struct SettingsView: View {
             HStack(spacing: 10) {
                 Image(systemName: "arrow.counterclockwise.circle.fill")
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("RESET ALL PROGRESS")
+                    Text(Copy.text("settings.resetAll"))
                         .font(.system(size: 11, weight: .black, design: .rounded))
                         .tracking(0.9)
-                    Text("Sound and haptics will stay unchanged")
+                    Text(Copy.text("settings.resetAll.detail"))
                         .font(.system(size: 9, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.white.opacity(0.48))
                 }
@@ -320,10 +296,10 @@ struct SettingsView: View {
                 .fill(Color.white.opacity(0.12))
                 .frame(width: 1, height: 28)
             VStack(alignment: .leading, spacing: 2) {
-                Text("PUZZLE TODAY · BRIGHTER TOMORROW")
+                Text(Copy.text("settings.footer"))
                     .font(.system(size: 8, weight: .bold, design: .rounded))
                     .tracking(0.8)
-                Text("Version \(LegalDocument.shortVersion) (\(LegalDocument.buildNumber))")
+                Text(Copy.format("settings.version", LegalDocument.shortVersion, LegalDocument.buildNumber))
                     .font(.system(size: 10, weight: .medium, design: .rounded))
                     .foregroundStyle(EchoTheme.muted)
             }

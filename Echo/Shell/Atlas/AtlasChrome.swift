@@ -253,19 +253,5 @@ extension Act {
         }
     }
 
-    var atlasTraits: [String] {
-        switch self {
-        case .trace: ["ECHOES", "TIMERS", "MIRE"]
-        case .drift: ["AIRLOCKS", "BONUSES", "MIRE"]
-        case .fracture: ["LANES", "SCARS", "ROCKS"]
-        case .debris: ["ROCKS", "PATROLS", "MAGMA"]
-        case .paradox: ["BEAMS", "LOCKS", "FREEZE"]
-        case .singularity: ["FLARES", "CORE", "ALL LAWS"]
-        case .rift: ["WARP", "FOLDS", "COMETS"]
-        case .gravity: ["PULL", "ORBITS", "DARK CORE"]
-        case .mirage: ["MIRROR", "PHASE", "FALSE ROUTES"]
-        case .confection: ["CANDY", "SPEED", "RESONANCE"]
-        case .eternity: ["ALL LAWS", "ALL PASTS", "THE LOOP"]
-        }
-    }
+    var atlasTraits: [String] { (1...3).map { Copy.text("region.\(key).trait\($0)") } }
 }

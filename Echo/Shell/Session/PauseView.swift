@@ -23,11 +23,11 @@ struct PauseView: View {
                     .overlay(Circle().stroke(EchoTheme.cyan.opacity(0.44), lineWidth: 1))
 
                 VStack(spacing: 5) {
-                    Text("TIMELINE HELD")
+                    Text(Copy.text("pause.eyebrow"))
                         .font(.system(size: 10, weight: .black, design: .rounded))
                         .tracking(2.3)
                         .foregroundStyle(EchoTheme.cyan)
-                    Text("PAUSED")
+                    Text(Copy.text("pause.title"))
                         .font(.system(size: 30, weight: .ultraLight))
                         .tracking(5)
                     Text(levelName)
@@ -54,7 +54,7 @@ struct PauseView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "clock.arrow.circlepath")
                         .foregroundStyle(EchoTheme.cyan)
-                    Text("\(rewindCharges) REWIND \(rewindCharges == 1 ? "CHARGE" : "CHARGES")")
+                    Text(Copy.format("pause.rewinds", rewindCharges))
                         .foregroundStyle(.white)
                 }
                 .font(.system(size: 10, weight: .black, design: .rounded))
@@ -64,15 +64,15 @@ struct PauseView: View {
                 .background(EchoTheme.cyan.opacity(0.10), in: Capsule())
 
                 VStack(spacing: 10) {
-                    PrimaryButton(title: "Resume", systemImage: "play.fill", action: onResume)
+                    PrimaryButton(title: Copy.text("button.resume"), systemImage: "play.fill", action: onResume)
 
                     HStack(spacing: 10) {
-                        SecondaryButton(title: "Restart", systemImage: "arrow.counterclockwise", action: onRestart)
-                        SecondaryButton(title: "Settings", systemImage: "gearshape", action: onSettings)
+                        SecondaryButton(title: Copy.text("button.restart"), systemImage: "arrow.counterclockwise", action: onRestart)
+                        SecondaryButton(title: Copy.text("button.settings"), systemImage: "gearshape", action: onSettings)
                     }
 
-                    SecondaryButton(title: "Temporal Lab", systemImage: "hexagon.fill", action: onShop)
-                    GhostButton(title: "Main Menu", action: onMenu)
+                    SecondaryButton(title: Copy.text("button.lab"), systemImage: "hexagon.fill", action: onShop)
+                    GhostButton(title: Copy.text("button.menu"), action: onMenu)
                 }
             }
             .foregroundStyle(.white)

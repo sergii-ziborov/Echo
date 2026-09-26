@@ -24,7 +24,7 @@ struct RemoteHUD: View {
         VStack {
             HStack(spacing: 5) {
                 RemoteRoundButton(symbol: "chevron.left", action: onBack)
-                    .accessibilityLabel("Leave remote")
+                    .accessibilityLabel(Copy.text("watch.remote.leave"))
                 Label("\(frame.collected.nonzeroBitCount)/\(level.sparks.count)", systemImage: "sparkle")
                     .foregroundStyle(.cyan)
                 Label("\(frame.echoes.count)/\(level.maxEchoes)", systemImage: echoSymbol)
@@ -41,11 +41,11 @@ struct RemoteHUD: View {
 
             HStack(alignment: .bottom) {
                 RemoteRoundButton(symbol: frame.state == .paused ? "play.fill" : "pause.fill", size: 26, action: onPause)
-                    .accessibilityLabel(frame.state == .paused ? "Resume on iPhone" : "Pause on iPhone")
+                    .accessibilityLabel(Copy.text(frame.state == .paused ? "watch.remote.resume" : "watch.remote.pause"))
                 Spacer()
 #if DEBUG
                 // Review aid: how late frames from the phone arrive.
-                Text("\(Int((lag * 1000).rounded())) ms")
+                Text(Copy.format("watch.remote.lag", Int((lag * 1000).rounded())))
                     .font(.system(size: 9, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.45))
                     .padding(.bottom, 4)

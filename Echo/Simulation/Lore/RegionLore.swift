@@ -1,26 +1,11 @@
 import Foundation
 
-/// The story the maps sit in. The orb is the Signal, the last light of the
-/// Lighthouse the Keepers built at the rim of the galaxy to hold time
-/// steady. Time broke: anything that moves is now replayed a few seconds
-/// later. The Signal carries an unbroken present down the Fold Road, a chain
-/// of folds that open once enough loose present (the sparks) is gathered and
-/// throw it to the next place. Each act is one region of space along the
-/// Road, which is why the sky, the walls and the hazards change between acts.
-enum RegionLore {
-    static let premise = "At the rim of the galaxy the Keepers built the Lighthouse to hold time steady. Time broke anyway: everything that moves is now replayed a few seconds later. The Keepers lit one last Signal — you — to carry an unbroken present down the Fold Road to wherever the break began."
-
-    static let foldRoad = "Every map is one stop on the Fold Road. Sparks are loose seconds of the present; once enough are gathered, the exit opens into a fold that throws the Signal to the next place. That is why the sky changes: each region lies in a different part of space."
-
-    static let loop = "The Road ends where it began. At the end of time the break lies inside the Lighthouse itself, and the last echo is the Signal the moment it was lit. The loop closes, then opens again — each lap more fractured than the last."
-
-    static let deepTime = "Below the Road lies Deep Time: moments no Keeper ever charted, drawn fresh on every dive. They borrow the look of every region, never repeat, and never end."
-
-    static let dailyRift = "Each day a fresh tear reopens one stop of the Road with its sparks scattered anew."
-
-    static let wrist = "The Keepers tuned their light with a chronometer: twelve clockwork rooms in three movements, Tick, Crown and Tourbillon, that now fit on a wrist. Every movement cleared there tunes the Signal on the phone."
-}
-
+/// The story the maps sit in (canon 0.2). After the Break, the Keepers'
+/// recovery network began replaying recorded movement; the Signal carries
+/// new state records down the Fold Road, and each act is one region of
+/// space along it. Every word lives in the string catalog under
+/// `region.<key>.*`; this file keeps what is not words: each region's
+/// colours, air and sky landmark.
 /// A distant landmark that fixes where in space a region lies.
 enum SkyLandmark: Equatable, Sendable {
     /// A banded giant, with or without rings.
@@ -46,50 +31,34 @@ enum SkyLandmark: Equatable, Sendable {
 }
 
 extension Act {
-    /// Where on the Fold Road the region lies.
-    var region: String {
+    /// Stable key of the region's texts in the catalog.
+    var key: String {
         switch self {
-        case .trace: "THE LIGHTHOUSE"
-        case .drift: "DRIFT GARDENS"
-        case .fracture: "TESSERA SHELF"
-        case .debris: "HOLLOW BELT"
-        case .paradox: "PROVING GROUNDS"
-        case .singularity: "ASHCROWN CORONA"
-        case .rift: "THE RIFTLANDS"
-        case .gravity: "THE UNDERTOW"
-        case .mirage: "GLASS NEBULA"
-        case .confection: "CANDY TIMELINE"
-        case .eternity: "LAST DAWN"
+        case .trace: "trace"
+        case .drift: "drift"
+        case .fracture: "fracture"
+        case .debris: "debris"
+        case .paradox: "paradox"
+        case .singularity: "singularity"
+        case .rift: "rift"
+        case .gravity: "gravity"
+        case .mirage: "mirage"
+        case .confection: "confection"
+        case .eternity: "eternity"
         }
     }
 
-    /// The story card shown the first time the Signal arrives in the region.
-    var intro: String {
-        switch self {
-        case .trace:
-            RegionLore.premise
-        case .drift:
-            "The first fold throws the Signal into the Drift Gardens: greenhouse domes torn loose from a garden world, drifting under a small red sun. Their airlocks still cycle on broken timers, and they open whether you are ready or not."
-        case .fracture:
-            "The Road drops onto Tessera, a frozen moon split by the first time scars. Cracks run through its ice shelf, and loose rock has started to drift free."
-        case .debris:
-            "Beyond Tessera lies the Hollow Belt, all that is left of Cinder, a world the break tore apart. Its crust became basalt, its mantle magma, its heart meteoric iron — and every piece is still moving."
-        case .paradox:
-            "The Road runs through the Proving Grounds, where the Keepers tested how to lock time. The tests never stopped: sentinel beams still charge and fire on the beat of a dead pulsar, and the locks still keep their own clocks."
-        case .singularity:
-            "The Proving Grounds circle Ashcrown, a giant star now collapsing into a singularity. Its corona fires on its own, and the heaviest pieces it has shed hold whole swarms of shards in orbit."
-        case .rift:
-            "Ashcrown's collapse tore the Road into the Riftlands, where space has exits of its own. Warp tears fold you across the arena, and rock from far away — hollow geodes, dusty comets — falls through them."
-        case .gravity:
-            "Past the Riftlands the Road falls into the Undertow, where Ashcrown's remains collapsed into black holes. The dark pulls long before it kills, and every straight route bends."
-        case .mirage:
-            "Light bent around the Undertow pours into the Glass Nebula, where space shows mirrored copies of itself. Here a tear does not only move you — it can reflect you."
-        case .confection:
-            "Falling out of the Glass Nebula, the Signal lands in the Candy Timeline, a pocket reality the broken timeline dreams for itself. Everything is sweeter and faster here, and none of it is safe."
-        case .eternity:
-            "The last fold opens onto the rim of the galaxy: the Lighthouse, at the end of time. The break began here. Every law you survived returns at once — and so does every route you ever drew."
-        }
-    }
+    /// Where on the Fold Road the region lies.
+    var region: String { Copy.text("region.\(key).name") }
+
+    /// Two sentences for the arrival card.
+    var intro: String { Copy.text("region.\(key).arrival") }
+
+    /// What the region's name means, for the Archive.
+    var meaning: String { Copy.text("region.\(key).meaning") }
+
+    /// Where the fiction parts with real science, for the Archive.
+    var scienceNote: String { Copy.text("region.\(key).science") }
 
     var theme: ArenaTheme {
         switch self {

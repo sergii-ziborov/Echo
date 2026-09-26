@@ -20,16 +20,16 @@ struct WatchRootView: View {
                     .listRowBackground(Color.clear)
 
                 NavigationLink(value: WristRoute.maps) {
-                    WatchMenuRow(title: "Wrist Timeline", detail: "\(store.clears)/\(WristCatalog.maps.count) cleared", symbol: "circle.hexagonpath.fill", tint: .cyan)
+                    WatchMenuRow(title: Copy.text("watch.menu.rooms"), detail: Copy.format("watch.menu.roomsDetail", store.clears, WristCatalog.maps.count), symbol: "circle.hexagonpath.fill", tint: .cyan)
                 }
                 NavigationLink(value: WristRoute.remote) {
-                    WatchMenuRow(title: "iPhone Remote", detail: "Steer the orb on your phone", symbol: "iphone.radiowaves.left.and.right", tint: .purple)
+                    WatchMenuRow(title: Copy.text("watch.menu.remote"), detail: Copy.text("watch.menu.remoteDetail"), symbol: "iphone.radiowaves.left.and.right", tint: .purple)
                 }
                 NavigationLink(value: WristRoute.skills) {
-                    WatchMenuRow(title: "Skills", detail: "\(store.skills.count)/\(WristSkill.allCases.count) awake", symbol: "digitalcrown.arrow.counterclockwise", tint: .mint)
+                    WatchMenuRow(title: Copy.text("watch.menu.skills"), detail: Copy.format("watch.menu.skillsDetail", store.skills.count, WristSkill.allCases.count), symbol: "digitalcrown.arrow.counterclockwise", tint: .mint)
                 }
                 NavigationLink(value: WristRoute.relics) {
-                    WatchMenuRow(title: "iPhone Relics", detail: "\(store.progress.relics.count)/\(WristRelic.allCases.count) unlocked", symbol: "crown.fill", tint: .yellow)
+                    WatchMenuRow(title: Copy.text("watch.menu.relics"), detail: Copy.format("watch.menu.relicsDetail", store.progress.relics.count, WristRelic.allCases.count), symbol: "crown.fill", tint: .yellow)
                 }
             }
             .navigationTitle("ECHO")
@@ -90,7 +90,7 @@ struct WatchHero: View {
             }
             .frame(width: 42, height: 42)
             VStack(alignment: .leading, spacing: 2) {
-                Text("You survive the timeline you created.")
+                Text(Copy.text("watch.tagline"))
                     .font(.system(size: 11, weight: .medium, design: .serif))
                     .italic()
                     .foregroundStyle(.white.opacity(0.75))

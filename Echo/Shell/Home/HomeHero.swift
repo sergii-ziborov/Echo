@@ -52,13 +52,13 @@ struct HomeHero: View {
 
                     HStack(spacing: 7) {
                         HomeHeroPill(
-                            text: "ACT \(String(format: "%02d", act.rawValue)) · \(act.title)",
+                            text: Copy.format("home.actLine", String(format: "%02d", act.rawValue), act.title),
                             tint: act.homeTint
                         )
                         HomeHeroPill(
                             text: cleared == LevelCatalog.playable.count
-                                ? "ARCHIVE COMPLETE"
-                                : "\(LevelCatalog.playable.count - cleared) TIMELINES REMAIN",
+                                ? Copy.text("home.hero.complete")
+                                : Copy.format("home.hero.remaining", LevelCatalog.playable.count - cleared),
                             tint: EchoTheme.magenta
                         )
                     }

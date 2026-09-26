@@ -1,8 +1,8 @@
 # About ECHO
 
-ECHO is a one-time temporal puzzle for iPhone, iPad and Apple Watch. You are the Signal, the last light of the Lighthouse: carry it down the Fold Road through eleven regions of space, collect sparks, and outlive the route you just drew.
+ECHO is a route-planning survival puzzle for iPhone, iPad and Apple Watch, in English and Russian. After the Break, the Keepers' recovery network replays recorded movement. Guide the Signal down the Fold Road through eleven regions, collect every spark, and outlive the route you just drew.
 
-It has 77 campaign maps, the endless Deep Time, a Daily Rift, and twelve clockwork rooms on the watch, which can also steer a run on the phone.
+It has 77 campaign maps, the Deep Time expedition, a Daily Rift, and twelve Keeper Chronometer rooms on the watch, which can also steer a run on the phone.
 
 The App Store build is a paid download. There are no ads, subscriptions, or in-app purchases. Progress stays on your devices.
 

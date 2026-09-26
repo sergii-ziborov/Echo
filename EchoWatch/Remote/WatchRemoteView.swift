@@ -75,7 +75,7 @@ struct WatchRemoteView: View {
         VStack(spacing: 6) {
             HStack {
                 RemoteRoundButton(symbol: "chevron.left") { dismiss() }
-                    .accessibilityLabel("Leave remote")
+                    .accessibilityLabel(Copy.text("watch.remote.leave"))
                 Spacer()
             }
             .frame(height: WatchRunView.band)
@@ -85,10 +85,10 @@ struct WatchRemoteView: View {
             Image(systemName: "iphone.radiowaves.left.and.right")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundStyle(.purple)
-            Text(link.isReachable ? "Start a map on iPhone" : "Open ECHO on iPhone")
+            Text(Copy.text(link.isReachable ? "watch.remote.start" : "watch.remote.open"))
                 .font(.system(size: 13, weight: .semibold, design: .rounded))
                 .multilineTextAlignment(.center)
-            Text("This face becomes the stick")
+            Text(Copy.text("watch.remote.stick"))
                 .font(.system(size: 11, weight: .medium, design: .rounded))
                 .foregroundStyle(.white.opacity(0.55))
             Spacer()
@@ -117,26 +117,26 @@ struct WatchRemoteView: View {
     private func card(for frame: RemoteFrame) -> some View {
         switch frame.state {
         case .paused:
-            WatchRunCard(title: "Paused", tint: .cyan) {
+            WatchRunCard(title: Copy.text("watch.paused"), tint: .cyan) {
                 HStack(spacing: 6) {
-                    Button("Resume", systemImage: "play.fill") { link.send(.pause) }
+                    Button(Copy.text("watch.resume"), systemImage: "play.fill") { link.send(.pause) }
                     Button { dismiss() } label: { Image(systemName: "xmark") }
                         .frame(width: 48)
-                        .accessibilityLabel("Leave remote")
+                        .accessibilityLabel(Copy.text("watch.remote.leave"))
                 }
             }
         case .dead:
-            WatchRunCard(title: "Crashed", subtitle: frame.cause?.watchLabel, tint: .pink) {
+            WatchRunCard(title: Copy.text("watch.lost"), subtitle: frame.cause?.watchLabel, tint: .pink) {
                 if frame.rewindsLeft > 0 {
-                    Label("Turn the Crown back · \(frame.rewindsLeft)", systemImage: "digitalcrown.arrow.counterclockwise")
+                    Label(Copy.format("watch.crownBack", frame.rewindsLeft), systemImage: "digitalcrown.arrow.counterclockwise")
                         .font(.system(size: 11, weight: .semibold, design: .rounded))
                         .foregroundStyle(.cyan)
                 }
-                Button("Retry", systemImage: "arrow.counterclockwise") { link.send(.retry) }
+                Button(Copy.text("watch.retry"), systemImage: "arrow.counterclockwise") { link.send(.retry) }
             }
         case .won:
-            WatchRunCard(title: "Cleared", subtitle: "Pick the next map on iPhone", tint: .yellow) {
-                Button("Replay", systemImage: "arrow.counterclockwise") { link.send(.retry) }
+            WatchRunCard(title: Copy.text("watch.cleared"), subtitle: Copy.text("watch.remote.next"), tint: .yellow) {
+                Button(Copy.text("watch.replay"), systemImage: "arrow.counterclockwise") { link.send(.retry) }
             }
         case .ready, .playing:
             EmptyView()

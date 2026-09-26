@@ -133,9 +133,9 @@ extension GameScene {
                     label?.fontSize = 10 * pickupScale
                     label?.fontColor = tone
                     label?.text = displayed.effects.isFrozen
-                        ? String(format: "HOLD  %.0f", ceil(remaining))
-                        : String(format: "%.0fs", ceil(remaining))
-                    reward?.text = "BONUS"
+                        ? Copy.format("arena.crystal.hold", "\(Int(ceil(remaining)))")
+                        : Copy.format("unit.seconds", "\(Int(ceil(remaining)))")
+                    reward?.text = Copy.text("arena.crystal.bonus")
                 }
             } else {
                 label?.text = ""

@@ -5,7 +5,8 @@ import Foundation
 /// Shared with the phone so it can count clears and grant relics.
 enum WristCatalog {
     static let worldSize: Double = 700
-    static let actTitles = ["Tick", "Crown", "Tourbillon"]
+    /// The three movements of the Keeper Chronometer.
+    static var actTitles: [String] { (1...3).map { Copy.text("wrist.act\($0)") } }
     static let mapsPerAct = 4
 
     static let maps: [LevelDefinition] = [

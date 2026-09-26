@@ -23,10 +23,10 @@ struct HomePlayButton: View {
                     }
 
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("PLAY")
+                        Text(Copy.text("home.play"))
                             .font(.system(size: 19, weight: .black, design: .rounded))
                             .tracking(0.8)
-                        Text("\(act.title) \(String(format: "%02d", level.number)) · \(level.name)")
+                        Text("\(act.title) \(String(format: "%02d", level.number)) · \(level.title)")
                             .font(.system(size: 9, weight: .bold, design: .rounded))
                             .tracking(0.8)
                             .opacity(0.72)
@@ -74,7 +74,7 @@ struct HomePlayButton: View {
                 )
             }
             .buttonStyle(PressStyle())
-            .accessibilityLabel("Play level \(level.number), \(level.name)")
+            .accessibilityLabel(Copy.format("home.a11y.play", level.number, level.title))
         }
     }
 }

@@ -8,7 +8,7 @@ struct DeathView: View {
     var onRestart: () -> Void
     var onMenu: () -> Void
     /// Deep Time ends the run instead of restarting the map.
-    var restartTitle = "Restart level"
+    var restartTitle = Copy.text("button.restartMap")
     var note: String?
 
     var body: some View {
@@ -22,11 +22,11 @@ struct DeathView: View {
                     .overlay(Circle().stroke(EchoTheme.danger.opacity(0.42), lineWidth: 1))
 
                 VStack(spacing: 5) {
-                    Text("ROUTE INTERRUPTED")
+                    Text(Copy.text("death.eyebrow"))
                         .font(.system(size: 10, weight: .black, design: .rounded))
                         .tracking(2.0)
                         .foregroundStyle(EchoTheme.danger)
-                    Text("TIMELINE BROKEN")
+                    Text(Copy.text("death.title"))
                         .font(.system(size: 23, weight: .ultraLight))
                         .tracking(2.7)
                         .multilineTextAlignment(.center)
@@ -38,7 +38,7 @@ struct DeathView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 7) {
-                    Text("WHAT HAPPENED")
+                    Text(Copy.text("death.reason"))
                         .font(.system(size: 9, weight: .black, design: .rounded))
                         .tracking(1.2)
                         .foregroundStyle(EchoTheme.danger)
@@ -60,10 +60,10 @@ struct DeathView: View {
                         HStack {
                             Image(systemName: "clock.arrow.circlepath")
                                 .foregroundStyle(EchoTheme.cyan)
-                            Text("\(rewindCharges) \(rewindCharges == 1 ? "REWIND" : "REWINDS") LEFT")
+                            Text(Copy.format("death.rewindsLeft", rewindCharges))
                                 .foregroundStyle(.white)
                             Spacer()
-                            Text(String(format: "−%.1f SEC", rewindSeconds))
+                            Text(Copy.format("death.rewindDepth", Copy.seconds(rewindSeconds)))
                                 .foregroundStyle(EchoTheme.cyan)
                         }
                         .font(.system(size: 10, weight: .black, design: .rounded))
@@ -72,18 +72,18 @@ struct DeathView: View {
                         .background(EchoTheme.cyan.opacity(0.09), in: RoundedRectangle(cornerRadius: 13, style: .continuous))
 
                         PrimaryButton(
-                            title: String(format: "Rewind %.1fs", rewindSeconds),
+                            title: Copy.format("death.rewindButton", Copy.seconds(rewindSeconds)),
                             systemImage: "clock.arrow.circlepath",
                             action: onRewind
                         )
                         SecondaryButton(title: restartTitle, systemImage: "arrow.counterclockwise", action: onRestart)
                     } else {
-                        Text("No rewind charges remain on this run.")
+                        Text(Copy.text("death.noRewind"))
                             .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundStyle(EchoTheme.muted)
                         PrimaryButton(title: restartTitle, systemImage: "arrow.counterclockwise", action: onRestart)
                     }
-                    GhostButton(title: "Main Menu", action: onMenu)
+                    GhostButton(title: Copy.text("button.menu"), action: onMenu)
                 }
             }
             .foregroundStyle(.white)
@@ -100,13 +100,6 @@ struct DeathView: View {
         }
     }
 
-    private var recoveryTip: String {
-        switch cause {
-        case .echo, .ghost: "Change your route before your previous path catches up."
-        case .asteroid: "Watch the rock's approach and keep a clear lane for its ricochet."
-        case .rift, .blackHole: "Stay outside the pull until you have a safe exit route."
-        case .collision: "Avoid the unstable branch left by the last impact."
-        case .laser: "Cross during the warning phase, before the beam fires."
-        }
-    }
+    /// Each cause has its own advice; a rift and a field well are not the same danger.
+    private var recoveryTip: String { cause.tip }
 }

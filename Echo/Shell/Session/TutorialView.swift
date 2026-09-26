@@ -13,35 +13,19 @@ struct TutorialView: View {
     }
 
     private let steps: [TutorialBeat] = [
+        ("hand.draw.fill", EchoTheme.cyan),
+        ("clock.arrow.2.circlepath", EchoTheme.violet),
+        ("point.topleft.down.to.point.bottomright.curvepath", EchoTheme.gold),
+        ("clock.arrow.circlepath", EchoTheme.magenta),
+    ].enumerated().map { index, style in
         TutorialBeat(
-            icon: "hand.draw.fill",
-            title: "Drag the present",
-            detail: "Drag anywhere to steer the white orb. Release to coast through a clear lane.",
-            tip: "Try a smooth route. Your movement will matter again soon.",
-            tint: EchoTheme.cyan
-        ),
-        TutorialBeat(
-            icon: "clock.arrow.2.circlepath",
-            title: "Your route returns",
-            detail: "When the Echo clock reaches zero, a copy starts replaying the path you just drew.",
-            tip: "The violet echo is your past, not a collectible.",
-            tint: EchoTheme.violet
-        ),
-        TutorialBeat(
-            icon: "point.topleft.down.to.point.bottomright.curvepath",
-            title: "Leave room for yourself",
-            detail: "Collect every spark, then enter the awakened exit. Avoid crossing the path your echo is about to follow.",
-            tip: "A wide loop is safer than a tight knot.",
-            tint: EchoTheme.gold
-        ),
-        TutorialBeat(
-            icon: "clock.arrow.circlepath",
-            title: "Rewind a bad turn",
-            detail: "Double-tap the arena to dash. After a crash, use Rewind on the fracture screen to return along your recent route if you have a charge.",
-            tip: "Rewind leaves the failed branch as an unstable echo.",
-            tint: EchoTheme.magenta
+            icon: style.0,
+            title: Copy.text("tutorial.\(index + 1).title"),
+            detail: Copy.text("tutorial.\(index + 1).detail"),
+            tip: Copy.text("tutorial.\(index + 1).tip"),
+            tint: style.1
         )
-    ]
+    }
 
     private var current: TutorialBeat { steps[stepIndex] }
 
@@ -66,7 +50,7 @@ struct TutorialView: View {
                 Spacer(minLength: 0)
 
                 PrimaryButton(
-                    title: stepIndex == steps.count - 1 ? "Start playing" : "Next lesson",
+                    title: Copy.text(stepIndex == steps.count - 1 ? "tutorial.start" : "tutorial.next"),
                     systemImage: stepIndex == steps.count - 1 ? "play.fill" : "arrow.right"
                 ) {
                     if stepIndex == steps.count - 1 {
@@ -97,10 +81,10 @@ struct TutorialView: View {
                 .overlay(Circle().stroke(EchoTheme.cyan.opacity(0.24), lineWidth: 1))
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("FIELD TRAINING")
+                Text(Copy.text("tutorial.eyebrow"))
                     .font(.system(size: 14, weight: .black, design: .rounded))
                     .tracking(1.8)
-                Text("LEARN THE LOOP IN FOUR BEATS")
+                Text(Copy.text("tutorial.subtitle"))
                     .font(.system(size: 8, weight: .bold, design: .rounded))
                     .tracking(1)
                     .foregroundStyle(EchoTheme.muted)
@@ -111,7 +95,7 @@ struct TutorialView: View {
             Button {
                 onDone()
             } label: {
-                Text("SKIP")
+                Text(Copy.text("tutorial.skip"))
                     .font(.system(size: 9, weight: .black, design: .rounded))
                     .tracking(1.1)
                     .foregroundStyle(EchoTheme.muted)
@@ -119,7 +103,7 @@ struct TutorialView: View {
                     .background(Color.white.opacity(0.06), in: Capsule())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Skip tutorial and start playing")
+            .accessibilityLabel(Copy.text("tutorial.a11y.skip"))
         }
     }
 
@@ -149,7 +133,7 @@ struct TutorialView: View {
                     )
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Lesson \(index + 1): \(steps[index].title)")
+                .accessibilityLabel(Copy.format("tutorial.a11y.lesson", index + 1, steps[index].title))
                 .accessibilityAddTraits(index == stepIndex ? .isSelected : [])
             }
         }
@@ -165,7 +149,7 @@ struct TutorialView: View {
                     .background(current.tint.opacity(0.13), in: RoundedRectangle(cornerRadius: 13, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("LESSON \(stepIndex + 1) / \(steps.count)")
+                    Text(Copy.format("tutorial.lesson", stepIndex + 1, steps.count))
                         .font(.system(size: 9, weight: .black, design: .rounded))
                         .tracking(1.3)
                         .foregroundStyle(current.tint)
@@ -230,7 +214,7 @@ private struct TutorialScene: View {
                     Circle()
                         .fill(tint)
                         .frame(width: 5, height: 5)
-                    Text("LIVE FIELD DEMO")
+                    Text(Copy.text("tutorial.demo"))
                         .font(.system(size: 9, weight: .black, design: .rounded))
                         .tracking(1.2)
                         .foregroundStyle(tint)
@@ -242,7 +226,7 @@ private struct TutorialScene: View {
                 .padding(14)
             }
         }
-        .accessibilityLabel("Animated illustration of \(step == 0 ? "dragging" : step == 1 ? "an echo replaying" : step == 2 ? "avoiding your echo" : "rewinding")")
+        .accessibilityLabel(Copy.format("tutorial.a11y.demo", Copy.text("tutorial.a11y.demo\(min(4, step + 1))")))
     }
 
     private func drawGrid(context: inout GraphicsContext, size: CGSize) {

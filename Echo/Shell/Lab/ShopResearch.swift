@@ -18,7 +18,7 @@ extension ShopView {
                     HStack(spacing: 11) {
                         AbilityIconView(kind: kind, size: 48)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("ABILITY TRAINING")
+                            Text(Copy.text("lab.ability.eyebrow"))
                                 .font(.system(size: 9, weight: .black, design: .rounded))
                                 .tracking(1.6)
                                 .foregroundStyle(tint)
@@ -43,11 +43,11 @@ extension ShopView {
                     MechanicDemoView(scenario: MechanicDemoScenario(bonus: kind), height: 188)
 
                     HStack(spacing: 8) {
-                        abilityStep("1", "SEE", icon: "eye.fill", tint: EchoTheme.cyan)
+                        abilityStep("1", Copy.text("lab.ability.see"), icon: "eye.fill", tint: EchoTheme.cyan)
                         Image(systemName: "chevron.right").foregroundStyle(EchoTheme.muted.opacity(0.55))
-                        abilityStep("2", "TAP", icon: "hand.tap.fill", tint: tint)
+                        abilityStep("2", Copy.text("lab.ability.tap"), icon: "hand.tap.fill", tint: tint)
                         Image(systemName: "chevron.right").foregroundStyle(EchoTheme.muted.opacity(0.55))
-                        abilityStep("3", "MOVE", icon: "location.fill", tint: EchoTheme.gold)
+                        abilityStep("3", Copy.text("lab.ability.move"), icon: "location.fill", tint: EchoTheme.gold)
                     }
 
                     VStack(alignment: .leading, spacing: 7) {
@@ -60,8 +60,8 @@ extension ShopView {
                             .fixedSize(horizontal: false, vertical: true)
 
                         HStack(spacing: 8) {
-                            abilityStat(icon: "timer", value: kind.duration > 0 ? String(format: "%.1fs", kind.duration) : "INSTANT", title: "EFFECT", tint: tint)
-                            abilityStat(icon: "arrow.clockwise", value: "\(Int(kind.cooldown))s", title: "COOLDOWN", tint: EchoTheme.cyan)
+                            abilityStat(icon: "timer", value: kind.duration > 0 ? Copy.format("unit.seconds", Copy.seconds(kind.duration)) : Copy.text("lab.ability.instant"), title: Copy.text("lab.ability.effect"), tint: tint)
+                            abilityStat(icon: "arrow.clockwise", value: Copy.format("unit.seconds", Copy.seconds(kind.cooldown)), title: Copy.text("lab.ability.cooldown"), tint: EchoTheme.cyan)
                         }
                     }
                     .padding(13)
@@ -140,13 +140,13 @@ extension ShopView {
             .frame(width: 58, height: 58)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("TIMELINE MATRIX")
+                Text(Copy.text("lab.matrix.title"))
                     .font(.system(size: 13, weight: .bold))
                     .tracking(1.8)
-                Text("\(total)-rank journey · \(earned) synchronized")
+                Text(Copy.format("lab.matrix.progress", total, earned))
                     .font(.system(size: 11))
                     .foregroundStyle(EchoTheme.muted)
-                Text("Choose a branch. Only fully unlocked nodes can be opened.")
+                Text(Copy.text("lab.matrix.hint"))
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(EchoTheme.cyan.opacity(0.82))
             }
@@ -170,23 +170,23 @@ extension ShopView {
     var researchGuide: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Label("HOW THE TREE WORKS", systemImage: "point.3.connected.trianglepath.dotted")
+                Label(Copy.text("lab.guide.title"), systemImage: "point.3.connected.trianglepath.dotted")
                     .font(.system(size: 10, weight: .black, design: .rounded))
                     .tracking(1.1)
                     .foregroundStyle(.white)
                 Spacer()
-                Label("ALL PARENTS REQUIRED", systemImage: "checkmark.circle.fill")
+                Label(Copy.text("lab.guide.all"), systemImage: "checkmark.circle.fill")
                     .font(.system(size: 9, weight: .bold, design: .rounded))
                     .foregroundStyle(EchoTheme.magenta)
             }
 
-            Text("A node opens only after every listed prerequisite reaches its rank. Green checks are complete; locks still need research. Prerequisites can live in another branch.")
+            Text(Copy.text("lab.guide.body"))
                 .font(.system(size: 11, weight: .medium, design: .rounded))
                 .foregroundStyle(.white.opacity(0.80))
                 .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 6) {
-                researchGuideBadge("✓ REQUIREMENT MET", tint: .green)
-                researchGuideBadge("◆ POINT COST", tint: EchoTheme.gold)
+                researchGuideBadge(Copy.text("lab.guide.met"), tint: .green)
+                researchGuideBadge(Copy.text("lab.guide.cost"), tint: EchoTheme.gold)
             }
         }
         .padding(13)
@@ -234,7 +234,7 @@ extension ShopView {
                             .tracking(0.5)
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
-                        Text("\(unlocked) UNLOCKED")
+                        Text(Copy.format("lab.branch.open", unlocked))
                             .font(.system(size: 8, weight: .bold, design: .rounded))
                             .foregroundStyle(unlocked > 0 ? tint : EchoTheme.muted)
                     }
@@ -251,7 +251,7 @@ extension ShopView {
                     )
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("\(branch.title) research, \(unlocked) unlocked upgrades")
+                .accessibilityLabel(Copy.format("lab.branch.a11y", branch.title, unlocked))
             }
         }
     }
@@ -267,10 +267,10 @@ extension ShopView {
                     .frame(width: 42, height: 42)
                     .background(tint.opacity(0.13), in: RoundedRectangle(cornerRadius: 12))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("\(researchBranch.title) RESEARCH")
+                    Text(Copy.format("lab.branch.header", researchBranch.title))
                         .font(.system(size: 13, weight: .black, design: .rounded))
                         .tracking(1.1)
-                    Text("\(researched) of \(kinds.count) technologies researched")
+                    Text(Copy.format("lab.branch.progress", researched, kinds.count))
                         .font(.system(size: 10, weight: .medium, design: .rounded))
                         .foregroundStyle(EchoTheme.muted)
                 }

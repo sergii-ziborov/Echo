@@ -13,19 +13,24 @@ struct RootView: View {
         return ProcessInfo.processInfo.arguments
     }
 
+#if DEBUG
+    /// The map the pause and results screenshots name, in the app's language.
+    static var shotLevelTitle: String { LevelCatalog.level(number: 27)?.title ?? "" }
+#endif
+
     var body: some View {
         ZStack {
 #if DEBUG
             if shotArguments.contains("-shot-pause") {
                 ScreenBackground()
-                PauseView(levelName: "Frostlane · Paradox 27", rewindCharges: 2, onResume: {}, onRestart: {}, onShop: {}, onSettings: {}, onMenu: {})
+                PauseView(levelName: Self.shotLevelTitle, rewindCharges: 2, onResume: {}, onRestart: {}, onShop: {}, onSettings: {}, onMenu: {})
             } else if shotArguments.contains("-shot-death") {
                 ScreenBackground()
                 DeathView(cause: .asteroid, rewindCharges: 2, onRewind: {}, onRestart: {}, onMenu: {})
             } else if shotArguments.contains("-shot-results") {
                 ScreenBackground()
                 ResultsView(
-                    levelName: "Frostlane · Paradox 27",
+                    levelName: Self.shotLevelTitle,
                     result: SessionResult(time: 43.28, moves: 18, stars: 2, sparks: 6, echoesFaced: 4, timeCrystals: 2, resonance: 3, scars: 1, closest: 0.14, control: true, paradox: false),
                     controlSeal: .maxEchoes(4),
                     paradoxSeal: .parTime,

@@ -15,7 +15,7 @@ struct ResultsView: View {
     var onNext: () -> Void
     var onNextCycle: (() -> Void)? = nil
     var onMenu: () -> Void
-    var nextTitle = "Next"
+    var nextTitle = Copy.text("button.next")
 
     var body: some View {
         GameModalShell(tint: EchoTheme.gold) {
@@ -28,11 +28,11 @@ struct ResultsView: View {
                     .overlay(Circle().stroke(EchoTheme.gold.opacity(0.45), lineWidth: 1))
 
                 VStack(spacing: 4) {
-                    Text("EPOCH STABILIZED")
+                    Text(Copy.text("result.eyebrow"))
                         .font(.system(size: 10, weight: .black, design: .rounded))
                         .tracking(2)
                         .foregroundStyle(EchoTheme.gold)
-                    Text("STABLE TIMELINE")
+                    Text(Copy.text("result.title"))
                         .font(.system(size: 25, weight: .ultraLight))
                         .tracking(3)
                         .multilineTextAlignment(.center)
@@ -44,7 +44,7 @@ struct ResultsView: View {
 
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("CLEAR TIME")
+                        Text(Copy.text("result.time"))
                             .font(.system(size: 9, weight: .black, design: .rounded))
                             .tracking(1.2)
                             .foregroundStyle(EchoTheme.cyan)
@@ -52,7 +52,7 @@ struct ResultsView: View {
                             .font(.system(size: 26, weight: .black, design: .monospaced))
                             .foregroundStyle(.white)
                         if let bestTime {
-                            Text("BEST \(format(bestTime))")
+                            Text(Copy.format("result.best", format(bestTime)))
                                 .font(.system(size: 9, weight: .bold, design: .rounded))
                                 .foregroundStyle(EchoTheme.muted)
                         }
@@ -66,7 +66,7 @@ struct ResultsView: View {
                             }
                         }
                         .font(.system(size: 18))
-                        Text("\(result.stars)/3 SEALS")
+                        Text(Copy.format("result.seals", result.stars))
                             .font(.system(size: 9, weight: .black, design: .rounded))
                             .foregroundStyle(EchoTheme.gold)
                     }
@@ -79,10 +79,10 @@ struct ResultsView: View {
                         Image(systemName: "infinity.circle.fill")
                             .foregroundStyle(EchoTheme.gold)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("THE LOOP CLOSES · 77 STOPS")
+                            Text(Copy.text("result.passDone"))
                                 .font(.system(size: 10, weight: .black, design: .rounded))
                                 .foregroundStyle(.white)
-                            Text("Next lap: \(nextDifficulty.shortTitle) · +777 research points")
+                            Text(Copy.format("result.passNext", nextDifficulty.shortTitle, ProgressStore.passCompletionReward))
                                 .font(.system(size: 10, weight: .medium, design: .rounded))
                                 .foregroundStyle(EchoTheme.muted)
                         }
@@ -93,18 +93,18 @@ struct ResultsView: View {
                 }
 
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                    ResultMetric(icon: "arrow.triangle.branch", title: "MOVES", value: "\(result.moves)", detail: bestMoves.map { "BEST \($0)" })
-                    ResultMetric(icon: "circle.dotted", title: "ECHOES", value: "\(result.echoesFaced)", detail: nil)
-                    ResultMetric(icon: "waveform.path.ecg", title: "CLOSEST", value: result.closest.isFinite ? String(format: "%.2f", result.closest) : "—", detail: nil)
-                    ResultMetric(icon: "bolt.horizontal", title: "SCARS", value: "\(result.scars)", detail: nil)
+                    ResultMetric(icon: "arrow.triangle.branch", title: Copy.text("result.moves"), value: "\(result.moves)", detail: bestMoves.map { Copy.format("result.best", "\($0)") })
+                    ResultMetric(icon: "circle.dotted", title: Copy.text("result.echoes"), value: "\(result.echoesFaced)", detail: nil)
+                    ResultMetric(icon: "waveform.path.ecg", title: Copy.text("result.closest"), value: result.closest.isFinite ? result.closest.formatted(.number.precision(.fractionLength(2))) : "—", detail: nil)
+                    ResultMetric(icon: "bolt.horizontal", title: Copy.text("result.scars"), value: "\(result.scars)", detail: nil)
                 }
 
                 VStack(spacing: 0) {
-                    ResultSealRow(title: "CLEAR", detail: "Complete", met: true)
+                    ResultSealRow(title: Copy.text("result.seal.clear"), detail: Copy.text("result.seal.complete"), met: true)
                     Divider().overlay(Color.white.opacity(0.08))
-                    ResultSealRow(title: "CONTROL", detail: controlSeal.label, met: result.control)
+                    ResultSealRow(title: Copy.text("result.seal.control"), detail: controlSeal.label, met: result.control)
                     Divider().overlay(Color.white.opacity(0.08))
-                    ResultSealRow(title: "PARADOX", detail: paradoxSeal.label, met: result.paradox)
+                    ResultSealRow(title: Copy.text("result.seal.paradox"), detail: paradoxSeal.label, met: result.paradox)
                 }
                 .padding(.horizontal, 12)
                 .background(Color.white.opacity(0.045), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -113,7 +113,7 @@ struct ResultsView: View {
                     Image(systemName: "diamond.fill")
                         .foregroundStyle(EchoTheme.magenta)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(awardedPoints > 0 ? "+\(awardedPoints) RESEARCH POINTS" : "NO RESEARCH POINTS")
+                        Text(awardedPoints > 0 ? Copy.format("result.points", awardedPoints) : Copy.text("result.noPoints"))
                             .font(.system(size: 12, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
                         Text(rewardDetail)
@@ -126,16 +126,16 @@ struct ResultsView: View {
                 .background(EchoTheme.magenta.opacity(0.10), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
 
                 HStack(spacing: 10) {
-                    PrimaryButton(title: "Retry", systemImage: "arrow.counterclockwise", action: onRetry)
+                    PrimaryButton(title: Copy.text("button.retry"), systemImage: "arrow.counterclockwise", action: onRetry)
                     if cycleComplete, let onNextCycle {
-                        PrimaryButton(title: "Next Cycle", systemImage: "infinity", action: onNextCycle)
+                        PrimaryButton(title: Copy.text("button.nextPass"), systemImage: "infinity", action: onNextCycle)
                     } else {
                         PrimaryButton(title: nextTitle, systemImage: "arrow.right", action: onNext)
                     }
                 }
                 HStack(spacing: 10) {
-                    SecondaryButton(title: "Watch", systemImage: "play.fill", action: onWatch)
-                    GhostButton(title: "Main Menu", action: onMenu)
+                    SecondaryButton(title: Copy.text("button.replay"), systemImage: "play.fill", action: onWatch)
+                    GhostButton(title: Copy.text("button.menu"), action: onMenu)
                 }
             }
             .foregroundStyle(.white)
@@ -144,18 +144,17 @@ struct ResultsView: View {
 
     private var rewardDetail: String {
         if awardedPoints == 0 {
-            return result.points > 0
-                ? "Repeat Daily · \(result.points) theoretical"
-                : "Already claimed"
+            // A repeat of today's Daily, or a map that pays nothing new.
+            return Copy.text(result.points > 0 ? "result.dailyClaimed" : "result.noNewPoints")
         }
-        var parts = ["\(result.stars) seals"]
-        if result.timeCrystals > 0 { parts.append("\(result.timeCrystals) crystals") }
-        if result.resonance >= 2 { parts.append("×\(result.resonance) resonance") }
+        var parts = [Copy.format("result.sealCount", result.stars)]
+        if result.timeCrystals > 0 { parts.append(Copy.format("result.crystalCount", result.timeCrystals)) }
+        if result.resonance >= 2 { parts.append(Copy.format("result.resonance", result.resonance)) }
         return parts.joined(separator: " · ")
     }
 
     private func format(_ time: TimeInterval) -> String {
-        String(format: "%.2fs", time)
+        Copy.format("unit.seconds", time.formatted(.number.precision(.fractionLength(2))))
     }
 }
 

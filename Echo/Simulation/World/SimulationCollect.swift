@@ -1,6 +1,16 @@
 import Foundation
 
 extension WorldSimulation {
+    /// Seconds to collect the next spark and keep the resonance chain going.
+    static let normalResonanceWindow: TimeInterval = 3.25
+    /// The candy training mode is more forgiving.
+    static let candyResonanceWindow: TimeInterval = 5.0
+    /// Freeze seconds a timed crystal pays when taken before its ring empties.
+    static let crystalFreezeReward: TimeInterval = 1.5
+    /// Seconds Pulse and Shift push the next echo back, before research.
+    static let pulseEchoDelay: TimeInterval = 2.4
+    static let shiftEchoDelay: TimeInterval = 3.6
+
     func tickLasers() -> [SimEvent] {
         var events: [SimEvent] = []
         for i in lasers.indices {
@@ -81,7 +91,7 @@ extension WorldSimulation {
                     events.append(.resonance(chain: resonanceChain, window: resonanceWindow))
                 }
                 if securedCharge {
-                    let reward = 1.5 + tuning.freezeBonus * 0.25 + tuning.crystalRewardBonus
+                    let reward = Self.crystalFreezeReward + tuning.freezeBonus * 0.25 + tuning.crystalRewardBonus
                     effects.freezeRemaining += reward
                     timedSparksSecured += 1
                     events.append(.timeCrystalSecured(id: sparks[i].id, freeze: reward))
@@ -118,7 +128,7 @@ extension WorldSimulation {
         case .surge:
             effects.surgeRemaining += (kind.duration + tuning.surgeBonus) * tuning.timedEffectMultiplier
         case .pulse:
-            pulseDelay += 2.4 + tuning.pulseDelayBonus
+            pulseDelay += Self.pulseEchoDelay + tuning.pulseDelayBonus
         case .magnet:
             effects.magnetRemaining += kind.duration * tuning.timedEffectMultiplier
         case .phase:
@@ -126,7 +136,7 @@ extension WorldSimulation {
             effects.phaseRemaining += duration
             effects.iFrames = max(effects.iFrames, duration)
         case .chrono:
-            pulseDelay += 3.6 + tuning.chronoDelayBonus
+            pulseDelay += Self.shiftEchoDelay + tuning.chronoDelayBonus
         case .anchor:
             effects.anchorRemaining += (kind.duration + tuning.anchorBonus) * tuning.timedEffectMultiplier
         case .repulse:

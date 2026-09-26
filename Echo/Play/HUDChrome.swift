@@ -93,7 +93,7 @@ struct InventoryBar: View {
                                 if cooldown > 0 {
                                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                                         .fill(Color.black.opacity(0.66))
-                                    Text(String(format: "%.1f", cooldown))
+                                    Text(Copy.seconds(cooldown))
                                         .font(.system(size: 11, weight: .bold, design: .monospaced))
                                         .foregroundStyle(.white)
                                 }
@@ -108,7 +108,7 @@ struct InventoryBar: View {
                         }
                         .buttonStyle(.plain)
                         .disabled(session.phase != .playing || stock == 0 || cooldown > 0)
-                        .accessibilityLabel("Use \(kind.title), \(stock) owned")
+                        .accessibilityLabel(Copy.format("hud.a11y.use", kind.title, stock))
                     } else {
                         Image(systemName: "plus")
                             .font(.system(size: 13, weight: .semibold))

@@ -101,7 +101,7 @@ final class GameSession {
         replaySnapshots = []
         replayIndex = 0
         replayClock = 0
-        banner = "Paradox"
+        banner = Copy.text("banner.rewind")
         publish()
         return true
     }
@@ -148,15 +148,15 @@ final class GameSession {
                  .asteroidImpacted, .asteroidShattered, .playerTeleported:
                 break
             case .resonance(let chain, _):
-                banner = "Resonance ×\(chain)"
+                banner = Copy.format("banner.resonance", chain)
             case .timeCrystalSecured(_, let freeze):
-                banner = String(format: "Freeze +%.1fs", freeze)
+                banner = Copy.format("banner.crystal", Copy.seconds(freeze))
             case .sparkTimerExpired:
-                banner = "Freeze charge expired"
+                banner = Copy.text("banner.crystalExpired")
             case .bonusCollected(let kind):
                 banner = kind.title
             case .shieldBroke:
-                banner = "Shield broke"
+                banner = Copy.text("banner.shieldBroke")
             case .echoWillSpawn:
                 break
             case .echoSpawned:
@@ -164,16 +164,16 @@ final class GameSession {
             case .exitOpened:
                 exitOpen = true
             case .riftOpened:
-                banner = "Rift"
+                banner = Copy.text("banner.rift")
             case .riftEntered(let kind):
                 banner = switch kind {
-                case .calm: "TIME HELD"
-                case .collision: "COLLAPSING RIFT"
-                case .warp: "MIRROR SHIFT"
-                case .candy: "CANDY TIMELINE"
+                case .calm: Copy.text("banner.rift.calm")
+                case .collision: Copy.text("banner.rift.collision")
+                case .warp: Copy.text("banner.rift.warp")
+                case .candy: Copy.text("banner.rift.candy")
                 }
             case .timeCollision:
-                banner = "Time collision"
+                banner = Copy.text("banner.collision")
             case .died(let cause):
                 deathCause = cause
                 replaySnapshots = sim.snapshots

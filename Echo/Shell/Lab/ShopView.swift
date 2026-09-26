@@ -119,10 +119,10 @@ struct ShopView: View {
         HStack {
             IconCircle(system: "chevron.left") { goBack() }
             VStack(alignment: .leading, spacing: 2) {
-                Text("TEMPORAL LAB")
+                Text(Copy.text("lab.title"))
                     .font(.system(size: 14, weight: .bold))
                     .tracking(2.5)
-                Text("SKILLS & PERMANENT UPGRADES")
+                Text(Copy.text("lab.subtitle"))
                     .font(.system(size: 9, weight: .semibold))
                     .tracking(1.4)
                     .foregroundStyle(EchoTheme.muted)
@@ -153,17 +153,17 @@ struct ShopView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("\(model.progress.points)")
                     .font(.system(size: 25, weight: .semibold, design: .rounded))
-                Text("RESEARCH POINTS")
+                Text(Copy.text("lab.points"))
                     .font(.system(size: 9, weight: .bold))
                     .tracking(1.3)
                     .foregroundStyle(EchoTheme.muted)
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 3) {
-                Text("\(model.progress.skillSlotCount) SLOTS")
+                Text(Copy.format("lab.slots", model.progress.skillSlotCount))
                     .font(.system(size: 11, weight: .bold))
                     .foregroundStyle(EchoTheme.cyan)
-                Text("\(model.progress.inventoryCapacity) MAX / SKILL")
+                Text(Copy.format("lab.capacity", model.progress.inventoryCapacity))
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(EchoTheme.muted)
             }
@@ -186,7 +186,7 @@ struct ShopView: View {
                     model.audio.play(.select)
                     withAnimation(.easeOut(duration: 0.18)) { section = item }
                 } label: {
-                    Label(item.rawValue, systemImage: item.icon)
+                    Label(item.title, systemImage: item.icon)
                         .font(.system(size: 11, weight: .bold))
                         .tracking(1.1)
                         .foregroundStyle(section == item ? .white : EchoTheme.muted)
@@ -208,7 +208,7 @@ struct ShopView: View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    Text("ACTIVE LOADOUT")
+                    Text(Copy.text("lab.loadout.title"))
                         .font(.system(size: 11, weight: .bold))
                         .tracking(1.5)
                     Spacer()
@@ -226,7 +226,7 @@ struct ShopView: View {
                     }
                 }
 
-                Text("Equipped skills appear in the arena. Each charge is consumed on use; cooldown prevents rapid repeats.")
+                Text(Copy.text("lab.loadout.note"))
                     .font(.system(size: 11))
                     .foregroundStyle(EchoTheme.muted)
                     .fixedSize(horizontal: false, vertical: true)
@@ -238,7 +238,7 @@ struct ShopView: View {
                     .stroke(Color.white.opacity(0.09), lineWidth: 1)
             )
 
-            Text("ARSENAL")
+            Text(Copy.text("lab.arsenal"))
                 .font(.system(size: 11, weight: .bold))
                 .tracking(1.6)
                 .foregroundStyle(EchoTheme.muted)
@@ -254,6 +254,13 @@ struct ShopView: View {
 enum LabSection: String, CaseIterable {
     case loadout = "SKILLS"
     case research = "UPGRADES"
+
+    var title: String {
+        switch self {
+        case .loadout: Copy.text("lab.section.loadout")
+        case .research: Copy.text("lab.section.research")
+        }
+    }
 
     var icon: String {
         switch self {

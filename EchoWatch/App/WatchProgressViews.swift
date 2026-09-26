@@ -19,7 +19,7 @@ struct WatchSkillsView: View {
                         .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundStyle(.secondary)
                     if !awake {
-                        Text("Clear \(skill.requiredClears) wrist maps")
+                        Text(Copy.format("watch.skill.requires", skill.requiredClears))
                             .font(.system(size: 10, weight: .bold, design: .rounded))
                             .foregroundStyle(.orange)
                     }
@@ -28,7 +28,7 @@ struct WatchSkillsView: View {
             .opacity(awake ? 1 : 0.6)
             .padding(.vertical, 3)
         }
-        .navigationTitle("Skills")
+        .navigationTitle(Copy.text("watch.menu.skills"))
     }
 }
 
@@ -38,7 +38,7 @@ struct WatchRelicsView: View {
 
     var body: some View {
         List {
-            Text("Every new wrist clear also pays \(WristProgress.shardsPerMap) research points on iPhone.")
+            Text(Copy.format("watch.relics.note", WristProgress.shardsPerMap))
                 .font(.system(size: 11, weight: .medium, design: .rounded))
                 .foregroundStyle(.secondary)
                 .listRowBackground(Color.clear)
@@ -55,7 +55,7 @@ struct WatchRelicsView: View {
                         Text(relic.detail)
                             .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundStyle(.secondary)
-                        Text(unlocked ? "Active on iPhone" : "\(store.clears)/\(relic.requiredClears) wrist maps")
+                        Text(unlocked ? Copy.text("watch.relic.active") : Copy.format("watch.relic.progress", store.clears, relic.requiredClears))
                             .font(.system(size: 10, weight: .bold, design: .rounded))
                             .foregroundStyle(unlocked ? .yellow : .orange)
                     }
@@ -64,6 +64,6 @@ struct WatchRelicsView: View {
                 .padding(.vertical, 3)
             }
         }
-        .navigationTitle("Relics")
+        .navigationTitle(Copy.text("watch.relics.title"))
     }
 }

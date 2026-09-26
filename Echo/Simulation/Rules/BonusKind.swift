@@ -16,84 +16,18 @@ enum BonusKind: String, Equatable, Hashable, Sendable, CaseIterable, Identifiabl
 
     var id: String { rawValue }
 
-    var title: String {
-        switch self {
-        case .shield: "Shield"
-        case .freeze: "Freeze"
-        case .surge: "Surge"
-        case .pulse: "Pulse"
-        case .magnet: "Magnet"
-        case .phase: "Phase"
-        case .chrono: "Shift"
-        case .anchor: "Anchor"
-        case .repulse: "Repulse"
-        case .prism: "Prism"
-        case .blink: "Blink"
-        case .ward: "Ward"
-        }
-    }
+    /// The skill's name in the player's language; `rawValue` stays the save key.
+    var title: String { Copy.text("ability.\(rawValue).name") }
 
-    var fieldLabel: String {
-        switch self {
-        case .surge: "SPEED"
-        case .pulse: "DELAY"
-        case .chrono: "SHIFT"
-        case .anchor: "SLOW"
-        case .repulse: "BLAST"
-        default: title.uppercased()
-        }
-    }
+    /// The short caption under an arena token.
+    var fieldLabel: String { Copy.text("ability.\(rawValue).field") }
 
-    var detail: String {
-        switch self {
-        case .shield: "Block the next collision."
-        case .freeze: "Stop every hazard; you keep moving."
-        case .surge: "Move much faster for a few seconds."
-        case .pulse: "Delay the next echo with a time wave."
-        case .magnet: "Pull every nearby spark toward you."
-        case .phase: "Pass safely through echoes and debris."
-        case .chrono: "Push the next echo far into the future."
-        case .anchor: "Slow the whole timeline; you stay fast."
-        case .repulse: "Blast rocks and scars away from you."
-        case .prism: "Bend lasers around you for a moment."
-        case .blink: "Jump forward through a dangerous line."
-        case .ward: "Starting shield — easy-mode, not used from the bar"
-        }
-    }
+    /// What the skill does, including what it does not do.
+    var detail: String { Copy.text("ability.\(rawValue).rule") }
 
-    var command: String {
-        switch self {
-        case .shield: "TAP BEFORE IMPACT"
-        case .freeze: "TAP · HAZARDS STOP"
-        case .surge: "TAP · ESCAPE FAST"
-        case .pulse: "TAP BEFORE ECHO SPAWNS"
-        case .magnet: "TAP NEAR MANY SPARKS"
-        case .phase: "TAP · CROSS THROUGH DANGER"
-        case .chrono: "TAP · BUY MORE TIME"
-        case .anchor: "TAP · OUTRUN THE WORLD"
-        case .repulse: "TAP WHEN SURROUNDED"
-        case .prism: "TAP BEFORE THE BEAM FIRES"
-        case .blink: "FACE A DIRECTION · TAP"
-        case .ward: "AUTOMATIC AT START"
-        }
-    }
+    var command: String { Copy.text("ability.\(rawValue).command") }
 
-    var bestUse: String {
-        switch self {
-        case .shield: "When one unavoidable hit is close."
-        case .freeze: "When several moving hazards overlap."
-        case .surge: "On long routes or while escaping an echo."
-        case .pulse: "When the echo countdown is almost empty."
-        case .magnet: "Inside a dense cluster of sparks."
-        case .phase: "To cut through a trapped corridor."
-        case .chrono: "Before a difficult final route."
-        case .anchor: "When timing windows are too tight."
-        case .repulse: "Among brittle rocks or lethal scars."
-        case .prism: "While crossing a charged laser."
-        case .blink: "To skip one wall, beam, or collision line."
-        case .ward: "At the beginning of assisted runs."
-        }
-    }
+    var bestUse: String { Copy.text("ability.\(rawValue).best") }
 
     var duration: TimeInterval {
         switch self {

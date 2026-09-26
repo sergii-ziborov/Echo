@@ -25,7 +25,7 @@ struct WatchMapsView: View {
                 }
             }
         }
-        .navigationTitle("Wrist Timeline")
+        .navigationTitle(Copy.text("watch.rooms"))
     }
 
     private func maps(in act: Int) -> [LevelDefinition] {
@@ -41,14 +41,14 @@ struct WatchMapsView: View {
                 .foregroundStyle(cleared ? .yellow : .cyan)
                 .frame(width: 24)
             VStack(alignment: .leading, spacing: 1) {
-                Text(level.name)
+                Text(level.title)
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                 if let best = store.progress.bestTimes[level.id] {
-                    Text(String(format: "Best %.1f s", best))
+                    Text(Copy.format("watch.best", Copy.seconds(best)))
                         .font(.system(size: 10, weight: .medium, design: .rounded))
                         .foregroundStyle(.secondary)
                 } else {
-                    Text(level.subtitle)
+                    Text(level.tip)
                         .font(.system(size: 10, weight: .medium, design: .rounded))
                         .foregroundStyle(.secondary)
                         .lineLimit(2)

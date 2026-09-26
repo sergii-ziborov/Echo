@@ -91,39 +91,53 @@ struct WatchRunView: View {
     private func overlay(_ run: WatchRun) -> some View {
         switch run.phase {
         case .ready:
-            Text("Tap where to fly")
-                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                .foregroundStyle(.white.opacity(0.85))
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background(.black.opacity(0.45), in: Capsule())
-                .frame(maxHeight: .infinity)
-                .allowsHitTesting(false)
+            // The room's log line, until the first touch starts the run.
+            VStack(spacing: 6) {
+                Text(Copy.text("watch.tapToFly"))
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.85))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(.black.opacity(0.45), in: Capsule())
+                Text(Copy.text("wrist.\(level.number).log"))
+                    .font(.system(size: 10, weight: .medium, design: .serif))
+                    .italic()
+                    .foregroundStyle(.white.opacity(0.72))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(5)
+                    .minimumScaleFactor(0.85)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 5)
+                    .background(.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                    .padding(.horizontal, 14)
+            }
+            .frame(maxHeight: .infinity)
+            .allowsHitTesting(false)
         case .playing:
             EmptyView()
         case .paused:
-            WatchRunCard(title: "Paused", tint: .cyan) {
-                cardActions(primary: Button("Resume", systemImage: "play.fill") { run.togglePause() }, leaveIcon: "xmark", leaveLabel: "Leave")
+            WatchRunCard(title: Copy.text("watch.paused"), tint: .cyan) {
+                cardActions(primary: Button(Copy.text("watch.resume"), systemImage: "play.fill") { run.togglePause() }, leaveIcon: "xmark", leaveLabel: Copy.text("watch.leave"))
             }
         case .dead(let cause):
-            WatchRunCard(title: "Crashed", subtitle: cause.watchLabel, tint: .pink) {
+            WatchRunCard(title: Copy.text("watch.lost"), subtitle: cause.watchLabel, tint: .pink) {
                 if run.canRewind {
-                    Label("Turn the Crown back · \(run.rewindsLeft)", systemImage: "digitalcrown.arrow.counterclockwise")
+                    Label(Copy.format("watch.crownBack", run.rewindsLeft), systemImage: "digitalcrown.arrow.counterclockwise")
                         .font(.system(size: 11, weight: .semibold, design: .rounded))
                         .foregroundStyle(.cyan)
                 }
-                cardActions(primary: Button("Retry", systemImage: "arrow.counterclockwise") { run.restart() }, leaveIcon: "xmark", leaveLabel: "Leave")
+                cardActions(primary: Button(Copy.text("watch.retry"), systemImage: "arrow.counterclockwise") { run.restart() }, leaveIcon: "xmark", leaveLabel: Copy.text("watch.leave"))
             }
         case .won(let time, let newClear):
             WatchRunCard(
-                title: "Cleared",
-                subtitle: String(format: "%.1f s", time) + (newClear ? " · +\(WristProgress.shardsPerMap) ◆ on iPhone" : ""),
+                title: Copy.text("watch.cleared"),
+                subtitle: clearedLine(time: time, newClear: newClear),
                 tint: .yellow
             ) {
                 if let next = WristCatalog.maps.first(where: { $0.number == level.number + 1 }) {
-                    cardActions(primary: Button(next.name, systemImage: "forward.fill") { advance(to: next) }, leaveIcon: "list.bullet", leaveLabel: "Maps")
+                    cardActions(primary: Button(next.title, systemImage: "forward.fill") { advance(to: next) }, leaveIcon: "list.bullet", leaveLabel: Copy.text("watch.rooms"))
                 } else {
-                    Button("Maps", systemImage: "list.bullet") { dismiss() }
+                    Button(Copy.text("watch.rooms"), systemImage: "list.bullet") { dismiss() }
                 }
             }
         }
@@ -144,6 +158,11 @@ struct WatchRunView: View {
         }
     }
 
+    private func clearedLine(time: TimeInterval, newClear: Bool) -> String {
+        let seconds = Copy.format("unit.seconds", Copy.seconds(time))
+        return newClear ? Copy.format("watch.reward", seconds, WristProgress.shardsPerMap) : seconds
+    }
+
     private func advance(to next: LevelDefinition) {
         guard let size = scene?.size else { return }
         level = next
@@ -156,10 +175,10 @@ struct WatchRunView: View {
 extension DeathCause {
     var watchLabel: String {
         switch self {
-        case .echo: "Your echo caught you"
-        case .asteroid: "Hit a rock"
-        case .laser: "Crossed a beam"
-        default: "The timeline broke"
+        case .echo: Copy.text("watch.cause.echo")
+        case .asteroid: Copy.text("watch.cause.asteroid")
+        case .laser: Copy.text("watch.cause.laser")
+        default: Copy.text("watch.cause.other")
         }
     }
 }

@@ -35,7 +35,7 @@ struct DailyChallengeView: View {
                     .padding(.bottom, 8)
                 }
 
-                PrimaryButton(title: done ? "Enter again" : "Enter Rift") {
+                PrimaryButton(title: Copy.text(done ? "daily.enterAgain" : "daily.enter")) {
                     model.play(level: daily, daily: true)
                 }
             }
@@ -56,10 +56,10 @@ struct DailyChallengeView: View {
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("DAILY RIFT")
+                Text(Copy.text("daily.title"))
                     .font(.system(size: 14, weight: .black, design: .rounded))
                     .tracking(2.5)
-                Text("ONE SHARED TIMELINE · ONE REWARD")
+                Text(Copy.text("daily.subtitle"))
                     .font(.system(size: 8, weight: .bold, design: .rounded))
                     .tracking(1.2)
                     .foregroundStyle(EchoTheme.muted)
@@ -91,7 +91,7 @@ struct DailyChallengeView: View {
             }
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("NEXT RIFT IN")
+                Text(Copy.text("daily.nextIn"))
                     .font(.system(size: 8, weight: .black, design: .rounded))
                     .tracking(1.4)
                     .foregroundStyle(EchoTheme.muted)
@@ -103,11 +103,11 @@ struct DailyChallengeView: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 2) {
-                Text("RESETS")
+                Text(Copy.text("daily.resets"))
                     .font(.system(size: 8, weight: .black, design: .rounded))
                     .tracking(1)
                     .foregroundStyle(EchoTheme.gold)
-                Text("AT MIDNIGHT")
+                Text(Copy.text("daily.midnight"))
                     .font(.system(size: 9, weight: .bold, design: .rounded))
                     .foregroundStyle(EchoTheme.muted)
             }
@@ -135,11 +135,11 @@ struct DailyChallengeView: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("RIFT \(key) · \(daily.region.region)")
+                    Text(Copy.format("daily.rift", key, daily.region.region.uppercased()))
                         .font(.system(size: 9, weight: .black, design: .rounded))
                         .tracking(1.3)
                         .foregroundStyle(EchoTheme.cyan)
-                    Text("STOP \(String(format: "%02d", daily.number)) · \(daily.name)")
+                    Text(Copy.format("daily.stop", String(format: "%02d", daily.number), daily.title))
                         .font(.system(size: 19, weight: .black, design: .rounded))
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)
@@ -147,7 +147,7 @@ struct DailyChallengeView: View {
 
                 Spacer()
 
-                Text(done ? "STABILIZED" : "LIVE")
+                Text(Copy.text(done ? "daily.done" : "daily.live"))
                     .font(.system(size: 8, weight: .black, design: .rounded))
                     .tracking(1)
                     .foregroundStyle(done ? EchoTheme.gold : .green)
@@ -156,7 +156,7 @@ struct DailyChallengeView: View {
                     .background((done ? EchoTheme.gold : Color.green).opacity(0.10), in: Capsule())
             }
 
-            Text(daily.subtitle)
+            Text(daily.tip)
                 .font(.system(size: 12, weight: .medium, design: .rounded))
                 .foregroundStyle(Color.white.opacity(0.68))
                 .fixedSize(horizontal: false, vertical: true)
@@ -174,16 +174,16 @@ struct DailyChallengeView: View {
             }
 
             HStack(spacing: 8) {
-                DailyMetric(title: "YOUR BEST", value: best.bestTime.map { String(format: "%.2fs", $0) } ?? "—", tint: EchoTheme.cyan)
-                DailyMetric(title: "SEALS", value: "\(best.stars)/3", tint: EchoTheme.gold)
+                DailyMetric(title: Copy.text("daily.best"), value: best.bestTime.map { Copy.format("unit.seconds", $0.formatted(.number.precision(.fractionLength(2)))) } ?? "—", tint: EchoTheme.cyan)
+                DailyMetric(title: Copy.text("daily.seals"), value: "\(best.stars)/3", tint: EchoTheme.gold)
             }
 
             VStack(spacing: 0) {
-                DailyObjective(icon: "checkmark.seal.fill", title: "CLEAR", detail: "Complete the rift", tint: .green)
+                DailyObjective(icon: "checkmark.seal.fill", title: Copy.text("result.seal.clear"), detail: Copy.text("daily.clearRift"), tint: .green)
                 objectiveDivider
-                DailyObjective(icon: "scope", title: "CONTROL", detail: control.label, tint: EchoTheme.cyan)
+                DailyObjective(icon: "scope", title: Copy.text("result.seal.control"), detail: control.label, tint: EchoTheme.cyan)
                 objectiveDivider
-                DailyObjective(icon: "circle.dotted", title: "PARADOX", detail: paradox.label, tint: EchoTheme.magenta)
+                DailyObjective(icon: "circle.dotted", title: Copy.text("result.seal.paradox"), detail: paradox.label, tint: EchoTheme.magenta)
             }
             .background(Color.white.opacity(0.035), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
@@ -208,10 +208,10 @@ struct DailyChallengeView: View {
                 .background((done ? EchoTheme.gold : EchoTheme.magenta).opacity(0.11), in: Circle())
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(done ? "TODAY'S REWARD CLAIMED" : "FIRST CLEAR PAYS OUT")
+                Text(Copy.text(done ? "daily.claimed" : "daily.firstClear"))
                     .font(.system(size: 9, weight: .black, design: .rounded))
                     .tracking(0.9)
-                Text(done ? "A new layout arrives at midnight." : "Replay freely; fragments are awarded once today.")
+                Text(Copy.text(done ? "daily.newLayout" : "daily.replayFreely"))
                     .font(.system(size: 10, weight: .medium, design: .rounded))
                     .foregroundStyle(EchoTheme.muted)
             }
@@ -223,12 +223,12 @@ struct DailyChallengeView: View {
     }
 
     private func modifiers(for level: LevelDefinition) -> [String] {
-        var items = ["\(level.maxEchoes) ECHOES"]
-        if !level.rifts.isEmpty { items.append("RIFTS") }
-        if !level.movers.isEmpty { items.append("MOVERS") }
-        if !level.gates.isEmpty { items.append("GATES") }
-        if !level.lasers.isEmpty { items.append("LASERS") }
-        if items.count < 3 { items.append("SCARS PERSIST") }
+        var items = [Copy.format("daily.mod.echoes", level.maxEchoes)]
+        if !level.rifts.isEmpty { items.append(Copy.text("daily.mod.rifts")) }
+        if !level.movers.isEmpty { items.append(Copy.text("daily.mod.debris")) }
+        if !level.gates.isEmpty { items.append(Copy.text("daily.mod.gates")) }
+        if !level.lasers.isEmpty { items.append(Copy.text("daily.mod.beams")) }
+        if items.count < 3 { items.append(Copy.text("daily.mod.scars")) }
         return Array(items.prefix(3))
     }
 
@@ -280,7 +280,9 @@ private struct DailyObjective: View {
                 .font(.system(size: 8, weight: .black, design: .rounded))
                 .tracking(0.8)
                 .foregroundStyle(tint)
-                .frame(width: 60, alignment: .leading)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .frame(width: 76, alignment: .leading)
             Text(detail)
                 .font(.system(size: 10, weight: .medium, design: .rounded))
                 .foregroundStyle(Color.white.opacity(0.68))

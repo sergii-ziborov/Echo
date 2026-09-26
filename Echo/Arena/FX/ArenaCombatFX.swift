@@ -83,7 +83,7 @@ extension GameScene {
         shockwave(at: point, color: tint, start: 14, end: CGFloat(64 + min(chain, 6) * 9))
 
         let label = SKLabelNode(fontNamed: "AvenirNext-Heavy")
-        label.text = "×\(chain)  RESONANCE"
+        label.text = Copy.format("arena.resonance", chain)
         label.fontSize = CGFloat(12 + min(chain, 5))
         label.fontColor = tint
         label.horizontalAlignmentMode = .center

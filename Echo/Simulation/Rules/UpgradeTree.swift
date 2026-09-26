@@ -5,13 +5,10 @@ enum UpgradeBranch: String, CaseIterable, Sendable {
     case loadout
     case temporal
 
-    var title: String {
-        switch self {
-        case .motion: "MOTION"
-        case .loadout: "LOADOUT"
-        case .temporal: "TIME"
-        }
-    }
+    var title: String { Copy.text("branch.\(rawValue).title") }
+
+    /// One line about the branch for the Archive.
+    var summary: String { Copy.text("branch.\(rawValue).summary") }
 
     var tint: RGB {
         switch self {
@@ -61,92 +58,14 @@ enum UpgradeKind: String, CaseIterable, Codable, Sendable, Identifiable {
         }
     }
 
-    var title: String {
-        switch self {
-        case .velocity: "Vector Drive"
-        case .sparkSense: "Spark Sense"
-        case .dashCapacitor: "Dash Capacitor"
-        case .surgeMastery: "Storm Runner"
-        case .dashImpulse: "Kinetic Impulse"
-        case .slots: "Slot Matrix"
-        case .reserves: "Deep Reserves"
-        case .fabricator: "Nano Fabricator"
-        case .aegis: "Aegis Protocol"
-        case .shieldLattice: "Shield Lattice"
-        case .fieldAmplifier: "Field Amplifier"
-        case .recharge: "Fast Cycle"
-        case .beamForecast: "Beam Forecast"
-        case .cryostasis: "Cryostasis"
-        case .echoForecast: "Echo Forecast"
-        case .crystalMemory: "Crystal Memory"
-        case .magnetism: "Magnetic Field"
-        case .phaseResearch: "Phase Theory"
-        case .chronoResearch: "Chrono Theory"
-        case .rewind: "Long Rewind"
-        case .anchorResearch: "World Anchor"
-        case .repulseResearch: "Repulse Core"
-        case .prismResearch: "Prism Shell"
-        case .blinkResearch: "Blink Drive"
-        }
-    }
+    /// The research node's name; `rawValue` stays the save key.
+    var title: String { Copy.text("upgrade.\(rawValue).name") }
 
-    var detail: String {
-        switch self {
-        case .velocity: "Your orb moves 4% faster per rank. Rank 1 also unlocks Surge for the Skills tab."
-        case .sparkSense: "Nearby sparks jump into your orb automatically. Every rank expands the collection ring."
-        case .dashCapacitor: "Your double-tap dash becomes ready 9% sooner per rank. Dash distance does not change."
-        case .surgeMastery: "Every Surge charge keeps the speed boost active 0.45s longer per rank."
-        case .dashImpulse: "Each double-tap dash travels farther and keeps its safe crossing window open longer."
-        case .slots: "Adds one ability slot. A new, larger activation button appears during a run."
-        case .reserves: "Adds two charges to every owned ability, so you can activate it more often per run."
-        case .fabricator: "Future ability charges cost 5% fewer research points per rank. Earlier purchases are unchanged."
-        case .aegis: "After a shield hit, you stay protected longer. At rank 5 every new run starts shielded."
-        case .shieldLattice: "Extends safety after impact. Rank 5 lets Shield absorb two separate hits."
-        case .fieldAmplifier: "Freeze, Surge, Magnet, Phase, Anchor and Prism last 4% longer per rank."
-        case .recharge: "All equipped abilities recover 8% faster per rank after you activate them."
-        case .beamForecast: "Laser warning lines appear 0.18s earlier per rank, giving you more time to move."
-        case .cryostasis: "Freeze holds asteroids, echoes and moving hazards still for 0.55s longer per rank."
-        case .echoForecast: "Each recorded echo starts 0.45s later per rank, leaving more space behind you."
-        case .crystalMemory: "Timed crystals release 0.30s more emergency Freeze energy per rank when collected."
-        case .magnetism: "Unlocks Magnet. Further ranks widen the field that pulls sparks toward your orb."
-        case .phaseResearch: "Unlocks Phase. Higher ranks keep you intangible longer while crossing hazards."
-        case .chronoResearch: "Unlocks Shift and Pulse. Further ranks push dangerous timeline events farther away."
-        case .rewind: "Rewinds more of your route. Ranks 2 and 5 add another rewind charge for each run."
-        case .anchorResearch: "Unlocks Anchor. Each rank slows the world more while your orb keeps full speed."
-        case .repulseResearch: "Unlocks Repulse. Each rank makes its blast clear a wider circle around your orb."
-        case .prismResearch: "Unlocks Prism. Higher ranks bend lasers away from you for longer."
-        case .blinkResearch: "Unlocks Blink. Each rank teleports your orb farther across one danger zone."
-        }
-    }
+    /// What the node changes. The current and next values come from the
+    /// same formulas the run uses, shown in the Lab.
+    var detail: String { Copy.text("upgrade.\(rawValue).effect") }
 
-    var useCase: String {
-        switch self {
-        case .velocity: "Best for races, collapsing lanes and crystals with short timers."
-        case .sparkSense: "Best when sparks sit near walls, lasers or moving asteroids."
-        case .dashCapacitor: "Best on maps that demand several emergency dodges in a row."
-        case .surgeMastery: "Best for long open routes and escaping a pursuing echo."
-        case .dashImpulse: "Best for crossing gates, walls and wide hazard lanes in one move."
-        case .slots: "Use it when you own more abilities than you can bring into a run."
-        case .reserves: "Best for long levels where one or two activations are not enough."
-        case .fabricator: "Buy early if you plan to collect and upgrade many abilities."
-        case .aegis: "Best for learning dense maps without losing a run to one mistake."
-        case .shieldLattice: "Best against chain collisions and hazards that strike twice quickly."
-        case .fieldAmplifier: "Best for loadouts built around timed area effects."
-        case .recharge: "Best when your strongest ability is often still cooling down."
-        case .beamForecast: "Best on laser-heavy maps and narrow corridors."
-        case .cryostasis: "Best for safely collecting crystals inside crowded rooms."
-        case .echoForecast: "Best when your own previous route blocks the next objective."
-        case .crystalMemory: "Best when the timer is nearly empty and the map is already crowded."
-        case .magnetism: "Best for collecting risky sparks without touching their exact position."
-        case .phaseResearch: "Best for direct shortcuts through asteroids, gates and echo trails."
-        case .chronoResearch: "Best for delaying the next wave while you finish an objective."
-        case .rewind: "Best for undoing a wrong turn or returning to a missed crystal."
-        case .anchorResearch: "Best when several moving hazards converge at the same time."
-        case .repulseResearch: "Best when enemies and breakable asteroids surround you."
-        case .prismResearch: "Best for crossing overlapping laser beams without waiting."
-        case .blinkResearch: "Best for instant escapes across a wall or fatal collision line."
-        }
-    }
+    var useCase: String { Copy.text("upgrade.\(rawValue).best") }
 
     var icon: String {
         switch self {

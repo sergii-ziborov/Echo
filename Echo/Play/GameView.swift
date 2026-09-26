@@ -97,7 +97,7 @@ struct GameView: View {
                     .padding(.horizontal, 12)
 
                     if case .ballet = session.phase {
-                        Label("TEMPORAL REPLAY", systemImage: "waveform.path.ecg")
+                        Label(Copy.text("play.routeReplay"), systemImage: "waveform.path.ecg")
                             .font(.system(size: 10, weight: .bold, design: .rounded))
                             .tracking(2.1)
                             .foregroundStyle(EchoTheme.cyan)
@@ -132,7 +132,7 @@ struct GameView: View {
                     .padding(.horizontal, 12)
 
                     if !session.hasStarted {
-                        Text("Drag to move")
+                        Text(Copy.text("play.dragToMove"))
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(.white.opacity(0.5))
                             .padding(.top, 6)
@@ -143,7 +143,7 @@ struct GameView: View {
 
                 if case .paused = session.phase, overlay == .none, arrival == nil {
                     PauseView(
-                        levelName: session.level.name,
+                        levelName: session.level.title,
                         rewindCharges: session.sim.rewindCharges,
                         onResume: { session.togglePause() },
                         onRestart: { restart() },
@@ -158,7 +158,7 @@ struct GameView: View {
                 if case .won(let result) = session.phase {
                     let seals = LevelCatalog.seals(for: session.level.number)
                     ResultsView(
-                        levelName: request.endless.map { "Deep Time · Depth \($0.depth)" } ?? session.level.name,
+                        levelName: request.endless.map { Copy.format("play.depthTitle", $0.depth) } ?? session.level.title,
                         result: result,
                         controlSeal: seals.control,
                         paradoxSeal: seals.paradox,
@@ -175,7 +175,7 @@ struct GameView: View {
                             ? { activeModel.startNextCycle() }
                             : nil,
                         onMenu: { activeModel.goHome() },
-                        nextTitle: request.endless.map { "Depth \($0.depth + 1)" } ?? "Next"
+                        nextTitle: request.endless.map { Copy.format("endless.depth", $0.depth + 1) } ?? Copy.text("button.next")
                     )
                 }
 
@@ -187,8 +187,8 @@ struct GameView: View {
                         onRewind: paradoxRewind,
                         onRestart: { request.endless == nil ? restart() : newEndlessRun() },
                         onMenu: { leaveAfterCrash() },
-                        restartTitle: request.endless == nil ? "Restart level" : "New run",
-                        note: request.endless.map { "Deep Time · depth \($0.depth) · best \(activeModel.progress.endless.bestDepth)" }
+                        restartTitle: Copy.text(request.endless == nil ? "button.restartMap" : "button.newExpedition"),
+                        note: request.endless.map { Copy.format("play.endlessNote", $0.depth, activeModel.progress.endless.bestDepth) }
                     )
                 }
 
@@ -218,7 +218,7 @@ struct GameView: View {
                 if session.phase == .replaying {
                     VStack {
                         Spacer()
-                        Text("YOUR PAST")
+                        Text(Copy.text("play.routeReplay"))
                             .font(.system(size: 15, weight: .semibold))
                             .tracking(4)
                             .foregroundStyle(EchoTheme.magenta)
@@ -238,7 +238,7 @@ struct GameView: View {
                 session.togglePause()
             }
             if let key = request.endless {
-                session.banner = "Deep Time · Depth \(key.depth)"
+                session.banner = Copy.format("play.depthTitle", key.depth)
             }
             scene.onEvents = { events in handle(events) }
             scene.cometStyle = activeModel.progress.usesTourbillonTail ? .tourbillon : .classic
@@ -268,7 +268,7 @@ struct GameView: View {
             }
             if activeModel.progress.consume(.ward) {
                 _ = session.sim.activate(.ward)
-                session.banner = "Ward"
+                session.banner = BonusKind.ward.title
             }
 #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("-shot-candy") {

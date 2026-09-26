@@ -93,7 +93,7 @@ final class WorldSimulation {
     var pulseDelay: TimeInterval = 0
     var collisionCooldown: TimeInterval = 0
     var riftTravelCooldown: TimeInterval = 0
-    var resonanceWindow: TimeInterval { reality == .candy ? 5.0 : 3.25 }
+    var resonanceWindow: TimeInterval { reality == .candy ? Self.candyResonanceWindow : Self.normalResonanceWindow }
 
     init(level: LevelDefinition, config: SimConfig = SimConfig()) {
         self.level = level

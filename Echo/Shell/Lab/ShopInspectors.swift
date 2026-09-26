@@ -4,8 +4,8 @@ import UIKit
 extension ShopView {
     func researchInspector(_ kind: UpgradeKind) -> some View {
         let level = model.progress.upgradeLevel(kind)
-        let current = researchEffect(kind, level: level)
-        let next = level == kind.maxLevel ? "Fully synchronized" : researchEffect(kind, level: level + 1)
+        let current = kind.effect(atRank: level)
+        let next = level == kind.maxLevel ? Copy.text("lab.maxed") : kind.effect(atRank: level + 1)
         let tint = color(kind.branch.tint)
 
         return ZStack {
@@ -23,10 +23,10 @@ extension ShopView {
                         ResearchIconView(kind: kind, size: 43)
                             .frame(width: 48, height: 48)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("TECHNOLOGY PREVIEW")
+                            Text(Copy.text("lab.inspector.title"))
                                 .font(.system(size: 11, weight: .black, design: .rounded))
                                 .tracking(1.8)
-                            Text("Guided before → after · permanent upgrade")
+                            Text(Copy.text("lab.inspector.subtitle"))
                                 .font(.system(size: 10, weight: .medium))
                                 .foregroundStyle(EchoTheme.muted)
                         }
@@ -41,7 +41,7 @@ extension ShopView {
                                 .background(Color.white.opacity(0.08), in: Circle())
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("Close upgrade details")
+                        .accessibilityLabel(Copy.text("lab.inspector.close"))
                     }
 
                     TechnologyPreviewView(
@@ -55,7 +55,7 @@ extension ShopView {
                     VStack(alignment: .leading, spacing: 12) {
                         explanationRow(
                             icon: "gearshape.2.fill",
-                            eyebrow: "WHAT CHANGES",
+                            eyebrow: Copy.text("lab.inspector.changes"),
                             text: kind.detail,
                             tint: tint
                         )
@@ -63,7 +63,7 @@ extension ShopView {
                             .overlay(Color.white.opacity(0.08))
                         explanationRow(
                             icon: "scope",
-                            eyebrow: "WHEN YOU WILL FEEL IT",
+                            eyebrow: Copy.text("lab.inspector.when"),
                             text: kind.useCase,
                             tint: EchoTheme.gold
                         )
@@ -126,65 +126,6 @@ extension ShopView {
         )
     }
 
-    func researchEffect(_ kind: UpgradeKind, level: Int) -> String {
-        switch kind {
-        case .velocity:
-            return level == 0 ? "Base movement speed" : "+\(level * 4)% movement speed"
-        case .sparkSense:
-            return level == 0 ? "Base pickup radius" : "+\(level * 4) spark reach"
-        case .dashCapacitor:
-            return level == 0 ? "2.6s dash cooldown" : "−\(level * 9)% dash cooldown"
-        case .surgeMastery:
-            return level == 0 ? "4.0s Surge" : String(format: "%.2fs Surge", BonusKind.surge.duration + Double(level) * 0.45)
-        case .dashImpulse:
-            return level == 0 ? "1.15s dash" : String(format: "%.2fs dash", 1.15 + Double(level) * 0.09)
-        case .slots:
-            return "\(min(6, 2 + level)) active skill slots"
-        case .reserves:
-            return "\(min(ProgressStore.maxOwned, 3 + level * 2)) charges per skill"
-        case .fabricator:
-            return level == 0 ? "Standard skill prices" : "−\(level * 5)% skill prices"
-        case .aegis:
-            if level == 0 { return "Base shield recovery" }
-            if level >= 5 { return "+0.9s grace · starts shielded" }
-            return String(format: "+%.1fs shield grace", Double(level) * 0.18)
-        case .shieldLattice:
-            if level == 0 { return "Single-layer shield" }
-            if level >= 5 { return "+0.6s grace · 2 layers" }
-            return String(format: "+%.2fs shield grace", Double(level) * 0.12)
-        case .fieldAmplifier:
-            return level == 0 ? "Base effect durations" : "+\(level * 4)% timed effects"
-        case .recharge:
-            return level == 0 ? "Base cooldown" : "−\(level * 8)% skill cooldown"
-        case .beamForecast:
-            return level == 0 ? "Base beam warning" : String(format: "+%.2fs beam warning", Double(level) * 0.18)
-        case .cryostasis:
-            return String(format: "%.1fs Freeze duration", BonusKind.freeze.duration + Double(level) * 0.55)
-        case .echoForecast:
-            return level == 0 ? "Standard echo schedule" : String(format: "+%.2fs before echoes", Double(level) * 0.45)
-        case .crystalMemory:
-            return level == 0 ? "+1.5s crystal Freeze" : String(format: "+%.1fs crystal Freeze", 1.5 + Double(level) * 0.30)
-        case .magnetism:
-            return level == 0 ? "Magnet locked" : "Magnet · +\(level * 14)% radius"
-        case .phaseResearch:
-            return level == 0 ? "Phase locked" : String(format: "Phase · %.1fs", BonusKind.phase.duration + Double(max(0, level - 1)) * 0.45)
-        case .chronoResearch:
-            return level == 0 ? "Shift & Pulse locked" : String(format: "Shift · +%.1fs", 3.6 + Double(max(0, level - 1)) * 0.65)
-        case .rewind:
-            let seconds = 3 + Double(level) * 0.45
-            let charges = level >= 5 ? 3 : level >= 2 ? 2 : 1
-            return String(format: "%.1fs rewind · %d charge%@", seconds, charges, charges == 1 ? "" : "s")
-        case .anchorResearch:
-            return level == 0 ? "Anchor locked" : String(format: "Anchor · %d%% world · %.1fs", max(24, 44 - level * 5), BonusKind.anchor.duration + Double(level) * 0.35)
-        case .repulseResearch:
-            return level == 0 ? "Repulse locked" : "Repulse · \(160 + level * 24) radius"
-        case .prismResearch:
-            return level == 0 ? "Prism locked" : String(format: "Prism · %.1fs", BonusKind.prism.duration + Double(level) * 0.5)
-        case .blinkResearch:
-            return level == 0 ? "Blink locked" : "Blink · \(165 + level * 28) distance"
-        }
-    }
-
     func goBack() {
         model.audio.play(.tap)
         if let onBack {
@@ -198,10 +139,10 @@ extension ShopView {
         if model.progress.buy(kind) {
             model.audio.play(.confirm)
             model.audio.haptic(.medium)
-            show("+1 \(kind.title)")
+            show(Copy.format("lab.toast.bought", kind.title))
         } else {
             model.audio.play(.denied)
-            show(model.progress.isSkillUnlocked(kind) ? "Need points" : model.progress.skillUnlockHint(kind))
+            show(model.progress.isSkillUnlocked(kind) ? Copy.text("lab.toast.needPoints") : model.progress.skillUnlockHint(kind))
         }
     }
 
@@ -209,10 +150,10 @@ extension ShopView {
         let wasEquipped = model.progress.equippedSkills.contains(kind)
         if model.progress.toggleEquipped(kind) {
             model.audio.play(.select)
-            show(wasEquipped ? "\(kind.title) removed" : "\(kind.title) equipped")
+            show(Copy.format(wasEquipped ? "lab.toast.removed" : "lab.toast.equipped", kind.title))
         } else {
             model.audio.play(.denied)
-            show("All skill slots are full")
+            show(Copy.text("lab.toast.slotsFull"))
         }
     }
 
@@ -220,13 +161,13 @@ extension ShopView {
         if model.progress.buyUpgrade(kind) {
             model.audio.play(.confirm)
             model.audio.haptic(.medium)
-            show("\(kind.title) upgraded")
+            show(Copy.format("lab.toast.upgraded", kind.title))
         } else if let requirement = model.progress.upgradeRequirement(kind) {
             model.audio.play(.denied)
             show(requirement)
         } else {
             model.audio.play(.denied)
-            show("Need more points")
+            show(Copy.text("lab.toast.needMore"))
         }
     }
 
@@ -273,7 +214,7 @@ extension ShopView {
             VStack(spacing: 5) {
                 Image(systemName: "plus")
                     .font(.system(size: 15, weight: .semibold))
-                Text("EMPTY")
+                Text(Copy.text("lab.slot.empty"))
                     .font(.system(size: 7, weight: .bold))
             }
             .foregroundStyle(EchoTheme.muted)
@@ -310,7 +251,7 @@ extension ShopView {
                     HStack(spacing: 7) {
                         Text(kind.title)
                             .font(.system(size: 17, weight: .semibold))
-                        Text("\(Int(kind.cooldown))s CD")
+                        Text(Copy.format("lab.skill.cooldown", Copy.seconds(kind.cooldown)))
                             .font(.system(size: 8, weight: .bold))
                             .foregroundStyle(EchoTheme.muted)
                             .padding(.horizontal, 6)
@@ -321,7 +262,7 @@ extension ShopView {
                         .font(.system(size: 11))
                         .foregroundStyle(unlocked ? EchoTheme.muted : EchoTheme.gold)
                         .lineLimit(2)
-                    Text(unlocked ? "Reserve \(owned)/\(model.progress.inventoryCapacity)" : "LOCKED")
+                    Text(unlocked ? Copy.format("lab.skill.reserve", owned, model.progress.inventoryCapacity) : Copy.text("lab.locked"))
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(unlocked && owned > 0 ? EchoTheme.cyan : EchoTheme.muted)
                 }
@@ -333,7 +274,7 @@ extension ShopView {
                 model.audio.play(.select)
                 inspectedSkill = kind
             } label: {
-                Label(unlocked ? "ANIMATED DEMO · TAP TO WATCH" : "DEMO LOCKED", systemImage: unlocked ? "play.rectangle.fill" : "lock.fill")
+                Label(Copy.text(unlocked ? "lab.skill.demo" : "lab.skill.demoLocked"), systemImage: unlocked ? "play.rectangle.fill" : "lock.fill")
                     .font(.system(size: 10, weight: .black, design: .rounded))
                     .tracking(0.8)
                     .frame(maxWidth: .infinity)
@@ -349,7 +290,7 @@ extension ShopView {
                 Button {
                     toggle(kind)
                 } label: {
-                    Label(equipped ? "EQUIPPED" : "EQUIP", systemImage: equipped ? "checkmark.circle.fill" : "circle")
+                    Label(Copy.text(equipped ? "lab.skill.equipped" : "lab.skill.equip"), systemImage: equipped ? "checkmark.circle.fill" : "circle")
                         .font(.system(size: 10, weight: .bold))
                         .frame(maxWidth: .infinity)
                         .frame(height: 38)
@@ -364,7 +305,7 @@ extension ShopView {
                 } label: {
                     HStack(spacing: 5) {
                         Image(systemName: "diamond.fill")
-                        Text(full ? "FULL" : "\(model.progress.skillPrice(kind))")
+                        Text(full ? Copy.text("lab.skill.full") : "\(model.progress.skillPrice(kind))")
                     }
                     .font(.system(size: 11, weight: .bold, design: .rounded))
                     .frame(maxWidth: .infinity)

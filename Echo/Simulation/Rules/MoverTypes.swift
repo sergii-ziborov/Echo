@@ -18,31 +18,13 @@ enum AsteroidMaterial: String, CaseIterable, Equatable, Sendable {
     /// A dusty snowball trailing vapour; the first impact dooms it.
     case comet
 
-    var title: String {
-        switch self {
-        case .basalt: "Basalt"
-        case .ice: "Cryo ice"
-        case .crystal: "Chrono crystal"
-        case .alloy: "Void alloy"
-        case .magma: "Magma core"
-        case .geode: "Hollow geode"
-        case .iron: "Meteoric iron"
-        case .comet: "Comet frost"
-        }
-    }
+    /// The material's display name; `rawValue` stays the internal key.
+    var title: String { Copy.text("material.\(rawValue).name") }
 
-    var shortLabel: String {
-        switch self {
-        case .basalt: "BAS"
-        case .ice: "ICE"
-        case .crystal: "CHR"
-        case .alloy: "ALLOY"
-        case .magma: "MAG"
-        case .geode: "GEO"
-        case .iron: "IRON"
-        case .comet: "COM"
-        }
-    }
+    /// One line about the material for the Archive.
+    var about: String { Copy.text("material.\(rawValue).about") }
+
+    var shortLabel: String { Copy.text("material.\(rawValue).code") }
 
     /// Nil means the shell rebounds forever. Brittle shells start an internal
     /// collapse clock on their first wall impact and can also be broken early

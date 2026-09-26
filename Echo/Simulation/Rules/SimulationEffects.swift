@@ -136,91 +136,37 @@ enum EncounterHint: String, Equatable, Sendable {
     case prism
     case blink
 
-    var title: String {
+    /// The ability this card introduces, if it is one of the skills.
+    private var skill: BonusKind? {
         switch self {
-        case .echo: "Violet orb = your echo"
-        case .asteroid: "Moving rock = asteroid"
-        case .rift: "Time rifts"
-        case .freeze: "Freeze"
-        case .phase: "Phase"
-        case .collision: "Time collision"
-        case .gate: "Time gates"
-        case .laser: "Temporal lasers"
-        case .timeCrystal: "Timed crystals"
-        case .resonance: "Resonance route"
-        case .blackHole: "Gravity wells"
-        case .realityShift: "Reality breach"
-        case .surge: "Surge"
-        case .pulse: "Pulse"
-        case .magnet: "Magnet"
-        case .chrono: "Shift"
-        case .anchor: "Anchor"
-        case .repulse: "Repulse"
-        case .prism: "Prism"
-        case .blink: "Blink"
+        case .freeze: .freeze
+        case .phase: .phase
+        case .surge: .surge
+        case .pulse: .pulse
+        case .magnet: .magnet
+        case .chrono: .chrono
+        case .anchor: .anchor
+        case .repulse: .repulse
+        case .prism: .prism
+        case .blink: .blink
+        default: nil
         }
+    }
+
+    var title: String {
+        skill?.title ?? Copy.text("hint.\(rawValue).title")
     }
 
     var detail: String {
         switch self {
-        case .echo:
-            "It repeats the route you just drew. Change direction so the violet orb never touches you."
-        case .asteroid:
-            "Ice, crystal, and basalt crack after wall hits. Watch the cracks open and chips flake off; metal alloy never breaks."
-        case .rift:
-            "Rifts open and close. A calm tear pauses time. A collapsing one is a collision — stay out."
-        case .freeze:
-            "Echoes, rocks, rifts, gates, lasers, and crystal countdowns hold still. Move while the past cannot."
-        case .phase:
-            "You pass through copies for a moment. Spend it on a bad line, not a pretty one."
-        case .collision:
-            "Two pasts occupied the same beat. The scar they leave is lethal for a few seconds."
-        case .gate:
-            "These bars vanish and return on a clock. Freeze holds them too."
-        case .laser:
-            "Emitters charge before the line flares lethal. Some beams sweep across the arena. Freeze suspends and disarms them."
-        case .timeCrystal:
-            "Take the crystal before its ring empties to gain bonus Freeze time and points. Freeze pauses this countdown too."
-        case .resonance:
-            "Collect another spark within 3.25 seconds to extend the chain. Longer routes earn bonus research points."
-        case .blackHole:
-            "The bright lens is only a warning. Gravity pulls inside the outer ring; the dark core ends the run. Freeze suspends its pull."
-        case .realityShift:
-            "Warp tears fold the arena. Candy tears open a temporary pocket timeline with faster movement and a wider resonance window."
-        case .surge: BonusKind.surge.detail
-        case .pulse: BonusKind.pulse.detail
-        case .magnet: BonusKind.magnet.detail
-        case .chrono: BonusKind.chrono.detail
-        case .anchor: BonusKind.anchor.detail
-        case .repulse: BonusKind.repulse.detail
-        case .prism: BonusKind.prism.detail
-        case .blink: BonusKind.blink.detail
+        case .freeze, .phase: Copy.text("hint.\(rawValue).detail")
+        case .resonance: Copy.format("hint.resonance.detail", Copy.seconds(WorldSimulation.normalResonanceWindow))
+        default: skill?.detail ?? Copy.text("hint.\(rawValue).detail")
         }
     }
 
     var action: String {
-        switch self {
-        case .echo: "YOUR OLD PATH CHASES YOU"
-        case .asteroid: "WALL HITS CRACK SOME ROCKS"
-        case .rift: "ENTER ONLY WHILE THE RING IS OPEN"
-        case .freeze: BonusKind.freeze.command
-        case .phase: BonusKind.phase.command
-        case .collision: "LEAVE THE PURPLE SCAR"
-        case .gate: "CROSS WHILE THE BAR IS GONE"
-        case .laser: "MOVE AFTER CHARGE · BEFORE FIRE"
-        case .timeCrystal: "TAKE IT BEFORE THE RING EMPTIES"
-        case .resonance: "CHAIN SPARKS BEFORE TIME RUNS OUT"
-        case .blackHole: "ESCAPE THE OUTER RING"
-        case .realityShift: "A TEAR CHANGES THE ARENA RULES"
-        case .surge: BonusKind.surge.command
-        case .pulse: BonusKind.pulse.command
-        case .magnet: BonusKind.magnet.command
-        case .chrono: BonusKind.chrono.command
-        case .anchor: BonusKind.anchor.command
-        case .repulse: BonusKind.repulse.command
-        case .prism: BonusKind.prism.command
-        case .blink: BonusKind.blink.command
-        }
+        skill?.command ?? Copy.text("hint.\(rawValue).action")
     }
 }
 

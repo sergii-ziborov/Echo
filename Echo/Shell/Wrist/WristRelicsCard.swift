@@ -19,14 +19,14 @@ struct WristRelicsCard: View {
                     .tracking(1.5)
                     .foregroundStyle(EchoTheme.gold)
                 Spacer()
-                Text("\(cleared)/\(total) WRIST MAPS")
+                Text(Copy.format("wristCard.maps", cleared, total))
                     .font(.system(size: 9, weight: .bold, design: .rounded))
                     .tracking(0.7)
                     .foregroundStyle(EchoTheme.muted)
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Wrist Timeline")
+                Text(Copy.text("wristCard.title"))
                     .font(.system(size: 21, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                 Text(status)
@@ -74,12 +74,12 @@ struct WristRelicsCard: View {
     private var status: String {
         let link = PhoneWatchLink.shared
         if !link.isPaired {
-            return "Pair an Apple Watch to play twelve wrist maps. Every new clear pays \(WristProgress.shardsPerMap) research points here."
+            return Copy.format("wristCard.pair", WristProgress.shardsPerMap)
         }
         if !link.isWatchAppInstalled {
-            return "Install ECHO on your Apple Watch from the Watch app to open the wrist timeline."
+            return Copy.text("wristCard.install")
         }
-        return "Every new wrist clear pays \(WristProgress.shardsPerMap) research points. Open Remote on the watch to steer this orb from your wrist."
+        return Copy.format("wristCard.ready", WristProgress.shardsPerMap)
     }
 
     private func relicRow(_ relic: WristRelic) -> some View {
@@ -106,14 +106,14 @@ struct WristRelicsCard: View {
             Spacer(minLength: 4)
 
             if relic == .tourbillonTail, unlocked {
-                Toggle("Tourbillon Tail", isOn: Binding(
+                Toggle(relic.title, isOn: Binding(
                     get: { model.progress.wristTrailEnabled },
                     set: { model.progress.setWristTrail($0) }
                 ))
                 .labelsHidden()
                 .tint(EchoTheme.gold)
             } else {
-                Text(unlocked ? "ACTIVE" : "\(relic.requiredClears) MAPS")
+                Text(unlocked ? Copy.text("wristCard.active") : Copy.format("wristCard.rooms", relic.requiredClears))
                     .font(.system(size: 9, weight: .black, design: .rounded))
                     .tracking(0.8)
                     .lineLimit(1)

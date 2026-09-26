@@ -20,11 +20,11 @@ struct ActHeroCard: View {
                         .frame(width: 72, height: 72)
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("REGION \(String(format: "%02d", act.rawValue)) · \(act.title)")
+                        Text(Copy.format("atlas.hero.eyebrow", String(format: "%02d", act.rawValue), act.title))
                             .font(.system(size: 9, weight: .black, design: .rounded))
                             .tracking(1.2)
                             .foregroundStyle(act.atlasTint)
-                        Text(act.atlasRegion)
+                        Text(act.atlasRegion.uppercased())
                             .font(.system(size: 22, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
                             .lineLimit(1)
@@ -33,6 +33,7 @@ struct ActHeroCard: View {
                             .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundStyle(Color.white.opacity(0.68))
                             .lineLimit(1)
+                            .minimumScaleFactor(0.8)
 
                         HStack(spacing: 5) {
                             ForEach(act.atlasTraits, id: \.self) { trait in
@@ -53,7 +54,7 @@ struct ActHeroCard: View {
 
                 VStack(spacing: 5) {
                     HStack {
-                        Text("REGION MASTERY")
+                        Text(Copy.text("atlas.mastery"))
                         Spacer()
                         Text("\(cleared)/\(act.range.count) · \(stars)/\(act.range.count * 3)")
                     }
@@ -133,15 +134,15 @@ struct ActRouteCard: View {
         VStack(spacing: 7) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("FOLD ROAD")
+                    Text(Copy.text("atlas.route.title"))
                         .font(.system(size: 11, weight: .black, design: .rounded))
                         .tracking(1.5)
-                    Text("\(act.region.capitalized) · \(cleared)/\(levels.count) stops cleared")
+                    Text(Copy.format("atlas.route.subtitle", act.region, cleared, levels.count))
                         .font(.system(size: 9, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.white.opacity(0.62))
                 }
                 Spacer()
-                Label("SWIPE REGION", systemImage: "hand.draw.fill")
+                Label(Copy.text("atlas.route.swipe"), systemImage: "hand.draw.fill")
                     .font(.system(size: 7, weight: .bold, design: .rounded))
                     .tracking(0.7)
                     .foregroundStyle(act.atlasTint)

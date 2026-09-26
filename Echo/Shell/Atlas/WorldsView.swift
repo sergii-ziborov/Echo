@@ -80,10 +80,10 @@ struct WorldsView: View {
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("TIMELINE ATLAS")
+                Text(Copy.text("atlas.title"))
                     .font(.system(size: 14, weight: .black, design: .rounded))
                     .tracking(2.2)
-                Text("SWIPE OR CHOOSE A REGION")
+                Text(Copy.text("atlas.subtitle"))
                     .font(.system(size: 8, weight: .bold, design: .rounded))
                     .tracking(1.3)
                     .foregroundStyle(EchoTheme.muted)
@@ -137,7 +137,7 @@ struct WorldsView: View {
                         }
                         .buttonStyle(.plain)
                         .id(act.rawValue)
-                        .accessibilityLabel("Region \(act.rawValue), \(act.atlasRegion)")
+                        .accessibilityLabel(Copy.format("atlas.a11y.region", act.rawValue, act.atlasRegion))
                         .accessibilityAddTraits(selected ? .isSelected : [])
                     }
                 }
@@ -198,13 +198,13 @@ struct WorldsView: View {
                     AtlasSummaryMetric(
                         icon: "checkmark.circle.fill",
                         value: "\(clearedCount(in: act))/\(levels.count)",
-                        title: "MAPS CLEARED",
+                        title: Copy.text("atlas.mapsCleared"),
                         tint: act.atlasTint
                     )
                     AtlasSummaryMetric(
                         icon: "checkmark.seal.fill",
                         value: "\(starCount(in: act))/\(levels.count * 3)",
-                        title: "SEALS FOUND",
+                        title: Copy.text("atlas.sealsFound"),
                         tint: EchoTheme.gold
                     )
                 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum MechanicDemoScenario: Hashable {
+enum MechanicDemoScenario: String, Hashable {
     case echo, asteroid, rift, freeze, phase, collision, gate, laser
     case timeCrystal, resonance, blackHole
     case shield, surge, pulse, magnet, chrono, anchor, repulse, prism, blink
@@ -66,30 +66,7 @@ enum MechanicDemoScenario: Hashable {
         }
     }
 
-    var caption: String {
-        switch self {
-        case .echo: "YOUR OLD ROUTE REPEATS"
-        case .asteroid: "WALL HIT → CRACK → BREAK"
-        case .rift: "OPEN RING CHANGES THE RULES"
-        case .freeze: "HAZARDS STOP · YOU MOVE"
-        case .phase: "CROSS THROUGH DANGER"
-        case .collision: "TWO ECHOES LEAVE A SCAR"
-        case .gate: "WAIT · THEN CROSS"
-        case .laser: "CHARGE → FIRE → MOVE"
-        case .timeCrystal: "GOLD BONUS · GRAB FOR FREEZE"
-        case .resonance: "FAST SPARKS BUILD A CHAIN"
-        case .blackHole: "PULL OUTSIDE · DEATH INSIDE"
-        case .shield: "ONE HIT BOUNCES AWAY"
-        case .surge: "YOU MOVE FASTER"
-        case .pulse: "NEXT ECHO ARRIVES LATER"
-        case .magnet: "SPARKS FLY TO YOU"
-        case .chrono: "PUSH THE TIMELINE BACK"
-        case .anchor: "WORLD SLOWS · YOU DO NOT"
-        case .repulse: "CLEAR SPACE AROUND YOU"
-        case .prism: "LASERS BEND AROUND YOU"
-        case .blink: "JUMP ACROSS ONE DANGER"
-        }
-    }
+    var caption: String { Copy.text("demo.\(rawValue)") }
 
     var tint: Color {
         switch self {

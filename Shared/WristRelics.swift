@@ -8,19 +8,12 @@ enum WristRelic: String, CaseIterable, Identifiable, Sendable {
 
     var id: String { rawValue }
 
-    var title: String {
-        switch self {
-        case .tourbillonTail: "Tourbillon Tail"
-        case .crownCharge: "Crown Charge"
-        case .mainspring: "Mainspring"
-        }
-    }
+    var title: String { Copy.text("relic.\(rawValue).name") }
 
     var detail: String {
         switch self {
-        case .tourbillonTail: "Your comet burns ember-gold on iPhone."
-        case .crownCharge: "One extra Paradox Rewind in every iPhone run."
-        case .mainspring: "Echoes arrive 0.5 s later on iPhone."
+        case .mainspring: Copy.format("relic.mainspring.detail", Copy.seconds(WristProgress.echoDelayRelicBonus))
+        default: Copy.text("relic.\(rawValue).detail")
         }
     }
 
@@ -89,23 +82,17 @@ enum WristSkill: String, CaseIterable, Identifiable, Sendable {
 
     var id: String { rawValue }
 
-    var title: String {
-        switch self {
-        case .crownRewind: "Crown Rewind"
-        case .pulseSense: "Pulse Sense"
-        case .wristDash: "Wrist Dash"
-        case .tickFreeze: "Tick Freeze"
-        }
-    }
+    var title: String { Copy.text("wristSkill.\(rawValue).name") }
 
     var detail: String {
         switch self {
-        case .crownRewind: "Turn the Digital Crown back to rewind three seconds."
-        case .pulseSense: "Your wrist taps before every echo appears."
-        case .wristDash: "Double-tap the arena to dash."
-        case .tickFreeze: "Freeze every hazard from the skill button, or with a double tap of your fingers."
+        case .crownRewind: Copy.format("wristSkill.crownRewind.detail", Copy.seconds(Self.crownRewindSeconds))
+        default: Copy.text("wristSkill.\(rawValue).detail")
         }
     }
+
+    /// How far a turn of the Crown rewinds a wrist run.
+    static let crownRewindSeconds: TimeInterval = 3
 
     var symbol: String {
         switch self {

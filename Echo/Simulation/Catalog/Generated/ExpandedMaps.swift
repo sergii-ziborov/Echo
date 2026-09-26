@@ -3,12 +3,12 @@ import Foundation
 extension LevelCatalog {
     static func expandedLevel(_ number: Int) -> LevelDefinition {
         let names = [
-            "Corona", "Twinfire", "Redshift", "Lensing", "Pulse Crown", "Zero Hour",
-            "First Tear", "Foldline", "Split Realm", "Backstep", "False Door", "Broken Axis", "Rift Heart",
-            "Dark Tide", "Orbit Fall", "Gravity Choir", "Bent Route", "Well Spring", "Tidal Lock", "Dark Star",
+            "Corona", "Twinfire", "Redshift", "Lens Array", "Pulse Crown", "Zero Hour",
+            "First Tear", "Foldline", "Split Channel", "Backstep", "False Door", "Broken Axis", "Rift Heart",
+            "Dark Tide", "Orbit Fall", "Gravity Choir", "Bent Route", "Well Spring", "Tide Crossing", "Dark Star",
             "Doppelglass", "Inversion", "False North", "Phase Garden", "Echo Mask", "Glass Labyrinth", "Dream Collapse",
             "Sugar Static", "Gumdrop Orbit", "Frosting Rail", "Candy Comet", "Crystal Syrup", "Sweet Paradox", "Candy Timeline",
-            "Last Dawn", "All Pasts", "Infinite Scar", "Final Mirror", "Event Crown", "Forever Loop", "Eternal Echo",
+            "Last Dawn", "Route Archive", "Residual Scar", "Final Mirror", "Pulse Junction", "Recovery Loop", "Eternal Echo",
         ]
         let subtitles = [
             "Read the light before it fires.",
@@ -267,7 +267,8 @@ extension LevelCatalog {
         let templateName = level.name
         level.id = "daily-\(Self.dayKey(start, calendar: calendar))"
         level.name = "Daily Rift"
-        level.subtitle = "\(templateName) · \(Act.containing(level: pick).title)"
+        // Internal only: the Daily shows its stop's localized title and tip.
+        level.subtitle = templateName
 
         let positions = level.sparks.map(\.position).shuffled(using: &rng)
         for i in level.sparks.indices {

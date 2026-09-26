@@ -12,13 +12,15 @@ extension ProgressStore {
         inventory[kind.rawValue] ?? 0
     }
 
-    var inventoryCapacity: Int {
-        min(Self.maxOwned, 3 + upgradeLevel(.reserves) * 2)
-    }
+    var inventoryCapacity: Int { Self.capacity(reserves: upgradeLevel(.reserves)) }
 
-    var skillSlotCount: Int {
-        min(6, 2 + upgradeLevel(.slots))
-    }
+    var skillSlotCount: Int { Self.slots(rank: upgradeLevel(.slots)) }
+
+    static func capacity(reserves rank: Int) -> Int { min(maxOwned, 3 + rank * 2) }
+
+    static func slots(rank: Int) -> Int { min(6, 2 + rank) }
+
+    static func discount(fabricator rank: Int) -> Double { min(0.25, Double(rank) * 0.05) }
 
     var equippedSkills: [BonusKind] {
         equippedSkillIDs.compactMap(BonusKind.init(rawValue:))
@@ -29,7 +31,7 @@ extension ProgressStore {
     }
 
     func skillPrice(_ kind: BonusKind) -> Int {
-        let discount = min(0.25, Double(upgradeLevel(.fabricator)) * 0.05)
+        let discount = Self.discount(fabricator: upgradeLevel(.fabricator))
         return max(1, Int((Double(kind.price) * (1 - discount)).rounded()))
     }
 
@@ -88,19 +90,19 @@ extension ProgressStore {
     }
 
     func skillUnlockHint(_ kind: BonusKind) -> String {
-        switch kind {
-        case .shield, .freeze: "Available"
-        case .surge: "Research Vector Drive I"
-        case .pulse: "Research Chrono Theory"
-        case .magnet: "Research Magnetic Field I"
-        case .phase: "Research Phase Theory"
-        case .chrono: "Research Chrono Theory"
-        case .anchor: "Research World Anchor I"
-        case .repulse: "Research Repulse Core I"
-        case .prism: "Research Prism Shell I"
-        case .blink: "Research Blink Drive I"
-        case .ward: "Arena-only"
+        let research: UpgradeKind? = switch kind {
+        case .shield, .freeze, .ward: nil
+        case .surge: .velocity
+        case .pulse, .chrono: .chronoResearch
+        case .magnet: .magnetism
+        case .phase: .phaseResearch
+        case .anchor: .anchorResearch
+        case .repulse: .repulseResearch
+        case .prism: .prismResearch
+        case .blink: .blinkResearch
         }
+        guard let research else { return Copy.text("lab.unlock.available") }
+        return Copy.format("lab.unlock.research", "\(research.title) I")
     }
 
     @discardableResult
@@ -136,7 +138,7 @@ extension ProgressStore {
         guard let missing = kind.prerequisites.first(where: { upgradeLevel($0.kind) < $0.level }) else {
             return nil
         }
-        return "Requires \(missing.kind.title) \(Self.roman(missing.level))"
+        return Copy.format("lab.requires", "\(missing.kind.title) \(Self.roman(missing.level))")
     }
 
     func canUpgrade(_ kind: UpgradeKind) -> Bool {
@@ -155,35 +157,41 @@ extension ProgressStore {
     }
 
     var playerTuning: PlayerTuning {
-        let rewindLevel = upgradeLevel(.rewind)
-        let aegisLevel = upgradeLevel(.aegis)
+        Self.tuning(wrist: wrist) { upgradeLevel($0) }
+    }
+
+    /// Run tuning for a set of research ranks. The Lab previews one rank with it,
+    /// so what a node promises is what the run applies.
+    static func tuning(wrist: WristProgress = WristProgress(), rank: (UpgradeKind) -> Int) -> PlayerTuning {
+        let rewindLevel = rank(.rewind)
+        let aegisLevel = rank(.aegis)
         return PlayerTuning(
-            speedMultiplier: 1 + Double(upgradeLevel(.velocity)) * 0.04,
-            pickupRadiusBonus: Double(upgradeLevel(.sparkSense)) * 3.5,
-            dashCooldownMultiplier: max(0.42, 1 - Double(upgradeLevel(.dashCapacitor)) * 0.09),
-            dashDurationBonus: Double(upgradeLevel(.dashImpulse)) * 0.09,
-            cooldownMultiplier: max(0.46, 1 - Double(upgradeLevel(.recharge)) * 0.08),
-            timedEffectMultiplier: 1 + Double(upgradeLevel(.fieldAmplifier)) * 0.04,
-            surgeBonus: Double(upgradeLevel(.surgeMastery)) * 0.45,
-            freezeBonus: Double(upgradeLevel(.cryostasis)) * 0.55,
-            magnetRadiusMultiplier: 1 + Double(upgradeLevel(.magnetism)) * 0.14,
-            shieldGraceBonus: Double(aegisLevel) * 0.18 + Double(upgradeLevel(.shieldLattice)) * 0.12,
+            speedMultiplier: 1 + Double(rank(.velocity)) * 0.04,
+            pickupRadiusBonus: Double(rank(.sparkSense)) * 3.5,
+            dashCooldownMultiplier: max(0.42, 1 - Double(rank(.dashCapacitor)) * 0.09),
+            dashDurationBonus: Double(rank(.dashImpulse)) * 0.09,
+            cooldownMultiplier: max(0.46, 1 - Double(rank(.recharge)) * 0.08),
+            timedEffectMultiplier: 1 + Double(rank(.fieldAmplifier)) * 0.04,
+            surgeBonus: Double(rank(.surgeMastery)) * 0.45,
+            freezeBonus: Double(rank(.cryostasis)) * 0.55,
+            magnetRadiusMultiplier: 1 + Double(rank(.magnetism)) * 0.14,
+            shieldGraceBonus: Double(aegisLevel) * 0.18 + Double(rank(.shieldLattice)) * 0.12,
             startsShielded: aegisLevel >= 5,
-            shieldChargesPerUse: upgradeLevel(.shieldLattice) >= 5 ? 2 : 1,
-            laserWarningBonus: Double(upgradeLevel(.beamForecast)) * 0.18,
-            echoDelayBonus: Double(upgradeLevel(.echoForecast)) * 0.45
+            shieldChargesPerUse: rank(.shieldLattice) >= 5 ? 2 : 1,
+            laserWarningBonus: Double(rank(.beamForecast)) * 0.18,
+            echoDelayBonus: Double(rank(.echoForecast)) * 0.45
                 + (wrist.isUnlocked(.mainspring) ? WristProgress.echoDelayRelicBonus : 0),
-            crystalRewardBonus: Double(upgradeLevel(.crystalMemory)) * 0.30,
+            crystalRewardBonus: Double(rank(.crystalMemory)) * 0.30,
             rewindSeconds: 3 + Double(rewindLevel) * 0.45,
             rewindCharges: (rewindLevel >= 5 ? 3 : rewindLevel >= 2 ? 2 : 1) + (wrist.isUnlocked(.crownCharge) ? 1 : 0),
-            anchorTimeScale: max(0.24, 0.44 - Double(upgradeLevel(.anchorResearch)) * 0.05),
-            anchorBonus: Double(upgradeLevel(.anchorResearch)) * 0.35,
-            repulseRadius: 160 + Double(upgradeLevel(.repulseResearch)) * 24,
-            prismBonus: Double(upgradeLevel(.prismResearch)) * 0.5,
-            blinkDistance: 165 + Double(upgradeLevel(.blinkResearch)) * 28,
-            phaseBonus: Double(max(0, upgradeLevel(.phaseResearch) - 1)) * 0.45,
-            chronoDelayBonus: Double(max(0, upgradeLevel(.chronoResearch) - 1)) * 0.65,
-            pulseDelayBonus: Double(max(0, upgradeLevel(.chronoResearch) - 1)) * 0.40
+            anchorTimeScale: max(0.24, 0.44 - Double(rank(.anchorResearch)) * 0.05),
+            anchorBonus: Double(rank(.anchorResearch)) * 0.35,
+            repulseRadius: 160 + Double(rank(.repulseResearch)) * 24,
+            prismBonus: Double(rank(.prismResearch)) * 0.5,
+            blinkDistance: 165 + Double(rank(.blinkResearch)) * 28,
+            phaseBonus: Double(max(0, rank(.phaseResearch) - 1)) * 0.45,
+            chronoDelayBonus: Double(max(0, rank(.chronoResearch) - 1)) * 0.65,
+            pulseDelayBonus: Double(max(0, rank(.chronoResearch) - 1)) * 0.40
         )
     }
 
