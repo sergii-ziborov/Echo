@@ -98,6 +98,7 @@ struct RecordsView: View {
     private var phoneBoard: some View {
         VStack(spacing: 14) {
             ratingCard(Ratings.phone(model.progress), board: .phone, note: Copy.text("records.phone.note"))
+            gameCenterButton
             VStack(alignment: .leading, spacing: 0) {
                 sectionTitle(Copy.text("records.regions"))
                 ForEach(Act.allCases, id: \.rawValue) { act in
@@ -143,6 +144,7 @@ struct RecordsView: View {
         let wrist = model.progress.wrist
         return VStack(spacing: 14) {
             ratingCard(Ratings.watch(wrist), board: .watch, note: Copy.text("records.watch.note"))
+            gameCenterButton
             Text(Copy.format("records.watch.summary", wrist.cleared.count, WristCatalog.maps.count, wrist.relics.count, WristRelic.allCases.count))
                 .font(.system(size: 10, weight: .black, design: .rounded))
                 .tracking(0.8)
@@ -206,6 +208,38 @@ struct RecordsView: View {
     }
 
     // MARK: - Shared
+
+    /// Both ratings are also Game Center leaderboards, next to the achievements.
+    private var gameCenterButton: some View {
+        Button {
+            model.audio.play(.select)
+            model.syncGameCenter()
+            GameCenter.shared.open()
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "gamecontroller.fill")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(EchoTheme.cyan)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(Copy.text("records.gameCenter"))
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                    Text(Copy.text(GameCenter.shared.isSignedIn ? "records.gameCenter.detail" : "records.gameCenter.signIn"))
+                        .font(.system(size: 10, weight: .medium, design: .rounded))
+                        .foregroundStyle(EchoTheme.muted)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(EchoTheme.muted)
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 15)
+            .frame(height: 52)
+            .background(Color.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Color.white.opacity(0.08), lineWidth: 1))
+        }
+        .buttonStyle(PressStyle())
+    }
 
     private func ratingCard(_ lines: [RatingLine], board: Board, note: String) -> some View {
         VStack(alignment: .leading, spacing: 12) {

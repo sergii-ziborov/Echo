@@ -12,6 +12,7 @@
 		035B4BAB06DF71AEB294CA16 /* WorldSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4810701140A99AD8C82337F /* WorldSimulation.swift */; };
 		0558B6400B3C6E811EA5D90F /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3AA771216D8B1B25EE3154 /* DailyChallengeView.swift */; };
 		05AEDB702D9C33CB1717BBC1 /* SessionCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B165656CCF82A8872B2E270 /* SessionCoverageTests.swift */; };
+		05B1048A65250B497E720DF7 /* Achievements.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D7C1D4B159A2131840EB0 /* Achievements.swift */; };
 		05C998AB53B2A1D1F6627F45 /* LaserTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812D55F81564754B4D96DDB3 /* LaserTypes.swift */; };
 		07A4A07FB19992612667797F /* LevelPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA371066EE3061D0269A188 /* LevelPrototype.swift */; };
 		07E57E5D723BA533FD2F22C1 /* SimulationClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9418282F22A74AA5C49EE99 /* SimulationClock.swift */; };
@@ -44,6 +45,7 @@
 		1D4597181484A1E310D86151 /* SimulationTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB537A4616C84D5E90EC346 /* SimulationTypes.swift */; };
 		1F98ED326B43128BAEABF54A /* ProgressStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08C24BCC6BFDA1D0C987AFD /* ProgressStoreTests.swift */; };
 		1FD22BA2C2C60D6808782E33 /* LevelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C1412C5BED8201B14E0DC9 /* LevelFactory.swift */; };
+		1FF3867A605A6D56336712B1 /* GameCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3588357969931A0FC3461176 /* GameCenter.swift */; };
 		20FE0F1A5357B5E0876C11A0 /* TechnologyPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA08B8518A2930C7816535CE /* TechnologyPreviewView.swift */; };
 		236F4DB96CAE5D156F9A173E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 97696FFCBF8755B6D306340E /* PrivacyInfo.xcprivacy */; };
 		2414EBC8C2F1E5ED62CBD73C /* ChromeCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9DB9F1FBC0A92388DDCF51 /* ChromeCoverageTests.swift */; };
@@ -355,6 +357,7 @@
 		302A60CB624D280AA73626CD /* RockShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockShape.swift; sourceTree = "<group>"; };
 		33273365323639FA0684F212 /* GameSessionCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionCoverageTests.swift; sourceTree = "<group>"; };
 		354EBB57B4313E203FE67AAD /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
+		3588357969931A0FC3461176 /* GameCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenter.swift; sourceTree = "<group>"; };
 		359089611FDBDE265B760D7B /* ArenaRockBuild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaRockBuild.swift; sourceTree = "<group>"; };
 		37854D78DDF0D45D3E53439A /* HomeControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeControls.swift; sourceTree = "<group>"; };
 		37AA03B1D00D39F06FEE1882 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -463,6 +466,7 @@
 		AD484F9AC50B58BC99B24F95 /* WristRelicsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WristRelicsCard.swift; sourceTree = "<group>"; };
 		ADD6A0A688F0F0FC86328EE1 /* WikiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiView.swift; sourceTree = "<group>"; };
 		AF5FA4D54C9412FEEF9A0560 /* StarRatingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingTests.swift; sourceTree = "<group>"; };
+		AF64088612A2F4A4DCF5D5EA /* Echo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Echo.entitlements; sourceTree = "<group>"; };
 		B019EEFC6CF91C5EF319E46C /* SupportRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportRows.swift; sourceTree = "<group>"; };
 		B1243E5572CEE34546A84D7C /* VisualAssetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualAssetTests.swift; sourceTree = "<group>"; };
 		B3C72B518D24FD1F057BF3F1 /* spawn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = spawn.wav; sourceTree = "<group>"; };
@@ -490,6 +494,7 @@
 		D41B7758D6DC186E8B1AABF8 /* BonusFramingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusFramingTests.swift; sourceTree = "<group>"; };
 		D4C1A6DF1DC3D998C18AFA61 /* WikiPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiPages.swift; sourceTree = "<group>"; };
 		D55E24D73D57D5CFD9179266 /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
+		D78D7C1D4B159A2131840EB0 /* Achievements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievements.swift; sourceTree = "<group>"; };
 		D7C14A82EE315B6F4C339ACA /* LevelSeals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSeals.swift; sourceTree = "<group>"; };
 		D9978C3F37CBA8D257461A3E /* EndlessReach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndlessReach.swift; sourceTree = "<group>"; };
 		DC5924108C5B874313935282 /* RemoteFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFrame.swift; sourceTree = "<group>"; };
@@ -661,6 +666,7 @@
 			children = (
 				194EA970BDA85C19DC061F34 /* AppModel.swift */,
 				69D2C2A8CA81A77FB457A82F /* EchoApp.swift */,
+				3588357969931A0FC3461176 /* GameCenter.swift */,
 				C19A0C00FB40E9F9FB766ACC /* PhoneWatchLink.swift */,
 			);
 			path = App;
@@ -942,6 +948,7 @@
 			isa = PBXGroup;
 			children = (
 				546FBBBE11D88D6AC114509C /* Assets.xcassets */,
+				AF64088612A2F4A4DCF5D5EA /* Echo.entitlements */,
 				97696FFCBF8755B6D306340E /* PrivacyInfo.xcprivacy */,
 				ECDDBC61344998E7F8091D2A /* Sounds */,
 			);
@@ -1061,6 +1068,7 @@
 		BC48B91A4D19DCE5DBAF9055 /* Records */ = {
 			isa = PBXGroup;
 			children = (
+				D78D7C1D4B159A2131840EB0 /* Achievements.swift */,
 				E0944EA754ED88FF84EC87DC /* Ratings.swift */,
 				942D5CC1E8C831F2940DB1D4 /* RecordsCard.swift */,
 				7DF0102037BB0476D0D3F662 /* RecordsView.swift */,
@@ -1458,6 +1466,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B5826C1BD543E3CEE2E89D /* AbilityGlyph.swift in Sources */,
+				05B1048A65250B497E720DF7 /* Achievements.swift in Sources */,
 				D27B0F4102D97BCE416B458B /* ActorFactory.swift in Sources */,
 				666184025B10DC2C35F9C8E0 /* AppModel.swift in Sources */,
 				ABB36B0EDAD1FD010902F29A /* ArenaActorSync.swift in Sources */,
@@ -1500,6 +1509,7 @@
 				58664EE18AF24F2E63FECC22 /* EndlessReach.swift in Sources */,
 				C8976B55A95788BD666D95FE /* EndlessRun.swift in Sources */,
 				DAE8BD7F4BE4C169E7ACC5A9 /* ExpandedMaps.swift in Sources */,
+				1FF3867A605A6D56336712B1 /* GameCenter.swift in Sources */,
 				917318EFBB7FF1D8A3A0D949 /* GameScene.swift in Sources */,
 				D9303642DC611E6BA44465F8 /* GameSession.swift in Sources */,
 				F82694D2DA3C309EAEF89879 /* GameView.swift in Sources */,
@@ -1769,6 +1779,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Echo/Resources/Echo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1829,7 +1840,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = XMS5ZC28UJ;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1915,7 +1926,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XMS5ZC28UJ;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1983,6 +1994,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Echo/Resources/Echo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;

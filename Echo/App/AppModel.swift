@@ -35,7 +35,9 @@ final class AppModel {
     func appear() {
         PhoneWatchLink.shared.onProgress = { [weak self] incoming in
             self?.progress.mergeWrist(incoming)
+            self?.syncGameCenter()
         }
+        GameCenter.shared.start { [weak self] in self?.syncGameCenter() }
         PhoneWatchLink.shared.activate()
         audio.enabled = progress.soundEnabled
         audio.setMasterVolume(progress.soundVolume)
@@ -252,12 +254,19 @@ final class AppModel {
     func recordEndlessWin(_ key: EndlessKey, result: SessionResult) -> Int {
         let awarded = progress.recordEndlessClear(key, result: result)
         audio.play(.win)
+        syncGameCenter()
         return awarded
     }
 
     func startNextCycle() {
         guard progress.advanceDifficultyIfComplete() else { return }
+        syncGameCenter()
         play(level: LevelCatalog.prototype, daily: false)
+    }
+
+    /// Sends both ratings and achievement progress when a player is signed in.
+    func syncGameCenter() {
+        GameCenter.shared.sync(progress)
     }
 
     func recordWin(levelID: String, result: SessionResult, daily: Bool, dayKey: String? = nil) -> Int {
@@ -275,6 +284,7 @@ final class AppModel {
             progress.recordWin(levelID: levelID, result: result, awardsShard: true)
         }
         audio.play(.win)
+        syncGameCenter()
         return awarded
     }
 }

@@ -72,7 +72,7 @@ A crash can **Paradox Rewind** three seconds. The discarded branch replays once 
 - **Timed gates**, **echo collision scars**, and **paradox ghosts** after a rewind.
 - **Signal Lab** — equip a limited loadout and research the 24-node Signal Matrix. Every number a node shows is read from the same tuning the run applies.
 - **Keeper Archive** — the in-game manual for controls, clocks, hazards, skills, research, regions and the recovered story.
-- **Ratings** — two ratings on Home, one per device. iPhone: Route Seals × 100, best Deep Time depth × 250, completed passes × 1000, with seals per region. Apple Watch: cleared rooms × 100 plus 10 for every second of a best time under par, with every room's best time.
+- **Ratings and Game Center** — two ratings on Home, one per device, each also a Game Center leaderboard, plus fifteen achievements for the Road, Deep Time, the Daily Rift, the chronometer rooms and the Signal Matrix (IDs and texts in [docs/app-store/GAME_CENTER.md](docs/app-store/GAME_CENTER.md)). Signing in is optional: the sheet only appears from the Game Center button on the Ratings screen. iPhone: Route Seals × 100, best Deep Time depth × 250, completed passes × 1000, with seals per region. Apple Watch: cleared rooms × 100 plus 10 for every second of a best time under par, with every room's best time.
 
 The first time you meet an echo, a rock, a rift, a gate, Freeze, Phase, or an echo collision, a short card explains it. The first time you reach a region, an arrival card says where the Signal has landed.
 

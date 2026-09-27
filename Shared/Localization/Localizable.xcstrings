@@ -13096,6 +13096,57 @@
         }
       }
     },
+    "records.gameCenter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Game Center"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Game Center"
+          }
+        }
+      }
+    },
+    "records.gameCenter.detail": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leaderboards for both ratings and achievements"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблицы обоих рейтингов и достижения"
+          }
+        }
+      }
+    },
+    "records.gameCenter.signIn": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to share your ratings and earn achievements"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Войди, чтобы делиться рейтингом и получать достижения"
+          }
+        }
+      }
+    },
     "records.line.depth": {
       "extractionState": "manual",
       "localizations": {

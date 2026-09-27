@@ -33,6 +33,28 @@ final class RecordsTests: XCTestCase {
         XCTAssertEqual(Ratings.secondsUnderPar(wrist), 5, "A better time only raises the rating")
     }
 
+    func testAchievementsFollowTheSavedRecords() {
+        XCTAssertLessThanOrEqual(Achievement.allCases.reduce(0) { $0 + $1.points }, 1000, "Game Center allows 1000 points per game")
+        XCTAssertEqual(Set(Achievement.allCases.map(\.rawValue)).count, Achievement.allCases.count)
+
+        let fresh = CoverageFixtures.model(rich: false).progress
+        XCTAssertTrue(Achievement.allCases.allSatisfy { $0.percent(fresh) == 0 })
+
+        let model = CoverageFixtures.model(rich: false)
+        model.progress.debugShowcase(cleared: Act.trace.range.upperBound)
+        XCTAssertEqual(Achievement.firstLight.percent(model.progress), 100)
+        XCTAssertEqual(Achievement.lighthouse.percent(model.progress), 100)
+        XCTAssertLessThan(Achievement.lastDawn.percent(model.progress), 100)
+
+        for room in WristCatalog.maps.prefix(12) {
+            model.progress.wrist.record(clear: room.id, time: room.parTime - 1)
+        }
+        XCTAssertEqual(Achievement.calibrated.percent(model.progress), 100)
+        XCTAssertEqual(Achievement.regulated.percent(model.progress), 0)
+        XCTAssertEqual(Achievement.aheadOfTime.percent(model.progress), 100)
+        XCTAssertEqual(Achievement.certified.percent(model.progress), 33)
+    }
+
     func testRatingsScreensRender() {
         let model = CoverageFixtures.model()
         model.progress.wrist.record(clear: WristCatalog.maps[0].id, time: 10)
