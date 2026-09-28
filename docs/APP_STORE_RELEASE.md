@@ -1,6 +1,6 @@
 # ECHO App Store release guide
 
-App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Version **1.0.0**, current build **18**. The listing is not public yet.
+App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App IDs `com.sergiiziborov.Echo` and `com.sergiiziborov.Echo.watchkitapp`. Version **1.0.0**; TestFlight has build **7** from Xcode Cloud. The listing is not public yet.
 
 ## Price and product type
 
@@ -8,13 +8,11 @@ Intended sale: **$1.99 USD one-time iOS app**. No ads, no in-app purchases, no s
 
 ## TestFlight / Xcode Cloud
 
-`project.yml` and the generated Xcode project use marketing version **1.0.0** and build **18**. Xcode Cloud numbers its own builds, so set its next build number above the last uploaded build. `ci_scripts/ci_post_clone.sh` installs XcodeGen if needed and regenerates the project.
+`project.yml` uses marketing version **1.0.0** and build **20** for installs from this Mac. Xcode Cloud numbers its own builds and ignores that number; build 7 was the first to reach TestFlight. `ci_scripts/ci_post_clone.sh` installs XcodeGen if needed and regenerates the project.
 
-After signing in to App Store Connect:
+The Xcode Cloud workflow **Default** builds `sergii-ziborov/Echo` on `main`. It runs **Archive - iOS** (scheme Echo, App Store Connect distribution), then **TestFlight Internal Testing** for the internal group **Keepers**, which gets every build.
 
-1. Connect an Xcode Cloud workflow to `sergii-ziborov/Echo` on `main`.
-2. Use **Archive - iOS**, **App Store Connect** distribution, and **TestFlight Internal Testing**.
-3. Confirm the processed build is 1.0.0 (20) or later before assigning testers.
+Both App IDs must be registered by hand in Certificates, Identifiers & Profiles: `com.sergiiziborov.Echo` (with Game Center) and `com.sergiiziborov.Echo.watchkitapp`. Xcode Cloud can't register an App ID itself, and installs from this Mac don't reveal a missing one because they sign with the wildcard profile. Without the watch App ID, the export fails with “Automatic signing cannot register bundle identifier”.
 
 Suggested **What to Test**: region arrival cards and the Atlas route (Möbius loop, region skies); Deep Time; the Apple Watch app on its own and as a remote for a phone run; Settings → About / Terms / Privacy / Report a bug.
 
@@ -90,16 +88,17 @@ Russian listing (add **Russian** under App Store Connect → the version's local
 >
 > Прогресс хранится на устройстве. Без аккаунта, рекламы, встроенных покупок и подключения к сети.
 
-App Privacy answers: **no data collected**. Confirm against `PRIVACY.md` and the shipped binary before publishing.
+App Privacy answers: **no data collected**. Game Center doesn't change that: Apple collects that data, and Apple's guidance says developers aren't responsible for disclosing it. Confirm against `PRIVACY.md` and the shipped binary before publishing.
 
-App Review notes: no sign-in. Settings contains About, Terms, Privacy, Report a bug (a prefilled email), and a confirmed progress reset. The Apple Watch app is embedded: wrist maps play on their own, and Remote steers a map that is running on the paired iPhone. Contact email `sergii.ziborov@gmail.com`. Add a reachable phone number in App Store Connect.
+App Review notes: no sign-in of its own. Game Center is optional: its sign-in sheet appears only after the player taps Game Center on the Ratings screen (the trophy card on Home). Settings contains About, Terms, Privacy, Report a bug (a prefilled email), and a confirmed progress reset. The Apple Watch app is embedded: wrist maps play on their own, and Remote steers a map that is running on the paired iPhone. Contact email `sergii.ziborov@gmail.com`. Add a reachable phone number in App Store Connect.
 
 ## Submission sequence
 
-1. Confirm the explicit App ID and the iOS app record. English (U.S.) primary language.
-2. Archive 1.0.0 (20) with a release Xcode (or let Xcode Cloud archive it), validate, and upload. Wait for processing.
+1. Confirm both explicit App IDs and the iOS app record. English (U.S.) primary language.
+2. Let Xcode Cloud archive and upload the build, then wait for processing and pick that build on the version page.
 3. Attach screenshots, listing copy, support and privacy URLs, age rating, and content rights. Export compliance: the app uses only exempt encryption (`ITSAppUsesNonExemptEncryption` is false).
 4. Choose **Paid** only after the Paid Apps Agreement is accepted. Set $1.99 and the intended countries.
-5. Review the product page and submit. “Prepare for Submission” is not a public release.
+5. On the Game Center page, press **Add for Review** on both leaderboards and all 15 achievements so they go out with 1.0.0 (`app-store/GAME_CENTER.md`).
+6. Review the product page and submit. “Prepare for Submission” is not a public release.
 
 Do not accept new Apple legal agreements or set a paid price without the account holder’s explicit decision.

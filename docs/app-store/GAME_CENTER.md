@@ -1,6 +1,6 @@
 # Game Center
 
-The app reports to these IDs (`Echo/App/GameCenter.swift`, `Echo/Shell/Records/Achievements.swift`). They must exist in App Store Connect under the app's Game Center settings, and the version must have Game Center turned on with both leaderboards and all achievements added. IDs never change; titles and art can.
+The app reports to these IDs (`Echo/App/GameCenter.swift`, `Echo/Shell/Records/Achievements.swift`). All of them are set up on the app's Game Center page in App Store Connect, each with English and Russian text and, for achievements, the art below. Development and TestFlight builds see them before review. The version page no longer has a Game Center switch: for the release, press **Add for Review** on each leaderboard and achievement so they are reviewed with version 1.0.0. IDs never change; titles and art can.
 
 ## Leaderboards
 
