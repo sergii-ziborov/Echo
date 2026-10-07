@@ -5,6 +5,7 @@ struct ActHeroCard: View {
     let cleared: Int
     let stars: Int
     let reduceMotion: Bool
+    var tablet = false
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -17,20 +18,20 @@ struct ActHeroCard: View {
             VStack(spacing: 11) {
                 HStack(spacing: 12) {
                     AtlasRegionGlyph(act: act, reduceMotion: reduceMotion)
-                        .frame(width: 72, height: 72)
+                        .frame(width: tablet ? 84 : 72, height: tablet ? 84 : 72)
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(Copy.format("atlas.hero.eyebrow", String(format: "%02d", act.rawValue), act.title))
-                            .font(.system(size: 9, weight: .black, design: .rounded))
+                            .font(.system(size: tablet ? 11 : 9, weight: .black, design: .rounded))
                             .tracking(1.2)
                             .foregroundStyle(act.atlasTint)
                         Text(act.atlasRegion.uppercased())
-                            .font(.system(size: 22, weight: .black, design: .rounded))
+                            .font(.system(size: tablet ? 29 : 22, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
                             .lineLimit(1)
                             .minimumScaleFactor(0.72)
                         Text(act.blurb)
-                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .font(.system(size: tablet ? 13 : 11, weight: .medium, design: .rounded))
                             .foregroundStyle(Color.white.opacity(0.68))
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
@@ -74,9 +75,9 @@ struct ActHeroCard: View {
                     .frame(height: 5)
                 }
             }
-            .padding(16)
+            .padding(tablet ? 20 : 16)
         }
-        .frame(height: 164)
+        .frame(height: tablet ? 186 : 164)
         .background {
             GeometryReader { geometry in
                 Image(act.atlasCoverAsset)
@@ -121,6 +122,7 @@ struct ActRouteCard: View {
     let levels: [LevelDefinition]
     let selectedLevelNumber: Int
     var reduceMotion = false
+    var mapHeight: CGFloat = 302
     let progressFor: (LevelDefinition) -> LevelProgress
     let isUnlocked: (LevelDefinition) -> Bool
     let onSelect: (LevelDefinition) -> Void
@@ -170,7 +172,7 @@ struct ActRouteCard: View {
                     AtlasRouteLayer(pass: .over, points: points, stops: stops, selected: selected, selectedAt: selectedAt, tint: act.atlasTint, reduceMotion: reduceMotion)
                 }
             }
-            .frame(height: 302)
+            .frame(height: mapHeight)
         }
         .padding(13)
         .background {

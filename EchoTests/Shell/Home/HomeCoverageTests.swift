@@ -59,4 +59,19 @@ final class HomeCoverageTests: XCTestCase {
         }
         RootView.testLaunchArguments = []
     }
+
+    func testHomeUsesTabletDashboardAtIPadSizes() {
+        let model = CoverageFixtures.model()
+        for size in [
+            CGSize(width: 1032, height: 1376),
+            CGSize(width: 1376, height: 1032),
+            CGSize(width: 834, height: 1194),
+        ] {
+            let view = CoverageHost.render(HomeView().environment(model), size: size)
+            XCTAssertEqual(view.bounds.size, size)
+        }
+        for size in [CGSize(width: 744, height: 1133), CGSize(width: 650, height: 900)] {
+            XCTAssertEqual(CoverageHost.render(HomeView().environment(model), size: size).bounds.size, size)
+        }
+    }
 }

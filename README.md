@@ -32,10 +32,15 @@ The game is in **English and Russian**. It follows the device language, and Sett
 
 The Lab shows equipped abilities and their charges at a glance. Its research tree shows exact prerequisites and the effects of the current build; tapping a requirement jumps to that node. Recharge buys one charge at a time.
 
+On iPad, Home uses a dashboard and the Atlas keeps its route and selected map side by side. Narrow windows return to the compact layout.
+
 <details>
 <summary>More screen sizes: iPad and iPhone Duo</summary>
 
 <p align="center">
+  <img src="docs/app-store/ipad/02-atlas.jpg" width="240" alt="Wide iPad Atlas with route and selected map side by side">
+  <img src="docs/app-store/ipad/06-home.jpg" width="240" alt="Two-column iPad Home dashboard">
+  <br>
   <img src="docs/app-store/ipad/04-research.jpg" width="240" alt="Signal Matrix research tree on iPad">
   <img src="docs/app-store/ipad/05-lab.jpg" width="240" alt="Signal Lab loadout on iPad">
   <br>
@@ -49,7 +54,7 @@ The Lab shows equipped abilities and their charges at a glance. Its research tre
 
 The complete screenshot sets are in [iPhone 6.9-inch](docs/app-store/iphone), [iPhone 6.5-inch](docs/app-store/iphone65), [iPad](docs/app-store/ipad), [iPhone Duo](docs/app-store/duo), and [Apple Watch](docs/app-store/watch).
 
-See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
+See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store listing copy](docs/app-store/LISTING.md), [release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
 
 ## The story
 

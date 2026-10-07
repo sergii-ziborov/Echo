@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-DERIVED=/tmp/EchoShotBuild
+DERIVED="${ECHO_SHOT_DERIVED:-/tmp/EchoShotBuild}"
 APP="$DERIVED/Build/Products/Debug-iphonesimulator/Echo.app"
 BUNDLE=com.sergiiziborov.Echo
 
@@ -64,7 +64,7 @@ capture "$IPHONE69" "$ROOT/docs/app-store/iphone/play" 1320 2868 \
   -shot-play 3.4 01-gameplay.jpg \
   -shot-laser 3.4 02-lasers.jpg \
   -shot-endless-deep 3.4 04-deep-time.jpg \
-  -shot-arrival,-shot-level,49 2.2 05-arrival.jpg
+  -shot-arrival,-shot-level,49 8.0 05-arrival.jpg
 capture "$IPHONE69" "$ROOT/docs/app-store/iphone/menu" 1320 2868 \
   -shot-worlds 1.8 03-atlas.jpg \
   -shot-research 1.8 06-research.jpg \
@@ -77,7 +77,7 @@ capture "$IPHONE65" "$ROOT/docs/app-store/iphone65/play" 1284 2778 \
   -shot-play 3.4 01-gameplay.jpg \
   -shot-laser 3.4 02-lasers.jpg \
   -shot-endless-deep 3.4 04-deep-time.jpg \
-  -shot-arrival,-shot-level,49 2.2 05-arrival.jpg
+  -shot-arrival,-shot-level,49 8.0 05-arrival.jpg
 capture "$IPHONE65" "$ROOT/docs/app-store/iphone65/menu" 1284 2778 \
   -shot-worlds 1.8 03-atlas.jpg \
   -shot-research 1.8 06-research.jpg \
@@ -88,7 +88,7 @@ capture "$IPHONE65" "$ROOT/docs/app-store/iphone65/menu" 1284 2778 \
 
 capture "$IPAD13" "$ROOT/docs/app-store/ipad" 2064 2752 \
   -shot-play 3.4 01-gameplay.jpg \
-  -shot-worlds 1.8 02-atlas.jpg \
+  -shot-worlds,-shot-region,4 2.5 02-atlas.jpg \
   -shot-endless-deep 3.4 03-deep-time.jpg \
   -shot-research 1.8 04-research.jpg \
   -shot-shop 1.8 05-lab.jpg \

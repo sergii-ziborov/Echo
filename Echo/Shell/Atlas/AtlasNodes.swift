@@ -75,35 +75,36 @@ struct ActLevelDetailCard: View {
     let level: LevelDefinition
     let progress: LevelProgress
     let unlocked: Bool
+    var tablet = false
     let onPlay: () -> Void
 
     var body: some View {
         VStack(spacing: 13) {
             HStack(spacing: 13) {
                 AtlasLevelPreview(level: level, tint: act.atlasTint)
-                    .frame(width: 88, height: 96)
+                    .frame(width: tablet ? 108 : 88, height: tablet ? 116 : 96)
 
                 VStack(alignment: .leading, spacing: 5) {
                     Text(Copy.format("atlas.detail.eyebrow", String(format: "%02d", level.number), (LevelLore.entry(for: level.number)?.place ?? act.region).uppercased()))
-                        .font(.system(size: 8, weight: .black, design: .rounded))
+                        .font(.system(size: tablet ? 10 : 8, weight: .black, design: .rounded))
                         .tracking(1.1)
                         .foregroundStyle(act.atlasTint)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                     Text(level.title)
-                        .font(.system(size: 21, weight: .black, design: .rounded))
+                        .font(.system(size: tablet ? 25 : 21, weight: .black, design: .rounded))
                         .foregroundStyle(unlocked ? .white : EchoTheme.muted)
                         .lineLimit(1)
                         .minimumScaleFactor(0.72)
                     if unlocked, let lore = LevelLore.entry(for: level.number) {
                         Text(lore.log)
-                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .font(.system(size: tablet ? 12 : 10, weight: .medium, design: .rounded))
                             .foregroundStyle(Color.white.opacity(0.72))
                             .lineLimit(3)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     Text(unlocked ? level.tip : Copy.format("atlas.detail.locked", max(1, level.number - 1)))
-                        .font(.system(size: 9, weight: .semibold, design: .rounded))
+                        .font(.system(size: tablet ? 11 : 9, weight: .semibold, design: .rounded))
                         .foregroundStyle(unlocked ? act.atlasTint.opacity(0.85) : EchoTheme.gold)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
@@ -163,7 +164,7 @@ struct ActLevelDetailCard: View {
                 }
                 .foregroundStyle(unlocked ? .white : EchoTheme.muted)
                 .padding(.horizontal, 15)
-                .frame(height: 43)
+                .frame(height: tablet ? 50 : 43)
                 .background(
                     unlocked
                         ? AnyShapeStyle(LinearGradient(colors: [act.atlasTint, act.atlasTint.opacity(0.62)], startPoint: .leading, endPoint: .trailing))
@@ -175,7 +176,7 @@ struct ActLevelDetailCard: View {
             .buttonStyle(PressStyle())
             .disabled(!unlocked)
         }
-        .padding(14)
+        .padding(tablet ? 18 : 14)
         .background(
             LinearGradient(colors: [EchoTheme.panel.opacity(0.98), act.atlasTint.opacity(0.07)], startPoint: .topLeading, endPoint: .bottomTrailing),
             in: RoundedRectangle(cornerRadius: 23, style: .continuous)
@@ -183,4 +184,3 @@ struct ActLevelDetailCard: View {
         .overlay(RoundedRectangle(cornerRadius: 23, style: .continuous).stroke(act.atlasTint.opacity(0.20), lineWidth: 1))
     }
 }
-

@@ -12,53 +12,86 @@ struct HomeView: View {
     }
 
     var body: some View {
-        ZStack {
-            ScreenBackground()
-            HomeStarfield(reduceMotion: reduceMotion)
-                .allowsHitTesting(false)
+        GeometryReader { geometry in
+            let tablet = geometry.size.width >= 780
+            ZStack {
+                ScreenBackground()
+                HomeStarfield(reduceMotion: reduceMotion)
+                    .allowsHitTesting(false)
 
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 14) {
-                    topBar
-                        .homeEntrance(appeared, delay: 0.00, reduceMotion: reduceMotion)
-
-                    HomeHero(act: act, cleared: cleared, reduceMotion: reduceMotion)
-                        .homeEntrance(appeared, delay: 0.04, reduceMotion: reduceMotion)
-
-                    HomePlayButton(level: level, act: act, reduceMotion: reduceMotion) {
-                        model.playPrimary()
+                ScrollView(showsIndicators: false) {
+                    Group {
+                        if tablet {
+                            tabletLayout
+                        } else {
+                            compactLayout
+                        }
                     }
-                    .homeEntrance(appeared, delay: 0.09, reduceMotion: reduceMotion)
-
-                    routeBar
-                        .homeEntrance(appeared, delay: 0.14, reduceMotion: reduceMotion)
-
-                    continueCard
-                        .homeEntrance(appeared, delay: 0.19, reduceMotion: reduceMotion)
-
-                    RecordsCard()
-                        .homeEntrance(appeared, delay: 0.2, reduceMotion: reduceMotion)
-
-                    EndlessCard(appeared: appeared, reduceMotion: reduceMotion)
-                        .homeEntrance(appeared, delay: 0.205, reduceMotion: reduceMotion)
-
-                    if PhoneWatchLink.isAvailable {
-                        WristRelicsCard(appeared: appeared, reduceMotion: reduceMotion)
-                            .homeEntrance(appeared, delay: 0.22, reduceMotion: reduceMotion)
-                    }
-
-                    tagline
-                        .homeEntrance(appeared, delay: 0.26, reduceMotion: reduceMotion)
+                    .frame(maxWidth: tablet ? 1120 : (geometry.size.width >= 700 ? 800 : 620))
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, tablet ? 24 : 20)
+                    .padding(.top, tablet ? 14 : 8)
+                    .padding(.bottom, 28)
                 }
-                .frame(maxWidth: 620)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-                .padding(.bottom, 28)
             }
         }
         .onAppear { appeared = true }
         .onDisappear { appeared = false }
+    }
+
+    private var compactLayout: some View {
+        VStack(spacing: 14) {
+            topBar.homeEntrance(appeared, delay: 0.00, reduceMotion: reduceMotion)
+            HomeHero(act: act, cleared: cleared, reduceMotion: reduceMotion)
+                .homeEntrance(appeared, delay: 0.04, reduceMotion: reduceMotion)
+            HomePlayButton(level: level, act: act, reduceMotion: reduceMotion) {
+                model.playPrimary()
+            }
+            .homeEntrance(appeared, delay: 0.09, reduceMotion: reduceMotion)
+            routeBar.homeEntrance(appeared, delay: 0.14, reduceMotion: reduceMotion)
+            continueCard.homeEntrance(appeared, delay: 0.19, reduceMotion: reduceMotion)
+            RecordsCard().homeEntrance(appeared, delay: 0.2, reduceMotion: reduceMotion)
+            EndlessCard(appeared: appeared, reduceMotion: reduceMotion)
+                .homeEntrance(appeared, delay: 0.205, reduceMotion: reduceMotion)
+            if PhoneWatchLink.isAvailable {
+                WristRelicsCard(appeared: appeared, reduceMotion: reduceMotion)
+                    .homeEntrance(appeared, delay: 0.22, reduceMotion: reduceMotion)
+            }
+            tagline.homeEntrance(appeared, delay: 0.26, reduceMotion: reduceMotion)
+        }
+    }
+
+    private var tabletLayout: some View {
+        VStack(spacing: 20) {
+            topBar.homeEntrance(appeared, delay: 0.00, reduceMotion: reduceMotion)
+
+            HStack(alignment: .top, spacing: 20) {
+                VStack(spacing: 18) {
+                    HomeHero(act: act, cleared: cleared, reduceMotion: reduceMotion)
+                        .homeEntrance(appeared, delay: 0.04, reduceMotion: reduceMotion)
+                    HomePlayButton(level: level, act: act, reduceMotion: reduceMotion) {
+                        model.playPrimary()
+                    }
+                    .homeEntrance(appeared, delay: 0.09, reduceMotion: reduceMotion)
+                    routeBar.homeEntrance(appeared, delay: 0.14, reduceMotion: reduceMotion)
+                }
+                .frame(maxWidth: .infinity)
+
+                VStack(spacing: 18) {
+                    continueCard.homeEntrance(appeared, delay: 0.19, reduceMotion: reduceMotion)
+                    RecordsCard().homeEntrance(appeared, delay: 0.2, reduceMotion: reduceMotion)
+                    EndlessCard(appeared: appeared, reduceMotion: reduceMotion)
+                        .homeEntrance(appeared, delay: 0.205, reduceMotion: reduceMotion)
+                    if PhoneWatchLink.isAvailable {
+                        WristRelicsCard(appeared: appeared, reduceMotion: reduceMotion)
+                            .homeEntrance(appeared, delay: 0.22, reduceMotion: reduceMotion)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+
+            tagline.homeEntrance(appeared, delay: 0.26, reduceMotion: reduceMotion)
+        }
     }
 
     private var topBar: some View {

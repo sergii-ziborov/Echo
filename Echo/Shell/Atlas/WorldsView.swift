@@ -1,5 +1,18 @@
 import SwiftUI
 
+enum AtlasLayout {
+    static func usesTwoColumns(width: CGFloat) -> Bool { width >= 900 }
+
+    static func contentWidth(for width: CGFloat) -> CGFloat {
+        min(usesTwoColumns(width: width) ? 1120 : (width >= 700 ? 800 : 660),
+            max(0, width - (usesTwoColumns(width: width) ? 48 : 32)))
+    }
+
+    static func routeHeight(for height: CGFloat) -> CGFloat {
+        min(760, max(500, height * 0.55))
+    }
+}
+
 struct WorldsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -19,35 +32,39 @@ struct WorldsView: View {
     }
 
     var body: some View {
-        ZStack {
-            AtlasBackground(act: selectedAct, reduceMotion: reduceMotion)
+        GeometryReader { geometry in
+            let tablet = AtlasLayout.usesTwoColumns(width: geometry.size.width)
 
-            VStack(spacing: 10) {
-                header
-                    .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : -8)
+            ZStack {
+                AtlasBackground(act: selectedAct, reduceMotion: reduceMotion)
 
-                actSelector
-                    .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 10)
+                VStack(spacing: tablet ? 16 : 10) {
+                    header(tablet: tablet)
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : -8)
 
-                actPage(selectedAct)
-                    .id(selectedActID)
-                    .transition(.opacity.combined(with: .scale(scale: 0.985)))
-                    .contentShape(Rectangle())
-                    .simultaneousGesture(
-                        DragGesture(minimumDistance: 28)
-                            .onEnded { value in
-                                guard abs(value.translation.width) > abs(value.translation.height),
-                                      abs(value.translation.width) > 52 else { return }
-                                moveAct(by: value.translation.width < 0 ? 1 : -1)
-                            }
-                    )
-                .opacity(appeared ? 1 : 0)
+                    actSelector(tablet: tablet)
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : 10)
+
+                    actPage(selectedAct, tablet: tablet, availableSize: geometry.size)
+                        .id(selectedActID)
+                        .transition(.opacity.combined(with: .scale(scale: 0.985)))
+                        .contentShape(Rectangle())
+                        .simultaneousGesture(
+                            DragGesture(minimumDistance: 28)
+                                .onEnded { value in
+                                    guard abs(value.translation.width) > abs(value.translation.height),
+                                          abs(value.translation.width) > 52 else { return }
+                                    moveAct(by: value.translation.width < 0 ? 1 : -1)
+                                }
+                        )
+                        .opacity(appeared ? 1 : 0)
+                }
+                .frame(maxWidth: AtlasLayout.contentWidth(for: geometry.size.width))
+                .padding(.horizontal, tablet ? 24 : 16)
+                .padding(.top, tablet ? 12 : 8)
             }
-            .frame(maxWidth: 660)
-            .padding(.horizontal, 16)
-            .padding(.top, 8)
         }
         .animation(.easeOut(duration: 0.24), value: selectedActID)
         .animation(.spring(response: 0.58, dampingFraction: 0.84), value: appeared)
@@ -72,7 +89,7 @@ struct WorldsView: View {
         }
     }
 
-    private var header: some View {
+    private func header(tablet: Bool) -> some View {
         HStack(spacing: 11) {
             IconCircle(system: "chevron.left") {
                 model.audio.play(.tap)
@@ -81,10 +98,10 @@ struct WorldsView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(Copy.text("atlas.title"))
-                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .font(.system(size: tablet ? 19 : 14, weight: .black, design: .rounded))
                     .tracking(2.2)
                 Text(Copy.text("atlas.subtitle"))
-                    .font(.system(size: 8, weight: .bold, design: .rounded))
+                    .font(.system(size: tablet ? 10 : 8, weight: .bold, design: .rounded))
                     .tracking(1.3)
                     .foregroundStyle(EchoTheme.muted)
             }
@@ -97,7 +114,7 @@ struct WorldsView: View {
                 Text(model.progress.difficulty.shortTitle)
                     .foregroundStyle(EchoTheme.magenta)
             }
-            .font(.system(size: 9, weight: .bold, design: .rounded))
+            .font(.system(size: tablet ? 11 : 9, weight: .bold, design: .rounded))
             .padding(.horizontal, 10)
             .frame(height: 38)
             .background(EchoTheme.gold.opacity(0.08), in: Capsule())
@@ -105,7 +122,7 @@ struct WorldsView: View {
         }
     }
 
-    private var actSelector: some View {
+    private func actSelector(tablet: Bool) -> some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 4) {
@@ -117,13 +134,13 @@ struct WorldsView: View {
                         } label: {
                             VStack(spacing: 3) {
                                 Image(systemName: act.atlasIcon)
-                                    .font(.system(size: 12, weight: .bold))
+                                    .font(.system(size: tablet ? 17 : 12, weight: .bold))
                                 Text(String(format: "%02d", act.rawValue))
-                                    .font(.system(size: 8, weight: .black, design: .rounded))
+                                    .font(.system(size: tablet ? 10 : 8, weight: .black, design: .rounded))
                             }
                             .foregroundStyle(selected ? .white : EchoTheme.muted)
-                            .frame(width: 48)
-                            .frame(height: 45)
+                            .frame(width: tablet ? 68 : 48)
+                            .frame(height: tablet ? 57 : 45)
                             .background(
                                 selected
                                     ? AnyShapeStyle(LinearGradient(colors: [act.atlasTint, act.atlasTint.opacity(0.58)], startPoint: .topLeading, endPoint: .bottomTrailing))
@@ -156,61 +173,87 @@ struct WorldsView: View {
         .overlay(RoundedRectangle(cornerRadius: 17, style: .continuous).stroke(Color.white.opacity(0.07), lineWidth: 1))
     }
 
-    private func actPage(_ act: Act) -> some View {
+    private func actPage(_ act: Act, tablet: Bool, availableSize: CGSize) -> some View {
         let levels = levels(in: act)
         let selectedLevel = levels.first(where: { $0.number == selectedLevelNumber }) ?? recommendedLevel(in: act)
         let progress = model.progress.progress(for: selectedLevel.id)
         let unlocked = model.progress.isUnlocked(selectedLevel)
+        let routeHeight = tablet
+            ? AtlasLayout.routeHeight(for: availableSize.height)
+            : (availableSize.width >= 700 ? 420 : 302)
 
         return ScrollView(showsIndicators: false) {
-            VStack(spacing: 13) {
+            VStack(spacing: tablet ? 18 : 13) {
                 ActHeroCard(
                     act: act,
                     cleared: clearedCount(in: act),
                     stars: starCount(in: act),
-                    reduceMotion: reduceMotion
-                )
-
-                ActRouteCard(
-                    act: act,
-                    levels: levels,
-                    selectedLevelNumber: selectedLevel.number,
                     reduceMotion: reduceMotion,
-                    progressFor: { model.progress.progress(for: $0.id) },
-                    isUnlocked: { model.progress.isUnlocked($0) },
-                    onSelect: { level in
-                        withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                            selectedLevelNumber = level.number
+                    tablet: tablet
+                )
+
+                if tablet {
+                    HStack(alignment: .top, spacing: 18) {
+                        routeCard(act: act, levels: levels, selectedLevel: selectedLevel, mapHeight: routeHeight)
+                            .frame(maxWidth: .infinity)
+
+                        VStack(spacing: 14) {
+                            ActLevelDetailCard(
+                                act: act, level: selectedLevel, progress: progress,
+                                unlocked: unlocked, tablet: true,
+                                onPlay: { model.play(level: selectedLevel, daily: false) }
+                            )
+                            Spacer(minLength: 0)
+                            summaryMetrics(act: act, levels: levels)
                         }
-                        model.audio.play(.select)
+                        .frame(width: min(360, AtlasLayout.contentWidth(for: availableSize.width) * 0.37))
+                        .frame(height: routeHeight + 58)
                     }
-                )
-
-                ActLevelDetailCard(
-                    act: act,
-                    level: selectedLevel,
-                    progress: progress,
-                    unlocked: unlocked,
-                    onPlay: { model.play(level: selectedLevel, daily: false) }
-                )
-
-                HStack(spacing: 10) {
-                    AtlasSummaryMetric(
-                        icon: "checkmark.circle.fill",
-                        value: "\(clearedCount(in: act))/\(levels.count)",
-                        title: Copy.text("atlas.mapsCleared"),
-                        tint: act.atlasTint
+                } else {
+                    routeCard(act: act, levels: levels, selectedLevel: selectedLevel, mapHeight: routeHeight)
+                    ActLevelDetailCard(
+                        act: act, level: selectedLevel, progress: progress,
+                        unlocked: unlocked,
+                        onPlay: { model.play(level: selectedLevel, daily: false) }
                     )
-                    AtlasSummaryMetric(
-                        icon: "checkmark.seal.fill",
-                        value: "\(starCount(in: act))/\(levels.count * 3)",
-                        title: Copy.text("atlas.sealsFound"),
-                        tint: EchoTheme.gold
-                    )
+                    summaryMetrics(act: act, levels: levels)
                 }
-                .padding(.bottom, 24)
             }
             .padding(.top, 2)
+            .padding(.bottom, 24)
+        }
+    }
+
+    private func routeCard(
+        act: Act, levels: [LevelDefinition], selectedLevel: LevelDefinition, mapHeight: CGFloat
+    ) -> some View {
+        ActRouteCard(
+            act: act,
+            levels: levels,
+            selectedLevelNumber: selectedLevel.number,
+            reduceMotion: reduceMotion,
+            mapHeight: mapHeight,
+            progressFor: { model.progress.progress(for: $0.id) },
+            isUnlocked: { model.progress.isUnlocked($0) },
+            onSelect: { level in
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                    selectedLevelNumber = level.number
+                }
+                model.audio.play(.select)
+            }
+        )
+    }
+
+    private func summaryMetrics(act: Act, levels: [LevelDefinition]) -> some View {
+        HStack(spacing: 10) {
+            AtlasSummaryMetric(
+                icon: "checkmark.circle.fill", value: "\(clearedCount(in: act))/\(levels.count)",
+                title: Copy.text("atlas.mapsCleared"), tint: act.atlasTint
+            )
+            AtlasSummaryMetric(
+                icon: "checkmark.seal.fill", value: "\(starCount(in: act))/\(levels.count * 3)",
+                title: Copy.text("atlas.sealsFound"), tint: EchoTheme.gold
+            )
         }
     }
 
