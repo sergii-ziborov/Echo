@@ -101,6 +101,10 @@ targets:
       - path: Echo/Arena/Textures/SpriteTextures.swift
       - path: Echo/Arena/Textures/RockPainter.swift
       - path: Echo/Arena/Textures/RockSurfaces.swift
+    entitlements:
+      path: EchoWatch/EchoWatch.entitlements
+      properties:
+        com.apple.developer.game-center: true
     info:
       path: EchoWatch/Info.plist
       properties:

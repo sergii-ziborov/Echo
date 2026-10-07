@@ -518,6 +518,7 @@
 		EFF8D8E3127179ED6B14B9B6 /* HandcraftedLateMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandcraftedLateMaps.swift; sourceTree = "<group>"; };
 		F1E629412D14789B950FF9CF /* ActorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorFactory.swift; sourceTree = "<group>"; };
 		F1F382707B17E73A4923C1E5 /* RemoteHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteHUD.swift; sourceTree = "<group>"; };
+		F2661C784D226E1326CA7E24 /* EchoWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EchoWatch.entitlements; sourceTree = "<group>"; };
 		F77FDFB6FA0A364BE0A349A3 /* AppModelCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelCoverageTests.swift; sourceTree = "<group>"; };
 		F85F62EF7C58D511077F5DE7 /* HomeDecor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDecor.swift; sourceTree = "<group>"; };
 		FB8D63F2878D67275F4A7D79 /* WristCertification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WristCertification.swift; sourceTree = "<group>"; };
@@ -566,6 +567,7 @@
 			isa = PBXGroup;
 			children = (
 				448E748591A86C32373B9AC7 /* Assets.xcassets */,
+				F2661C784D226E1326CA7E24 /* EchoWatch.entitlements */,
 				6575D44A19953377E6B616FB /* PrivacyInfo.xcprivacy */,
 				1FAFAB436D2D69028107B4D9 /* App */,
 				5DD6B4BA303D7E38F566A36C /* Play */,
