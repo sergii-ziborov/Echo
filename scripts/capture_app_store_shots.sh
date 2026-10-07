@@ -6,9 +6,22 @@ DERIVED=/tmp/EchoShotBuild
 APP="$DERIVED/Build/Products/Debug-iphonesimulator/Echo.app"
 BUNDLE=com.sergiiziborov.Echo
 
-IPHONE69=42F73E2F-CBDC-42B0-86D8-EED7CCE9B3AC
-IPHONE65=F26A5919-420C-4779-892E-E9D548A039F2
-IPAD13=47A57182-C38C-4D1F-A7F6-E6FCDFC6140A
+simulator_id() {
+  xcrun simctl list -j devices available | python3 -c '
+import json, sys
+name = sys.argv[1]
+for devices in json.load(sys.stdin)["devices"].values():
+    for device in devices:
+        if device["name"] == name:
+            print(device["udid"])
+            sys.exit(0)
+sys.exit("Missing simulator: " + name)
+' "$1"
+}
+
+IPHONE69="${IPHONE69:-$(simulator_id 'Echo Shots 6.9')}"
+IPHONE65="${IPHONE65:-$(simulator_id 'Echo Shots 6.5')}"
+IPAD13="${IPAD13:-$(simulator_id 'Echo Shots iPad 13')}"
 
 cd "$ROOT"
 xcodegen generate
@@ -16,7 +29,7 @@ xcodebuild -project Echo.xcodeproj -scheme Echo \
   -destination 'generic/platform=iOS Simulator' \
   -derivedDataPath "$DERIVED" \
   -configuration Debug \
-  build
+  CODE_SIGNING_ALLOWED=NO build -quiet
 
 capture() {
   local udid="$1" dest="$2" width="$3" height="$4"
@@ -31,7 +44,10 @@ capture() {
     local arg="$1" wait="$2" file="$3"
     shift 3
     xcrun simctl terminate "$udid" "$BUNDLE" >/dev/null 2>&1 || true
-    xcrun simctl launch "$udid" "$BUNDLE" "$arg" >/dev/null
+    # Comma-separated flags allow the arrival card to launch with a level.
+    local -a launch_args
+    launch_args=("${(@s:,:)arg}")
+    xcrun simctl launch "$udid" "$BUNDLE" "${launch_args[@]}" >/dev/null
     sleep "$wait"
     local raw="/tmp/echo-shot-raw.png"
     xcrun simctl io "$udid" screenshot "$raw"
@@ -46,34 +62,36 @@ mkdir -p "$ROOT/docs/app-store/iphone/play" "$ROOT/docs/app-store/iphone/menu" \
 
 capture "$IPHONE69" "$ROOT/docs/app-store/iphone/play" 1320 2868 \
   -shot-play 3.4 01-gameplay.jpg \
-  -shot-laser 3.4 02-lasers.jpg
+  -shot-laser 3.4 02-lasers.jpg \
+  -shot-endless-deep 3.4 04-deep-time.jpg \
+  -shot-arrival,-shot-level,49 2.2 05-arrival.jpg
 capture "$IPHONE69" "$ROOT/docs/app-store/iphone/menu" 1320 2868 \
   -shot-worlds 1.8 03-atlas.jpg \
-  -shot-research 1.8 04-research.jpg \
-  -shot-shop 1.8 05-lab.jpg \
-  -shot-wiki 1.8 06-wiki.jpg \
-  -shot-home 1.8 07-home.jpg
+  -shot-research 1.8 06-research.jpg \
+  -shot-shop 1.8 07-lab.jpg \
+  -shot-wiki-story 1.8 08-wiki.jpg \
+  -shot-home 1.8 09-home.jpg \
+  -shot-recharge 1.8 10-recharge.jpg
 
 capture "$IPHONE65" "$ROOT/docs/app-store/iphone65/play" 1284 2778 \
   -shot-play 3.4 01-gameplay.jpg \
-  -shot-laser 3.4 02-lasers.jpg
+  -shot-laser 3.4 02-lasers.jpg \
+  -shot-endless-deep 3.4 04-deep-time.jpg \
+  -shot-arrival,-shot-level,49 2.2 05-arrival.jpg
 capture "$IPHONE65" "$ROOT/docs/app-store/iphone65/menu" 1284 2778 \
   -shot-worlds 1.8 03-atlas.jpg \
-  -shot-research 1.8 04-research.jpg \
-  -shot-shop 1.8 05-lab.jpg \
-  -shot-wiki 1.8 06-wiki.jpg \
-  -shot-home 1.8 07-home.jpg
+  -shot-research 1.8 06-research.jpg \
+  -shot-shop 1.8 07-lab.jpg \
+  -shot-wiki-story 1.8 08-wiki.jpg \
+  -shot-home 1.8 09-home.jpg \
+  -shot-recharge 1.8 10-recharge.jpg
 
 capture "$IPAD13" "$ROOT/docs/app-store/ipad" 2064 2752 \
   -shot-play 3.4 01-gameplay.jpg \
   -shot-worlds 1.8 02-atlas.jpg \
-  -shot-research 1.8 03-research.jpg \
-  -shot-shop 1.8 04-lab.jpg \
-  -shot-home 1.8 05-home.jpg
+  -shot-endless-deep 3.4 03-deep-time.jpg \
+  -shot-research 1.8 04-research.jpg \
+  -shot-shop 1.8 05-lab.jpg \
+  -shot-home 6.0 06-home.jpg
 
-# remove stale flat captures if they are still sitting in the parent folder
-rm -f "$ROOT"/docs/app-store/iphone-*.jpg \
-      "$ROOT"/docs/app-store/iphone65-*.jpg \
-      "$ROOT"/docs/app-store/ipad-*.jpg
-
-echo "screenshots ready"
+echo 'iPhone and iPad screenshots refreshed; Duo and Watch have separate capture paths.'

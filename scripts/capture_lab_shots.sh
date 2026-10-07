@@ -6,6 +6,19 @@ DERIVED="${ECHO_SHOT_DERIVED:-/tmp/EchoLabShotBuild}"
 APP="$DERIVED/Build/Products/Debug-iphonesimulator/Echo.app"
 BUNDLE=com.sergiiziborov.Echo
 
+simulator_id() {
+  xcrun simctl list -j devices available | python3 -c '
+import json, sys
+name = sys.argv[1]
+for devices in json.load(sys.stdin)["devices"].values():
+    for device in devices:
+        if device["name"] == name:
+            print(device["udid"])
+            sys.exit(0)
+sys.exit("Missing simulator: " + name)
+' "$1"
+}
+
 cd "$ROOT"
 xcodebuild -project Echo.xcodeproj -scheme Echo -configuration Debug \
   -destination 'generic/platform=iOS Simulator' -derivedDataPath "$DERIVED" \
@@ -36,11 +49,11 @@ capture() {
   done
 }
 
-capture 19138E8E-2E32-48FE-A363-81A7D85CF20B \
+capture "${IPHONE69:-$(simulator_id 'Echo Shots 6.9')}" \
   "$ROOT/docs/app-store/iphone/menu" 06-research 07-lab 10-recharge
-capture 87E79137-5303-4920-AABC-92F182828A43 \
+capture "${IPHONE65:-$(simulator_id 'Echo Shots 6.5')}" \
   "$ROOT/docs/app-store/iphone65/menu" 06-research 07-lab 10-recharge
-capture 04B1C95C-9FA9-4D1D-8688-21EF87234AAC \
+capture "${IPAD13:-$(simulator_id 'Echo Shots iPad 13')}" \
   "$ROOT/docs/app-store/ipad" 04-research 05-lab -
 
 echo 'Lab screenshots captured from the running app.'

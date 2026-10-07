@@ -21,6 +21,7 @@ The game is in **English and Russian**. It follows the device language, and Sett
   <br>
   <img src="docs/app-store/iphone/menu/06-research.jpg" width="220" alt="Signal Matrix research tree">
   <img src="docs/app-store/iphone/menu/07-lab.jpg" width="220" alt="Signal Lab loadout">
+  <img src="docs/app-store/iphone/menu/10-recharge.jpg" width="220" alt="One-charge refill prices in Signal Lab">
   <img src="docs/app-store/iphone/menu/09-home.jpg" width="220" alt="Home screen with Deep Time">
   <br>
   <img src="docs/app-store/watch/01-wrist-run.jpg" width="150" alt="A wrist map on Apple Watch">
@@ -28,6 +29,25 @@ The game is in **English and Russian**. It follows the device language, and Sett
   <img src="docs/app-store/watch/03-relics.jpg" width="150" alt="Chronometer Rewards that carry over to iPhone">
   <img src="docs/app-store/watch/04-skills.jpg" width="150" alt="Watch skills">
 </p>
+
+The Lab shows equipped abilities and their charges at a glance. Its research tree shows exact prerequisites and the effects of the current build; tapping a requirement jumps to that node. Recharge buys one charge at a time.
+
+<details>
+<summary>More screen sizes: iPad and iPhone Duo</summary>
+
+<p align="center">
+  <img src="docs/app-store/ipad/04-research.jpg" width="240" alt="Signal Matrix research tree on iPad">
+  <img src="docs/app-store/ipad/05-lab.jpg" width="240" alt="Signal Lab loadout on iPad">
+  <br>
+  <img src="docs/app-store/duo/duo-outer-loadout.png" width="180" alt="Duo outer display: compact ability loadout">
+  <img src="docs/app-store/duo/duo-outer-research.png" width="180" alt="Duo outer display: one research branch and its effects">
+  <img src="docs/app-store/duo/duo-inner-loadout.png" width="240" alt="Duo inner display: loadout beside charge refill">
+  <img src="docs/app-store/duo/duo-inner-research.png" width="240" alt="Duo inner display: research branch beside selected effect">
+</p>
+
+</details>
+
+The complete screenshot sets are in [iPhone 6.9-inch](docs/app-store/iphone), [iPhone 6.5-inch](docs/app-store/iphone65), [iPad](docs/app-store/ipad), [iPhone Duo](docs/app-store/duo), and [Apple Watch](docs/app-store/watch).
 
 See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
 

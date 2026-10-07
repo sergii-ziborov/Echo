@@ -16,7 +16,7 @@ After signing in to App Store Connect:
 2. Use **Archive - iOS**, **App Store Connect** distribution, and **TestFlight Internal Testing**.
 3. Confirm that the latest processed build is available to the Keepers internal group.
 
-Suggested **What to Test**: region arrival cards and the Atlas route (Möbius loop, region skies); Deep Time; the Apple Watch app on its own and as a remote for a phone run; Settings → About / Terms / Privacy / Report a bug.
+Suggested **What to Test**: change the two equipped abilities, inspect live research effects and cross-branch prerequisites, and buy a single charge; check the compact outer and side-by-side inner iPhone Duo layouts; region arrival cards and the Atlas route; Deep Time; the Apple Watch app on its own and as a remote for a phone run.
 
 ## Prepared assets
 
@@ -44,12 +44,15 @@ Keep the two iPhone groups separate in App Store Connect. The first image in eac
 | `menu/07-lab.jpg` | `05-lab.jpg` | Ability loadout |
 | `menu/08-wiki.jpg` | — | Archive: Story |
 | `menu/09-home.jpg` | `06-home.jpg` | Home screen |
+| `menu/10-recharge.jpg` | — | Buy one ability charge |
 
 Apple Watch (`watch/`): `01-wrist-run.jpg`, `02-wrist-maps.jpg`, `03-relics.jpg`, `04-skills.jpg`.
 
-The Lab captures now show the simplified loadout, exact research dependencies and live upgrade effects. `menu/10-recharge.jpg` shows the one-charge prices on both iPhone sizes. Regenerate these captures from the running Debug app with `scripts/capture_lab_shots.sh`.
+The Lab captures show the simplified loadout, exact research dependencies, live upgrade effects and one-charge prices. Run `scripts/capture_app_store_shots.sh` to regenerate the complete iPhone and iPad sets, or `scripts/capture_lab_shots.sh` for just the Lab screens. The full capture script looks up the three `Echo Shots` simulators by name.
 
-The Duo images are rendered from the actual SwiftUI Lab at Apple's outer and inner display sizes by `LabCoverageTests.testDuoOuterAndInnerDisplayLayouts`. Xcode 27.0 on this Mac does not include a Duo simulator, so the test verifies layout at the exact viewports but does not replace a device or Duo simulator run. Recheck both displays when that simulator is installed.
+The Duo set contains `duo-outer-loadout.png`, `duo-outer-research.png`, `duo-inner-loadout.png` and `duo-inner-research.png`. They are rendered from the actual SwiftUI Lab at Apple's outer and inner display sizes by `LabCoverageTests.testDuoOuterAndInnerDisplayLayouts`. Xcode 27.0 on this Mac does not include a Duo simulator, so the test verifies layout at the exact viewports but does not replace a device or Duo simulator run. Recheck both displays when that simulator is installed.
+
+The English (U.S.) App Store version currently has 10 screenshots in each large iPhone group, 6 for iPad, 4 for Duo and 4 for Apple Watch. Game Center's localized leaderboard names are **iPhone** and **Apple Watch** in English and Russian; keep them short so the ranked card does not wrap.
 
 The iOS and Watch icons are included in the uploaded build's asset catalog and appear under **Included Assets** after a build is associated with version 1.0.0. The generic thumbnail in Xcode Cloud's navigation is a separate App Store Connect display state.
 

@@ -8,8 +8,10 @@ Classic leaderboards, integer score, high to low, best score kept.
 
 | ID | English | Russian |
 |---|---|---|
-| `echo.rating.iphone` | Rating — iPhone | Рейтинг — iPhone |
-| `echo.rating.watch` | Rating — Apple Watch | Рейтинг — Apple Watch |
+| `echo.rating.iphone` | iPhone | iPhone |
+| `echo.rating.watch` | Apple Watch | Apple Watch |
+
+The localized names are intentionally short so Game Center's narrow ranked card keeps each title on one line. The identifiers and scoring rules stay the same.
 
 The iPhone rating is Route Seals × 100 + best Deep Time depth × 250 + completed passes × 1000. The Apple Watch rating is cleared rooms × 100 + 10 per second of best times under par. Both are sent from the iPhone when they change.
 
