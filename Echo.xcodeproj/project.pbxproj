@@ -1762,6 +1762,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EchoWatch/EchoWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = EchoWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sergiiziborov.Echo.watchkitapp;
@@ -1879,6 +1880,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EchoWatch/EchoWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = EchoWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sergiiziborov.Echo.watchkitapp;
