@@ -6870,6 +6870,312 @@
         }
       }
     },
+    "lab.inGame": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "IN GAME"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В ИГРЕ"
+          }
+        }
+      }
+    },
+    "lab.tapReplace": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a slot to change its skill"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажми на слот, чтобы заменить способность"
+          }
+        }
+      }
+    },
+    "lab.otherSkills": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OTHER SKILLS"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ДРУГИЕ СПОСОБНОСТИ"
+          }
+        }
+      }
+    },
+    "lab.lockedSkills": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Locked skills · %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Закрытые способности · %lld"
+          }
+        }
+      }
+    },
+    "lab.noCharges": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No charges"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет зарядов"
+          }
+        }
+      }
+    },
+    "lab.recharge.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REFILL CHARGES"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ПОПОЛНИТЬ ЗАРЯДЫ"
+          }
+        }
+      }
+    },
+    "lab.recharge.price": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+1 · ◆ %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+1 · ◆ %lld"
+          }
+        }
+      }
+    },
+    "lab.recharge.note": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Price is for one charge. The skill stays unlocked."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цена за один заряд. Способность остаётся открытой."
+          }
+        }
+      }
+    },
+    "lab.chooseSkill": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a skill"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбери способность"
+          }
+        }
+      }
+    },
+    "lab.removeSkill": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from slot"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать из слота"
+          }
+        }
+      }
+    },
+    "lab.upgradePrice": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UPGRADE · ◆ %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "УЛУЧШИТЬ · ◆ %lld"
+          }
+        }
+      }
+    },
+    "lab.metric.duration": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effect: %@ s"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эффект: %@ с"
+          }
+        }
+      }
+    },
+    "lab.metric.layers": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shield layers: %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Слоёв щита: %lld"
+          }
+        }
+      }
+    },
+    "lab.metric.echoDelay": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Echo delay: +%@ s"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Задержка эха: +%@ с"
+          }
+        }
+      }
+    },
+    "lab.metric.radius": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Radius: %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Радиус: %@"
+          }
+        }
+      }
+    },
+    "lab.metric.distance": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance: %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дистанция: %@"
+          }
+        }
+      }
+    },
+    "lab.metric.timeScale": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time: %@%%"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Время: %@%%"
+          }
+        }
+      }
+    },
+    "lab.metric.grace": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grace: %@ s"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Защита: %@ с"
+          }
+        }
+      }
+    },
     "lab.loadout.title": {
       "extractionState": "manual",
       "localizations": {
@@ -7284,13 +7590,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "RESEARCH"
+            "value": "DEVELOPMENT"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "ИССЛЕДОВАНИЯ"
+            "value": "РАЗВИТИЕ"
           }
         }
       }

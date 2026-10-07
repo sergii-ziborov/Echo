@@ -35,6 +35,11 @@ struct ShopView: View {
     @State var inspectedSkill: BonusKind? = ProcessInfo.processInfo.arguments.contains("-shot-ability")
         ? .freeze
         : nil
+    @State var selectedResearch: UpgradeKind = .velocity
+    @State var slotPickerOpen = false
+    @State var editingSlot = 0
+    @State var rechargeOpen = false
+    @State var lockedSkillsExpanded = false
 
     init(
         onBack: (() -> Void)? = nil,
@@ -74,6 +79,9 @@ struct ShopView: View {
         _inspectedSkill = State(initialValue: inspectedSkill ?? (
             arguments.contains("-shot-ability") ? .freeze : nil
         ))
+        let initialBranch = researchBranch ?? (arguments.contains("-shot-research-loadout")
+            ? .loadout : arguments.contains("-shot-research-time") ? .temporal : .motion)
+        _selectedResearch = State(initialValue: initialBranch == .loadout ? .slots : initialBranch == .temporal ? .recharge : .velocity)
     }
 
     var body: some View {
@@ -81,19 +89,31 @@ struct ShopView: View {
             ScreenBackground()
             VStack(spacing: 12) {
                 header
-                balanceCard
                 sectionPicker
 
-                ScrollView(showsIndicators: false) {
-                    Group {
-                        switch section {
-                        case .loadout:
-                            loadoutSection
-                        case .research:
-                            researchSection
+                ScrollViewReader { scroll in
+                    ScrollView(showsIndicators: false) {
+                        Group {
+                            switch section {
+                            case .loadout:
+                                loadoutSection
+                            case .research:
+                                researchSection
+                            }
+                        }
+                        .padding(.bottom, section == .loadout ? 12 : 0)
+                    }
+                    .onChange(of: selectedResearch) { _, kind in
+                        guard section == .research else { return }
+                        withAnimation(.easeInOut(duration: 0.24)) {
+                            scroll.scrollTo(kind, anchor: .center)
                         }
                     }
-                    .padding(.bottom, 28)
+                }
+                if section == .research {
+                    selectedResearchCard(selectedResearch)
+                } else {
+                    rechargeButton
                 }
             }
             .padding(.horizontal, 18)
@@ -113,21 +133,35 @@ struct ShopView: View {
                 .presentationCornerRadius(30)
                 .presentationBackground(EchoTheme.navyDeep)
         }
+        .sheet(isPresented: $slotPickerOpen) {
+            slotPicker
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(30)
+                .presentationBackground(EchoTheme.navyDeep)
+        }
+        .sheet(isPresented: $rechargeOpen) {
+            rechargeSheet
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(30)
+                .presentationBackground(EchoTheme.navyDeep)
+        }
     }
 
     var header: some View {
         HStack {
             IconCircle(system: "chevron.left") { goBack() }
-            VStack(alignment: .leading, spacing: 2) {
-                Text(Copy.text("lab.title"))
-                    .font(.system(size: 14, weight: .bold))
-                    .tracking(2.5)
-                Text(Copy.text("lab.subtitle"))
-                    .font(.system(size: 9, weight: .semibold))
-                    .tracking(1.4)
-                    .foregroundStyle(EchoTheme.muted)
-            }
+            Text(Copy.text("lab.title"))
+                .font(.system(size: 19, weight: .bold))
             Spacer()
+            Label("\(model.progress.points)", systemImage: "diamond.fill")
+                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 12)
+                .frame(height: 36)
+                .background(EchoTheme.magenta.opacity(0.15), in: Capsule())
+                .overlay(Capsule().stroke(EchoTheme.magenta.opacity(0.25), lineWidth: 1))
             if let flash {
                 Text(flash)
                     .font(.system(size: 11, weight: .semibold))
@@ -139,46 +173,6 @@ struct ShopView: View {
         }
     }
 
-    var balanceCard: some View {
-        HStack(spacing: 14) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 15, style: .continuous)
-                    .fill(EchoTheme.magenta.opacity(0.15))
-                Image(systemName: "diamond.fill")
-                    .font(.system(size: 22))
-                    .foregroundStyle(EchoTheme.magenta)
-            }
-            .frame(width: 50, height: 50)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text("\(model.progress.points)")
-                    .font(.system(size: 25, weight: .semibold, design: .rounded))
-                Text(Copy.text("lab.points"))
-                    .font(.system(size: 9, weight: .bold))
-                    .tracking(1.3)
-                    .foregroundStyle(EchoTheme.muted)
-            }
-            Spacer()
-            VStack(alignment: .trailing, spacing: 3) {
-                Text(Copy.format("lab.slots", model.progress.skillSlotCount))
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(EchoTheme.cyan)
-                Text(Copy.format("lab.capacity", model.progress.inventoryCapacity))
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(EchoTheme.muted)
-            }
-        }
-        .padding(13)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(EchoTheme.panel.opacity(0.92))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(EchoTheme.panelStroke, lineWidth: 1)
-        )
-    }
-
     var sectionPicker: some View {
         HStack(spacing: 4) {
             ForEach(LabSection.allCases, id: \.rawValue) { item in
@@ -186,9 +180,8 @@ struct ShopView: View {
                     model.audio.play(.select)
                     withAnimation(.easeOut(duration: 0.18)) { section = item }
                 } label: {
-                    Label(item.title, systemImage: item.icon)
-                        .font(.system(size: 11, weight: .bold))
-                        .tracking(1.1)
+                    Text(item.title)
+                        .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(section == item ? .white : EchoTheme.muted)
                         .frame(maxWidth: .infinity)
                         .frame(height: 40)
@@ -205,46 +198,56 @@ struct ShopView: View {
     }
 
     var loadoutSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text(Copy.text("lab.loadout.title"))
-                        .font(.system(size: 11, weight: .bold))
-                        .tracking(1.5)
-                    Spacer()
-                    Text("\(model.progress.equippedSkills.count)/\(model.progress.skillSlotCount)")
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
-                        .foregroundStyle(EchoTheme.cyan)
-                }
-
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
-                            loadoutSlot(index)
-                                .frame(width: 58)
-                        }
-                    }
-                }
-
-                Text(Copy.text("lab.loadout.note"))
-                    .font(.system(size: 11))
-                    .foregroundStyle(EchoTheme.muted)
-                    .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 18) {
+            HStack {
+                Text(Copy.text("lab.inGame"))
+                    .font(.system(size: 18, weight: .bold))
+                Spacer()
+                Text("\(model.progress.equippedSkills.count)/\(model.progress.skillSlotCount)")
+                    .foregroundStyle(EchoTheme.cyan)
             }
-            .padding(14)
-            .background(Color.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(Color.white.opacity(0.09), lineWidth: 1)
-            )
-
-            Text(Copy.text("lab.arsenal"))
-                .font(.system(size: 11, weight: .bold))
-                .tracking(1.6)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 2), spacing: 10) {
+                ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
+                    loadoutSlot(index)
+                }
+            }
+            Text(Copy.text("lab.tapReplace"))
+                .font(.system(size: 11))
                 .foregroundStyle(EchoTheme.muted)
+                .frame(maxWidth: .infinity)
 
-            ForEach(BonusKind.allCases.filter(\.canBuy), id: \.self) { kind in
-                skillRow(kind)
+            Text(Copy.text("lab.otherSkills"))
+                .font(.system(size: 18, weight: .bold))
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 2), spacing: 10) {
+                ForEach(BonusKind.allCases.filter { $0.canBuy && model.progress.isSkillUnlocked($0) && !model.progress.equippedSkills.contains($0) }) { kind in
+                    skillRow(kind)
+                }
+            }
+            Button {
+                withAnimation { lockedSkillsExpanded.toggle() }
+            } label: {
+                HStack {
+                    Image(systemName: "lock.fill")
+                    Text(Copy.format("lab.lockedSkills", BonusKind.allCases.filter { $0.canBuy && !model.progress.isSkillUnlocked($0) }.count))
+                    Spacer()
+                    Image(systemName: lockedSkillsExpanded ? "chevron.down" : "chevron.right")
+                }
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(EchoTheme.muted)
+                .padding(15)
+                .background(EchoTheme.panel, in: RoundedRectangle(cornerRadius: 16))
+            }
+            .buttonStyle(.plain)
+            if lockedSkillsExpanded {
+                ForEach(BonusKind.allCases.filter { $0.canBuy && !model.progress.isSkillUnlocked($0) }) { kind in
+                    Button { inspectedSkill = kind } label: {
+                        Label(kind.title, systemImage: kind.icon)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(12)
+                            .background(EchoTheme.panel, in: RoundedRectangle(cornerRadius: 14))
+                    }
+                    .buttonStyle(.plain)
+                }
             }
         }
         .padding(.top, 2)

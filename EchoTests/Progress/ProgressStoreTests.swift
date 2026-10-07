@@ -69,6 +69,58 @@ final class ProgressStoreTests: XCTestCase {
         XCTAssertEqual(store.count(.freeze), 3)
     }
 
+    func testReplacingLoadoutSlotSwapsExistingSkillsAndKeepsCharges() {
+        let store = makeStore()
+        store.addShards(500)
+        XCTAssertTrue(store.buyUpgrade(.velocity))
+        XCTAssertEqual(store.equippedSkills, [.shield, .freeze])
+        XCTAssertTrue(store.setEquipped(.surge, at: 0))
+        XCTAssertEqual(store.equippedSkills, [.surge, .freeze])
+        XCTAssertTrue(store.setEquipped(.freeze, at: 0))
+        XCTAssertEqual(store.equippedSkills, [.freeze, .surge])
+        XCTAssertEqual(store.count(.freeze), 0)
+        XCTAssertFalse(store.setEquipped(.blink, at: 1))
+        XCTAssertEqual(store.equippedSkills, [.freeze, .surge])
+    }
+
+    func testRefillingChargesDoesNotChangeLoadout() {
+        let store = makeStore()
+        store.addShards(500)
+        XCTAssertTrue(store.buyUpgrade(.velocity))
+        XCTAssertTrue(store.buyUpgrade(.slots))
+        XCTAssertEqual(store.skillSlotCount, 3)
+        XCTAssertTrue(store.buy(.surge, equipIfPossible: false))
+        XCTAssertEqual(store.count(.surge), 1)
+        XCTAssertEqual(store.equippedSkills, [.shield, .freeze])
+    }
+
+    func testResearchPreviewIncludesEffectsFromOtherBranches() {
+        let store = makeStore()
+        store.upgrades[UpgradeKind.aegis.rawValue] = 3
+        store.upgrades[UpgradeKind.fieldAmplifier.rawValue] = 2
+        XCTAssertNotEqual(
+            UpgradeKind.shieldLattice.effect(atRank: 0, progress: store),
+            UpgradeKind.shieldLattice.effect(atRank: 0)
+        )
+        XCTAssertNotEqual(
+            UpgradeKind.cryostasis.effect(atRank: 1, progress: store),
+            UpgradeKind.cryostasis.effect(atRank: 1)
+        )
+    }
+
+    func testLabSkillStatsUseCurrentRunTuning() {
+        let store = makeStore()
+        XCTAssertEqual(store.skillCooldown(.freeze), 11, accuracy: 0.001)
+        XCTAssertEqual(store.skillDuration(.freeze)!, 3.2, accuracy: 0.001)
+        XCTAssertNil(store.skillDuration(.shield))
+
+        store.upgrades[UpgradeKind.recharge.rawValue] = 2
+        store.upgrades[UpgradeKind.cryostasis.rawValue] = 2
+        store.upgrades[UpgradeKind.fieldAmplifier.rawValue] = 1
+        XCTAssertEqual(store.skillCooldown(.freeze), 9.24, accuracy: 0.001)
+        XCTAssertEqual(store.skillDuration(.freeze)!, 4.472, accuracy: 0.001)
+    }
+
     func testResearchUnlocksSlotsCapacityAndSkillTypes() {
         let store = makeStore()
         store.addShards(2_000)

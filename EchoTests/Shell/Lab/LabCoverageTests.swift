@@ -35,4 +35,24 @@ final class LabCoverageTests: XCTestCase {
             CoverageHost.render(ResearchIconView(kind: kind, size: 28))
         }
     }
+
+    func testTreeRowsFollowEverySameBranchRequirement() {
+        for branch in UpgradeBranch.allCases {
+            let kinds = UpgradeKind.allCases.filter { $0.branch == branch }
+            let layout = ResearchTreeLayout(kinds: kinds)
+            for kind in kinds {
+                for requirement in kind.prerequisites where requirement.kind.branch == branch {
+                    XCTAssertLessThan(layout.depths[requirement.kind]!, layout.depths[kind]!)
+                }
+            }
+            for row in Set(layout.depths.values) {
+                let rowKinds = kinds.filter { layout.depths[$0] == row }
+                XCTAssertLessThanOrEqual(rowKinds.count, 3)
+                let centers = rowKinds.map { layout.point(for: $0, width: 320).x }.sorted()
+                for pair in zip(centers, centers.dropFirst()) {
+                    XCTAssertGreaterThanOrEqual(pair.1 - pair.0, 77)
+                }
+            }
+        }
+    }
 }

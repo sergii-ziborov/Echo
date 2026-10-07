@@ -4,8 +4,8 @@ import UIKit
 extension ShopView {
     func researchInspector(_ kind: UpgradeKind) -> some View {
         let level = model.progress.upgradeLevel(kind)
-        let current = kind.effect(atRank: level)
-        let next = level == kind.maxLevel ? Copy.text("lab.maxed") : kind.effect(atRank: level + 1)
+        let current = kind.effect(atRank: level, progress: model.progress)
+        let next = level == kind.maxLevel ? Copy.text("lab.maxed") : kind.effect(atRank: level + 1, progress: model.progress)
         let tint = color(kind.branch.tint)
 
         return ZStack {
@@ -136,7 +136,7 @@ extension ShopView {
     }
 
     func buy(_ kind: BonusKind) {
-        if model.progress.buy(kind) {
+        if model.progress.buy(kind, equipIfPossible: false) {
             model.audio.play(.confirm)
             model.audio.haptic(.medium)
             show(Copy.format("lab.toast.bought", kind.title))
@@ -189,142 +189,214 @@ extension ShopView {
         Color(red: tint.r, green: tint.g, blue: tint.b)
     }
 
-    @ViewBuilder
-    func loadoutSlot(_ index: Int) -> some View {
-        let equipped = model.progress.equippedSkills
-        if equipped.indices.contains(index) {
-            let kind = equipped[index]
-            let tint = color(kind.tint)
-            VStack(spacing: 4) {
-                AbilityIconView(kind: kind, size: 31)
-                Text(kind.title.uppercased())
-                    .font(.system(size: 7, weight: .bold))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.65)
-            }
-            .foregroundStyle(.white)
-            .frame(maxWidth: .infinity)
-            .frame(height: 58)
-            .background(tint.opacity(0.13), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 15, style: .continuous)
-                    .stroke(tint.opacity(0.42), lineWidth: 1)
-            )
-        } else {
-            VStack(spacing: 5) {
-                Image(systemName: "plus")
-                    .font(.system(size: 15, weight: .semibold))
-                Text(Copy.text("lab.slot.empty"))
-                    .font(.system(size: 7, weight: .bold))
-            }
-            .foregroundStyle(EchoTheme.muted)
-            .frame(maxWidth: .infinity)
-            .frame(height: 58)
-            .background(Color.white.opacity(0.025), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 15, style: .continuous)
-                    .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
-            )
+    func effectiveCooldown(_ kind: BonusKind) -> TimeInterval {
+        model.progress.skillCooldown(kind)
+    }
+
+    func effectiveDuration(_ kind: BonusKind) -> TimeInterval? {
+        model.progress.skillDuration(kind)
+    }
+
+    func abilityEffect(_ kind: BonusKind) -> String {
+        let tuning = model.progress.playerTuning
+        if kind == .magnet, let duration = effectiveDuration(kind) {
+            return Copy.format("lab.metric.duration", Copy.seconds(duration)) + " · "
+                + Copy.format("lab.metric.radius", Copy.number(SimConfig().magnetRadius * tuning.magnetRadiusMultiplier))
+        }
+        if kind == .anchor, let duration = effectiveDuration(kind) {
+            return Copy.format("lab.metric.duration", Copy.seconds(duration)) + " · "
+                + Copy.format("lab.metric.timeScale", Copy.percent(tuning.anchorTimeScale))
+        }
+        if let duration = effectiveDuration(kind) {
+            return Copy.format("lab.metric.duration", Copy.seconds(duration))
+        }
+        switch kind {
+        case .shield:
+            return Copy.format("lab.metric.layers", tuning.shieldChargesPerUse) + " · "
+                + Copy.format("lab.metric.grace", Copy.seconds(0.55 + tuning.shieldGraceBonus))
+        case .pulse:
+            return Copy.format("lab.metric.echoDelay", Copy.seconds(WorldSimulation.pulseEchoDelay + tuning.pulseDelayBonus))
+        case .chrono:
+            return Copy.format("lab.metric.echoDelay", Copy.seconds(WorldSimulation.shiftEchoDelay + tuning.chronoDelayBonus))
+        case .repulse:
+            return Copy.format("lab.metric.radius", Copy.number(tuning.repulseRadius))
+        case .blink:
+            return Copy.format("lab.metric.distance", Copy.number(tuning.blinkDistance))
+        case .ward:
+            return Copy.format("lab.metric.layers", tuning.shieldChargesPerUse)
+        default:
+            return kind.detail
         }
     }
 
+    func loadoutSlot(_ index: Int) -> some View {
+        let equipped = model.progress.equippedSkills
+        let kind = equipped.indices.contains(index) ? equipped[index] : nil
+        let tint = kind.map { color($0.tint) } ?? EchoTheme.cyan
+        return Button {
+            editingSlot = index
+            slotPickerOpen = true
+            model.audio.play(.select)
+        } label: {
+            VStack(spacing: 6) {
+                if let kind {
+                    AbilityIconView(kind: kind, size: 72)
+                        .shadow(color: tint.opacity(0.5), radius: 10)
+                    Text(kind.title)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                    Text(Copy.format("lab.charges", model.progress.count(kind)))
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(EchoTheme.cyan)
+                } else {
+                    Image(systemName: "plus.circle")
+                        .font(.system(size: 54, weight: .ultraLight))
+                        .foregroundStyle(EchoTheme.muted)
+                    Text(Copy.text("lab.slot.empty"))
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(EchoTheme.muted)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 155)
+            .background(tint.opacity(kind == nil ? 0.04 : 0.10), in: RoundedRectangle(cornerRadius: 20))
+            .overlay(RoundedRectangle(cornerRadius: 20).stroke(tint.opacity(kind == nil ? 0.14 : 0.42), lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint(Copy.text("lab.tapReplace"))
+    }
+
     func skillRow(_ kind: BonusKind) -> some View {
-        let unlocked = model.progress.isSkillUnlocked(kind)
-        let owned = model.progress.count(kind)
-        let equipped = model.progress.equippedSkills.contains(kind)
-        let full = owned >= model.progress.inventoryCapacity
-        let affordable = model.progress.canBuy(kind)
         let tint = color(kind.tint)
-
-        return VStack(spacing: 11) {
-            HStack(spacing: 12) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15, style: .continuous)
-                        .fill(tint.opacity(unlocked ? 0.17 : 0.06))
-                    AbilityIconView(kind: kind, size: 42)
-                        .saturation(unlocked ? 1 : 0)
-                        .opacity(unlocked ? 1 : 0.35)
-                }
-                .frame(width: 54, height: 54)
-
-                VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 7) {
-                        Text(kind.title)
-                            .font(.system(size: 17, weight: .semibold))
-                        Text(Copy.format("lab.skill.cooldown", Copy.seconds(kind.cooldown)))
-                            .font(.system(size: 8, weight: .bold))
-                            .foregroundStyle(EchoTheme.muted)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 3)
-                            .background(Color.white.opacity(0.06), in: Capsule())
-                    }
-                    Text(unlocked ? kind.detail : model.progress.skillUnlockHint(kind))
-                        .font(.system(size: 11))
-                        .foregroundStyle(unlocked ? EchoTheme.muted : EchoTheme.gold)
-                        .lineLimit(2)
-                    Text(unlocked ? Copy.format("lab.skill.reserve", owned, model.progress.inventoryCapacity) : Copy.text("lab.locked"))
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(unlocked && owned > 0 ? EchoTheme.cyan : EchoTheme.muted)
-                }
-                Spacer(minLength: 0)
+        return Button {
+            inspectedSkill = kind
+            model.audio.play(.select)
+        } label: {
+            VStack(spacing: 4) {
+                AbilityIconView(kind: kind, size: 59)
+                Text(kind.title)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                Text(model.progress.count(kind) > 0 ? Copy.format("lab.charges", model.progress.count(kind)) : Copy.text("lab.noCharges"))
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(model.progress.count(kind) > 0 ? EchoTheme.cyan : EchoTheme.muted)
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: 128)
+            .background(EchoTheme.panel.opacity(0.83), in: RoundedRectangle(cornerRadius: 19))
+            .overlay(RoundedRectangle(cornerRadius: 19).stroke(tint.opacity(0.26), lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+    }
 
-            Button {
-                guard unlocked else { return }
-                model.audio.play(.select)
-                inspectedSkill = kind
-            } label: {
-                Label(Copy.text(unlocked ? "lab.skill.demo" : "lab.skill.demoLocked"), systemImage: unlocked ? "play.rectangle.fill" : "lock.fill")
-                    .font(.system(size: 10, weight: .black, design: .rounded))
-                    .tracking(0.8)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 36)
-                    .foregroundStyle(unlocked ? tint : EchoTheme.muted)
-                    .background(tint.opacity(unlocked ? 0.10 : 0.035), in: Capsule())
-                    .overlay(Capsule().stroke(tint.opacity(unlocked ? 0.26 : 0.07), lineWidth: 1))
-            }
-            .buttonStyle(PressStyle())
-            .disabled(!unlocked)
+    var rechargeButton: some View {
+        Button {
+            rechargeOpen = true
+            model.audio.play(.select)
+        } label: {
+            Label(Copy.text("lab.recharge.title"), systemImage: "bolt.fill")
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(EchoTheme.cyan)
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(EchoTheme.cyan.opacity(0.11), in: Capsule())
+                .overlay(Capsule().stroke(EchoTheme.cyan, lineWidth: 1.5))
+        }
+        .buttonStyle(PressStyle())
+    }
 
-            HStack(spacing: 9) {
-                Button {
-                    toggle(kind)
-                } label: {
-                    Label(Copy.text(equipped ? "lab.skill.equipped" : "lab.skill.equip"), systemImage: equipped ? "checkmark.circle.fill" : "circle")
-                        .font(.system(size: 10, weight: .bold))
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 38)
-                        .foregroundStyle(equipped ? EchoTheme.cyan : .white)
-                        .background(Color.white.opacity(0.06), in: Capsule())
-                }
-                .buttonStyle(PressStyle())
-                .disabled(!unlocked)
-
-                Button {
-                    buy(kind)
-                } label: {
-                    HStack(spacing: 5) {
-                        Image(systemName: "diamond.fill")
-                        Text(full ? Copy.text("lab.skill.full") : "\(model.progress.skillPrice(kind))")
+    var slotPicker: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(Copy.text("lab.chooseSkill"))
+                .font(.system(size: 20, weight: .bold))
+                .padding(.top, 20)
+            ScrollView {
+                LazyVStack(spacing: 8) {
+                    ForEach(BonusKind.allCases.filter { $0.canBuy && model.progress.isSkillUnlocked($0) }) { kind in
+                        Button {
+                            if model.progress.setEquipped(kind, at: editingSlot) {
+                                slotPickerOpen = false
+                                model.audio.play(.confirm)
+                                model.audio.haptic(.medium)
+                            }
+                        } label: {
+                            HStack(spacing: 10) {
+                                AbilityIconView(kind: kind, size: 44)
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(kind.title).font(.system(size: 14, weight: .semibold)).foregroundStyle(.white)
+                                    Text(abilityEffect(kind)).font(.system(size: 11)).foregroundStyle(EchoTheme.muted)
+                                }
+                                Spacer()
+                                Text(Copy.format("lab.charges", model.progress.count(kind)))
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundStyle(EchoTheme.cyan)
+                            }
+                            .padding(10)
+                            .background(EchoTheme.panel, in: RoundedRectangle(cornerRadius: 15))
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 38)
-                    .foregroundStyle(affordable ? .white : EchoTheme.muted)
-                    .background(affordable ? EchoTheme.primaryBlue : Color.white.opacity(0.05), in: Capsule())
+                    if model.progress.equippedSkills.indices.contains(editingSlot) {
+                        Button(Copy.text("lab.removeSkill")) {
+                            toggle(model.progress.equippedSkills[editingSlot])
+                            slotPickerOpen = false
+                        }
+                        .foregroundStyle(EchoTheme.muted)
+                        .padding(10)
+                    }
                 }
-                .buttonStyle(PressStyle())
-                .disabled(!affordable)
             }
         }
-        .padding(13)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(EchoTheme.panel.opacity(unlocked ? 0.90 : 0.54))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(unlocked ? tint.opacity(0.20) : Color.white.opacity(0.06), lineWidth: 1)
-        )
+        .padding(.horizontal, 18)
+    }
+
+    var rechargeSheet: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(Copy.text("lab.recharge.title"))
+                .font(.system(size: 23, weight: .bold))
+                .padding(.top, 20)
+            Label("\(model.progress.points)", systemImage: "diamond.fill")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(EchoTheme.magenta)
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(BonusKind.allCases.filter { $0.canBuy && model.progress.isSkillUnlocked($0) }) { kind in
+                        let owned = model.progress.count(kind)
+                        let full = owned >= model.progress.inventoryCapacity
+                        HStack(spacing: 12) {
+                            AbilityIconView(kind: kind, size: 48)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(kind.title)
+                                    .font(.system(size: 14, weight: .semibold))
+                                Text(Copy.format("lab.skill.reserve", owned, model.progress.inventoryCapacity))
+                                    .font(.system(size: 11))
+                                    .foregroundStyle(EchoTheme.muted)
+                            }
+                            Spacer(minLength: 4)
+                            Button { buy(kind) } label: {
+                                Text(full ? Copy.text("lab.skill.full") : Copy.format("lab.recharge.price", model.progress.skillPrice(kind)))
+                                    .font(.system(size: 12, weight: .bold))
+                                    .foregroundStyle(model.progress.canBuy(kind) ? .white : EchoTheme.muted)
+                                    .frame(minWidth: 105)
+                                    .frame(height: 39)
+                                    .background(model.progress.canBuy(kind) ? EchoTheme.primaryBlue : Color.white.opacity(0.07), in: Capsule())
+                            }
+                            .buttonStyle(PressStyle())
+                            .disabled(!model.progress.canBuy(kind))
+                        }
+                        .padding(.vertical, 9)
+                        Divider().overlay(Color.white.opacity(0.07))
+                    }
+                }
+            }
+            Text(Copy.text("lab.recharge.note"))
+                .font(.system(size: 10))
+                .foregroundStyle(EchoTheme.muted)
+                .padding(.bottom, 15)
+        }
+        .padding(.horizontal, 18)
     }
 }

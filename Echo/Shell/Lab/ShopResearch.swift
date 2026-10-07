@@ -54,14 +54,22 @@ extension ShopView {
                         Text(kind.detail)
                             .font(.system(size: 13, weight: .semibold, design: .rounded))
                             .foregroundStyle(.white)
+                        if !model.progress.isSkillUnlocked(kind) {
+                            Label(model.progress.skillUnlockHint(kind), systemImage: "lock.fill")
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundStyle(EchoTheme.gold)
+                        }
+                        Text(abilityEffect(kind))
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .foregroundStyle(tint)
                         Label(kind.bestUse, systemImage: "lightbulb.fill")
                             .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundStyle(EchoTheme.muted)
                             .fixedSize(horizontal: false, vertical: true)
 
                         HStack(spacing: 8) {
-                            abilityStat(icon: "timer", value: kind.duration > 0 ? Copy.format("unit.seconds", Copy.seconds(kind.duration)) : Copy.text("lab.ability.instant"), title: Copy.text("lab.ability.effect"), tint: tint)
-                            abilityStat(icon: "arrow.clockwise", value: Copy.format("unit.seconds", Copy.seconds(kind.cooldown)), title: Copy.text("lab.ability.cooldown"), tint: EchoTheme.cyan)
+                            abilityStat(icon: "timer", value: effectiveDuration(kind).map { Copy.format("unit.seconds", Copy.seconds($0)) } ?? Copy.text("lab.ability.instant"), title: Copy.text("lab.ability.effect"), tint: tint)
+                            abilityStat(icon: "arrow.clockwise", value: Copy.format("unit.seconds", Copy.seconds(effectiveCooldown(kind))), title: Copy.text("lab.ability.cooldown"), tint: EchoTheme.cyan)
                         }
                     }
                     .padding(13)
@@ -105,188 +113,34 @@ extension ShopView {
     }
 
     var researchSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            researchSummary
-            researchGuide
+        VStack(spacing: 14) {
             researchBranchPicker
             researchRoute
         }
         .padding(.top, 2)
     }
 
-    var researchSummary: some View {
-        let earned = UpgradeKind.allCases.reduce(0) { $0 + model.progress.upgradeLevel($1) }
-        let total = UpgradeKind.allCases.reduce(0) { $0 + $1.maxLevel }
-        let progress = total == 0 ? 0 : Double(earned) / Double(total)
-
-        return HStack(spacing: 13) {
-            ZStack {
-                Circle()
-                    .stroke(Color.white.opacity(0.08), lineWidth: 5)
-                Circle()
-                    .trim(from: 0, to: CGFloat(progress))
-                    .stroke(
-                        AngularGradient(
-                            colors: [EchoTheme.cyan, EchoTheme.magenta, EchoTheme.gold, EchoTheme.cyan],
-                            center: .center
-                        ),
-                        style: StrokeStyle(lineWidth: 5, lineCap: .round)
-                    )
-                    .rotationEffect(.degrees(-90))
-                    .shadow(color: EchoTheme.cyan.opacity(0.45), radius: 5)
-                Text("\(earned)")
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
-            }
-            .frame(width: 58, height: 58)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(Copy.text("lab.matrix.title"))
-                    .font(.system(size: 13, weight: .bold))
-                    .tracking(1.8)
-                Text(Copy.format("lab.matrix.progress", total, earned))
-                    .font(.system(size: 11))
-                    .foregroundStyle(EchoTheme.muted)
-                Text(Copy.text("lab.matrix.hint"))
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(EchoTheme.cyan.opacity(0.82))
-            }
-            Spacer(minLength: 0)
-        }
-        .padding(13)
-        .background(
-            LinearGradient(
-                colors: [EchoTheme.panel.opacity(0.96), EchoTheme.violet.opacity(0.08)],
-                startPoint: .leading,
-                endPoint: .trailing
-            ),
-            in: RoundedRectangle(cornerRadius: 20, style: .continuous)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(Color.white.opacity(0.09), lineWidth: 1)
-        )
-    }
-
-    var researchGuide: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Label(Copy.text("lab.guide.title"), systemImage: "point.3.connected.trianglepath.dotted")
-                    .font(.system(size: 10, weight: .black, design: .rounded))
-                    .tracking(1.1)
-                    .foregroundStyle(.white)
-                Spacer()
-                Label(Copy.text("lab.guide.all"), systemImage: "checkmark.circle.fill")
-                    .font(.system(size: 9, weight: .bold, design: .rounded))
-                    .foregroundStyle(EchoTheme.magenta)
-            }
-
-            Text(Copy.text("lab.guide.body"))
-                .font(.system(size: 11, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.80))
-                .fixedSize(horizontal: false, vertical: true)
-            HStack(spacing: 6) {
-                researchGuideBadge(Copy.text("lab.guide.met"), tint: .green)
-                researchGuideBadge(Copy.text("lab.guide.cost"), tint: EchoTheme.gold)
-            }
-        }
-        .padding(13)
-        .background(
-            LinearGradient(
-                colors: [EchoTheme.primaryBlue.opacity(0.16), EchoTheme.magenta.opacity(0.08)],
-                startPoint: .leading,
-                endPoint: .trailing
-            ),
-            in: RoundedRectangle(cornerRadius: 19, style: .continuous)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 19, style: .continuous)
-                .stroke(EchoTheme.cyan.opacity(0.16), lineWidth: 1)
-        )
-    }
-
-    func researchGuideBadge(_ title: String, tint: Color) -> some View {
-        Text(title)
-            .font(.system(size: 8, weight: .black, design: .rounded))
-            .tracking(0.4)
-            .foregroundStyle(tint)
-            .padding(.horizontal, 9)
-            .frame(height: 24)
-            .background(tint.opacity(0.10), in: Capsule())
-    }
-
     var researchBranchPicker: some View {
         HStack(spacing: 7) {
             ForEach(UpgradeBranch.allCases, id: \.rawValue) { branch in
                 let tint = color(branch.tint)
-                let kinds = researchOrder(for: branch)
-                let unlocked = kinds.filter {
-                    model.progress.prerequisitesMet(for: $0) && model.progress.upgradeLevel($0) < $0.maxLevel
-                }.count
                 Button {
-                    withAnimation(.easeInOut(duration: 0.18)) { researchBranch = branch }
                     model.audio.play(.select)
-                } label: {
-                    VStack(spacing: 5) {
-                        ResearchIconView(kind: kinds[0], size: 34)
-                            .opacity(researchBranch == branch ? 1 : 0.66)
-                        Text(branch.title)
-                            .font(.system(size: 8, weight: .black, design: .rounded))
-                            .tracking(0.5)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
-                        Text(Copy.format("lab.branch.open", unlocked))
-                            .font(.system(size: 8, weight: .bold, design: .rounded))
-                            .foregroundStyle(unlocked > 0 ? tint : EchoTheme.muted)
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        researchBranch = branch
+                        selectedResearch = researchOrder(for: branch)[0]
                     }
-                    .foregroundStyle(researchBranch == branch ? .white : EchoTheme.muted)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 77)
-                    .background(
-                        researchBranch == branch ? tint.opacity(0.18) : Color.white.opacity(0.035),
-                        in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(researchBranch == branch ? tint.opacity(0.62) : Color.white.opacity(0.07), lineWidth: 1)
-                    )
+                } label: {
+                    Text(branch.title)
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(researchBranch == branch ? EchoTheme.cyan : EchoTheme.muted)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 36)
+                        .background(researchBranch == branch ? tint.opacity(0.14) : EchoTheme.panel.opacity(0.55), in: Capsule())
+                        .overlay(Capsule().stroke(researchBranch == branch ? EchoTheme.cyan : Color.white.opacity(0.08), lineWidth: 1))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(Copy.format("lab.branch.a11y", branch.title, unlocked))
             }
         }
-    }
-
-    var researchRoute: some View {
-        let kinds = researchOrder(for: researchBranch)
-        let tint = color(researchBranch.tint)
-        let researched = kinds.filter { model.progress.upgradeLevel($0) > 0 }.count
-
-        return VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 11) {
-                ResearchIconView(kind: kinds[0], size: 34)
-                    .frame(width: 42, height: 42)
-                    .background(tint.opacity(0.13), in: RoundedRectangle(cornerRadius: 12))
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(Copy.format("lab.branch.header", researchBranch.title))
-                        .font(.system(size: 13, weight: .black, design: .rounded))
-                        .tracking(1.1)
-                    Text(Copy.format("lab.branch.progress", researched, kinds.count))
-                        .font(.system(size: 10, weight: .medium, design: .rounded))
-                        .foregroundStyle(EchoTheme.muted)
-                }
-                Spacer(minLength: 0)
-            }
-            .padding(.bottom, 3)
-
-            ForEach(Array(kinds.enumerated()), id: \.element) { index, kind in
-                researchRouteNode(kind, index: index)
-            }
-        }
-        .padding(12)
-        .background(EchoTheme.navyDeep.opacity(0.76), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(tint.opacity(0.16), lineWidth: 1)
-        )
     }
 }

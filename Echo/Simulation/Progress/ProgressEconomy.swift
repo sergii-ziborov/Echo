@@ -43,11 +43,11 @@ extension ProgressStore {
     }
 
     @discardableResult
-    func buy(_ kind: BonusKind) -> Bool {
+    func buy(_ kind: BonusKind, equipIfPossible: Bool = true) -> Bool {
         guard canBuy(kind) else { return false }
         shards -= skillPrice(kind)
         inventory[kind.rawValue] = count(kind) + 1
-        if !equippedSkillIDs.contains(kind.rawValue), equippedSkillIDs.count < skillSlotCount {
+        if equipIfPossible, !equippedSkillIDs.contains(kind.rawValue), equippedSkillIDs.count < skillSlotCount {
             equippedSkillIDs.append(kind.rawValue)
         }
         persist()
@@ -120,6 +120,29 @@ extension ProgressStore {
         return true
     }
 
+    /// Replace one visible slot directly. Selecting a skill already in another
+    /// slot swaps the two, so a loadout never contains duplicate skills.
+    @discardableResult
+    func setEquipped(_ kind: BonusKind, at slot: Int) -> Bool {
+        guard kind.useFromBar, isSkillUnlocked(kind), slot >= 0, slot < skillSlotCount,
+              slot <= equippedSkillIDs.count else { return false }
+        if let previous = equippedSkillIDs.firstIndex(of: kind.rawValue) {
+            guard previous != slot else { return true }
+            if slot < equippedSkillIDs.count {
+                equippedSkillIDs.swapAt(previous, slot)
+            } else {
+                equippedSkillIDs.remove(at: previous)
+                equippedSkillIDs.append(kind.rawValue)
+            }
+        } else if slot < equippedSkillIDs.count {
+            equippedSkillIDs[slot] = kind.rawValue
+        } else {
+            equippedSkillIDs.append(kind.rawValue)
+        }
+        persist()
+        return true
+    }
+
     func upgradeLevel(_ kind: UpgradeKind) -> Int {
         min(kind.maxLevel, max(0, upgrades[kind.rawValue] ?? 0))
     }
@@ -158,6 +181,26 @@ extension ProgressStore {
 
     var playerTuning: PlayerTuning {
         Self.tuning(wrist: wrist) { upgradeLevel($0) }
+    }
+
+    /// Values shown in the Lab use the same tuning as a running session.
+    func skillCooldown(_ kind: BonusKind) -> TimeInterval {
+        kind.cooldown * playerTuning.cooldownMultiplier
+    }
+
+    func skillDuration(_ kind: BonusKind) -> TimeInterval? {
+        let tuning = playerTuning
+        let bonus: TimeInterval
+        switch kind {
+        case .freeze: bonus = tuning.freezeBonus
+        case .surge: bonus = tuning.surgeBonus
+        case .phase: bonus = tuning.phaseBonus
+        case .anchor: bonus = tuning.anchorBonus
+        case .prism: bonus = tuning.prismBonus
+        case .magnet: bonus = 0
+        default: return nil
+        }
+        return (kind.duration + bonus) * tuning.timedEffectMultiplier
     }
 
     /// Run tuning for a set of research ranks. The Lab previews one rank with it,

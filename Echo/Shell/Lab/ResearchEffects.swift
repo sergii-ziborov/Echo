@@ -5,7 +5,21 @@ extension UpgradeKind {
     /// applies, so a node never promises a number the arena does not use.
     @MainActor
     func effect(atRank rank: Int) -> String {
-        let tuning = ProgressStore.tuning { $0 == self ? rank : 0 }
+        effect(atRank: rank, tuning: ProgressStore.tuning { $0 == self ? rank : 0 })
+    }
+
+    /// Preview this rank in the player's current build, including interactions
+    /// with research in other branches and wrist relics.
+    @MainActor
+    func effect(atRank rank: Int, progress: ProgressStore) -> String {
+        let tuning = ProgressStore.tuning(wrist: progress.wrist) {
+            $0 == self ? rank : progress.upgradeLevel($0)
+        }
+        return effect(atRank: rank, tuning: tuning)
+    }
+
+    @MainActor
+    private func effect(atRank rank: Int, tuning: PlayerTuning) -> String {
         let config = SimConfig()
         let key = "lab.effect.\(rawValue)"
         func base() -> String { Copy.text("\(key).base") }
@@ -18,7 +32,7 @@ extension UpgradeKind {
         case .dashCapacitor:
             return Copy.format(key, Copy.number(config.dashCooldown * tuning.dashCooldownMultiplier))
         case .surgeMastery:
-            return Self.duration(.surge, BonusKind.surge.duration + tuning.surgeBonus)
+            return Self.duration(.surge, (BonusKind.surge.duration + tuning.surgeBonus) * tuning.timedEffectMultiplier)
         case .dashImpulse:
             return Copy.format(key, Copy.number(config.dashDuration + tuning.dashDurationBonus))
         case .slots:
@@ -32,7 +46,7 @@ extension UpgradeKind {
             let grace = Copy.number(tuning.shieldGraceBonus)
             return Copy.format(tuning.startsShielded ? "\(key).final" : "lab.effect.grace", grace)
         case .shieldLattice:
-            if rank == 0 { return base() }
+            if rank == 0 && tuning.shieldGraceBonus == 0 { return base() }
             let grace = Copy.number(tuning.shieldGraceBonus)
             return Copy.format(tuning.shieldChargesPerUse > 1 ? "\(key).final" : "lab.effect.grace", grace)
         case .fieldAmplifier:
@@ -42,7 +56,7 @@ extension UpgradeKind {
         case .beamForecast:
             return rank == 0 ? base() : Copy.format(key, Copy.number(tuning.laserWarningBonus))
         case .cryostasis:
-            return Self.duration(.freeze, BonusKind.freeze.duration + tuning.freezeBonus)
+            return Self.duration(.freeze, (BonusKind.freeze.duration + tuning.freezeBonus) * tuning.timedEffectMultiplier)
         case .echoForecast:
             return rank == 0 ? base() : Copy.format(key, Copy.number(tuning.echoDelayBonus))
         case .crystalMemory:
@@ -52,7 +66,7 @@ extension UpgradeKind {
             return Copy.format(key, BonusKind.magnet.title, Copy.percent(tuning.magnetRadiusMultiplier - 1))
         case .phaseResearch:
             if rank == 0 { return Self.locked(.phase) }
-            return Self.duration(.phase, BonusKind.phase.duration + tuning.phaseBonus)
+            return Self.duration(.phase, (BonusKind.phase.duration + tuning.phaseBonus) * tuning.timedEffectMultiplier)
         case .chronoResearch:
             if rank == 0 { return Copy.format("\(key).base", BonusKind.chrono.title, BonusKind.pulse.title) }
             return Copy.format(
@@ -68,14 +82,14 @@ extension UpgradeKind {
                 key,
                 BonusKind.anchor.title,
                 Copy.percent(tuning.anchorTimeScale),
-                Copy.number(BonusKind.anchor.duration + tuning.anchorBonus)
+                Copy.number((BonusKind.anchor.duration + tuning.anchorBonus) * tuning.timedEffectMultiplier)
             )
         case .repulseResearch:
             if rank == 0 { return Self.locked(.repulse) }
             return Copy.format(key, BonusKind.repulse.title, Copy.number(tuning.repulseRadius))
         case .prismResearch:
             if rank == 0 { return Self.locked(.prism) }
-            return Self.duration(.prism, BonusKind.prism.duration + tuning.prismBonus)
+            return Self.duration(.prism, (BonusKind.prism.duration + tuning.prismBonus) * tuning.timedEffectMultiplier)
         case .blinkResearch:
             if rank == 0 { return Self.locked(.blink) }
             return Copy.format(key, BonusKind.blink.title, Copy.number(tuning.blinkDistance))
