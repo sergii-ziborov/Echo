@@ -38,7 +38,7 @@ struct ShopView: View {
     @State var selectedResearch: UpgradeKind = .velocity
     @State var slotPickerOpen = false
     @State var editingSlot = 0
-    @State var rechargeOpen = false
+    @State var rechargeOpen = ProcessInfo.processInfo.arguments.contains("-shot-recharge")
     @State var lockedSkillsExpanded = false
 
     init(
@@ -85,39 +85,21 @@ struct ShopView: View {
     }
 
     var body: some View {
-        ZStack {
-            ScreenBackground()
-            VStack(spacing: 12) {
-                header
-                sectionPicker
-
-                ScrollViewReader { scroll in
-                    ScrollView(showsIndicators: false) {
-                        Group {
-                            switch section {
-                            case .loadout:
-                                loadoutSection
-                            case .research:
-                                researchSection
-                            }
-                        }
-                        .padding(.bottom, section == .loadout ? 12 : 0)
-                    }
-                    .onChange(of: selectedResearch) { _, kind in
-                        guard section == .research else { return }
-                        withAnimation(.easeInOut(duration: 0.24)) {
-                            scroll.scrollTo(kind, anchor: .center)
-                        }
+        GeometryReader { geometry in
+            ZStack {
+                ScreenBackground()
+                VStack(spacing: 12) {
+                    header
+                    sectionPicker
+                    if LabLayout.usesSidePanels(width: geometry.size.width) {
+                        expandedContent(width: geometry.size.width - 36, height: geometry.size.height)
+                    } else {
+                        compactContent
                     }
                 }
-                if section == .research {
-                    selectedResearchCard(selectedResearch)
-                } else {
-                    rechargeButton
-                }
+                .padding(.horizontal, 18)
+                .padding(.top, hostTopInset + 8)
             }
-            .padding(.horizontal, 18)
-            .padding(.top, hostTopInset + 8)
         }
         .sheet(item: $inspectedUpgrade) { kind in
             researchInspector(kind)
@@ -146,6 +128,61 @@ struct ShopView: View {
                 .presentationDragIndicator(.visible)
                 .presentationCornerRadius(30)
                 .presentationBackground(EchoTheme.navyDeep)
+        }
+    }
+
+    /// The Duo's inner display has room to keep the next action beside the list.
+    @ViewBuilder
+    func expandedContent(width: CGFloat, height: CGFloat) -> some View {
+        switch section {
+        case .loadout:
+            HStack(alignment: .top, spacing: 14) {
+                ScrollView(showsIndicators: false) {
+                    loadoutSection.padding(.bottom, 12)
+                }
+                rechargePanel
+                    .frame(width: min(360, width * 0.42))
+                    .frame(height: min(390, max(260, height - 160)))
+            }
+        case .research:
+            HStack(alignment: .top, spacing: 14) {
+                researchScroll
+                ScrollView(showsIndicators: false) {
+                    selectedResearchCard(selectedResearch)
+                        .padding(.bottom, 12)
+                }
+                .frame(width: min(320, width * 0.44))
+            }
+        }
+    }
+
+    var compactContent: some View {
+        VStack(spacing: 12) {
+            researchScroll
+            if section == .research {
+                selectedResearchCard(selectedResearch)
+            } else {
+                rechargeButton
+            }
+        }
+    }
+
+    var researchScroll: some View {
+        ScrollViewReader { scroll in
+            ScrollView(showsIndicators: false) {
+                Group {
+                    switch section {
+                    case .loadout: loadoutSection.padding(.bottom, 12)
+                    case .research: researchSection
+                    }
+                }
+            }
+            .onChange(of: selectedResearch) { _, kind in
+                guard section == .research else { return }
+                withAnimation(.easeInOut(duration: 0.24)) {
+                    scroll.scrollTo(kind, anchor: .center)
+                }
+            }
         }
     }
 
@@ -271,4 +308,8 @@ enum LabSection: String, CaseIterable {
         case .research: "point.3.connected.trianglepath.dotted"
         }
     }
+}
+
+enum LabLayout {
+    static func usesSidePanels(width: CGFloat) -> Bool { width >= 620 }
 }

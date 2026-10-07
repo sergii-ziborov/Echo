@@ -85,6 +85,7 @@ final class AppModel {
             progress.markTutorialSeen()
             screen = .daily
         } else if args.contains("-shot-shop")
+            || args.contains("-shot-recharge")
             || args.contains("-shot-research")
             || args.contains("-shot-research-loadout")
             || args.contains("-shot-research-time")
@@ -94,6 +95,9 @@ final class AppModel {
             || args.contains("-shot-tech-loadout")
             || args.contains("-shot-tech-temporal")
             || args.contains("-shot-ability") {
+#if DEBUG
+            progress.debugLabShowcase()
+#endif
             progress.markTutorialSeen()
             screen = .shop
         } else if args.contains(where: { $0.hasPrefix("-shot-wiki") }) {

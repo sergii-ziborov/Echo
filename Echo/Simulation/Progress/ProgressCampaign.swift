@@ -128,5 +128,17 @@ extension ProgressStore {
         shards = max(shards, 640)
         persist()
     }
+
+    func debugLabShowcase() {
+        upgrades[UpgradeKind.velocity.rawValue] = 2
+        upgrades[UpgradeKind.dashCapacitor.rawValue] = 1
+        upgrades[UpgradeKind.magnetism.rawValue] = 1
+        inventory[BonusKind.shield.rawValue] = 3
+        inventory[BonusKind.freeze.rawValue] = 1
+        inventory[BonusKind.surge.rawValue] = 2
+        inventory[BonusKind.magnet.rawValue] = 0
+        shards = 640
+        persist()
+    }
 #endif
 }

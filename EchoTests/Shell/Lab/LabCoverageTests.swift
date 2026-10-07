@@ -1,4 +1,5 @@
 import XCTest
+import SwiftUI
 @testable import Echo
 
 @MainActor
@@ -54,5 +55,37 @@ final class LabCoverageTests: XCTestCase {
                 }
             }
         }
+    }
+
+    func testDuoOuterAndInnerDisplayLayouts() {
+        // Duo screenshots use 1398 × 2034 and 2007 × 2853 pixels at 3×.
+        let outer = CGSize(width: 466, height: 678)
+        let inner = CGSize(width: 669, height: 951)
+        XCTAssertFalse(LabLayout.usesSidePanels(width: outer.width))
+        XCTAssertTrue(LabLayout.usesSidePanels(width: inner.width))
+
+        let model = CoverageFixtures.model(rich: false)
+        model.progress.debugLabShowcase()
+        for size in [outer, inner] {
+            let loadout = CoverageHost.render(ShopView(section: .loadout).environment(model), size: size)
+            XCTAssertEqual(loadout.bounds.size, size)
+            attachScreenshot(loadout, name: size == outer ? "duo-outer-loadout" : "duo-inner-loadout")
+            let research = CoverageHost.render(ShopView(section: .research).environment(model), size: size)
+            XCTAssertEqual(research.bounds.size, size)
+            attachScreenshot(research, name: size == outer ? "duo-outer-research" : "duo-inner-research")
+        }
+    }
+
+    private func attachScreenshot(_ view: UIView, name: String) {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 3
+        format.opaque = true
+        let image = UIGraphicsImageRenderer(size: view.bounds.size, format: format).image { _ in
+            XCTAssertTrue(view.drawHierarchy(in: view.bounds, afterScreenUpdates: true))
+        }
+        let attachment = XCTAttachment(image: image)
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
 }

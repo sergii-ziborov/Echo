@@ -353,10 +353,20 @@ extension ShopView {
         .padding(.horizontal, 18)
     }
 
+    var rechargePanel: some View {
+        rechargeContent(compact: true)
+            .background(EchoTheme.panel.opacity(0.92), in: RoundedRectangle(cornerRadius: 20))
+            .overlay(RoundedRectangle(cornerRadius: 20).stroke(EchoTheme.cyan.opacity(0.25), lineWidth: 1))
+    }
+
     var rechargeSheet: some View {
+        rechargeContent(compact: false)
+    }
+
+    func rechargeContent(compact: Bool) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(Copy.text("lab.recharge.title"))
-                .font(.system(size: 23, weight: .bold))
+                .font(.system(size: compact ? 19 : 23, weight: .bold))
                 .padding(.top, 20)
             Label("\(model.progress.points)", systemImage: "diamond.fill")
                 .font(.system(size: 14, weight: .semibold))
@@ -366,22 +376,27 @@ extension ShopView {
                     ForEach(BonusKind.allCases.filter { $0.canBuy && model.progress.isSkillUnlocked($0) }) { kind in
                         let owned = model.progress.count(kind)
                         let full = owned >= model.progress.inventoryCapacity
-                        HStack(spacing: 12) {
-                            AbilityIconView(kind: kind, size: 48)
+                        HStack(spacing: compact ? 7 : 12) {
+                            AbilityIconView(kind: kind, size: compact ? 36 : 48)
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(kind.title)
-                                    .font(.system(size: 14, weight: .semibold))
+                                    .font(.system(size: compact ? 11 : 14, weight: .semibold))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.75)
                                 Text(Copy.format("lab.skill.reserve", owned, model.progress.inventoryCapacity))
-                                    .font(.system(size: 11))
+                                    .font(.system(size: compact ? 9 : 11))
                                     .foregroundStyle(EchoTheme.muted)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.75)
                             }
-                            Spacer(minLength: 4)
+                            Spacer(minLength: 0)
                             Button { buy(kind) } label: {
                                 Text(full ? Copy.text("lab.skill.full") : Copy.format("lab.recharge.price", model.progress.skillPrice(kind)))
-                                    .font(.system(size: 12, weight: .bold))
+                                    .font(.system(size: compact ? 10 : 12, weight: .bold))
                                     .foregroundStyle(model.progress.canBuy(kind) ? .white : EchoTheme.muted)
-                                    .frame(minWidth: 105)
-                                    .frame(height: 39)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.7)
+                                    .frame(width: compact ? 83 : 105, height: compact ? 34 : 39)
                                     .background(model.progress.canBuy(kind) ? EchoTheme.primaryBlue : Color.white.opacity(0.07), in: Capsule())
                             }
                             .buttonStyle(PressStyle())

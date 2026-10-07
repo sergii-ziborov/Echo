@@ -1,6 +1,6 @@
 # ECHO App Store release guide
 
-App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Version **1.0.0**, current build **18**. The listing is not public yet.
+App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Version **1.0.0**, local project build **20**. The listing is not public yet.
 
 ## Price and product type
 
@@ -8,25 +8,27 @@ Intended sale: **$1.99 USD one-time iOS app**. No ads, no in-app purchases, no s
 
 ## TestFlight / Xcode Cloud
 
-`project.yml` and the generated Xcode project use marketing version **1.0.0** and build **18**. Xcode Cloud numbers its own builds, so set its next build number above the last uploaded build. `ci_scripts/ci_post_clone.sh` installs XcodeGen if needed and regenerates the project.
+`project.yml` and the generated Xcode project use marketing version **1.0.0** and local build **20**. Xcode Cloud numbers its own builds. `ci_scripts/ci_post_clone.sh` installs XcodeGen if needed and regenerates the project.
 
 After signing in to App Store Connect:
 
 1. Connect an Xcode Cloud workflow to `sergii-ziborov/Echo` on `main`.
 2. Use **Archive - iOS**, **App Store Connect** distribution, and **TestFlight Internal Testing**.
-3. Confirm the processed build is 1.0.0 (20) or later before assigning testers.
+3. Confirm that the latest processed build is available to the Keepers internal group.
 
 Suggested **What to Test**: region arrival cards and the Atlas route (Möbius loop, region skies); Deep Time; the Apple Watch app on its own and as a remote for a phone run; Settings → About / Terms / Privacy / Report a bug.
 
 ## Prepared assets
 
-Screenshots are opaque JPEGs captured from the running app:
+The iPhone, iPad and Watch screenshots are opaque JPEGs captured from the running app. Duo uses opaque PNG renderings of the same SwiftUI views at its display sizes:
 
 | Group | Size | Folder |
 | --- | --- | --- |
 | iPhone 6.9-inch | 1320 × 2868 | `docs/app-store/iphone/` |
 | iPhone 6.5-inch | 1284 × 2778 | `docs/app-store/iphone65/` |
 | iPad 13-inch | 2064 × 2752 | `docs/app-store/ipad/` |
+| iPhone Duo outer display | 1398 × 2034 | `docs/app-store/duo/` |
+| iPhone Duo inner display | 2007 × 2853 | `docs/app-store/duo/` |
 | Apple Watch 46 mm | 416 × 496 | `docs/app-store/watch/` |
 
 Keep the two iPhone groups separate in App Store Connect. The first image in each group is gameplay, not a splash screen.
@@ -44,6 +46,12 @@ Keep the two iPhone groups separate in App Store Connect. The first image in eac
 | `menu/09-home.jpg` | `06-home.jpg` | Home screen |
 
 Apple Watch (`watch/`): `01-wrist-run.jpg`, `02-wrist-maps.jpg`, `03-relics.jpg`, `04-skills.jpg`.
+
+The Lab captures now show the simplified loadout, exact research dependencies and live upgrade effects. `menu/10-recharge.jpg` shows the one-charge prices on both iPhone sizes. Regenerate these captures from the running Debug app with `scripts/capture_lab_shots.sh`.
+
+The Duo images are rendered from the actual SwiftUI Lab at Apple's outer and inner display sizes by `LabCoverageTests.testDuoOuterAndInnerDisplayLayouts`. Xcode 27.0 on this Mac does not include a Duo simulator, so the test verifies layout at the exact viewports but does not replace a device or Duo simulator run. Recheck both displays when that simulator is installed.
+
+The iOS and Watch icons are included in the uploaded build's asset catalog and appear under **Included Assets** after a build is associated with version 1.0.0. The generic thumbnail in Xcode Cloud's navigation is a separate App Store Connect display state.
 
 ## English (U.S.) listing
 
