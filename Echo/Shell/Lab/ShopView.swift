@@ -146,7 +146,7 @@ struct ShopView: View {
             }
         case .research:
             HStack(alignment: .top, spacing: 14) {
-                researchScroll
+                researchScroll(rowSpacing: min(170, max(126, (height - 240) / 4)))
                 ScrollView(showsIndicators: false) {
                     selectedResearchCard(selectedResearch)
                         .padding(.bottom, 12)
@@ -158,7 +158,7 @@ struct ShopView: View {
 
     var compactContent: some View {
         VStack(spacing: 12) {
-            researchScroll
+            researchScroll()
             if section == .research {
                 selectedResearchCard(selectedResearch)
             } else {
@@ -167,13 +167,13 @@ struct ShopView: View {
         }
     }
 
-    var researchScroll: some View {
+    func researchScroll(rowSpacing: CGFloat = 126) -> some View {
         ScrollViewReader { scroll in
             ScrollView(showsIndicators: false) {
                 Group {
                     switch section {
                     case .loadout: loadoutSection.padding(.bottom, 12)
-                    case .research: researchSection
+                    case .research: researchSection(rowSpacing: rowSpacing)
                     }
                 }
             }

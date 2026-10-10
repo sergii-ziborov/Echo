@@ -8,6 +8,7 @@ struct RecordsView: View {
 
         var id: String { rawValue }
         var icon: String { self == .phone ? "iphone" : "applewatch" }
+        var artwork: String { self == .phone ? "RatingPhone" : "RatingWatch" }
         var tint: Color { self == .phone ? EchoTheme.cyan : EchoTheme.gold }
     }
 
@@ -243,7 +244,14 @@ struct RecordsView: View {
 
     private func ratingCard(_ lines: [RatingLine], board: Board, note: String) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline) {
+            HStack(alignment: .center, spacing: 11) {
+                Image(board.artwork)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 46, height: 46)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(board.tint.opacity(0.35), lineWidth: 1))
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 2) {
                     Label(Copy.text("records.tab.\(board.rawValue)"), systemImage: board.icon)
                         .font(.system(size: 10, weight: .black, design: .rounded))

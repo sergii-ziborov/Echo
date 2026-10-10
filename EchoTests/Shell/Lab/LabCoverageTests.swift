@@ -44,6 +44,15 @@ final class LabCoverageTests: XCTestCase {
             for kind in kinds {
                 for requirement in kind.prerequisites where requirement.kind.branch == branch {
                     XCTAssertLessThan(layout.depths[requirement.kind]!, layout.depths[kind]!)
+                    if layout.depths[kind]! - layout.depths[requirement.kind]! > 1 {
+                        let path = layout.path(from: requirement.kind, to: kind, width: 320)
+                        let destination = layout.point(for: kind, width: 320)
+                        if destination.x >= 160 {
+                            XCTAssertEqual(path.boundingRect.maxX, 300, accuracy: 0.5)
+                        } else {
+                            XCTAssertEqual(path.boundingRect.minX, 20, accuracy: 0.5)
+                        }
+                    }
                 }
             }
             for row in Set(layout.depths.values) {

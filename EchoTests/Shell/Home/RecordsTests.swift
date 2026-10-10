@@ -1,9 +1,18 @@
 import XCTest
+import UIKit
 @testable import Echo
 
 /// The ratings are plain sums of what the player can see on the screen.
 @MainActor
 final class RecordsTests: XCTestCase {
+    func testBothLeaderboardArtworksShipInTheApp() {
+        for board in RecordsView.Board.allCases {
+            let artwork = UIImage(named: board.artwork)
+            XCTAssertNotNil(artwork, "Missing artwork for \(board.rawValue)")
+            XCTAssertEqual(artwork?.size, CGSize(width: 1024, height: 1024))
+        }
+    }
+
     func testPhoneRatingCountsSealsDepthAndPasses() {
         let model = CoverageFixtures.model(rich: false)
         XCTAssertEqual(Ratings.total(Ratings.phone(model.progress)), 0)

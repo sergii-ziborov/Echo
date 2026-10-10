@@ -112,10 +112,10 @@ extension ShopView {
         .background(tint.opacity(0.08), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
-    var researchSection: some View {
+    func researchSection(rowSpacing: CGFloat) -> some View {
         VStack(spacing: 14) {
             researchBranchPicker
-            researchRoute
+            researchRoute(rowSpacing: rowSpacing)
         }
         .padding(.top, 2)
     }
@@ -124,6 +124,8 @@ extension ShopView {
         HStack(spacing: 7) {
             ForEach(UpgradeBranch.allCases, id: \.rawValue) { branch in
                 let tint = color(branch.tint)
+                let kinds = researchOrder(for: branch)
+                let studied = kinds.filter { model.progress.upgradeLevel($0) > 0 }.count
                 Button {
                     model.audio.play(.select)
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -131,15 +133,23 @@ extension ShopView {
                         selectedResearch = researchOrder(for: branch)[0]
                     }
                 } label: {
-                    Text(branch.title)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(researchBranch == branch ? EchoTheme.cyan : EchoTheme.muted)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 36)
-                        .background(researchBranch == branch ? tint.opacity(0.14) : EchoTheme.panel.opacity(0.55), in: Capsule())
-                        .overlay(Capsule().stroke(researchBranch == branch ? EchoTheme.cyan : Color.white.opacity(0.08), lineWidth: 1))
+                    VStack(spacing: 1) {
+                        Text(branch.title)
+                            .font(.system(size: 11, weight: .bold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                        Text("\(studied)/\(kinds.count)")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .opacity(0.78)
+                    }
+                    .foregroundStyle(researchBranch == branch ? tint : EchoTheme.muted)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 42)
+                    .background(researchBranch == branch ? tint.opacity(0.14) : EchoTheme.panel.opacity(0.55), in: Capsule())
+                    .overlay(Capsule().stroke(researchBranch == branch ? tint : Color.white.opacity(0.08), lineWidth: 1))
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("\(branch.title), \(Copy.format("lab.branch.progress", studied, kinds.count))")
             }
         }
     }

@@ -5,9 +5,11 @@ import SwiftUI
 struct ResearchTreeLayout {
     let kinds: [UpgradeKind]
     let depths: [UpgradeKind: Int]
+    let rowSpacing: CGFloat
 
-    init(kinds: [UpgradeKind]) {
+    init(kinds: [UpgradeKind], rowSpacing: CGFloat = 126) {
         self.kinds = kinds
+        self.rowSpacing = rowSpacing
         var computed: [UpgradeKind: Int] = [:]
         var rowCounts: [Int: Int] = [:]
         let branchKinds = Set(kinds)
@@ -33,7 +35,7 @@ struct ResearchTreeLayout {
         depths = computed
     }
 
-    var height: CGFloat { CGFloat((depths.values.max() ?? 0) + 1) * 126 + 24 }
+    var height: CGFloat { CGFloat(depths.values.max() ?? 0) * rowSpacing + 150 }
 
     func point(for kind: UpgradeKind, width: CGFloat) -> CGPoint {
         let row = depths[kind] ?? 0
@@ -41,8 +43,38 @@ struct ResearchTreeLayout {
         let index = rowKinds.firstIndex(of: kind) ?? 0
         return CGPoint(
             x: width * CGFloat(index + 1) / CGFloat(rowKinds.count + 1),
-            y: CGFloat(row) * 126 + 60
+            y: CGFloat(row) * rowSpacing + 60
         )
+    }
+
+    /// A long dependency takes an outer lane so it does not run through
+    /// the cards on the intervening row.
+    func path(from parent: UpgradeKind, to child: UpgradeKind, width: CGFloat) -> Path {
+        let source = point(for: parent, width: width)
+        let destination = point(for: child, width: width)
+        let start = CGPoint(x: source.x, y: source.y + 47)
+        let end = CGPoint(x: destination.x, y: destination.y - 47)
+        var path = Path()
+        path.move(to: start)
+
+        if (depths[child] ?? 0) - (depths[parent] ?? 0) > 1 {
+            let lane = destination.x >= width / 2 ? width - 20 : 20.0
+            let entry = CGPoint(x: lane, y: source.y + 65)
+            let exit = CGPoint(x: lane, y: destination.y - 65)
+            path.addCurve(to: entry,
+                control1: CGPoint(x: source.x, y: entry.y),
+                control2: CGPoint(x: lane, y: entry.y))
+            path.addLine(to: exit)
+            path.addCurve(to: end,
+                control1: CGPoint(x: lane, y: exit.y),
+                control2: CGPoint(x: destination.x, y: exit.y))
+        } else {
+            let middle = (source.y + destination.y) / 2
+            path.addCurve(to: end,
+                control1: CGPoint(x: source.x, y: middle),
+                control2: CGPoint(x: destination.x, y: middle))
+        }
+        return path
     }
 }
 
@@ -58,26 +90,36 @@ extension ShopView {
         }
     }
 
-    var researchRoute: some View {
+    func researchRoute(rowSpacing: CGFloat) -> some View {
         let kinds = researchOrder(for: researchBranch)
-        let layout = ResearchTreeLayout(kinds: kinds)
+        let layout = ResearchTreeLayout(kinds: kinds, rowSpacing: rowSpacing)
         let tint = color(researchBranch.tint)
         return GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
                 Canvas { context, size in
                     for target in kinds {
                         for requirement in target.prerequisites where requirement.kind.branch == researchBranch {
-                            let source = layout.point(for: requirement.kind, width: size.width)
-                            let destination = layout.point(for: target, width: size.width)
-                            var path = Path()
-                            path.move(to: CGPoint(x: source.x, y: source.y + 43))
-                            path.addCurve(
-                                to: CGPoint(x: destination.x, y: destination.y - 43),
-                                control1: CGPoint(x: source.x, y: (source.y + destination.y) / 2),
-                                control2: CGPoint(x: destination.x, y: (source.y + destination.y) / 2)
-                            )
+                            let path = layout.path(from: requirement.kind, to: target, width: size.width)
                             let met = model.progress.upgradeLevel(requirement.kind) >= requirement.level
-                            context.stroke(path, with: .color(met ? tint.opacity(0.88) : EchoTheme.muted.opacity(0.45)), style: StrokeStyle(lineWidth: met ? 2 : 1.2, lineCap: .round, dash: met ? [] : [4, 4]))
+                            let focused = target == selectedResearch || requirement.kind == selectedResearch
+                            let edgeColor = met ? tint : EchoTheme.muted
+                            context.stroke(
+                                path,
+                                with: .color(edgeColor.opacity(focused ? 0.95 : met ? 0.43 : 0.28)),
+                                style: StrokeStyle(
+                                    lineWidth: focused ? 2.5 : met ? 1.5 : 1,
+                                    lineCap: .round,
+                                    lineJoin: .round,
+                                    dash: met ? [] : [4, 5]
+                                )
+                            )
+                            if focused {
+                                let endpoint = layout.point(for: target, width: size.width)
+                                context.fill(
+                                    Path(ellipseIn: CGRect(x: endpoint.x - 3, y: endpoint.y - 50, width: 6, height: 6)),
+                                    with: .color(edgeColor)
+                                )
+                            }
                         }
                     }
                 }
@@ -131,8 +173,16 @@ extension ShopView {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 94)
-            .background(EchoTheme.panel.opacity(selected ? 0.90 : 0.72), in: RoundedRectangle(cornerRadius: 16))
+            .background(
+                LinearGradient(
+                    colors: [tint.opacity(selected ? 0.20 : level > 0 ? 0.10 : 0.04), EchoTheme.panel.opacity(0.86)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                in: RoundedRectangle(cornerRadius: 16)
+            )
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(selected ? EchoTheme.cyan : tint.opacity(available ? 0.28 : 0.10), lineWidth: selected ? 1.6 : 1))
+            .shadow(color: selected ? tint.opacity(0.20) : .clear, radius: 10)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Copy.format("lab.node.a11y", kind.title, level, kind.maxLevel))
@@ -166,19 +216,32 @@ extension ShopView {
             Text(kind.detail)
                 .font(.system(size: 11))
                 .foregroundStyle(EchoTheme.muted)
-                .lineLimit(2)
-            HStack(alignment: .center, spacing: 7) {
-                Text(kind.effect(atRank: level, progress: model.progress))
-                    .foregroundStyle(.white.opacity(0.75))
+                .fixedSize(horizontal: false, vertical: true)
+            VStack(alignment: .leading, spacing: 7) {
+                HStack(alignment: .top, spacing: 8) {
+                    Text(Copy.text("lab.card.current"))
+                        .foregroundStyle(EchoTheme.muted)
+                        .frame(width: 68, alignment: .leading)
+                    Text(kind.effect(atRank: level, progress: model.progress))
+                        .foregroundStyle(.white.opacity(0.88))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 if level < kind.maxLevel {
-                    Image(systemName: "arrow.right").foregroundStyle(EchoTheme.cyan)
-                    Text(kind.effect(atRank: level + 1, progress: model.progress))
-                        .foregroundStyle(EchoTheme.cyan)
+                    Rectangle().fill(Color.white.opacity(0.07)).frame(height: 1)
+                    HStack(alignment: .top, spacing: 8) {
+                        Text(Copy.text("lab.card.next"))
+                            .foregroundStyle(EchoTheme.muted)
+                            .frame(width: 68, alignment: .leading)
+                        Text(kind.effect(atRank: level + 1, progress: model.progress))
+                            .foregroundStyle(EchoTheme.cyan)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
             }
-            .font(.system(size: 11, weight: .semibold, design: .rounded))
+            .font(.system(size: 10, weight: .semibold, design: .rounded))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .fixedSize(horizontal: false, vertical: true)
+            .padding(9)
+            .background(tint.opacity(0.08), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
 
             if !kind.prerequisites.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -188,7 +251,13 @@ extension ShopView {
                             Button {
                                 jumpToResearch(requirement.kind)
                             } label: {
-                                Label("\(requirement.kind.title) \(requirement.level)", systemImage: met ? "checkmark" : "arrow.up.right")
+                                HStack(spacing: 5) {
+                                    Circle()
+                                        .fill(color(requirement.kind.branch.tint))
+                                        .frame(width: 5, height: 5)
+                                    Text("\(requirement.kind.title) \(requirement.level)")
+                                    Image(systemName: met ? "checkmark" : "arrow.up.right")
+                                }
                                     .font(.system(size: 10, weight: .semibold))
                                     .foregroundStyle(met ? EchoTheme.cyan : EchoTheme.gold)
                                     .padding(.horizontal, 9)

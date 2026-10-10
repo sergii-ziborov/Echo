@@ -13,6 +13,8 @@ Classic leaderboards, integer score, high to low, best score kept.
 
 The localized names are intentionally short so Game Center's narrow ranked card keeps each title on one line. The identifiers and scoring rules stay the same.
 
+Leaderboard artwork is in [`leaderboards/iphone.jpg`](leaderboards/iphone.jpg) and [`leaderboards/watch.jpg`](leaderboards/watch.jpg). Upload the matching 1024 × 1024 RGB image to **both English (U.S.) and Russian localizations** of each leaderboard. The same art appears in the app's Records screen. The iPhone image shows the route and its seals; the Watch image shows the chronometer. Keep the two images distinct at small Game Center card sizes.
+
 The iPhone rating is Route Seals × 100 + best Deep Time depth × 250 + completed passes × 1000. The Apple Watch rating is cleared rooms × 100 + 10 per second of best times under par. Both are sent from the iPhone when they change.
 
 ## Achievements
