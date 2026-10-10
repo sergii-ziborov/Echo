@@ -56,13 +56,15 @@ The Duo set contains `duo-outer-loadout.png`, `duo-outer-research.png`, `duo-inn
 
 The English (U.S.) App Store version has 10 screenshots in each large iPhone group, 6 for iPad, 4 for Duo and 4 for Apple Watch. The Russian product page uses the same image set. Game Center's localized leaderboard names are **iPhone** and **Apple Watch** in English and Russian; keep them short so the ranked card does not wrap.
 
+The Product Page Information → Header and Search Results tab uses two language-neutral creative assets in both localizations. The [creative artwork manifest](app-store/creative/README.md) records the source, final sizes and App Store Connect asset IDs. These are key art alongside the separate device screenshots. Check Apple's iPhone and iPad previews before resubmitting the version.
+
 The iOS and Watch icons are included in the uploaded build's asset catalog and appear under **Included Assets** after a build is associated with version 1.0.0. The generic thumbnail in Xcode Cloud's navigation is a separate App Store Connect display state.
 
 ## Product page copy and search terms
 
 The current English (U.S.) and Russian names, subtitles, promotional text, descriptions and keywords are in [the listing source](app-store/LISTING.md). Keep both App Store Connect localizations aligned with that file. The copy describes the 36 Watch rooms, optional Game Center, the iPad layout, and the current Lab economy; older copy describing twelve Watch rooms is obsolete.
 
-- Primary category: Games / Puzzle; secondary category: Action.
+- Primary category: Games, with Puzzle and Action as its two game subcategories.
 - Support URL: `https://github.com/sergii-ziborov/Echo#support`.
 - Privacy Policy URL: `https://github.com/sergii-ziborov/Echo/blob/main/PRIVACY.md`.
 - Copyright: © 2026 Sergii Ziborov.

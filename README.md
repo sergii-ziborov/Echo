@@ -52,7 +52,7 @@ On iPad, Home uses a dashboard and the Atlas keeps its route and selected map si
 
 </details>
 
-The complete screenshot sets are in [iPhone 6.9-inch](docs/app-store/iphone), [iPhone 6.5-inch](docs/app-store/iphone65), [iPad](docs/app-store/ipad), [iPhone Duo](docs/app-store/duo), and [Apple Watch](docs/app-store/watch).
+The complete screenshot sets are in [iPhone 6.9-inch](docs/app-store/iphone), [iPhone 6.5-inch](docs/app-store/iphone65), [iPad](docs/app-store/ipad), [iPhone Duo](docs/app-store/duo), and [Apple Watch](docs/app-store/watch). The [App Store header and search artwork](docs/app-store/creative/README.md) is kept beside those captures.
 
 See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store listing copy](docs/app-store/LISTING.md), [release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
 
