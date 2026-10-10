@@ -5,7 +5,6 @@ struct RootView: View {
 #if DEBUG
     static var testLaunchArguments: [String] = []
 #endif
-
     var shotArguments: [String] {
 #if DEBUG
         if !Self.testLaunchArguments.isEmpty { return Self.testLaunchArguments }
@@ -21,7 +20,10 @@ struct RootView: View {
     var body: some View {
         ZStack {
 #if DEBUG
-            if shotArguments.contains("-shot-pause") {
+            if shotArguments.contains("-shot-archive-find") {
+                ScreenBackground()
+                ArchiveRecoveryView(finds: ["wiki.story.break", "wiki.story.philosophy", "wiki.story.science"].compactMap(ArchiveDiscovery.item), onRead: { _ in }, onContinue: {})
+            } else if shotArguments.contains("-shot-pause") {
                 ScreenBackground()
                 PauseView(levelName: Self.shotLevelTitle, rewindCharges: 2, onResume: {}, onRestart: {}, onShop: {}, onSettings: {}, onMenu: {})
             } else if shotArguments.contains("-shot-death") {
@@ -50,6 +52,12 @@ struct RootView: View {
 #else
             screenContent
 #endif
+            if model.screen == .home, !model.progress.pendingArchiveDiscoveries.isEmpty {
+                ArchiveRecoveryView(finds: model.progress.pendingArchiveDiscoveries, onRead: model.readDiscovery) {
+                    model.progress.acknowledgeArchiveDiscoveries(model.progress.pendingArchiveDiscoveries)
+                    model.audio.play(.select)
+                }
+            }
         }
         .animation(.easeInOut(duration: 0.28), value: screenKey)
         .onAppear { model.appear() }
@@ -67,7 +75,7 @@ struct RootView: View {
         case .daily:
             DailyChallengeView()
         case .wiki:
-            WikiView()
+            WikiView(section: model.archiveFocus?.section ?? .launch, focusID: model.archiveFocus?.id)
         case .tutorial(let thenPlay):
             TutorialView {
                 model.finishTutorial(then: thenPlay)

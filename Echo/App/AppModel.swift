@@ -27,6 +27,7 @@ final class AppModel {
     var screen: Screen = .splash
     var progress = ProgressStore()
     let audio = SoundPlayer()
+    var archiveFocus: ArchiveDiscovery?
 
     var continueLevel: LevelDefinition {
         progress.continueLevel()
@@ -54,8 +55,15 @@ final class AppModel {
             for key in ArrivalCard.Arrival.allKeys { _ = progress.markHint(key) }
         }
 #if DEBUG
+        if let flag = args.firstIndex(of: "-shot-language"), flag + 1 < args.count,
+           let language = AppLanguage(rawValue: args[flag + 1]) {
+            LanguagePreference.shared.selection = language
+        }
         if let flag = args.firstIndex(of: "-shot-progress"), flag + 1 < args.count, let count = Int(args[flag + 1]) {
             progress.debugShowcase(cleared: count)
+        }
+        if args.contains(where: { $0.hasPrefix("-shot-") }), !args.contains("-shot-archive-find") {
+            progress.acknowledgeArchiveDiscoveries(progress.pendingArchiveDiscoveries)
         }
 #endif
         if let flag = args.firstIndex(of: "-shot-level"), flag + 1 < args.count, let number = Int(args[flag + 1]),
@@ -191,6 +199,14 @@ final class AppModel {
     }
 
     func openWiki() {
+        audio.play(.select)
+        archiveFocus = nil
+        screen = .wiki
+    }
+
+    func readDiscovery(_ item: ArchiveDiscovery) {
+        progress.acknowledgeArchiveDiscoveries(progress.pendingArchiveDiscoveries)
+        archiveFocus = item
         audio.play(.select)
         screen = .wiki
     }

@@ -22,6 +22,8 @@ struct GameView: View {
     @State var scene: GameScene
     @State var overlay: InRunOverlay = .none
     @State var awardedPoints = 0
+    @State var archiveFinds: [ArchiveDiscovery] = []
+    @State var archiveFocus: ArchiveDiscovery?
     @State var arrival: ArrivalCard.Arrival?
     @State var hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
     @Environment(\.scenePhase) var scenePhase
@@ -203,6 +205,18 @@ struct GameView: View {
                     SettingsView(onBack: { overlay = .none })
                 }
 
+                if overlay == .archive {
+                    WikiView(section: archiveFocus?.section ?? .basics, focusID: archiveFocus?.id, onBack: { overlay = .none })
+                }
+
+                if case .won = session.phase, overlay == .none, !archiveFinds.isEmpty {
+                    ArchiveRecoveryView(finds: archiveFinds, onRead: { item in
+                        acknowledgeFinds()
+                        archiveFocus = item
+                        overlay = .archive
+                    }, onContinue: acknowledgeFinds)
+                }
+
                 if let hint {
                     EncounterCard(hint: hint) {
                         dismissHint()
@@ -231,6 +245,11 @@ struct GameView: View {
         }
         .ignoresSafeArea()
         .onDisappear { PhoneWatchLink.shared.detach(session: session) }
+        .onChange(of: LanguagePreference.shared.selection) {
+            // SpriteKit captions are nodes, so refresh them without restarting
+            // the simulation or changing this run's route and results.
+            scene.rebuild()
+        }
         .onAppear {
             session.configure(tuning: activeModel.progress.playerTuning)
             arrival = ArrivalCard.Arrival.first(for: request, level: session.level, seen: activeModel.progress.seenHints)

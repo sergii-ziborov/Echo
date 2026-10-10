@@ -193,6 +193,8 @@ struct SettingsView: View {
                         .foregroundStyle(EchoTheme.magenta)
                     Text(model.progress.difficulty.title)
                         .font(.system(size: 17, weight: .black, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                 }
 
                 Spacer()

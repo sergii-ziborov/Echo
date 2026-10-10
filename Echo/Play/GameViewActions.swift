@@ -108,6 +108,7 @@ extension GameView {
                     )
                 }
                 activeModel.audio.notify(.success)
+                archiveFinds = activeModel.progress.pendingArchiveDiscoveries
             }
         }
     }
@@ -115,6 +116,7 @@ extension GameView {
     func restart(playSound: Bool = true) {
         if playSound { activeModel.audio.play(.tap) }
         overlay = .none
+        archiveFinds = []
         session.restart()
         scene.rebuild()
     }
@@ -122,6 +124,7 @@ extension GameView {
     func paradoxRewind() {
         overlay = .none
         if session.paradoxRewind() {
+            _ = activeModel.progress.markHint("archive.rewind")
             activeModel.audio.play(.rewind)
             scene.rebuild()
         } else {
@@ -147,6 +150,12 @@ extension GameView {
         } else {
             activeModel.progress.refund(kind)
         }
+    }
+
+    func acknowledgeFinds() {
+        activeModel.progress.acknowledgeArchiveDiscoveries(archiveFinds)
+        archiveFinds = []
+        activeModel.audio.play(.select)
     }
 
     func offerHint(_ value: EncounterHint) {

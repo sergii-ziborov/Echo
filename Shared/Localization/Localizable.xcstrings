@@ -1735,6 +1735,382 @@
         }
       }
     },
+    "archive.find.collection": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recovered: %lld / %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Восстановлено: %lld / %lld"
+          }
+        }
+      }
+    },
+    "archive.find.continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжить"
+          }
+        }
+      }
+    },
+    "archive.find.count": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld new entry"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld new entries"
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld новые записи"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld новых записей"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld новая запись"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld новой записи"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "archive.find.eyebrow": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KEEPER ARCHIVE · RECOVERED"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "АРХИВ ХРАНИТЕЛЕЙ · ВОССТАНОВЛЕНО"
+          }
+        }
+      }
+    },
+    "archive.find.read": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read this recovered entry"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прочитать найденную запись"
+          }
+        }
+      }
+    },
+    "archive.find.reason.campaign": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The complete Fold Road was recovered."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вся Дорога Складок восстановлена."
+          }
+        }
+      }
+    },
+    "archive.find.reason.clear": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The %@ region is fully restored."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Регион «%@» полностью восстановлен."
+          }
+        }
+      }
+    },
+    "archive.find.reason.daily": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Daily Rift route was confirmed."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подтверждён маршрут ежедневного разлома."
+          }
+        }
+      }
+    },
+    "archive.find.reason.deep": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Signal entered Deep Time."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сигнал вошёл в Глубокое время."
+          }
+        }
+      }
+    },
+    "archive.find.reason.encounter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recovered from a phenomenon the Signal encountered."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Восстановлено по явлению, с которым встретился Сигнал."
+          }
+        }
+      }
+    },
+    "archive.find.reason.visit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A route was confirmed in %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В регионе «%@» подтверждён маршрут."
+          }
+        }
+      }
+    },
+    "archive.find.reason.watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Chronometer returned its first room record."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Хронометр вернул первую запись комнаты."
+          }
+        }
+      }
+    },
+    "archive.find.require.daily": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear a Daily Rift."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пройди ежедневный разлом."
+          }
+        }
+      }
+    },
+    "archive.find.require.deep": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin a Deep Time expedition."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начни экспедицию в Глубокое время."
+          }
+        }
+      }
+    },
+    "archive.find.require.encounter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meet this phenomenon on the Road to recover the field note."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Встреть это явление на Дороге, чтобы восстановить полевую заметку."
+          }
+        }
+      }
+    },
+    "archive.find.require.rewind": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use Paradox Rewind to recover this record."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Примени парадоксальный откат, чтобы восстановить запись."
+          }
+        }
+      }
+    },
+    "archive.find.require.visit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear a first map in %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пройди первую карту в регионе «%@»."
+          }
+        }
+      }
+    },
+    "archive.find.require.watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear a Chronometer room on Apple Watch."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пройди комнату Хронометра на Apple Watch."
+          }
+        }
+      }
+    },
+    "archive.find.saved": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved in the Keeper Archive. Read now, or come back after the run."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Находки сохранены в Архиве Хранителей. Можно прочитать сейчас или после забега."
+          }
+        }
+      }
+    },
+    "archive.find.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Road remembers."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дорога возвращает запись."
+          }
+        }
+      }
+    },
     "archive.header.subtitle": {
       "extractionState": "manual",
       "localizations": {
@@ -16347,6 +16723,23 @@
         }
       }
     },
+    "settings.language.auto": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Авто"
+          }
+        }
+      }
+    },
     "settings.language.detail": {
       "extractionState": "manual",
       "localizations": {
@@ -16360,6 +16753,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ · меняется в настройках iOS"
+          }
+        }
+      }
+    },
+    "settings.language.inApp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto follows the device. Choose a language here."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Авто следует языку устройства. Можно выбрать вручную."
           }
         }
       }
@@ -23066,6 +23476,91 @@
           "stringUnit": {
             "state": "translated",
             "value": "Опора, а не часы Вселенной"
+          }
+        }
+      }
+    },
+    "wiki.story.philosophy.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Keepers tried to preserve a living world. Their machine preserved the sequence instead. ECHO asks what happens when memory becomes an instruction—and what lets the Signal choose a new line. This is one reading of the story; the Road leaves room for yours."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Хранители хотели сохранить живой мир. Их машина сохранила порядок действий. ECHO спрашивает, что происходит, когда память становится приказом, и что позволяет Сигналу выбрать новую линию. Это одно прочтение истории; Дорога оставляет место для твоего."
+          }
+        }
+      }
+    },
+    "wiki.story.philosophy.eyebrow": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A READING OF THE ROAD"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ПРОЧТЕНИЕ ДОРОГИ"
+          }
+        }
+      }
+    },
+    "wiki.story.philosophy.fact1": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Echoes carry a route, not an intention."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эхо переносит маршрут, а не намерение."
+          }
+        }
+      }
+    },
+    "wiki.story.philosophy.fact2": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returning is another choice, not the same moment."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Возвращение — новый выбор, а не тот же момент."
+          }
+        }
+      }
+    },
+    "wiki.story.philosophy.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memory can become a path"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Память может стать путём"
           }
         }
       }

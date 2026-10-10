@@ -8,6 +8,7 @@ struct EchoApp: App {
         WindowGroup {
             RootView()
                 .environment(model)
+                .environment(\.locale, Copy.language())
                 .preferredColorScheme(.dark)
                 .statusBarHidden(false)
         }

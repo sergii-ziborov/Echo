@@ -9,6 +9,7 @@ struct WikiStoryContent: View {
 
     private static let entries: [(key: String, icon: String, tint: Color)] = [
         ("wiki.story.break", "bolt.horizontal.circle.fill", EchoTheme.magenta),
+        ("wiki.story.philosophy", "sparkle", EchoTheme.gold),
         ("wiki.story.signal", "circle.circle.fill", EchoTheme.cyan),
         ("wiki.story.lighthouse", "light.beacon.max.fill", EchoTheme.gold),
         ("wiki.story.road", "point.3.connected.trianglepath.dotted", EchoTheme.cyan),
@@ -21,9 +22,17 @@ struct WikiStoryContent: View {
     var body: some View {
         VStack(spacing: 12) {
             ForEach(Self.entries, id: \.key) { entry in
-                WikiEntryCard(entry: WikiEntry(entry.key, icon: entry.icon, tint: entry.tint))
+                  if let item = ArchiveDiscovery.item(entry.key), !item.requirement.met(in: model.progress) {
+                    ArchiveSealedCard(item: item).id(entry.key)
+                  } else {
+                    WikiEntryCard(entry: WikiEntry(entry.key, icon: entry.icon, tint: entry.tint)).id(entry.key)
+                }
             }
-            WikiScienceCard()
+            if let item = ArchiveDiscovery.item("wiki.story.science"), !item.requirement.met(in: model.progress) {
+                ArchiveSealedCard(item: item).id(item.id)
+            } else {
+                WikiScienceCard().id("wiki.story.science")
+            }
             records
         }
     }
@@ -42,6 +51,7 @@ struct WikiStoryContent: View {
             }
             ForEach(StoryRecord.allCases) { record in
                 StoryRecordRow(record: record, recovered: record.isRecovered(in: model.progress))
+                    .id("story.\(record.rawValue)")
             }
         }
         .padding(15)
@@ -103,7 +113,7 @@ private struct StoryRecordRow: View {
                         .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.white.opacity(0.75))
                         .fixedSize(horizontal: false, vertical: true)
-                } else {
+                  } else {
                     // The ending's title stays sealed so the Archive never spoils it.
                     Text(record.isEnding ? Copy.text("wiki.records.sealed") : Copy.text("story.\(record.rawValue).title"))
                         .font(.system(size: 13, weight: .bold, design: .rounded))
@@ -156,9 +166,13 @@ private struct WikiScienceCard: View {
 /// Every region: where it is, what its name means, and where the fiction
 /// parts with science.
 struct WikiRegionsContent: View {
+    @Environment(AppModel.self) private var model
     var body: some View {
         VStack(spacing: 12) {
             ForEach(Act.allCases, id: \.rawValue) { act in
+                if let item = ArchiveDiscovery.item("region.\(act.key)"), !item.requirement.met(in: model.progress) {
+                ArchiveSealedCard(item: item).id(item.id)
+                } else {
                 let levels = LevelCatalog.playable.filter { act.range.contains($0.number) }
                 VStack(alignment: .leading, spacing: 11) {
                     HStack {
@@ -201,6 +215,8 @@ struct WikiRegionsContent: View {
                 .padding(15)
                 .background(EchoTheme.panel.opacity(0.94), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(act.wikiColor.opacity(0.17), lineWidth: 1))
+                .id("region.\(act.key)")
+                }
             }
         }
     }

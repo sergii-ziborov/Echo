@@ -4,11 +4,11 @@ ECHO is a top-down route-planning survival puzzle for iPhone, iPad and Apple Wat
 
 > You don't cooperate with your past. You survive it.
 
-Seventy-seven maps sit in eleven seven-map regions of space, strung along one road through a broken galaxy. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later regions add moving debris, timed crystals, beams, fold faults, field wells, and a short Candy Timeline training pocket. The in-game Keeper Archive documents every rule. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio preferences.
+Seventy-seven maps sit in eleven seven-map regions of space, strung along one road through a broken galaxy. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later regions add moving debris, timed crystals, beams, fold faults, field wells, and a short Candy Timeline training pocket. The in-game Keeper Archive documents every rule. The Archive gradually recovers field notes, places and Keeper records as you encounter mechanics and restore regions. A single recovery card after a run names the finds and opens the right article. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio and language preferences.
 
 The App Store build is a **$1.99 one-time download**. No ads, accounts, or in-app purchases. Progress stays on the device.
 
-The game is in **English and Russian**. It follows the device language, and Settings → Language opens the system's per-app switch.
+The game is in **English and Russian**. It follows the device language by default. Settings → Language offers Auto, English and Русский, and changes visible text immediately.
 
 <p align="center">
   <img src="docs/app-store/iphone/play/01-gameplay.jpg" width="220" alt="A run in the Undertow near Ashcrown's remnant, with rocks, beams and sparks">
@@ -53,6 +53,19 @@ On iPad, Home uses a dashboard and the Atlas keeps its route and selected map si
 </details>
 
 The complete screenshot sets are in [iPhone 6.9-inch](docs/app-store/iphone), [iPhone 6.5-inch](docs/app-store/iphone65), [iPad](docs/app-store/ipad), [iPhone Duo](docs/app-store/duo), and [Apple Watch](docs/app-store/watch). The [App Store header and search artwork](docs/app-store/creative/README.md) is kept beside those captures.
+
+<p align="center">
+  <img src="docs/app-store/archive/archive-ru-phone.png" width="220" alt="New Keeper records recovered after restoring a region">
+  <img src="docs/app-store/archive/language-en-phone.png" width="220" alt="Auto, English and Russian language choices inside Echo">
+</p>
+
+New Archive and language screenshots for phone, both Duo displays and iPad are in [the collection captures](docs/app-store/archive/README.md).
+
+Explore the [ECHO website](https://echo-survive-your-past.serhiiright.chatgpt.site), its [world and philosophy](https://echo-survive-your-past.serhiiright.chatgpt.site/story/) and [field guide](https://echo-survive-your-past.serhiiright.chatgpt.site/guide/). The portable source and migration instructions are in [website/](website/README.md).
+
+<p align="center">
+  <img src="docs/website/website-desktop.png" width="660" alt="ECHO's public bilingual website: The road remembers">
+</p>
 
 See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store listing copy](docs/app-store/LISTING.md), [release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
 

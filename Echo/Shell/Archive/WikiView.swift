@@ -3,9 +3,13 @@ import SwiftUI
 struct WikiView: View {
     @Environment(AppModel.self) private var model
     @State var section: WikiSection
+    var focusID: String?
+    var onBack: (() -> Void)?
 
-    init(section: WikiSection = .launch) {
+    init(section: WikiSection = .launch, focusID: String? = nil, onBack: (() -> Void)? = nil) {
         _section = State(initialValue: section)
+        self.focusID = focusID
+        self.onBack = onBack
     }
 
     var body: some View {
@@ -15,14 +19,19 @@ struct WikiView: View {
             VStack(spacing: 0) {
                 header
 
-                ScrollView(showsIndicators: false) {
+                ScrollViewReader { reader in
+                    ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
                         archiveHeader
                         sectionPicker
                         sectionContent
-                    }
+                      }
                     .padding(.horizontal, 18)
                     .padding(.bottom, 34)
+                    .frame(maxWidth: 850)
+                    .frame(maxWidth: .infinity)
+                    }
+                    .onAppear { if let focusID { reader.scrollTo(focusID, anchor: .top) } }
                 }
             }
         }
@@ -33,7 +42,7 @@ struct WikiView: View {
         HStack(spacing: 11) {
             IconCircle(system: "chevron.left") {
                 model.audio.play(.tap)
-                model.goHome()
+                if let onBack { onBack() } else { model.goHome() }
             }
             .accessibilityLabel(Copy.text("archive.back"))
 
@@ -81,6 +90,9 @@ struct WikiView: View {
                     .font(.system(size: 12, weight: .medium, design: .rounded))
                     .foregroundStyle(Color.white.opacity(0.7))
                     .fixedSize(horizontal: false, vertical: true)
+                Text(Copy.format("archive.find.collection", ArchiveDiscovery.availableIDs(in: model.progress).count, ArchiveDiscovery.catalog.count))
+                    .font(.system(size: 9, weight: .bold, design: .rounded))
+                    .foregroundStyle(EchoTheme.gold)
             }
 
             Spacer(minLength: 0)
@@ -107,7 +119,7 @@ struct WikiView: View {
                     model.audio.play(.select)
                     withAnimation(.easeOut(duration: 0.2)) {
                         section = item
-                    }
+                      }
                 } label: {
                     VStack(spacing: 3) {
                         Image(systemName: item.icon)
@@ -117,7 +129,7 @@ struct WikiView: View {
                             .tracking(0.35)
                             .lineLimit(1)
                             .minimumScaleFactor(0.6)
-                    }
+                      }
                     .foregroundStyle(section == item ? EchoTheme.navyDeep : Color.white.opacity(0.68))
                     .frame(maxWidth: .infinity)
                     .frame(height: 47)
@@ -151,7 +163,11 @@ struct WikiView: View {
         case .basics, .threats, .abilities:
             VStack(spacing: 12) {
                 ForEach(section == .basics ? WikiEntry.guide : section == .threats ? WikiEntry.hazards : WikiEntry.skills) { entry in
-                    WikiEntryCard(entry: entry)
+                    if let item = ArchiveDiscovery.item(entry.id), !item.requirement.met(in: model.progress) {
+                        ArchiveSealedCard(item: item).id(entry.id)
+                      } else {
+                        WikiEntryCard(entry: entry).id(entry.id)
+                      }
                 }
             }
         }

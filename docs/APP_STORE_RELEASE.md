@@ -1,6 +1,6 @@
 # ECHO App Store release guide
 
-App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Version **1.0.0**, local project build **20**. The listing is not public yet.
+App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Version **1.0.0**, local project build **21**. The listing is not public yet.
 
 ## Price and product type
 
@@ -8,7 +8,7 @@ Intended sale: **$1.99 USD one-time iOS app**. No ads, no in-app purchases, no s
 
 ## TestFlight / Xcode Cloud
 
-`project.yml` and the generated Xcode project use marketing version **1.0.0** and local build **20**. Xcode Cloud numbers its own builds. `ci_scripts/ci_post_clone.sh` installs XcodeGen if needed and regenerates the project.
+`project.yml` and the generated Xcode project use marketing version **1.0.0** and local build **21**. Xcode Cloud numbers its own builds. `ci_scripts/ci_post_clone.sh` installs XcodeGen if needed and regenerates the project.
 
 After signing in to App Store Connect:
 
@@ -16,7 +16,7 @@ After signing in to App Store Connect:
 2. Use **Archive - iOS**, **App Store Connect** distribution, and **TestFlight Internal Testing**.
 3. Confirm that the latest processed build is available to the Keepers internal group.
 
-Suggested **What to Test**: on iPad, inspect the two-column Atlas and Home in portrait and landscape, then narrow the window to check the compact layout; change the two equipped abilities, inspect live research effects and cross-branch prerequisites, and buy a single charge; check the compact outer and side-by-side inner iPhone Duo layouts; region arrival cards and Deep Time; the Apple Watch app on its own and as a remote for a phone run.
+Suggested **What to Test**: use Settings → Language to switch between Auto, English and Русский; restore a region and open newly recovered Archive notes; on iPad, inspect the two-column Atlas and Home in portrait and landscape, then narrow the window to check the compact layout; change the two equipped abilities, inspect live research effects and cross-branch prerequisites, and buy a single charge; check the compact outer and side-by-side inner iPhone Duo layouts; region arrival cards and Deep Time; the Apple Watch app on its own and as a remote for a phone run.
 
 ## Prepared assets
 
@@ -52,7 +52,7 @@ The Lab captures show the simplified loadout, exact research dependencies, live 
 
 Run `scripts/capture_watch_shots.sh` for the four Watch screenshots. It uses the `Echo Shots Watch 46` simulator and an eight-second run capture so the gameplay image shows a live room. Watch screenshots retain the simulator clock because watchOS does not support status bar overrides.
 
-The Duo set contains `duo-outer-loadout.png`, `duo-outer-research.png`, `duo-inner-loadout.png` and `duo-inner-research.png`. They are rendered from the actual SwiftUI Lab at Apple's outer and inner display sizes by `LabCoverageTests.testDuoOuterAndInnerDisplayLayouts`. Xcode 27.0 on this Mac does not include a Duo simulator, so the test verifies layout at the exact viewports but does not replace a device or Duo simulator run. Recheck both displays when that simulator is installed.
+The Duo set contains `duo-outer-loadout.png`, `duo-outer-research.png`, `duo-inner-loadout.png` and `duo-inner-research.png`. They are rendered from the actual SwiftUI Lab at Apple's outer and inner display sizes by `LabCoverageTests.testDuoOuterAndInnerDisplayLayouts`. The archive, language and lore tests now also run on a fresh iPhone Duo simulator with iOS 27.1. Archive recovery and language settings captures at both display sizes are in `docs/app-store/archive/`.
 
 The English (U.S.) App Store version has 10 screenshots in each large iPhone group, 6 for iPad, 4 for Duo and 4 for Apple Watch. The Russian product page uses the same image set. Game Center's localized leaderboard names are **iPhone** and **Apple Watch** in English and Russian; keep them short so the ranked card does not wrap.
 
@@ -65,8 +65,9 @@ The iOS and Watch icons are included in the uploaded build's asset catalog and a
 The current English (U.S.) and Russian names, subtitles, promotional text, descriptions and keywords are in [the listing source](app-store/LISTING.md). Keep both App Store Connect localizations aligned with that file. The copy describes the 36 Watch rooms, optional Game Center, the iPad layout, and the current Lab economy; older copy describing twelve Watch rooms is obsolete.
 
 - Primary category: Games, with Puzzle and Action as its two game subcategories.
-- Support URL: `https://github.com/sergii-ziborov/Echo#support`.
-- Privacy Policy URL: `https://github.com/sergii-ziborov/Echo/blob/main/PRIVACY.md`.
+- Marketing URL: `https://echo-survive-your-past.serhiiright.chatgpt.site/` (Russian: `/ru/`).
+- Support URL: `https://echo-survive-your-past.serhiiright.chatgpt.site/support/` (Russian: `/ru/support/`).
+- Privacy Policy URL: `https://echo-survive-your-past.serhiiright.chatgpt.site/privacy/` (Russian: `/ru/privacy/`).
 - Copyright: © 2026 Sergii Ziborov.
 
 App Privacy answers: **no data collected**. Confirm against `PRIVACY.md` and the shipped binary before publishing.
@@ -76,9 +77,17 @@ App Review notes: no sign-in. Settings contains About, Terms, Privacy, Report a 
 ## Submission sequence
 
 1. Confirm the explicit App ID and the iOS app record. English (U.S.) primary language.
-2. Archive 1.0.0 (20) with a release Xcode (or let Xcode Cloud archive it), validate, and upload. Wait for processing.
+2. Archive 1.0.0 (21) with a release Xcode (or let Xcode Cloud archive it), validate, and upload. Wait for processing.
 3. Attach screenshots, listing copy, support and privacy URLs, age rating, and content rights. Export compliance: the app uses only exempt encryption (`ITSAppUsesNonExemptEncryption` is false).
 4. Choose **Paid** only after the Paid Apps Agreement is accepted. Set $1.99 and the intended countries.
 5. Review the product page and submit. “Prepare for Submission” is not a public release.
 
 Do not accept new Apple legal agreements or set a paid price without the account holder’s explicit decision.
+
+## Website (11 October 2026)
+
+The bilingual world, philosophy, field guide and legal website is public at https://echo-survive-your-past.serhiiright.chatgpt.site. App Store Connect English and Russian localizations now use its home, support and privacy URLs. Terms remain available on `/terms/` and `/ru/terms/`. Portable source and host migration instructions are in `website/README.md`; the site has no custom analytics or advertising.
+
+## Archive and language verification (11 October 2026)
+
+22 selected tests passed with zero failures on a fresh iPhone Duo / iOS 27.1 simulator: Archive recovery, save migration and reset, language persistence and live localization, story unlocks, and bilingual phone/Duo/iPad renderings. iOS and the embedded Watch app compile successfully. New UI captures are in `docs/app-store/archive/`; the public website preview is in `docs/website/`. App Review still requires the requested physical-device launch/gameplay recording before resubmission.

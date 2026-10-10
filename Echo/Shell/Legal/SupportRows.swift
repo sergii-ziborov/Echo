@@ -38,30 +38,36 @@ private struct SupportRowLabel: View {
     }
 }
 
-/// iOS keeps each app's language in its own Settings page; this row names
-/// the current one and opens that page.
+/// A language choice inside Echo. Automatic follows the system's app language.
 struct LanguageRow: View {
     @Environment(AppModel.self) private var model
-    @Environment(\.openURL) private var openURL
 
     var body: some View {
-        Button {
-            model.audio.play(.select)
-            if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
-        } label: {
+        VStack(spacing: 0) {
             SupportRowLabel(
                 icon: "globe",
                 tint: EchoTheme.gold,
                 title: Copy.text("settings.language"),
-                detail: Copy.format("settings.language.detail", Self.currentLanguage),
-                trailing: "arrow.up.forward.app"
+                detail: Copy.text("settings.language.inApp"),
+                trailing: "character.bubble"
             )
+            Picker(Copy.text("settings.language"), selection: Binding(
+                get: { LanguagePreference.shared.selection },
+                set: { LanguagePreference.shared.selection = $0; model.audio.play(.select) }
+            )) {
+                ForEach(AppLanguage.allCases) { language in
+                    Text(language.title).tag(language)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 14)
+            .padding(.bottom, 14)
+            .accessibilityIdentifier("settings.language.picker")
         }
-        .buttonStyle(PressStyle())
     }
 
     static var currentLanguage: String {
-        let code = Bundle.main.preferredLocalizations.first ?? "en"
+        let code = LanguagePreference.shared.selection.resolvedCode()
         return Locale(identifier: code).localizedString(forLanguageCode: code)?.capitalized ?? code
     }
 }

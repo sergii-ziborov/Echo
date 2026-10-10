@@ -1,4 +1,5 @@
 import XCTest
+import Observation
 @testable import Echo
 
 /// The catalog ships English and Russian: every line exists in both with the
@@ -7,6 +8,41 @@ import XCTest
 @MainActor
 final class LocalizationTests: XCTestCase {
     private static let languages = ["en", "ru"]
+
+    func testLanguageDefaultsToAutomaticAndKeepsTheExplicitChoice() throws {
+        let suite = "echo.language.tests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let preference = LanguagePreference(defaults: defaults)
+        XCTAssertEqual(preference.selection, .automatic)
+        XCTAssertEqual(preference.selection.resolvedCode(), Bundle.main.preferredLocalizations.first ?? "en")
+        preference.selection = .russian
+        XCTAssertEqual(LanguagePreference(defaults: defaults).selection, .russian)
+        preference.selection = .automatic
+        XCTAssertEqual(LanguagePreference(defaults: defaults).selection, .automatic)
+        defaults.set("obsolete-choice", forKey: LanguagePreference.key)
+        XCTAssertEqual(LanguagePreference(defaults: defaults).selection, .automatic)
+    }
+
+    func testInAppLanguageSwitchUpdatesCopyAndPluralRulesWithoutChangingExplicitBundles() throws {
+        let preference = LanguagePreference.shared
+        let previous = preference.selection
+        defer { preference.selection = previous }
+        preference.selection = .english
+        XCTAssertEqual(Copy.text("home.tagline"), "THE ROAD REMEMBERS. KEEP MOVING.")
+        let updated = expectation(description: "Visible copy observes the language choice")
+        withObservationTracking { _ = Copy.text("home.tagline") } onChange: { updated.fulfill() }
+        preference.selection = .russian
+        wait(for: [updated], timeout: 1)
+        XCTAssertEqual(Copy.text("home.tagline"), "ДОРОГА ПОМНИТ. ДВИГАЙСЯ ДАЛЬШЕ.")
+        XCTAssertEqual(Copy.format("lab.charges", 21), "21 заряд")
+        XCTAssertEqual(Copy.format("lab.charges", 5), "5 зарядов")
+        XCTAssertEqual(Copy.seconds(3.5), "3,5")
+        XCTAssertEqual(Copy.text("home.tagline", bundle: try bundle("en")), "THE ROAD REMEMBERS. KEEP MOVING.")
+        preference.selection = .english
+        XCTAssertEqual(Copy.format("lab.charges", 2), "2 charges")
+        XCTAssertEqual(Copy.seconds(3.5), "3.5")
+    }
 
     private func bundle(_ language: String) throws -> Bundle {
         let path = try XCTUnwrap(Bundle.main.path(forResource: language, ofType: "lproj"), "No \(language).lproj in the app")
@@ -119,6 +155,9 @@ final class LocalizationTests: XCTestCase {
 
     /// The Lab words its numbers from the tuning the run applies.
     func testResearchEffectsQuoteTheRunTuning() {
+        let previous = LanguagePreference.shared.selection
+        LanguagePreference.shared.selection = .english
+        defer { LanguagePreference.shared.selection = previous }
         XCTAssertEqual(UpgradeKind.velocity.effect(atRank: 0), "Base movement speed")
         XCTAssertEqual(UpgradeKind.velocity.effect(atRank: 7), "+28% movement speed")
         XCTAssertEqual(UpgradeKind.sparkSense.effect(atRank: 2), "+7 pickup radius")

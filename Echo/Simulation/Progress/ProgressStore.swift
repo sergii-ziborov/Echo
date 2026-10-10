@@ -28,6 +28,7 @@ final class ProgressStore {
     let wristKey = "echo.progress.wrist.v1"
     let wristTrailKey = "echo.settings.wristTrail.v1"
     let endlessKey = "echo.progress.endless.v1"
+    let archiveAnnouncementsKey = "echo.progress.archive.announced.v1"
 
     var starsByLevel: [String: LevelProgress]
     var shards: Int
@@ -50,6 +51,7 @@ final class ProgressStore {
     var wristTrailEnabled: Bool
     /// Deep Time: best depth, runs, and the run waiting to be resumed.
     var endless: EndlessRecord
+    var announcedArchiveIDs: Set<String>
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -111,7 +113,11 @@ final class ProgressStore {
         } else {
             endless = EndlessRecord()
         }
+        announcedArchiveIDs = Set(defaults.stringArray(forKey: archiveAnnouncementsKey) ?? [])
         sanitizeEquippedSkills()
+#if os(iOS)
+        seedArchiveCollectionIfNeeded()
+#endif
     }
 
     var difficulty: DifficultyProfile { DifficultyProfile(cycle: difficultyCycle) }
@@ -162,6 +168,7 @@ final class ProgressStore {
         if let data = try? JSONEncoder().encode(endless) {
             defaults.set(data, forKey: endlessKey)
         }
+        defaults.set(Array(announcedArchiveIDs), forKey: archiveAnnouncementsKey)
     }
 
     func progressKey(for id: String, cycle: Int? = nil) -> String {

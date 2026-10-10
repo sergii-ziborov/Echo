@@ -45,6 +45,12 @@ The Fold Road Atlas holds **77 maps in 11 seven-map regions**. Swipe between reg
 
 Deep Time is a separate expedition of generated arenas. Each depth is checked for a connected route before it is played; it is a static check, so layouts can recur.
 
-Progress is stored on the device. Settings changes sound volume, haptics and replay preferences, and **Language** opens the system's per-app language switch (English or Russian). **Reset progress** asks for confirmation and erases maps, difficulty, records, points, inventory and research while keeping sound and haptic preferences.
+Progress is stored on the device. Settings changes sound volume, haptics and replay preferences, and **Language** offers **Auto / English / Русский** inside Echo. Auto follows the device language by default; manual choices are saved and apply immediately. **Reset progress** asks for confirmation and erases maps, difficulty, records, points, inventory and research while keeping sound, haptic and language preferences.
 
 For a quick reminder inside the game, open the **Archive** from the home screen. The four-step Field Training tutorial is offered when you start a new timeline.
+
+## Recovering the Archive
+
+Core controls and ability/research descriptions are available immediately. Advanced field notes appear when you first meet their phenomenon; a region dossier opens after its first cleared map; Keeper records follow completed regions. The ending remains sealed until the campaign is finished. Philosophy and the first science dossier open after restoring the Lighthouse region.
+
+New entries are gathered into one recovery card after the run, or when returning home. Tap a find to read its exact article; from a result screen, Back returns to those results. Continue keeps the entries in the Archive for later. Notices are saved once per entry across difficulty passes; existing saves gain readable entries without a backlog of notices. Reset starts the collection again.

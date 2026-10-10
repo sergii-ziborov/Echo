@@ -22,10 +22,10 @@ Guide the Signal through a broken galaxy. Collect every spark and reach the exit
 • Dodge shattering asteroids, beams, timed gates, field wells and reality rifts. Rewind after a crash and face the discarded route as a paradox ghost.
 • Equip two abilities, refill one charge at a time, and grow a 24-node research tree with visible prerequisites and live effects.
 • Venture into Deep Time, an endless expedition of generated arenas, or return for a new Daily Rift.
-• Follow your progress in the Atlas and uncover the rules and story in the Keeper Archive.
+• Follow your progress in the Atlas and recover field notes, places and story fragments in the Keeper Archive as you play.
 • Play 36 Keeper Chronometer rooms on Apple Watch, earn rewards for the phone game, or steer an iPhone run from your wrist.
 
-ECHO is a single-player puzzle adventure for iPhone and iPad with an Apple Watch companion. The core game works offline. Game Center leaderboards and achievements are optional. Your progress stays on your device. No ads, in-app purchases or account are required.
+ECHO is a single-player puzzle adventure for iPhone and iPad with an Apple Watch companion. The core game works offline. Game Center leaderboards and achievements are optional. Your progress stays on your device. English and Russian are included, with automatic language selection and an in-game switch. No ads, in-app purchases or account are required.
 
 ## Russian
 
@@ -47,7 +47,7 @@ ECHO is a single-player puzzle adventure for iPhone and iPad with an Apple Watch
 • Уклоняйся от раскалывающихся астероидов, лучей, шлюзов, полевых ловушек и разрывов реальности. После гибели перемотай время и встреть отброшенный маршрут как призрачное эхо.
 • Выбери две способности, покупай заряды по одному и развивай Матрицу Сигнала из 24 исследований. Требования и эффекты улучшений видны заранее.
 • Исследуй бесконечное Глубокое время с новыми аренами или возвращайся к ежедневному разрыву.
-• Следи за прогрессом в Атласе и раскрывай правила и историю в Архиве Хранителей.
+• Следи за прогрессом в Атласе и собирай полевые заметки, досье регионов и фрагменты истории в Архиве Хранителей по мере прохождения.
 • Пройди 36 комнат Хронометра на Apple Watch, получай награды для игры на телефоне или управляй попыткой на iPhone с запястья.
 
-ECHO — одиночная головоломка для iPhone и iPad с приложением для Apple Watch. Основная игра работает без интернета. Рейтинги и достижения Game Center доступны по желанию. Прогресс хранится на устройстве. Без рекламы, встроенных покупок и обязательной учётной записи.
+ECHO — одиночная головоломка для iPhone и iPad с приложением для Apple Watch. Основная игра работает без интернета. Рейтинги и достижения Game Center доступны по желанию. Прогресс хранится на устройстве. Есть английский и русский: язык выбирается автоматически, а переключить его можно в настройках игры. Без рекламы, встроенных покупок и обязательной учётной записи.

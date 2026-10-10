@@ -1,0 +1,678 @@
+{
+  "region.confection.act": {
+    "en": "CONFECTION",
+    "ru": "СЛАСТИ"
+  },
+  "region.confection.arrival": {
+    "en": "This was a children's training profile. Its bright scenery survived the Break; its safety limits did not.",
+    "ru": "Это был детский учебный профиль. Яркое оформление пережило Разлад; ограничения безопасности — нет."
+  },
+  "region.confection.blurb": {
+    "en": "A children's training mode without its limits.",
+    "ru": "Детский учебный режим без ограничений."
+  },
+  "region.confection.meaning": {
+    "en": "A confection is a sweet thing made by hand. This timeline is a saved training mode, named by the Keepers' children and their teachers.",
+    "ru": "Сласти — сделанное руками сладкое украшение. Эта линия — сохранённый учебный режим, названный детьми Хранителей и их учителями."
+  },
+  "region.confection.name": {
+    "en": "Candy Timeline",
+    "ru": "Сахарная линия"
+  },
+  "region.confection.science": {
+    "en": "The candy mode makes you faster and widens the collection chain for a while. It is not another universe.",
+    "ru": "Сахарный режим на время ускоряет и расширяет окно цепочки сбора. Это не другая Вселенная."
+  },
+  "region.confection.trait1": {
+    "en": "CANDY",
+    "ru": "СЛАСТИ"
+  },
+  "region.confection.trait2": {
+    "en": "SPEED",
+    "ru": "СКОРОСТЬ"
+  },
+  "region.confection.trait3": {
+    "en": "RESONANCE",
+    "ru": "РЕЗОНАНС"
+  },
+  "region.debris.act": {
+    "en": "DEBRIS",
+    "ru": "ОБЛОМКИ"
+  },
+  "region.debris.arrival": {
+    "en": "Cinder survives here as debris and incomplete records. Recover what remains without joining its fragments.",
+    "ru": "От Синдера здесь остались обломки и неполные записи. Собери уцелевшее, не став частью осколков."
+  },
+  "region.debris.blurb": {
+    "en": "What is left of Cinder — still moving.",
+    "ru": "Всё, что осталось от Синдера, — и оно движется."
+  },
+  "region.debris.meaning": {
+    "en": "Hollow is the empty place where Cinder stood on the old charts; the Belt is what remains of it.",
+    "ru": "«Полый» — пустое место, где на старых картах был Синдер; пояс — то, что от него осталось."
+  },
+  "region.debris.name": {
+    "en": "Hollow Belt",
+    "ru": "Полый пояс"
+  },
+  "region.debris.science": {
+    "en": "Time does not tear planets apart. The materials, cracks and glowing cores here are simplified for play.",
+    "ru": "Время не разрушает планеты. Материалы, трещины и светящиеся ядра здесь упрощены ради игры."
+  },
+  "region.debris.trait1": {
+    "en": "ROCKS",
+    "ru": "КАМНИ"
+  },
+  "region.debris.trait2": {
+    "en": "PATROLS",
+    "ru": "ПАТРУЛИ"
+  },
+  "region.debris.trait3": {
+    "en": "MOLTEN",
+    "ru": "РАСПЛАВ"
+  },
+  "region.drift.act": {
+    "en": "DRIFT",
+    "ru": "ДРЕЙФ"
+  },
+  "region.drift.arrival": {
+    "en": "The gardens kept their routines after their keepers left. Their airlocks no longer agree on when to open.",
+    "ru": "Сады сохранили свои распорядки после ухода Хранителей. Их шлюзы больше не согласуют моменты открытия."
+  },
+  "region.drift.blurb": {
+    "en": "Greenhouse domes drifting on broken schedules.",
+    "ru": "Оранжереи, дрейфующие по сбитым расписаниям."
+  },
+  "region.drift.meaning": {
+    "en": "The orbital modules drift, and the rhythms of their controllers drift apart. The gardens were real greenhouses, not quantum plants.",
+    "ru": "Орбитальные модули дрейфуют, а ритмы их контроллеров расходятся. Сады были настоящими оранжереями, а не «квантовыми растениями»."
+  },
+  "region.drift.name": {
+    "en": "Drift Gardens",
+    "ru": "Дрейфующие сады"
+  },
+  "region.drift.science": {
+    "en": "Clocks that drift apart do not put plants in parallel universes. Every gate here simply keeps its own cycle.",
+    "ru": "Расходящиеся часы не переносят растения в параллельные вселенные. Каждый шлюз здесь просто работает по своему циклу."
+  },
+  "region.drift.trait1": {
+    "en": "GATES",
+    "ru": "ШЛЮЗЫ"
+  },
+  "region.drift.trait2": {
+    "en": "BONUSES",
+    "ru": "БОНУСЫ"
+  },
+  "region.drift.trait3": {
+    "en": "MIRE",
+    "ru": "ТОПЬ"
+  },
+  "region.eternity.act": {
+    "en": "ETERNITY",
+    "ru": "ВЕЧНОСТЬ"
+  },
+  "region.eternity.arrival": {
+    "en": "The Road returns to the Lighthouse. This is the same station, not the same moment: the Signal brings a record it did not have before.",
+    "ru": "Дорога возвращается к Маяку. Это та же станция, но не тот же момент: Сигнал несёт запись, которой здесь прежде не было."
+  },
+  "region.eternity.blurb": {
+    "en": "The Lighthouse again — at a new moment.",
+    "ru": "Снова Маяк — но в новый момент."
+  },
+  "region.eternity.meaning": {
+    "en": "Last Dawn is the final dawn of the Lighthouse's old mode; the first new transmission comes after it. Eternity is the name of the long-term archive, not endless energy.",
+    "ru": "Последний рассвет — финальный рассвет старого режима Маяка; после него идёт первая новая передача. Вечность — имя архива долговременного хранения, а не бесконечная энергия."
+  },
+  "region.eternity.name": {
+    "en": "Last Dawn",
+    "ru": "Последний рассвет"
+  },
+  "region.eternity.science": {
+    "en": "Returning to the first station does not close a loop in time. The next pass is a new pass with a new archive, not an undone victory.",
+    "ru": "Возвращение к первой станции не замыкает петлю времени. Следующий обход — новый проход с новым архивом, а не отменённая победа."
+  },
+  "region.eternity.trait1": {
+    "en": "EVERY HAZARD",
+    "ru": "ВСЁ СРАЗУ"
+  },
+  "region.eternity.trait2": {
+    "en": "ARCHIVE",
+    "ru": "АРХИВ"
+  },
+  "region.eternity.trait3": {
+    "en": "RETURN",
+    "ru": "ВОЗВРАТ"
+  },
+  "region.fracture.act": {
+    "en": "FRACTURE",
+    "ru": "РАЗЛОМ"
+  },
+  "region.fracture.arrival": {
+    "en": "Tessera's ice is split into narrow passages. A route through them must leave room for its own return.",
+    "ru": "Лёд Тессеры рассечён узкими проходами. Проложенный путь должен оставить место собственному возвращению."
+  },
+  "region.fracture.blurb": {
+    "en": "An ice moon split into narrow passages.",
+    "ru": "Ледяная луна, расколотая на узкие проходы."
+  },
+  "region.fracture.meaning": {
+    "en": "Tessera is the ice moon and the mosaic of plots the Keepers cut on it. The shelf is its jutting ice with docks and shafts; Fracture is the breaking of material and channels.",
+    "ru": "Тессера — ледяная луна и мозаика участков, на которые Хранители разбили её поверхность. Шельф — выступающий лёд с причалами и шахтами; Разлом — разрушение материала и каналов."
+  },
+  "region.fracture.name": {
+    "en": "Tessera Shelf",
+    "ru": "Шельф Тессеры"
+  },
+  "region.fracture.science": {
+    "en": "A crack in ice, a collision scar in the game and a quantum many-body scar are three different things.",
+    "ru": "Трещина во льду, шрам столкновения в игре и квантовый «шрам» многих тел — три разных понятия."
+  },
+  "region.fracture.trait1": {
+    "en": "NARROW LANES",
+    "ru": "ПРОХОДЫ"
+  },
+  "region.fracture.trait2": {
+    "en": "SCARS",
+    "ru": "ШРАМЫ"
+  },
+  "region.fracture.trait3": {
+    "en": "ROCKS",
+    "ru": "КАМНИ"
+  },
+  "region.gravity.act": {
+    "en": "GRAVITY",
+    "ru": "ТЯГОТЕНИЕ"
+  },
+  "region.gravity.arrival": {
+    "en": "Ashcrown's compact remnant hangs beyond the stations. On the arena, damaged field wells pull the Signal toward lethal cores.",
+    "ru": "За станциями виден компактный остаток Эшкрауна. На арене повреждённые полевые ловушки тянут Сигнал к опасным ядрам."
+  },
+  "region.gravity.blurb": {
+    "en": "Field wells near Ashcrown's compact remnant.",
+    "ru": "Полевые ловушки у остатка Эшкрауна."
+  },
+  "region.gravity.meaning": {
+    "en": "An undertow is a current you cannot see from the edge. The operators gave that name to the damaged transport fields near Ashcrown's remnant.",
+    "ru": "Обратное течение — поток, которого не видно с края. Так операторы назвали повреждённые транспортные поля у остатка Эшкрауна."
+  },
+  "region.gravity.name": {
+    "en": "The Undertow",
+    "ru": "Обратное течение"
+  },
+  "region.gravity.science": {
+    "en": "One compact remnant does not become a flock of black holes. The field wells in the arena are game fields with a limited reach.",
+    "ru": "Один компактный остаток не превращается в стаю чёрных дыр. Полевые ловушки на арене — игровые поля с ограниченным радиусом."
+  },
+  "region.gravity.trait1": {
+    "en": "PULL",
+    "ru": "ТЯГА"
+  },
+  "region.gravity.trait2": {
+    "en": "ORBITS",
+    "ru": "ОРБИТЫ"
+  },
+  "region.gravity.trait3": {
+    "en": "LETHAL CORE",
+    "ru": "ЯДРО"
+  },
+  "region.mirage.act": {
+    "en": "MIRAGE",
+    "ru": "МИРАЖ"
+  },
+  "region.mirage.arrival": {
+    "en": "Several images do not always mean several worlds. Here, a misleading view and a damaged transfer frame are different dangers.",
+    "ru": "Несколько изображений не всегда означают несколько миров. Здесь обманчивый вид и повреждённая привязка перехода — разные опасности."
+  },
+  "region.mirage.blurb": {
+    "en": "Where image, record and object disagree.",
+    "ru": "Где образ, запись и объект не совпадают."
+  },
+  "region.mirage.meaning": {
+    "en": "Glass is the operators' nickname for repeated, distorted images; the nebula is the visible cloud of gas and dust. Mirage sets image, record and object against each other.",
+    "ru": "Стекло — прозвище многократных искажённых изображений; туманность — видимое облако газа и пыли. Мираж противопоставляет образ, запись и объект."
+  },
+  "region.mirage.name": {
+    "en": "Glass Nebula",
+    "ru": "Стеклянная туманность"
+  },
+  "region.mirage.science": {
+    "en": "Gravitational lensing bends the paths of light, not the commands of your hand. Flipped steering comes from a transfer, not from the view.",
+    "ru": "Гравитационное линзирование искривляет пути света, а не команды руки. Инверсия управления возникает от перехода, а не от вида."
+  },
+  "region.mirage.trait1": {
+    "en": "MIRROR",
+    "ru": "ЗЕРКАЛО"
+  },
+  "region.mirage.trait2": {
+    "en": "PHASE",
+    "ru": "ФАЗА"
+  },
+  "region.mirage.trait3": {
+    "en": "FALSE ROUTES",
+    "ru": "ЛОЖНЫЕ ПУТИ"
+  },
+  "region.paradox.act": {
+    "en": "PARADOX",
+    "ru": "ПАРАДОКС"
+  },
+  "region.paradox.arrival": {
+    "en": "The Keepers tested their recovery systems here. The tests still repeat; the people who judged them do not answer.",
+    "ru": "Здесь Хранители испытывали системы восстановления. Испытания повторяются; те, кто оценивал их, больше не отвечают."
+  },
+  "region.paradox.blurb": {
+    "en": "Test chambers still running their old trials.",
+    "ru": "Испытательные камеры повторяют старые тесты."
+  },
+  "region.paradox.meaning": {
+    "en": "The Keepers proved their devices here by testing them. The paradox: accept change, yet always return to the confirmed state.",
+    "ru": "Здесь Хранители доказывали работоспособность устройств испытаниями. Парадокс: принимать изменения — и всегда возвращать подтверждённое состояние."
+  },
+  "region.paradox.name": {
+    "en": "Proving Grounds",
+    "ru": "Испытательные полигоны"
+  },
+  "region.paradox.science": {
+    "en": "A pulsar is a living, spinning stellar remnant — not a dead star that mysteriously keeps ticking.",
+    "ru": "Пульсар — действующий вращающийся остаток звезды, а не мёртвый объект, мистически продолжающий тикать."
+  },
+  "region.paradox.trait1": {
+    "en": "BEAMS",
+    "ru": "ЛУЧИ"
+  },
+  "region.paradox.trait2": {
+    "en": "GATES",
+    "ru": "ШЛЮЗЫ"
+  },
+  "region.paradox.trait3": {
+    "en": "FREEZE",
+    "ru": "УДЕРЖАНИЕ"
+  },
+  "region.rift.act": {
+    "en": "RIFT",
+    "ru": "РАЗРЫВ"
+  },
+  "region.rift.arrival": {
+    "en": "The Road's damaged connections still accept the Signal. The exit address and control orientation may no longer match the entrance.",
+    "ru": "Повреждённые соединения Дороги всё ещё принимают Сигнал. Адрес выхода и ориентация управления больше не обязаны соответствовать входу."
+  },
+  "region.rift.blurb": {
+    "en": "Damaged links that move the Signal elsewhere.",
+    "ru": "Повреждённые соединения уводят Сигнал в сторону."
+  },
+  "region.rift.meaning": {
+    "en": "A rift is where a channel's entrance and exit no longer agree. The Riftlands are the damaged nodes of one branch, not a lawless dimension.",
+    "ru": "Разрыв — место, где вход и выход канала больше не согласованы. Область разрывов — повреждённые узлы одной ветви, а не измерение без правил."
+  },
+  "region.rift.name": {
+    "en": "The Riftlands",
+    "ru": "Область разрывов"
+  },
+  "region.rift.science": {
+    "en": "A transfer moves the Signal, shifts the replay clock and flips steering for a while. It is not a full rewind or travel into the past.",
+    "ru": "Переход переносит Сигнал, сдвигает часы повтора и на время инвертирует управление. Это не полный откат и не путешествие в прошлое."
+  },
+  "region.rift.trait1": {
+    "en": "TRANSFER",
+    "ru": "ПЕРЕНОС"
+  },
+  "region.rift.trait2": {
+    "en": "FOLDS",
+    "ru": "СКЛАДКИ"
+  },
+  "region.rift.trait3": {
+    "en": "COMETS",
+    "ru": "КОМЕТЫ"
+  },
+  "region.singularity.act": {
+    "en": "SINGULARITY",
+    "ru": "СИНГУЛЯРНОСТЬ"
+  },
+  "region.singularity.arrival": {
+    "en": "The Road passes observation stations around dying Ashcrown. Their last stable readings have become commands they cannot stop obeying.",
+    "ru": "Дорога проходит через станции наблюдения умирающего Эшкрауна. Последние устойчивые показания стали командами, которым станции не могут перестать подчиняться."
+  },
+  "region.singularity.blurb": {
+    "en": "Observation stations around a dying star.",
+    "ru": "Станции наблюдения у умирающей звезды."
+  },
+  "region.singularity.meaning": {
+    "en": "Ashcrown was named for the ash-grey rim in the station's images; the corona is its outer glow. Singularity is where the old model stops working.",
+    "ru": "Эшкраун назвали за пепельный обод на снимках станции; корона — его внешнее свечение. Сингулярность — режим, где прежняя модель перестаёт работать."
+  },
+  "region.singularity.name": {
+    "en": "Ashcrown Corona",
+    "ru": "Корона Эшкрауна"
+  },
+  "region.singularity.science": {
+    "en": "A singularity is not an observed ball of infinite density, and the game does not simulate a stellar collapse.",
+    "ru": "Сингулярность — не наблюдаемый шарик бесконечной плотности, и игра не моделирует коллапс звезды."
+  },
+  "region.singularity.trait1": {
+    "en": "FLARES",
+    "ru": "ВСПЫШКИ"
+  },
+  "region.singularity.trait2": {
+    "en": "FIXED CORE",
+    "ru": "ЯДРО"
+  },
+  "region.singularity.trait3": {
+    "en": "EVERY HAZARD",
+    "ru": "ВСЁ СРАЗУ"
+  },
+  "region.trace.act": {
+    "en": "TRACE",
+    "ru": "СЛЕД"
+  },
+  "region.trace.arrival": {
+    "en": "The Lighthouse is dark, but its channels still record movement. Gather the state records and reopen the first route.",
+    "ru": "Маяк погас, но его каналы продолжают записывать движение. Собери опорные записи и открой первую линию."
+  },
+  "region.trace.blurb": {
+    "en": "The reference station where the Signal was lit.",
+    "ru": "Опорная станция, где зажгли Сигнал."
+  },
+  "region.trace.meaning": {
+    "en": "The station is named for its job: sending a reference signal. Trace is the first recorded path of the Signal.",
+    "ru": "Станция названа по назначению: она выдаёт опорный сигнал. След — первая записанная траектория Сигнала."
+  },
+  "region.trace.name": {
+    "en": "The Lighthouse",
+    "ru": "Маяк"
+  },
+  "region.trace.science": {
+    "en": "Network time is an agreement between clocks. The Lighthouse never held one time for the whole universe.",
+    "ru": "Время сети — соглашение между часами. Маяк никогда не держал единое время всей Вселенной."
+  },
+  "region.trace.trait1": {
+    "en": "ECHOES",
+    "ru": "ЭХО"
+  },
+  "region.trace.trait2": {
+    "en": "TIMED CRYSTALS",
+    "ru": "КРИСТАЛЛЫ"
+  },
+  "region.trace.trait3": {
+    "en": "MIRE",
+    "ru": "ТОПЬ"
+  },
+  "story.ashcrown.author": {
+    "en": "Nara, engineer",
+    "ru": "Нара, инженер"
+  },
+  "story.ashcrown.text": {
+    "en": "We were trying to keep the channels open, not to stop the star from dying.",
+    "ru": "Мы пытались сохранить каналы, а не остановить гибель звезды."
+  },
+  "story.ashcrown.title": {
+    "en": "Ashcrown",
+    "ru": "Эшкраун"
+  },
+  "story.break.author": {
+    "en": "Nara, engineer",
+    "ru": "Нара, инженер"
+  },
+  "story.break.text": {
+    "en": "The failed controller treated the last confirmed state as an instruction to restore it. Every correction demanded another correction.",
+    "ru": "Отказавший контроллер принял последнее подтверждённое состояние за команду к восстановлению. Каждое исправление требовало нового исправления."
+  },
+  "story.break.title": {
+    "en": "The Break",
+    "ru": "Разлад"
+  },
+  "story.cinder.author": {
+    "en": "Archive entry",
+    "ru": "Запись Архива"
+  },
+  "story.cinder.text": {
+    "en": "Cinder survived in the Archive as a world. On the Road, only its fragments answered.",
+    "ru": "В Архиве Синдер сохранился как мир. На Дороге отвечали только его обломки."
+  },
+  "story.cinder.title": {
+    "en": "Cinder",
+    "ru": "Синдер"
+  },
+  "story.final.author": {
+    "en": "Lighthouse log",
+    "ru": "Журнал Маяка"
+  },
+  "story.final.text": {
+    "en": "The first recovery pass is confirmed. The past remains in the Archive; it no longer has to command every next move.",
+    "ru": "Первый контур восстановления подтверждён. Прошлое осталось в Архиве; оно больше не обязано командовать каждым следующим движением."
+  },
+  "story.final.title": {
+    "en": "First pass confirmed",
+    "ru": "Первый контур подтверждён"
+  },
+  "story.gardens.author": {
+    "en": "Garden log",
+    "ru": "Журнал сада"
+  },
+  "story.gardens.text": {
+    "en": "The gardens kept watering after the last gardener left. Preserving a routine was not the same as preserving a life.",
+    "ru": "Сады продолжали полив после ухода последнего садовника. Сохранить распорядок — не то же самое, что сохранить жизнь."
+  },
+  "story.gardens.title": {
+    "en": "Routine",
+    "ru": "Распорядок"
+  },
+  "story.glass.author": {
+    "en": "Warden of the glass station",
+    "ru": "Смотритель стеклянной станции"
+  },
+  "story.glass.text": {
+    "en": "Two images. One source. Neither instrument had the right to call that two homes.",
+    "ru": "Два изображения. Один источник. Ни один прибор не имел права назвать это двумя домами."
+  },
+  "story.glass.title": {
+    "en": "Two images",
+    "ru": "Два изображения"
+  },
+  "story.lighthouse.author": {
+    "en": "Lighthouse log",
+    "ru": "Журнал Маяка"
+  },
+  "story.lighthouse.text": {
+    "en": "The Lighthouse did not command time. It helped distant stations compare their records.",
+    "ru": "Маяк не управлял временем. Он помогал далёким станциям сопоставлять записи."
+  },
+  "story.lighthouse.title": {
+    "en": "Reference",
+    "ru": "Опора"
+  },
+  "story.mika.author": {
+    "en": "Mika, training record",
+    "ru": "Мика, учебная запись"
+  },
+  "story.mika.text": {
+    "en": "I left a turn here. Not for me. For whoever comes next.",
+    "ru": "Здесь остался мой поворот. Не для меня. Для того, кто будет после."
+  },
+  "story.mika.title": {
+    "en": "A turn left behind",
+    "ru": "Оставленный поворот"
+  },
+  "story.next.author": {
+    "en": "Lighthouse log",
+    "ru": "Журнал Маяка"
+  },
+  "story.next.text": {
+    "en": "The next pass tests a deeper layer of the network. Your confirmed records remain.",
+    "ru": "Следующий обход проверяет более глубокий слой сети. Подтверждённые записи сохраняются."
+  },
+  "story.next.title": {
+    "en": "The next pass",
+    "ru": "Следующий обход"
+  },
+  "wiki.story.break.body": {
+    "en": "After the Break, the Keepers’ recovery network began replaying recorded movement. Follow the Fold Road through its damaged stations and carry new state records back to the Lighthouse.",
+    "ru": "После Разлада сеть восстановления Хранителей начала повторять записанное движение. Пройди по Дороге складок через повреждённые станции и верни Маяку новые опорные записи."
+  },
+  "wiki.story.break.eyebrow": {
+    "en": "THE BREAK",
+    "ru": "РАЗЛАД"
+  },
+  "wiki.story.break.fact1": {
+    "en": "Echoes replay your measured route, not your thoughts",
+    "ru": "Эхо повторяет измеренный маршрут, а не твои мысли"
+  },
+  "wiki.story.break.fact2": {
+    "en": "Time itself did not break — the network did",
+    "ru": "Сломалось не время, а сеть"
+  },
+  "wiki.story.break.title": {
+    "en": "Why the past returns",
+    "ru": "Почему прошлое возвращается"
+  },
+  "wiki.story.chronometer.body": {
+    "en": "Thirty-six compact rooms in three movements tune the Keeper Chronometer: calibration, regulation and certification. Their rewards support the main campaign; they are not required to finish it.",
+    "ru": "Тридцать шесть компактных комнат в трёх частях настраивают Хронометр Хранителей: калибровка, регулировка и сертификация. Их награды помогают основной кампании, но не требуются для её завершения."
+  },
+  "wiki.story.chronometer.eyebrow": {
+    "en": "KEEPER CHRONOMETER",
+    "ru": "ХРОНОМЕТР ХРАНИТЕЛЕЙ"
+  },
+  "wiki.story.chronometer.fact1": {
+    "en": "Rewards after 4, 8 and 12 rooms",
+    "ru": "Награды за 4, 8 и 12 комнат"
+  },
+  "wiki.story.chronometer.fact2": {
+    "en": "The watch can also steer a run on iPhone",
+    "ru": "Часы также могут управлять попыткой на iPhone"
+  },
+  "wiki.story.chronometer.title": {
+    "en": "The watch",
+    "ru": "Часы"
+  },
+  "wiki.story.daily.body": {
+    "en": "A daily diagnostic reopens a familiar route with a new spark layout. The daily reward is granted once for the current game day.",
+    "ru": "Ежедневная диагностика открывает знакомый маршрут с новой расстановкой искр. Дневная награда выдаётся один раз за текущий игровой день."
+  },
+  "wiki.story.daily.eyebrow": {
+    "en": "DAILY RIFT",
+    "ru": "ЕЖЕДНЕВНЫЙ РАЗРЫВ"
+  },
+  "wiki.story.daily.fact1": {
+    "en": "Same place, new sparks",
+    "ru": "То же место, новые искры"
+  },
+  "wiki.story.daily.fact2": {
+    "en": "Pays bonus points once a day",
+    "ru": "Бонусные очки — раз в день"
+  },
+  "wiki.story.daily.title": {
+    "en": "A familiar stop, re-laid",
+    "ru": "Знакомый узел, заново"
+  },
+  "wiki.story.deep.body": {
+    "en": "Explore uncharted configurations of the Road in a separate, procedurally generated expedition. Each clear leads deeper; layouts can recur.",
+    "ru": "Исследуй неразмеченные конфигурации Дороги в отдельной процедурной экспедиции. Каждый пройденный участок ведёт глубже; планировки могут повторяться."
+  },
+  "wiki.story.deep.eyebrow": {
+    "en": "BEYOND THE CHARTS",
+    "ru": "ЗА ПРЕДЕЛАМИ КАРТ"
+  },
+  "wiki.story.deep.fact1": {
+    "en": "A separate expedition, not part of the campaign",
+    "ru": "Отдельная экспедиция, не часть кампании"
+  },
+  "wiki.story.deep.fact2": {
+    "en": "Each depth borrows one region’s sky",
+    "ru": "Каждая глубина берёт небо одного из регионов"
+  },
+  "wiki.story.deep.title": {
+    "en": "Deep Time",
+    "ru": "Глубокое время"
+  },
+  "wiki.story.lighthouse.body": {
+    "en": "The Lighthouse did not command time. It helped distant stations compare their records. When the network failed, the reference went dark.",
+    "ru": "Маяк не управлял временем. Он помогал далёким станциям сопоставлять записи. Когда сеть отказала, опорный сигнал погас."
+  },
+  "wiki.story.lighthouse.eyebrow": {
+    "en": "THE LIGHTHOUSE",
+    "ru": "МАЯК"
+  },
+  "wiki.story.lighthouse.fact1": {
+    "en": "The Keepers built and ran the network",
+    "ru": "Хранители построили сеть и обслуживали её"
+  },
+  "wiki.story.lighthouse.fact2": {
+    "en": "The Lighthouse is where the Road begins — and returns",
+    "ru": "С Маяка Дорога начинается — и к нему возвращается"
+  },
+  "wiki.story.lighthouse.title": {
+    "en": "A reference, not the clock of the universe",
+    "ru": "Опора, а не часы Вселенной"
+  },
+  "wiki.story.rewind.body": {
+    "en": "Restores a recent local state. The discarded route leaves a temporary Paradox Ghost.",
+    "ru": "Восстанавливает недавнее локальное состояние. Отброшенный путь оставляет временного Парадоксального призрака."
+  },
+  "wiki.story.rewind.eyebrow": {
+    "en": "PARADOX REWIND",
+    "ru": "ПАРАДОКСАЛЬНЫЙ ОТКАТ"
+  },
+  "wiki.story.rewind.fact1": {
+    "en": "Replay only shows a route; it changes nothing",
+    "ru": "Повтор лишь показывает маршрут и ничего не меняет"
+  },
+  "wiki.story.rewind.fact2": {
+    "en": "Rewind depth depends on research and recorded history",
+    "ru": "Глубина отката зависит от исследований и записанной истории"
+  },
+  "wiki.story.rewind.title": {
+    "en": "Restoring a cell, not the universe",
+    "ru": "Восстановление ячейки, а не Вселенной"
+  },
+  "wiki.story.road.body": {
+    "en": "Every map is one node of the Fold Road. Each region lies in a different part of space, so its sky, walls and hazards change with it: gardens adrift, an ice moon, the remains of Cinder, the stations around dying Ashcrown.",
+    "ru": "Каждая карта — узел Дороги складок. Регионы лежат в разных частях космоса, поэтому вместе с ними меняются небо, стены и угрозы: дрейфующие сады, ледяная луна, остатки Синдера, станции у умирающего Эшкрауна."
+  },
+  "wiki.story.road.eyebrow": {
+    "en": "THE FOLD ROAD",
+    "ru": "ДОРОГА СКЛАДОК"
+  },
+  "wiki.story.road.fact1": {
+    "en": "11 regions · 77 maps",
+    "ru": "11 регионов · 77 карт"
+  },
+  "wiki.story.road.fact2": {
+    "en": "Each region keeps one sky, getting closer as you cross it",
+    "ru": "У каждого региона своё небо — ближе с каждой картой"
+  },
+  "wiki.story.road.title": {
+    "en": "Why the sky changes",
+    "ru": "Почему меняется небо"
+  },
+  "wiki.story.science.body": {
+    "en": "ECHO is science fiction inspired by research on memory in open systems, information, error correction and relativity. The Keepers’ technologies are fictional; their names are not claims that these capabilities exist.",
+    "ru": "ECHO — научная фантастика, вдохновлённая исследованиями памяти открытых систем, информации, коррекции ошибок и теории относительности. Технологии Хранителей вымышлены; их названия не означают, что такие возможности существуют."
+  },
+  "wiki.story.science.eyebrow": {
+    "en": "SCIENCE NOTES",
+    "ru": "НАУЧНЫЕ ЗАМЕТКИ"
+  },
+  "wiki.story.science.title": {
+    "en": "What is real and what is ours",
+    "ru": "Что реально, а что придумано"
+  },
+  "wiki.story.signal.body": {
+    "en": "The Signal is a steerable carrier in the Keepers’ network, not a lone photon. It picks up sparks — the physical carriers of local state records — and delivers them to the exit.",
+    "ru": "Сигнал — управляемый носитель в сети Хранителей, а не одиночный фотон. Он собирает искры — физические носители локальных записей состояния — и доставляет их к выходу."
+  },
+  "wiki.story.signal.eyebrow": {
+    "en": "THE SIGNAL",
+    "ru": "СИГНАЛ"
+  },
+  "wiki.story.signal.fact1": {
+    "en": "Every spark is needed to open the exit",
+    "ru": "Для выхода нужны все искры"
+  },
+  "wiki.story.signal.fact2": {
+    "en": "The exit is a Fold Gate to the next node",
+    "ru": "Выход — переход Дороги к следующему узлу"
+  },
+  "wiki.story.signal.title": {
+    "en": "The carrier you steer",
+    "ru": "Носитель, которым ты управляешь"
+  }
+}
