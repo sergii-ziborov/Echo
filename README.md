@@ -4,7 +4,7 @@ ECHO is a top-down route-planning survival puzzle for iPhone, iPad and Apple Wat
 
 > You don't cooperate with your past. You survive it.
 
-Seventy-seven maps sit in eleven seven-map regions of space, strung along one road through a broken galaxy. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later regions add moving debris, timed crystals, beams, fold faults, field wells, and a short Candy Timeline training pocket. The in-game Keeper Archive documents every rule. The Archive gradually recovers field notes, places and Keeper records as you encounter mechanics and restore regions. A single recovery card after a run names the finds and opens the right article. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio and language preferences.
+Seventy-seven maps sit in eleven seven-map regions of space, strung along one road through a broken galaxy. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later regions add moving debris, timed crystals, beams, fold faults, field wells, and a short Candy Timeline training pocket. The in-game Keeper Archive documents every rule. The Archive gradually recovers field notes, places and Keeper records as you encounter mechanics and restore regions. A compact reward strip on the result screen opens numbered fragments with text excerpts, on demand. Encounters never interrupt play. The first route offers optional interactive practice. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio and language preferences.
 
 The App Store build is a **$1.99 one-time download**. No ads, accounts, or in-app purchases. Progress stays on the device.
 
@@ -13,7 +13,7 @@ The game is in **English and Russian**. It follows the device language by defaul
 <p align="center">
   <img src="docs/app-store/iphone/play/01-gameplay.jpg" width="220" alt="A run in the Undertow near Ashcrown's remnant, with rocks, beams and sparks">
   <img src="docs/app-store/iphone/menu/03-atlas.jpg" width="220" alt="Atlas: the Hollow Belt route under its broken world, the Signal looping round the selected stop">
-  <img src="docs/app-store/iphone/play/05-arrival.jpg" width="220" alt="Arrival card for the Riftlands">
+  <img src="docs/app-store/iphone/play/05-archive.jpg" width="220" alt="Numbered Keeper fragments recovered after a route">
   <br>
   <img src="docs/app-store/iphone/play/02-lasers.jpg" width="220" alt="Laser arena under Ashcrown">
   <img src="docs/app-store/iphone/play/04-deep-time.jpg" width="220" alt="Deep Time, the endless mode">
@@ -56,10 +56,11 @@ The complete screenshot sets are in [iPhone 6.9-inch](docs/app-store/iphone), [i
 
 <p align="center">
   <img src="docs/app-store/archive/archive-ru-phone.png" width="220" alt="New Keeper records recovered after restoring a region">
-  <img src="docs/app-store/archive/language-en-phone.png" width="220" alt="Auto, English and Russian language choices inside Echo">
+  <img src="docs/app-store/archive/practice-ru-duo-outer.png" width="220" alt="Optional interactive first route on the outer Duo screen">
+  <img src="docs/app-store/archive/results-finds-en-phone.png" width="220" alt="New fragments appear as an optional reward on the result screen">
 </p>
 
-New Archive and language screenshots for phone, both Duo displays and iPad are in [the collection captures](docs/app-store/archive/README.md).
+New Archive, practice, result and arena screenshots for phone, both Duo displays and iPad are in [the collection captures](docs/app-store/archive/README.md).
 
 Explore the [ECHO website](https://echo-survive-your-past.serhiiright.chatgpt.site), its [world and philosophy](https://echo-survive-your-past.serhiiright.chatgpt.site/story/) and [field guide](https://echo-survive-your-past.serhiiright.chatgpt.site/guide/). The portable source and migration instructions are in [website/](website/README.md).
 
@@ -89,7 +90,7 @@ Each act is one region along the Road. That is why the sky, the walls and the ha
 | CONFECTION | Candy Timeline | A children's training mode without its limits. |
 | ETERNITY | Last Dawn | The Lighthouse again — at a new moment. |
 
-Every map names its place on the Road and carries a one-line log that matches its hazards; both show in the Atlas and on the pause card, and the first map of each region opens with an arrival card. Clearing a region recovers a Keeper record in the Archive's **Story** page, with science notes that separate established physics from Keeper fiction. Clearing all 77 opens another, harder pass. Deep Time lies off the Road, the Daily Rift reopens one stop each day, and the watch is the Keepers' chronometer.
+Every map names its place on the Road and carries a one-line log that matches its hazards; both show in the Atlas and on the pause card, while region arrivals are recorded quietly without pausing play. Clearing a region recovers a Keeper record in the Archive's **Story** page, with science notes that separate established physics from Keeper fiction. Clearing all 77 opens another, harder pass. Deep Time lies off the Road, the Daily Rift reopens one stop each day, and the watch is the Keepers' chronometer.
 
 ## The loop
 
@@ -112,7 +113,7 @@ A crash can **Paradox Rewind** three seconds. The discarded branch replays once 
 - **Keeper Archive** — the in-game manual for controls, clocks, hazards, skills, research, regions and the recovered story.
 - **Ratings and Game Center** — two ratings on Home, one per device, each also a Game Center leaderboard, plus fifteen achievements for the Road, Deep Time, the Daily Rift, the chronometer rooms and the Signal Matrix (IDs and texts in [docs/app-store/GAME_CENTER.md](docs/app-store/GAME_CENTER.md)). Signing in is optional: the sheet only appears from the Game Center button on the Ratings screen. iPhone: Route Seals × 100, best Deep Time depth × 250, completed passes × 1000, with seals per region. Apple Watch: cleared rooms × 100 plus 10 for every second of a best time under par, with every room's best time.
 
-The first time you meet an echo, a rock, a rift, a gate, Freeze, Phase, or an echo collision, a short card explains it. The first time you reach a region, an arrival card says where the Signal has landed.
+New phenomena and region arrivals are recorded quietly. They never pause play or open help cards. At the end of an attempt, a compact Archive reward opens numbered fragments on request; unread finds are marked on Home. The first route offers a small optional practice arena, with a delayed echo and no charge cost.
 
 Behind every arena a distant sky moves slowly, and it tells you where you are. Each region has its own landmark that draws nearer as you cross it: the Lighthouse's ringed giant, the red sun over the gardens, cracked Tessera, the broken world of the Hollow Belt, a sweeping pulsar, collapsing Ashcrown, a tear across the sky, Ashcrown's compact remnant with its disc, mirrored giants, a candy world with its moon, and the light of Last Dawn rising at the edge. Around it drift a galaxy, twinkling stars, the odd meteor and a soft light that breathes and sweeps past. It all holds still when Reduce Motion is on.
 

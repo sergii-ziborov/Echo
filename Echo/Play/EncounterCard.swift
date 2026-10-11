@@ -54,4 +54,5 @@ enum InRunOverlay {
     case shop
     case settings
     case archive
+    case finds
 }

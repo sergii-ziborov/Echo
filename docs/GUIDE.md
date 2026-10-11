@@ -47,10 +47,10 @@ Deep Time is a separate expedition of generated arenas. Each depth is checked fo
 
 Progress is stored on the device. Settings changes sound volume, haptics and replay preferences, and **Language** offers **Auto / English / Русский** inside Echo. Auto follows the device language by default; manual choices are saved and apply immediately. **Reset progress** asks for confirmation and erases maps, difficulty, records, points, inventory and research while keeping sound, haptic and language preferences.
 
-For a quick reminder inside the game, open the **Archive** from the home screen. The four-step Field Training tutorial is offered when you start a new timeline.
+For a quick reminder inside the game, open the **Archive** from the home screen. On the first route, an optional interactive practice lets you move the Signal, gather three sparks and meet a delayed echo. You can start the game at any time; practice spends no charges.
 
 ## Recovering the Archive
 
 Core controls and ability/research descriptions are available immediately. Advanced field notes appear when you first meet their phenomenon; a region dossier opens after its first cleared map; Keeper records follow completed regions. The ending remains sealed until the campaign is finished. Philosophy and the first science dossier open after restoring the Lighthouse region.
 
-New entries are gathered into one recovery card after the run, or when returning home. Tap a find to read its exact article; from a result screen, Back returns to those results. Continue keeps the entries in the Archive for later. Notices are saved once per entry across difficulty passes; existing saves gain readable entries without a backlog of notices. Reset starts the collection again.
+A small fragment reward appears on the result screen after an attempt ends, including a crash. Tap it to inspect numbered fragments with excerpts, then open a fragment to read its full article. Back returns to the result. Encounters and region arrivals never pause play or open help cards, and Home never opens a collection modal automatically. Unread finds are marked on the Archive button. Finds remain saved across difficulty passes; existing saves gain readable entries without a backlog of notices. Reset starts the collection again.

@@ -47,7 +47,7 @@ final class AppModel {
     }
 
     func applyLaunchArgs(_ args: [String]) {
-        // Screenshot runs skip the region arrival cards unless asked for one.
+        // Legacy preview flags mark region visits; live runs record them quietly.
         if args.contains("-shot-arrival") {
             progress.seenHints.subtract(ArrivalCard.Arrival.allKeys)
             progress.persist()
@@ -200,7 +200,9 @@ final class AppModel {
 
     func openWiki() {
         audio.play(.select)
-        archiveFocus = nil
+        let unread = progress.pendingArchiveDiscoveries
+        archiveFocus = unread.first
+        progress.acknowledgeArchiveDiscoveries(unread)
         screen = .wiki
     }
 

@@ -9,7 +9,7 @@ struct RemoteLevel: Codable, Equatable, Sendable {
     var daily: Date?
     var cycle: Int
     var aspect: Double
-    /// What the phone HUD covers, so ability tokens move exactly as they do there.
+    /// Legacy framing for older phone recipes. New runs reserve interface space outside the arena.
     var bands: InterfaceBands?
     /// Set for Deep Time, whose arenas come from the run's seed and depth.
     var endless: EndlessKey?

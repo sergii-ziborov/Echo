@@ -132,6 +132,17 @@ struct HomeView: View {
             HomeRouteButton(title: Copy.text("home.route.archive"), systemImage: "books.vertical.fill", tint: EchoTheme.cyanBright) {
                 model.openWiki()
             }
+            .overlay(alignment: .topTrailing) {
+                let count = model.progress.pendingArchiveDiscoveries.count
+                if count > 0 {
+                    Text("+\(count)").font(.system(size: 9, weight: .black, design: .rounded))
+                        .foregroundStyle(EchoTheme.navyDeep)
+                        .padding(.horizontal, 6).padding(.vertical, 3)
+                        .background(EchoTheme.gold, in: Capsule())
+                        .offset(x: 3, y: -4)
+                        .allowsHitTesting(false)
+                }
+            }
         }
     }
 

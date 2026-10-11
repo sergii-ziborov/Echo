@@ -24,38 +24,49 @@ struct GameView: View {
     @State var awardedPoints = 0
     @State var archiveFinds: [ArchiveDiscovery] = []
     @State var archiveFocus: ArchiveDiscovery?
-    @State var arrival: ArrivalCard.Arrival?
-    @State var hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
     @Environment(\.scenePhase) var scenePhase
 
     init(
         request: PlayRequest,
         overlay: InRunOverlay = .none,
-        hint: EncounterHint? = ProcessInfo.processInfo.arguments.contains("-shot-hint") ? .echo : nil
+        viewport: CGSize? = nil
     ) {
         self.request = request
-        let bounds = UIScreen.main.bounds.size
-        var recipe = RemoteLevel(
+        let bounds = viewport ?? UIScreen.main.bounds.size
+        let recipe = RemoteLevel(
             id: request.levelID,
             daily: request.daily ? Date() : nil,
             cycle: request.difficultyCycle,
-            aspect: Double(bounds.height / max(bounds.width, 1)),
+            aspect: Double(Self.playfieldSize(in: bounds).height / max(bounds.width, 1)),
             endless: request.endless
         )
-        let fitted = recipe.fitted()
-        let bands = Self.interfaceBands(for: fitted, screen: bounds)
-        recipe.bands = bands
         remoteLevel = recipe
-        let level = fitted.keepingBonusesInView(bands)
+        let level = recipe.build()
         let session = GameSession(level: level, daily: request.daily)
         _session = State(initialValue: session)
-        _scene = State(initialValue: GameScene(session: session, size: bounds))
+        _scene = State(initialValue: GameScene(session: session, size: Self.arenaRect(for: level, screen: bounds).size))
         _overlay = State(initialValue: overlay)
-        _hint = State(initialValue: hint)
     }
 
     static func interfaceTopInset(_ insets: EdgeInsets) -> CGFloat {
         insets.top > 20 ? insets.top : 62
+    }
+
+    /// The complete arena fits between the interface strips. Reserving space
+    /// for temporary effects and banners keeps every spark, orbit, exit and
+    /// ability visible without relocating the authored route.
+    static func playfieldSize(in screen: CGSize, insets: EdgeInsets = EdgeInsets()) -> CGSize {
+        let top = interfaceTopInset(insets) + 4 + 36 + 7 + 28 + 14
+        let bottom = max(insets.bottom, 10) + 48 + 26 + 36 + 12
+        return CGSize(width: screen.width, height: max(1, screen.height - top - bottom))
+    }
+
+    static func arenaRect(for level: LevelDefinition, screen: CGSize, insets: EdgeInsets = EdgeInsets()) -> CGRect {
+        let space = playfieldSize(in: screen, insets: insets)
+        let scale = min(space.width / max(CGFloat(level.worldWidth), 1), space.height / max(CGFloat(level.worldHeight), 1))
+        let size = CGSize(width: CGFloat(level.worldWidth) * scale, height: CGFloat(level.worldHeight) * scale)
+        let top = interfaceTopInset(insets) + 4 + 36 + 7 + 28 + 14
+        return CGRect(x: (screen.width - size.width) / 2, y: top + (space.height - size.height) / 2, width: size.width, height: size.height)
     }
 
     /// The strips the HUD and the item bar cover, mirroring the layout in
@@ -84,12 +95,15 @@ struct GameView: View {
     var body: some View {
         GeometryReader { geo in
             let interfaceTopInset = Self.interfaceTopInset(geo.safeAreaInsets)
+            let arena = Self.arenaRect(for: session.level, screen: geo.size, insets: geo.safeAreaInsets)
 
             ZStack {
+                Color(uiColor: session.level.theme.sky.uiColor).ignoresSafeArea()
                 SpriteView(scene: scene, options: [.ignoresSiblingOrder])
-                    .ignoresSafeArea()
-                    .onAppear { scene.resize(to: geo.size) }
-                    .onChange(of: geo.size) { _, size in scene.resize(to: size) }
+                    .frame(width: arena.width, height: arena.height)
+                    .position(x: arena.midX, y: arena.midY)
+                    .onAppear { scene.resize(to: arena.size) }
+                    .onChange(of: arena.size) { _, size in scene.resize(to: size) }
 
                 VStack(spacing: 0) {
                     HUDBar(session: session) {
@@ -143,7 +157,7 @@ struct GameView: View {
                 .padding(.top, interfaceTopInset + 4)
                 .padding(.bottom, max(geo.safeAreaInsets.bottom, 10))
 
-                if case .paused = session.phase, overlay == .none, arrival == nil {
+                if case .paused = session.phase, overlay == .none {
                     PauseView(
                         levelName: session.level.title,
                         rewindCharges: session.sim.rewindCharges,
@@ -170,14 +184,16 @@ struct GameView: View {
                             && activeModel.progress.isCurrentDifficultyComplete,
                         nextDifficulty: DifficultyProfile(cycle: request.difficultyCycle + 1),
                         awardedPoints: awardedPoints,
-                        onWatch: { session.startBallet(result) },
-                        onRetry: { restart() },
-                        onNext: nextLevel,
+                        onWatch: { acknowledgeFinds(); session.startBallet(result) },
+                        onRetry: { acknowledgeFinds(); restart() },
+                        onNext: { acknowledgeFinds(); nextLevel() },
                         onNextCycle: session.level.number == LevelCatalog.playable.count
-                            ? { activeModel.startNextCycle() }
+                            ? { acknowledgeFinds(); activeModel.startNextCycle() }
                             : nil,
-                        onMenu: { activeModel.goHome() },
-                        nextTitle: request.endless.map { Copy.format("endless.depth", $0.depth + 1) } ?? Copy.text("button.next")
+                        onMenu: { acknowledgeFinds(); activeModel.goHome() },
+                        nextTitle: request.endless.map { Copy.format("endless.depth", $0.depth + 1) } ?? Copy.text("button.next"),
+                        archiveFinds: archiveFinds,
+                        onArchive: presentArchiveFinds
                     )
                 }
 
@@ -186,11 +202,13 @@ struct GameView: View {
                         cause: cause,
                         rewindCharges: session.sim.rewindCharges,
                         rewindSeconds: session.tuning.rewindSeconds,
-                        onRewind: paradoxRewind,
-                        onRestart: { request.endless == nil ? restart() : newEndlessRun() },
-                        onMenu: { leaveAfterCrash() },
+                        onRewind: { acknowledgeFinds(); paradoxRewind() },
+                        onRestart: { acknowledgeFinds(); request.endless == nil ? restart() : newEndlessRun() },
+                        onMenu: { acknowledgeFinds(); leaveAfterCrash() },
                         restartTitle: Copy.text(request.endless == nil ? "button.restartMap" : "button.newExpedition"),
-                        note: request.endless.map { Copy.format("play.endlessNote", $0.depth, activeModel.progress.endless.bestDepth) }
+                        note: request.endless.map { Copy.format("play.endlessNote", $0.depth, activeModel.progress.endless.bestDepth) },
+                        archiveFinds: archiveFinds,
+                        onArchive: presentArchiveFinds
                     )
                 }
 
@@ -209,24 +227,12 @@ struct GameView: View {
                     WikiView(section: archiveFocus?.section ?? .basics, focusID: archiveFocus?.id, onBack: { overlay = .none })
                 }
 
-                if case .won = session.phase, overlay == .none, !archiveFinds.isEmpty {
+                if hasFinishedAttempt, overlay == .finds, !archiveFinds.isEmpty {
                     ArchiveRecoveryView(finds: archiveFinds, onRead: { item in
                         acknowledgeFinds()
                         archiveFocus = item
                         overlay = .archive
                     }, onContinue: acknowledgeFinds)
-                }
-
-                if let hint {
-                    EncounterCard(hint: hint) {
-                        dismissHint()
-                    }
-                }
-
-                if let arrival {
-                    ArrivalCard(arrival: arrival) {
-                        enterRegion()
-                    }
                 }
 
                 if session.phase == .replaying {
@@ -252,9 +258,8 @@ struct GameView: View {
         }
         .onAppear {
             session.configure(tuning: activeModel.progress.playerTuning)
-            arrival = ArrivalCard.Arrival.first(for: request, level: session.level, seen: activeModel.progress.seenHints)
-            if arrival != nil, session.phase == .playing {
-                session.togglePause()
+            if let landing = ArrivalCard.Arrival.first(for: request, level: session.level, seen: activeModel.progress.seenHints) {
+                _ = activeModel.progress.markHint(landing.key)
             }
             if let key = request.endless {
                 session.banner = Copy.format("play.depthTitle", key.depth)

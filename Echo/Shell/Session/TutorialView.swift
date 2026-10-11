@@ -1,317 +1,254 @@
 import SwiftUI
 
+/// A small, disposable route. Training never spends charges or changes the archive.
+@MainActor @Observable
+final class TutorialPractice {
+    struct Sample { let time: TimeInterval; let point: CGPoint }
+    static let start = CGPoint(x: 0.18, y: 0.68)
+    static let sparks = [CGPoint(x: 0.38, y: 0.35), CGPoint(x: 0.72, y: 0.58), CGPoint(x: 0.42, y: 0.78)]
+    static let exit = CGPoint(x: 0.84, y: 0.22)
+    static let delay: TimeInterval = 2.4
+    var player = start
+    var target: CGPoint?
+    var collected: Set<Int> = []
+    var trail: [Sample] = []
+    var elapsed: TimeInterval = 0
+    var hasMoved = false
+    var hasSeenEcho = false
+    var collisions = 0
+    var completed = false
+    var echo: CGPoint? {
+        guard elapsed >= Self.delay else { return nil }
+        return trail.last { $0.time <= elapsed - Self.delay }?.point
+    }
+    var exitOpen: Bool { collected.count == Self.sparks.count }
+
+    func aim(at point: CGPoint?) {
+        guard !completed else { return }
+        target = point.map { CGPoint(x: min(0.94, max(0.06, $0.x)), y: min(0.94, max(0.06, $0.y))) }
+    }
+
+    func tick(_ dt: TimeInterval) {
+        guard !completed, !trail.isEmpty || target != nil else { return }
+        let dt = min(max(dt, 0), 0.05)
+        if trail.isEmpty { trail = [Sample(time: 0, point: player)] }
+        elapsed += dt
+        if let target {
+            let dx = target.x - player.x, dy = target.y - player.y
+            let distance = hypot(dx, dy)
+            let step = min(distance, 0.42 * dt)
+            if distance > 0 {
+                player.x += dx / distance * step
+                player.y += dy / distance * step
+                hasMoved = true
+            }
+        }
+        trail.append(Sample(time: elapsed, point: player))
+        for (index, spark) in Self.sparks.enumerated() where hypot(player.x - spark.x, player.y - spark.y) < 0.065 {
+            collected.insert(index)
+        }
+        if exitOpen, hypot(player.x - Self.exit.x, player.y - Self.exit.y) < 0.07 {
+            completed = true
+            target = nil
+            return
+        }
+        if let echo {
+            hasSeenEcho = true
+            if hypot(player.x - echo.x, player.y - echo.y) < 0.055 {
+                // A gentle reset teaches the collision; recovered sparks stay recovered.
+                collisions += 1
+                player = Self.start
+                elapsed = 0
+                trail = []
+                target = nil
+            }
+        }
+        // Keep only what the delayed echo and its visible trail still need.
+        trail.removeAll { $0.time < elapsed - Self.delay - 0.6 }
+    }
+}
+
 struct TutorialView: View {
     var onDone: () -> Void
-
-    @Environment(AppModel.self) private var model
+    @State var practice: TutorialPractice
+    @State private var selectedLesson: Int?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State var stepIndex: Int
 
-    init(stepIndex: Int = 0, onDone: @escaping () -> Void) {
+    init(practice: TutorialPractice = TutorialPractice(), onDone: @escaping () -> Void) {
         self.onDone = onDone
-        _stepIndex = State(initialValue: stepIndex)
+        _practice = State(initialValue: practice)
     }
-
-    private let steps: [TutorialBeat] = [
-        ("hand.draw.fill", EchoTheme.cyan),
-        ("clock.arrow.2.circlepath", EchoTheme.violet),
-        ("point.topleft.down.to.point.bottomright.curvepath", EchoTheme.gold),
-        ("clock.arrow.circlepath", EchoTheme.magenta),
-    ].enumerated().map { index, style in
-        TutorialBeat(
-            icon: style.0,
-            title: Copy.text("tutorial.\(index + 1).title"),
-            detail: Copy.text("tutorial.\(index + 1).detail"),
-            tip: Copy.text("tutorial.\(index + 1).tip"),
-            tint: style.1
-        )
-    }
-
-    private var current: TutorialBeat { steps[stepIndex] }
 
     var body: some View {
-        ZStack {
-            ScreenBackground()
-
-            VStack(spacing: 14) {
-                header
-                stepPicker
-
-                TutorialScene(step: stepIndex, tint: current.tint, reduceMotion: reduceMotion)
-                    .frame(height: 228)
-                    .clipShape(RoundedRectangle(cornerRadius: 23, style: .continuous))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 23, style: .continuous)
-                            .stroke(current.tint.opacity(0.38), lineWidth: 1)
-                    }
-
-                lessonCard
-
-                Spacer(minLength: 0)
-
-                PrimaryButton(
-                    title: Copy.text(stepIndex == steps.count - 1 ? "tutorial.start" : "tutorial.next"),
-                    systemImage: stepIndex == steps.count - 1 ? "play.fill" : "arrow.right"
-                ) {
-                    if stepIndex == steps.count - 1 {
-                        onDone()
-                    } else {
-                        model.audio.play(.select)
-                        withAnimation(.easeInOut(duration: reduceMotion ? 0.01 : 0.24)) {
-                            stepIndex += 1
+        GeometryReader { geo in
+            let wide = geo.size.width >= 800
+            ZStack {
+                ScreenBackground()
+                VStack(spacing: 16) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(Copy.text("tutorial.practice.eyebrow"))
+                                .font(.system(size: 10, weight: .black, design: .rounded)).tracking(2)
+                                .foregroundStyle(EchoTheme.cyan)
+                            Text(Copy.text("tutorial.practice.title"))
+                                .font(.system(size: 25, weight: .bold, design: .rounded))
                         }
-                    }
-                }
-            }
-            .frame(maxWidth: 620)
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 18)
-            .padding(.top, 8)
-            .padding(.bottom, 12)
-        }
-    }
-
-    private var header: some View {
-        HStack(spacing: 11) {
-            Image(systemName: "sparkles.rectangle.stack.fill")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(EchoTheme.cyan)
-                .frame(width: 46, height: 46)
-                .background(EchoTheme.cyan.opacity(0.13), in: Circle())
-                .overlay(Circle().stroke(EchoTheme.cyan.opacity(0.24), lineWidth: 1))
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(Copy.text("tutorial.eyebrow"))
-                    .font(.system(size: 14, weight: .black, design: .rounded))
-                    .tracking(1.8)
-                Text(Copy.text("tutorial.subtitle"))
-                    .font(.system(size: 8, weight: .bold, design: .rounded))
-                    .tracking(1)
-                    .foregroundStyle(EchoTheme.muted)
-            }
-
-            Spacer(minLength: 0)
-
-            Button {
-                onDone()
-            } label: {
-                Text(Copy.text("tutorial.skip"))
-                    .font(.system(size: 9, weight: .black, design: .rounded))
-                    .tracking(1.1)
-                    .foregroundStyle(EchoTheme.muted)
-                    .frame(width: 52, height: 42)
-                    .background(Color.white.opacity(0.06), in: Capsule())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(Copy.text("tutorial.a11y.skip"))
-        }
-    }
-
-    private var stepPicker: some View {
-        HStack(spacing: 6) {
-            ForEach(steps.indices, id: \.self) { index in
-                Button {
-                    model.audio.play(.select)
-                    withAnimation(.easeInOut(duration: reduceMotion ? 0.01 : 0.20)) {
-                        stepIndex = index
-                    }
-                } label: {
-                    HStack(spacing: 5) {
-                        Text(String(format: "%02d", index + 1))
-                            .font(.system(size: 9, weight: .black, design: .rounded))
-                        if index == stepIndex {
-                            Image(systemName: steps[index].icon)
-                                .font(.system(size: 9, weight: .bold))
+                        Spacer(minLength: 10)
+                        Button(action: onDone) {
+                            Text(Copy.text("tutorial.skip"))
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                                .padding(12).background(.white.opacity(0.06), in: Capsule())
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Copy.text("tutorial.a11y.skip"))
                     }
-                    .foregroundStyle(index == stepIndex ? EchoTheme.navyDeep : EchoTheme.muted)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 36)
-                    .background(
-                        index == stepIndex ? steps[index].tint : Color.white.opacity(0.06),
-                        in: RoundedRectangle(cornerRadius: 11, style: .continuous)
-                    )
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text(Copy.text("tutorial.practice.subtitle"))
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(EchoTheme.muted)
+                            if wide {
+                                HStack(alignment: .top, spacing: 20) {
+                                    arena.frame(height: 360)
+                                    instructions.frame(width: 285)
+                                }
+                            } else {
+                                arena.frame(height: min(290, max(190, geo.size.height * 0.30)))
+                                instructions
+                            }
+                        }
+                        .padding(.bottom, 4)
+                    }.scrollBounceBehavior(.basedOnSize)
+                    VStack(spacing: 8) {
+                        Text(Copy.text(practice.completed ? "tutorial.practice.finished" : "tutorial.practice.optional"))
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundStyle(practice.completed ? EchoTheme.gold : EchoTheme.muted)
+                            .multilineTextAlignment(.center)
+                        PrimaryButton(title: Copy.text("tutorial.start"), systemImage: "play.fill", action: onDone)
+                            .accessibilityIdentifier("tutorial.start")
+                    }
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Copy.format("tutorial.a11y.lesson", index + 1, steps[index].title))
-                .accessibilityAddTraits(index == stepIndex ? .isSelected : [])
+                .padding(.horizontal, wide ? 28 : 18).padding(.vertical, 16)
+                .frame(maxWidth: 980).frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .foregroundStyle(.white)
+        }
+        .task {
+            while !Task.isCancelled {
+                do { try await Task.sleep(for: .milliseconds(33)) } catch { break }
+                practice.tick(0.033)
             }
         }
     }
 
-    private var lessonCard: some View {
-        VStack(alignment: .leading, spacing: 13) {
-            HStack(spacing: 11) {
-                Image(systemName: current.icon)
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(current.tint)
-                    .frame(width: 45, height: 45)
-                    .background(current.tint.opacity(0.13), in: RoundedRectangle(cornerRadius: 13, style: .continuous))
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(Copy.format("tutorial.lesson", stepIndex + 1, steps.count))
-                        .font(.system(size: 9, weight: .black, design: .rounded))
-                        .tracking(1.3)
-                        .foregroundStyle(current.tint)
-                    Text(current.title)
-                        .font(.system(size: 18, weight: .black, design: .rounded))
-                        .foregroundStyle(.white)
-                }
-            }
-
-            Text(current.detail)
-                .font(.system(size: 13, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.78))
-                .fixedSize(horizontal: false, vertical: true)
-
-            HStack(alignment: .top, spacing: 7) {
-                Image(systemName: "lightbulb.fill")
-                    .foregroundStyle(EchoTheme.gold)
-                Text(current.tip)
-                    .foregroundStyle(EchoTheme.muted)
-            }
-            .font(.system(size: 10, weight: .medium, design: .rounded))
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(10)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.white.opacity(0.045), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        }
-        .padding(15)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(EchoTheme.panel.opacity(0.95), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(current.tint.opacity(0.20), lineWidth: 1)
-        }
-    }
-}
-
-private struct TutorialBeat {
-    let icon: String
-    let title: String
-    let detail: String
-    let tip: String
-    let tint: Color
-}
-
-private struct TutorialScene: View {
-    let step: Int
-    let tint: Color
-    let reduceMotion: Bool
-
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { timeline in
-            let phase = reduceMotion ? 0.55 : timeline.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3.3) / 3.3
-
-            ZStack(alignment: .topLeading) {
+    private var arena: some View {
+        GeometryReader { geo in
+            ZStack(alignment: .top) {
                 EchoTheme.navyDeep
                 Canvas { context, size in
-                    drawGrid(context: &context, size: size)
-                    drawRoute(context: &context, size: size, phase: phase)
+                    func point(_ p: CGPoint) -> CGPoint { CGPoint(x: p.x * size.width, y: p.y * size.height) }
+                    func circle(_ p: CGPoint, _ radius: CGFloat) -> Path {
+                        Circle().path(in: CGRect(x: p.x - radius, y: p.y - radius, width: radius * 2, height: radius * 2))
+                    }
+                    var grid = Path()
+                    for x in stride(from: CGFloat(0), through: size.width, by: 32) {
+                        grid.move(to: CGPoint(x: x, y: 0)); grid.addLine(to: CGPoint(x: x, y: size.height))
+                    }
+                    for y in stride(from: CGFloat(0), through: size.height, by: 32) {
+                        grid.move(to: CGPoint(x: 0, y: y)); grid.addLine(to: CGPoint(x: size.width, y: y))
+                    }
+                    context.stroke(grid, with: .color(.white.opacity(0.035)), lineWidth: 1)
+                    let exit = point(TutorialPractice.exit)
+                    context.stroke(circle(exit, 15), with: .color(practice.exitOpen ? EchoTheme.gold : .white.opacity(0.2)), style: StrokeStyle(lineWidth: 2, dash: practice.exitOpen ? [] : [3, 4]))
+                    for (i, spark) in TutorialPractice.sparks.enumerated() where !practice.collected.contains(i) {
+                        let p = point(spark)
+                        context.fill(circle(p, 15), with: .color(EchoTheme.gold.opacity(0.08)))
+                        context.stroke(circle(p, 10), with: .color(EchoTheme.gold.opacity(0.4)), lineWidth: 1)
+                        context.fill(circle(p, 4), with: .color(EchoTheme.gold))
+                    }
+                    var route = Path()
+                    for (i, sample) in practice.trail.enumerated() {
+                        if i == 0 { route.move(to: point(sample.point)) } else { route.addLine(to: point(sample.point)) }
+                    }
+                    context.stroke(route, with: .color(EchoTheme.cyan.opacity(0.24)), lineWidth: 2)
+                    if let echo = practice.echo {
+                        let p = point(echo)
+                        context.fill(circle(p, 18), with: .color(EchoTheme.violet.opacity(0.16)))
+                        context.stroke(circle(p, 10), with: .color(EchoTheme.violet), lineWidth: 2)
+                    }
+                    let p = point(practice.player)
+                    context.fill(circle(p, reduceMotion ? 16 : 18 + sin(practice.elapsed * 4) * 2), with: .color(EchoTheme.cyan.opacity(0.16)))
+                    context.fill(circle(p, 9), with: .color(EchoTheme.cyan))
+                    context.fill(circle(p, 4), with: .color(.white))
                 }
-
                 HStack(spacing: 6) {
-                    Circle()
-                        .fill(tint)
-                        .frame(width: 5, height: 5)
-                    Text(Copy.text("tutorial.demo"))
-                        .font(.system(size: 9, weight: .black, design: .rounded))
-                        .tracking(1.2)
-                        .foregroundStyle(tint)
-                    Spacer()
-                    Text(String(format: "%02d / 04", step + 1))
-                        .font(.system(size: 9, weight: .black, design: .monospaced))
-                        .foregroundStyle(EchoTheme.muted)
+                    Image(systemName: "hand.draw.fill")
+                    Text(Copy.text("tutorial.practice.touch"))
+                    Spacer(minLength: 0)
+                    Image(systemName: "sparkle").foregroundStyle(EchoTheme.gold)
+                    Text("\(practice.collected.count)/3").monospacedDigit()
                 }
-                .padding(14)
+                .font(.system(size: 10, weight: .bold, design: .rounded))
+                .foregroundStyle(EchoTheme.muted).padding(14).allowsHitTesting(false)
+            }
+            .contentShape(Rectangle())
+            .gesture(DragGesture(minimumDistance: 0)
+                .onChanged { practice.aim(at: CGPoint(x: $0.location.x / geo.size.width, y: $0.location.y / geo.size.height)) }
+                .onEnded { _ in practice.aim(at: nil) })
+            .accessibilityLabel(Copy.text("tutorial.practice.a11y"))
+            .accessibilityIdentifier("tutorial.practice.arena")
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .overlay(RoundedRectangle(cornerRadius: 24).stroke(EchoTheme.cyan.opacity(0.26), lineWidth: 1))
+    }
+
+    private var currentLesson: Int {
+        selectedLesson ?? (practice.hasSeenEcho ? 3 : practice.hasMoved ? 2 : 1)
+    }
+
+    private var instructions: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 6) {
+                ForEach(1...3, id: \.self) { index in
+                    Button { selectedLesson = index } label: {
+                        Text(Copy.text("tutorial.practice.\(index).short"))
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundStyle(index == currentLesson ? EchoTheme.cyan : EchoTheme.muted)
+                            .frame(maxWidth: .infinity).frame(height: 34)
+                            .background(index == currentLesson ? EchoTheme.cyan.opacity(0.1) : .white.opacity(0.035), in: Capsule())
+                    }.buttonStyle(.plain)
+                        .accessibilityAddTraits(index == currentLesson ? .isSelected : [])
+                }
+            }
+            let icons = ["hand.draw.fill", "sparkle", "clock.arrow.2.circlepath"]
+            let tints = [EchoTheme.cyan, EchoTheme.gold, EchoTheme.violet]
+            let met = [practice.hasMoved, practice.exitOpen, practice.hasSeenEcho]
+            instruction(currentLesson, icon: icons[currentLesson - 1], tint: tints[currentLesson - 1], met: met[currentLesson - 1])
+            if practice.collisions > 0 {
+                Text(Copy.text("tutorial.practice.collision"))
+                    .font(.system(size: 11, weight: .medium, design: .rounded))
+                    .foregroundStyle(EchoTheme.violet).fixedSize(horizontal: false, vertical: true)
+                    .padding(12).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(EchoTheme.violet.opacity(0.08), in: RoundedRectangle(cornerRadius: 14))
             }
         }
-        .accessibilityLabel(Copy.format("tutorial.a11y.demo", Copy.text("tutorial.a11y.demo\(min(4, step + 1))")))
     }
 
-    private func drawGrid(context: inout GraphicsContext, size: CGSize) {
-        for x in stride(from: CGFloat(0), through: size.width, by: 36) {
-            var path = Path()
-            path.move(to: CGPoint(x: x, y: 0))
-            path.addLine(to: CGPoint(x: x, y: size.height))
-            context.stroke(path, with: .color(.white.opacity(0.045)), lineWidth: 1)
+    private func instruction(_ index: Int, icon: String, tint: Color, met: Bool) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: met ? "checkmark" : icon)
+                .font(.system(size: 15, weight: .semibold)).foregroundStyle(tint)
+                .frame(width: 36, height: 36).background(tint.opacity(0.1), in: RoundedRectangle(cornerRadius: 11))
+            VStack(alignment: .leading, spacing: 4) {
+                Text(Copy.text("tutorial.practice.\(index).title"))
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                Text(Copy.text("tutorial.practice.\(index).detail"))
+                    .font(.system(size: 11, weight: .medium, design: .rounded)).foregroundStyle(EchoTheme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
         }
-        for y in stride(from: CGFloat(0), through: size.height, by: 36) {
-            var path = Path()
-            path.move(to: CGPoint(x: 0, y: y))
-            path.addLine(to: CGPoint(x: size.width, y: y))
-            context.stroke(path, with: .color(.white.opacity(0.045)), lineWidth: 1)
-        }
-    }
-
-    private func drawRoute(context: inout GraphicsContext, size: CGSize, phase: Double) {
-        let start = CGPoint(x: size.width * 0.16, y: size.height * 0.72)
-        let bend = CGPoint(x: size.width * 0.45, y: size.height * 0.36)
-        let finish = CGPoint(x: size.width * 0.82, y: size.height * 0.63)
-        let firstControl = CGPoint(x: size.width * 0.21, y: size.height * 0.27)
-        let secondControl = CGPoint(x: size.width * 0.78, y: size.height * 0.26)
-        let position = routePoint(start: start, bend: bend, finish: finish, firstControl: firstControl, secondControl: secondControl, progress: phase)
-
-        var fullPath = Path()
-        fullPath.move(to: start)
-        fullPath.addQuadCurve(to: bend, control: firstControl)
-        fullPath.addQuadCurve(to: finish, control: secondControl)
-        context.stroke(fullPath, with: .color(tint.opacity(0.42)), style: StrokeStyle(lineWidth: 2, dash: [5, 7]))
-
-        if step == 2 {
-            let danger = CGPoint(x: size.width * 0.61, y: size.height * 0.68)
-            context.fill(Circle().path(in: CGRect(x: danger.x - 21, y: danger.y - 21, width: 42, height: 42)), with: .color(EchoTheme.danger.opacity(0.14)))
-            context.stroke(Circle().path(in: CGRect(x: danger.x - 16, y: danger.y - 16, width: 32, height: 32)), with: .color(EchoTheme.danger), lineWidth: 2)
-        }
-
-        if step >= 1 {
-            let delayed = max(0, phase - 0.26)
-            let echo = routePoint(start: start, bend: bend, finish: finish, firstControl: firstControl, secondControl: secondControl, progress: delayed)
-            context.fill(Circle().path(in: CGRect(x: echo.x - 12, y: echo.y - 12, width: 24, height: 24)), with: .color(EchoTheme.violet.opacity(0.19)))
-            context.stroke(Circle().path(in: CGRect(x: echo.x - 9, y: echo.y - 9, width: 18, height: 18)), with: .color(EchoTheme.magenta.opacity(0.82)), lineWidth: 2)
-        }
-
-        if step == 3 {
-            let reversed = routePoint(start: start, bend: bend, finish: finish, firstControl: firstControl, secondControl: secondControl, progress: 1 - phase)
-            context.stroke(Circle().path(in: CGRect(x: reversed.x - 23, y: reversed.y - 23, width: 46, height: 46)), with: .color(EchoTheme.cyan.opacity(0.44)), lineWidth: 2)
-            drawOrb(context: &context, at: reversed)
-        } else {
-            drawOrb(context: &context, at: position)
-        }
-
-        if step == 0 || step == 2 {
-            let spark = CGPoint(x: size.width * 0.82, y: size.height * 0.63)
-            context.fill(Circle().path(in: CGRect(x: spark.x - 3, y: spark.y - 3, width: 6, height: 6)), with: .color(EchoTheme.gold))
-            context.stroke(Circle().path(in: CGRect(x: spark.x - 10, y: spark.y - 10, width: 20, height: 20)), with: .color(EchoTheme.gold.opacity(0.45)), lineWidth: 1)
-        }
-    }
-
-    private func routePoint(
-        start: CGPoint,
-        bend: CGPoint,
-        finish: CGPoint,
-        firstControl: CGPoint,
-        secondControl: CGPoint,
-        progress: Double
-    ) -> CGPoint {
-        if progress < 0.5 {
-            let t = CGFloat(progress * 2)
-            return quadratic(from: start, control: firstControl, to: bend, t: t)
-        }
-        let t = CGFloat((progress - 0.5) * 2)
-        return quadratic(from: bend, control: secondControl, to: finish, t: t)
-    }
-
-    private func quadratic(from start: CGPoint, control: CGPoint, to end: CGPoint, t: CGFloat) -> CGPoint {
-        let u = 1 - t
-        return CGPoint(
-            x: u * u * start.x + 2 * u * t * control.x + t * t * end.x,
-            y: u * u * start.y + 2 * u * t * control.y + t * t * end.y
-        )
-    }
-
-    private func drawOrb(context: inout GraphicsContext, at point: CGPoint) {
-        context.fill(Circle().path(in: CGRect(x: point.x - 18, y: point.y - 18, width: 36, height: 36)), with: .color(EchoTheme.cyan.opacity(0.22)))
-        context.fill(Circle().path(in: CGRect(x: point.x - 10, y: point.y - 10, width: 20, height: 20)), with: .color(.white))
+        .padding(12).frame(maxWidth: .infinity, alignment: .leading)
+        .background(.white.opacity(0.035), in: RoundedRectangle(cornerRadius: 16))
     }
 }

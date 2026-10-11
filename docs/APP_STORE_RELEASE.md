@@ -16,7 +16,7 @@ After signing in to App Store Connect:
 2. Use **Archive - iOS**, **App Store Connect** distribution, and **TestFlight Internal Testing**.
 3. Confirm that the latest processed build is available to the Keepers internal group.
 
-Suggested **What to Test**: use Settings → Language to switch between Auto, English and Русский; restore a region and open newly recovered Archive notes; on iPad, inspect the two-column Atlas and Home in portrait and landscape, then narrow the window to check the compact layout; change the two equipped abilities, inspect live research effects and cross-branch prerequisites, and buy a single charge; check the compact outer and side-by-side inner iPhone Duo layouts; region arrival cards and Deep Time; the Apple Watch app on its own and as a remote for a phone run.
+Suggested **What to Test**: use Settings → Language to switch between Auto, English and Русский; restore a region and open newly recovered Archive notes; on iPad, inspect the two-column Atlas and Home in portrait and landscape, then narrow the window to check the compact layout; change the two equipped abilities, inspect live research effects and cross-branch prerequisites, and buy a single charge; check the compact outer and side-by-side inner iPhone Duo layouts; quiet encounter collection, the optional first practice and Deep Time; the Apple Watch app on its own and as a remote for a phone run.
 
 ## Prepared assets
 
@@ -39,7 +39,7 @@ Keep the two iPhone groups separate in App Store Connect. The first image in eac
 | `play/02-lasers.jpg` | — | Laser arena under Ashcrown |
 | `menu/03-atlas.jpg` | `02-atlas.jpg` | Atlas route with the Signal's loop |
 | `play/04-deep-time.jpg` | `03-deep-time.jpg` | Endless Deep Time |
-| `play/05-arrival.jpg` | — | Region arrival card (story) |
+| `play/05-archive.jpg` | — | Numbered Keeper fragments, opened after a route |
 | `menu/06-research.jpg` | `04-research.jpg` | Research tree |
 | `menu/07-lab.jpg` | `05-lab.jpg` | Ability loadout |
 | `menu/08-wiki.jpg` | — | Archive: Story |
@@ -77,7 +77,7 @@ App Review notes: no sign-in. Settings contains About, Terms, Privacy, Report a 
 ## Submission sequence
 
 1. Confirm the explicit App ID and the iOS app record. English (U.S.) primary language.
-2. Archive 1.0.0 (21) with a release Xcode (or let Xcode Cloud archive it), validate, and upload. Wait for processing.
+2. Archive 1.0.0 (22) with a release Xcode (or let Xcode Cloud archive it), validate, and upload. Wait for processing.
 3. Attach screenshots, listing copy, support and privacy URLs, age rating, and content rights. Export compliance: the app uses only exempt encryption (`ITSAppUsesNonExemptEncryption` is false).
 4. Choose **Paid** only after the Paid Apps Agreement is accepted. Set $1.99 and the intended countries.
 5. Review the product page and submit. “Prepare for Submission” is not a public release.
@@ -91,3 +91,7 @@ The bilingual world, philosophy, field guide and legal website is public at http
 ## Archive and language verification (11 October 2026)
 
 22 selected tests passed with zero failures on a fresh iPhone Duo / iOS 27.1 simulator: Archive recovery, save migration and reset, language persistence and live localization, story unlocks, and bilingual phone/Duo/iPad renderings. iOS and the embedded Watch app compile successfully. New UI captures are in `docs/app-store/archive/`; the public website preview is in `docs/website/`. App Review still requires the requested physical-device launch/gameplay recording before resubmission.
+
+## Quiet collection and playfield verification (11 October 2026)
+
+47 selected tests passed with zero failures on a fresh iPhone Duo / iOS 27.1 simulator. Finds are opened on request from completed-attempt results; encounters and region arrivals never pause play. The optional first route is interactive, and the entire arena fits outside the HUD and footer. All 77 maps were checked at eight viewport sizes, including full spark orbits, exits and Watch remote reconstruction. Current native captures are in `docs/app-store/archive/`. The published bilingual guide matches this behavior.

@@ -18,9 +18,7 @@ final class SessionCoverageTests: XCTestCase {
 
     func testTutorialDailyAndPause() {
         let model = CoverageFixtures.model()
-        for step in 0..<4 {
-            CoverageHost.render(TutorialView(stepIndex: step, onDone: {}).environment(model))
-        }
+        CoverageHost.render(TutorialView(onDone: {}).environment(model))
         CoverageHost.render(DailyChallengeView().environment(model))
         CoverageHost.render(
             PauseView(

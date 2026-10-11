@@ -94,6 +94,7 @@ extension GameView {
                 scene.burst(at: at, color: UIColor(red: 0.9, green: 0.4, blue: 1, alpha: 1))
                 offerHint(.collision)
             case .died:
+                archiveFinds = activeModel.progress.pendingArchiveDiscoveries
                 activeModel.audio.play(.death)
                 activeModel.audio.notify(.error)
             case .won(let result):
@@ -152,18 +153,28 @@ extension GameView {
         }
     }
 
-    func acknowledgeFinds() {
-        activeModel.progress.acknowledgeArchiveDiscoveries(archiveFinds)
-        archiveFinds = []
+    var hasFinishedAttempt: Bool {
+        switch session.phase {
+        case .won, .dead: true
+        default: false
+        }
+    }
+
+    func presentArchiveFinds() {
+        guard hasFinishedAttempt, !archiveFinds.isEmpty else { return }
+        overlay = .finds
         activeModel.audio.play(.select)
     }
 
+    func acknowledgeFinds() {
+        activeModel.progress.acknowledgeArchiveDiscoveries(archiveFinds)
+        if overlay == .finds { overlay = .none }
+    }
+
+    /// Encounters recover field notes quietly. They never interrupt input,
+    /// resume a paused run, or place a lesson over the arena.
     func offerHint(_ value: EncounterHint) {
-        guard hint == nil, activeModel.progress.markHint(value.rawValue) else { return }
-        hint = value
-        if session.phase == .playing {
-            session.togglePause()
-        }
+        _ = activeModel.progress.markHint(value.rawValue)
     }
 
     func offerAbilityHint(_ kind: BonusKind) {
@@ -186,25 +197,6 @@ extension GameView {
     func audioPan(for position: Vec2) -> Float {
         let normalized = position.x / max(1, session.level.worldWidth)
         return Float((normalized * 2 - 1) * 0.62)
-    }
-
-    func dismissHint() {
-        hint = nil
-        if session.phase == .paused {
-            session.togglePause()
-        }
-    }
-
-    /// The Signal has read where it landed; any encounter card waiting
-    /// underneath comes next.
-    func enterRegion() {
-        guard let arrival else { return }
-        activeModel.progress.markHint(arrival.key)
-        activeModel.audio.play(.tap)
-        self.arrival = nil
-        if hint == nil, session.phase == .paused {
-            session.togglePause()
-        }
     }
 
     /// Where on the Fold Road this run takes place, for the pause card.

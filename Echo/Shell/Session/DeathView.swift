@@ -10,6 +10,8 @@ struct DeathView: View {
     /// Deep Time ends the run instead of restarting the map.
     var restartTitle = Copy.text("button.restartMap")
     var note: String?
+    var archiveFinds: [ArchiveDiscovery] = []
+    var onArchive: (() -> Void)? = nil
 
     var body: some View {
         GameModalShell(tint: EchoTheme.danger) {
@@ -54,6 +56,10 @@ struct DeathView: View {
                 .padding(14)
                 .background(EchoTheme.danger.opacity(0.09), in: RoundedRectangle(cornerRadius: 17, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 17, style: .continuous).stroke(EchoTheme.danger.opacity(0.18), lineWidth: 1))
+
+                if !archiveFinds.isEmpty, let onArchive {
+                    ArchiveRewardStrip(finds: archiveFinds, onOpen: onArchive)
+                }
 
                 VStack(spacing: 10) {
                     if rewindCharges > 0 {

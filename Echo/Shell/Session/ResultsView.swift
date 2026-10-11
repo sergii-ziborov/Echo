@@ -16,6 +16,8 @@ struct ResultsView: View {
     var onNextCycle: (() -> Void)? = nil
     var onMenu: () -> Void
     var nextTitle = Copy.text("button.next")
+    var archiveFinds: [ArchiveDiscovery] = []
+    var onArchive: (() -> Void)? = nil
 
     var body: some View {
         GameModalShell(tint: EchoTheme.gold) {
@@ -124,6 +126,10 @@ struct ResultsView: View {
                 }
                 .padding(13)
                 .background(EchoTheme.magenta.opacity(0.10), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+
+                if !archiveFinds.isEmpty, let onArchive {
+                    ArchiveRewardStrip(finds: archiveFinds, onOpen: onArchive)
+                }
 
                 HStack(spacing: 10) {
                     PrimaryButton(title: Copy.text("button.retry"), systemImage: "arrow.counterclockwise", action: onRetry)

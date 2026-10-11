@@ -55,6 +55,12 @@ struct ArchiveDiscovery: Identifiable {
     let icon: String
     let requirement: Requirement
     var title: String { Copy.text(titleKey) }
+    @MainActor var fragmentNumber: Int { (Self.catalog.firstIndex { $0.id == id } ?? 0) + 1 }
+    var excerpt: String {
+        if id.hasPrefix("region.") { return Copy.text("\(id).arrival") }
+        if id.hasPrefix("story.") { return Copy.text("\(id).text") }
+        return Copy.text("\(id).body")
+    }
 
     @MainActor
     static var catalog: [ArchiveDiscovery] {

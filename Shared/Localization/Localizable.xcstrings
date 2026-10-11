@@ -1758,13 +1758,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continue"
+            "value": "Back to results"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Продолжить"
+            "value": "К результатам"
           }
         }
       }
@@ -1778,13 +1778,13 @@
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld new entry"
+                  "value": "%lld new fragment"
                 }
               },
               "other": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld new entries"
+                  "value": "%lld new fragments"
                 }
               }
             }
@@ -1796,25 +1796,25 @@
               "few": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld новые записи"
+                  "value": "%lld новых фрагмента"
                 }
               },
               "many": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld новых записей"
+                  "value": "%lld новых фрагментов"
                 }
               },
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld новая запись"
+                  "value": "%lld новый фрагмент"
                 }
               },
               "other": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld новой записи"
+                  "value": "%lld новых фрагментов"
                 }
               }
             }
@@ -1828,13 +1828,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "KEEPER ARCHIVE · RECOVERED"
+            "value": "KEEPER ARCHIVE · FRAGMENTS"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "АРХИВ ХРАНИТЕЛЕЙ · ВОССТАНОВЛЕНО"
+            "value": "АРХИВ ХРАНИТЕЛЕЙ · ФРАГМЕНТЫ"
           }
         }
       }
@@ -1845,13 +1845,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Read this recovered entry"
+            "value": "Opens this recovered fragment in the Archive."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Прочитать найденную запись"
+            "value": "Открывает найденный фрагмент в Архиве."
           }
         }
       }
@@ -2083,13 +2083,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Saved in the Keeper Archive. Read now, or come back after the run."
+            "value": "These fragments stay in your Archive."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Находки сохранены в Архиве Хранителей. Можно прочитать сейчас или после забега."
+            "value": "Эти фрагменты остаются в твоём Архиве."
           }
         }
       }
@@ -2100,13 +2100,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The Road remembers."
+            "value": "Brought back from the Road."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Дорога возвращает запись."
+            "value": "Находки с Дороги."
           }
         }
       }
@@ -26045,6 +26045,363 @@
           "stringUnit": {
             "state": "translated",
             "value": "Рывок на часах"
+          }
+        }
+      }
+    },
+    "archive.find.continueHome": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close collection"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Закрыть коллекцию"
+          }
+        }
+      }
+    },
+    "archive.find.open": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read fragment"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прочитать фрагмент"
+          }
+        }
+      }
+    },
+    "archive.find.return": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to results"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "К результатам"
+          }
+        }
+      }
+    },
+    "archive.find.reward": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keeper Archive · collected on this route"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Архив Хранителей · находки маршрута"
+          }
+        }
+      }
+    },
+    "tutorial.practice.1.detail": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold and drag: the cyan light follows your finger. Lift to stop."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удерживай и веди палец: голубой свет движется к нему. Отпусти, чтобы остановиться."
+          }
+        }
+      }
+    },
+    "tutorial.practice.1.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lead the Signal"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Веди Сигнал"
+          }
+        }
+      }
+    },
+    "tutorial.practice.2.detail": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collect the three gold sparks. Their light opens the ring in the corner."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Собери три золотые искры. Их свет откроет кольцо в углу."
+          }
+        }
+      }
+    },
+    "tutorial.practice.2.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gather sparks, reach the exit"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Собери искры и дойди до выхода"
+          }
+        }
+      }
+    },
+    "tutorial.practice.3.detail": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A violet echo repeats your route after a delay. Keep moving; avoid crossing its path."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фиолетовое эхо повторяет твой маршрут с задержкой. Двигайся дальше и не пересекай его путь."
+          }
+        }
+      }
+    },
+    "tutorial.practice.3.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your past follows"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прошлое идёт следом"
+          }
+        }
+      }
+    },
+    "tutorial.practice.a11y": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Practice arena. Drag toward three sparks, then the exit. A delayed echo follows your route."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировочное поле. Веди палец к трём искрам, затем к выходу. Эхо повторяет маршрут с задержкой."
+          }
+        }
+      }
+    },
+    "tutorial.practice.collision": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your echo caught up. Try another route — your sparks are still here."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эхо догнало тебя. Попробуй другой маршрут — собранные искры сохранены."
+          }
+        }
+      }
+    },
+    "tutorial.practice.eyebrow": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FIRST SIGNAL"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ПЕРВЫЙ СИГНАЛ"
+          }
+        }
+      }
+    },
+    "tutorial.practice.finished": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Route complete. Your Signal is ready for the Road."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маршрут пройден. Твой Сигнал готов к Дороге."
+          }
+        }
+      }
+    },
+    "tutorial.practice.optional": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Practice is optional. No charges are spent."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Практика по желанию. Заряды не расходуются."
+          }
+        }
+      }
+    },
+    "tutorial.practice.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collect three sparks. See your own echo appear."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Собери три искры. Посмотри, как появляется твоё эхо."
+          }
+        }
+      }
+    },
+    "tutorial.practice.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first route."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Первый маршрут."
+          }
+        }
+      }
+    },
+    "tutorial.practice.touch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch inside to move"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Коснись поля, чтобы двигаться"
+          }
+        }
+      }
+    },
+    "tutorial.practice.1.short": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Movement"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Движение"
+          }
+        }
+      }
+    },
+    "tutorial.practice.2.short": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sparks"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Искры"
+          }
+        }
+      }
+    },
+    "tutorial.practice.3.short": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Echo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эхо"
           }
         }
       }

@@ -24,7 +24,7 @@ final class GameViewCoverageTests: XCTestCase {
         settings.session.phase = .paused
         CoverageHost.render(settings.environment(model))
 
-        CoverageHost.render(GameView(request: request, hint: .echo).environment(model))
+        CoverageHost.render(GameView(request: request).environment(model))
         CoverageHost.render(GameView(request: CoverageFixtures.playRequest(1, daily: true)).environment(model))
     }
 
@@ -133,7 +133,6 @@ final class GameViewCoverageTests: XCTestCase {
         view.offerHint(.gate)
         view.offerAbilityHint(.surge)
         view.offerAbilityHint(.ward)
-        view.dismissHint()
         view.restart()
         view.paradoxRewind()
         view.nextLevel()
@@ -150,9 +149,48 @@ final class GameViewCoverageTests: XCTestCase {
         var fresh = GameView(request: request)
         fresh.modelOverride = CoverageFixtures.model(rich: false)
         fresh.offerHint(.echo)
-        fresh.dismissHint()
         fresh.useItem(.blink)
         XCTAssertEqual(view.request.daily, false)
         CoverageHost.teardown()
+    }
+}
+
+@MainActor
+final class QuietDiscoveryTests: XCTestCase {
+    func testEncountersNeverPausePlayOrDismissAManualPause() {
+        let model = CoverageFixtures.model(rich: false)
+        var view = GameView(request: CoverageFixtures.playRequest(36))
+        view.modelOverride = model
+        let charges = BonusKind.allCases.map { model.progress.count($0) }
+        for hint in EncounterHint.allCases {
+            view.offerHint(hint)
+            XCTAssertEqual(view.session.phase, .playing, hint.rawValue)
+        }
+        XCTAssertEqual(charges, BonusKind.allCases.map { model.progress.count($0) })
+        XCTAssertFalse(model.progress.pendingArchiveDiscoveries.isEmpty)
+        view.session.phase = .paused
+        view.offerHint(.echo)
+        XCTAssertEqual(view.session.phase, .paused)
+        model.goHome()
+        XCTAssertEqual(model.screen, .home)
+        model.openWiki()
+        XCTAssertEqual(model.screen, .wiki)
+        XCTAssertNotNil(model.archiveFocus)
+        XCTAssertTrue(model.progress.pendingArchiveDiscoveries.isEmpty)
+    }
+
+    func testCollectionIsAvailableOnlyAfterAnAttemptEnds() {
+        let model = CoverageFixtures.model(rich: false)
+        var view = GameView(request: CoverageFixtures.playRequest(1))
+        view.modelOverride = model
+        XCTAssertFalse(view.hasFinishedAttempt)
+        view.session.phase = .paused
+        XCTAssertFalse(view.hasFinishedAttempt)
+        view.session.phase = .replaying
+        XCTAssertFalse(view.hasFinishedAttempt)
+        view.session.phase = .dead(.asteroid)
+        XCTAssertTrue(view.hasFinishedAttempt)
+        view.session.phase = .won(SessionResult(time: 10, moves: 5, stars: 1, sparks: 6, echoesFaced: 1))
+        XCTAssertTrue(view.hasFinishedAttempt)
     }
 }

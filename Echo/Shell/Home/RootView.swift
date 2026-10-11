@@ -52,12 +52,7 @@ struct RootView: View {
 #else
             screenContent
 #endif
-            if model.screen == .home, !model.progress.pendingArchiveDiscoveries.isEmpty {
-                ArchiveRecoveryView(finds: model.progress.pendingArchiveDiscoveries, onRead: model.readDiscovery) {
-                    model.progress.acknowledgeArchiveDiscoveries(model.progress.pendingArchiveDiscoveries)
-                    model.audio.play(.select)
-                }
-            }
+
         }
         .animation(.easeInOut(duration: 0.28), value: screenKey)
         .onAppear { model.appear() }
@@ -81,8 +76,11 @@ struct RootView: View {
                 model.finishTutorial(then: thenPlay)
             }
         case .playing(let request):
-            GameView(request: request)
-                .id(request.levelID + (request.daily ? "-daily" : ""))
+            GeometryReader { geometry in
+                GameView(request: request, viewport: geometry.size)
+            }
+            .ignoresSafeArea()
+            .id(request.levelID + (request.daily ? "-daily" : ""))
         case .settings:
             SettingsView()
         case .shop:

@@ -44,7 +44,7 @@ capture() {
     local arg="$1" wait="$2" file="$3"
     shift 3
     xcrun simctl terminate "$udid" "$BUNDLE" >/dev/null 2>&1 || true
-    # Comma-separated flags allow the arrival card to launch with a level.
+    # Comma-separated flags select a region or an explicit preview.
     local -a launch_args
     launch_args=("${(@s:,:)arg}")
     xcrun simctl launch "$udid" "$BUNDLE" "${launch_args[@]}" >/dev/null
@@ -64,7 +64,7 @@ capture "$IPHONE69" "$ROOT/docs/app-store/iphone/play" 1320 2868 \
   -shot-play 3.4 01-gameplay.jpg \
   -shot-laser 3.4 02-lasers.jpg \
   -shot-endless-deep 3.4 04-deep-time.jpg \
-  -shot-arrival,-shot-level,49 8.0 05-arrival.jpg
+  -shot-archive-find 1.8 05-archive.jpg
 capture "$IPHONE69" "$ROOT/docs/app-store/iphone/menu" 1320 2868 \
   -shot-worlds 1.8 03-atlas.jpg \
   -shot-research 1.8 06-research.jpg \
@@ -77,7 +77,7 @@ capture "$IPHONE65" "$ROOT/docs/app-store/iphone65/play" 1284 2778 \
   -shot-play 3.4 01-gameplay.jpg \
   -shot-laser 3.4 02-lasers.jpg \
   -shot-endless-deep 3.4 04-deep-time.jpg \
-  -shot-arrival,-shot-level,49 8.0 05-arrival.jpg
+  -shot-archive-find 1.8 05-archive.jpg
 capture "$IPHONE65" "$ROOT/docs/app-store/iphone65/menu" 1284 2778 \
   -shot-worlds 1.8 03-atlas.jpg \
   -shot-research 1.8 06-research.jpg \

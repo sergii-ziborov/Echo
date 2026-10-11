@@ -81,6 +81,10 @@ final class ArchiveDiscoveryTests: XCTestCase {
             preference.selection = language
             for item in catalog {
                 XCTAssertTrue(Copy.has(item.titleKey), item.id)
+                XCTAssertFalse(item.excerpt.isEmpty, item.id)
+                XCTAssertFalse(item.excerpt.hasSuffix(".body"), item.id)
+                XCTAssertFalse(item.excerpt.hasSuffix(".arrival"), item.id)
+                XCTAssertFalse(item.excerpt.hasSuffix(".text"), item.id)
                 XCTAssertFalse(item.requirement.instruction.isEmpty, item.id)
                 XCTAssertFalse(item.requirement.recoveryReason.isEmpty, item.id)
             }
@@ -127,6 +131,7 @@ final class ArchiveDiscoveryTests: XCTestCase {
     }
 
     private func attach(_ view: UIView, name: String) {
+        RunLoop.current.run(until: Date().addingTimeInterval(0.6))
         let format = UIGraphicsImageRendererFormat()
         format.scale = 2
         format.opaque = true
