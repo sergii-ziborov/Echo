@@ -70,6 +70,8 @@ Explore the [ECHO website](https://echo-survive-your-past.serhiiright.chatgpt.si
 
 See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store listing copy](docs/app-store/LISTING.md), [release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
 
+> **App Store status · 12 October 2026:** version 1.0.0 (build 18) was resubmitted and is Waiting for Review. The requested device gameplay video is attached to App Review. Build 18 remains available in TestFlight. [Release details](docs/APP_STORE_RELEASE.md).
+
 ## The story
 
 The Keepers built the Lighthouse as a reference station. It never ruled time; it let distant stations along the **Fold Road** compare their records. Then came **the Break**: a failed controller began treating the last confirmed state as an order to restore it, and every correction demanded another. The recovery network still replays recorded movement a few seconds late. Those replays are the echoes, and your own route is one of them. The orb is the Signal, the reference the Lighthouse still sends. Sparks are state records; gathering all of them confirms the route and opens the exit, a fold that carries the Signal to the next station.

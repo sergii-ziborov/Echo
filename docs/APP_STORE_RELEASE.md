@@ -1,6 +1,6 @@
 # ECHO App Store release guide
 
-App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Version **1.0.0**, local project build **21**. The listing is not public yet.
+App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Version **1.0.0**, local project build **22**. The listing is not public yet.
 
 ## Price and product type
 
@@ -8,7 +8,7 @@ Intended sale: **$1.99 USD one-time iOS app**. No ads, no in-app purchases, no s
 
 ## TestFlight / Xcode Cloud
 
-`project.yml` and the generated Xcode project use marketing version **1.0.0** and local build **21**. Xcode Cloud numbers its own builds. `ci_scripts/ci_post_clone.sh` installs XcodeGen if needed and regenerates the project.
+`project.yml` and the generated Xcode project use marketing version **1.0.0** and local build **22**. Xcode Cloud numbers its own builds. `ci_scripts/ci_post_clone.sh` installs XcodeGen if needed and regenerates the project.
 
 After signing in to App Store Connect:
 
@@ -54,7 +54,7 @@ Run `scripts/capture_watch_shots.sh` for the four Watch screenshots. It uses the
 
 The Duo set contains `duo-outer-loadout.png`, `duo-outer-research.png`, `duo-inner-loadout.png` and `duo-inner-research.png`. They are rendered from the actual SwiftUI Lab at Apple's outer and inner display sizes by `LabCoverageTests.testDuoOuterAndInnerDisplayLayouts`. The archive, language and lore tests now also run on a fresh iPhone Duo simulator with iOS 27.1. Archive recovery and language settings captures at both display sizes are in `docs/app-store/archive/`.
 
-The English (U.S.) App Store version has 10 screenshots in each large iPhone group, 6 for iPad, 4 for Duo and 4 for Apple Watch. The Russian product page uses the same image set. Game Center's localized leaderboard names are **iPhone** and **Apple Watch** in English and Russian; keep them short so the ranked card does not wrap.
+The English (U.S.) App Store version has 10 screenshots in each large iPhone group, 6 for iPad, 4 for Duo and 4 for Apple Watch. The Russian product page has matching slots, with localized gameplay and Archive replacements in `docs/app-store/ru/`. Game Center's localized leaderboard names are **iPhone** and **Apple Watch** in English and Russian; keep them short so the ranked card does not wrap.
 
 The Product Page Information → Header and Search Results tab uses two language-neutral creative assets in both localizations. The [creative artwork manifest](app-store/creative/README.md) records the source, final sizes and App Store Connect asset IDs. These are key art alongside the separate device screenshots. Check Apple's iPhone and iPad previews before resubmitting the version.
 
@@ -95,3 +95,11 @@ The bilingual world, philosophy, field guide and legal website is public at http
 ## Quiet collection and playfield verification (11 October 2026)
 
 47 selected tests passed with zero failures on a fresh iPhone Duo / iOS 27.1 simulator. Finds are opened on request from completed-attempt results; encounters and region arrivals never pause play. The optional first route is interactive, and the entire arena fits outside the HUD and footer. All 77 maps were checked at eight viewport sizes, including full spark orbits, exits and Watch remote reconstruction. Current native captures are in `docs/app-store/archive/`. The published bilingual guide matches this behavior.
+
+## Resubmission · 12 October 2026
+
+Version **1.0.0 (18)** was resubmitted to App Review and confirmed as **Waiting for Review**. The app, 15 updated Game Center achievements and the two leaderboards are together in submission `8588cb0e-f1c5-4c8e-b111-feac21d3f623`. Game Center is enabled for this app version. Build 18 is the tested binary from source commit `6421636a2659fdfc4aa262affcfdf85aa694c54b`. Release remains manual after approval.
+
+The supplied device recording (2 minutes 8 seconds) is attached to App Review as `Echo-1.0.0-build18-device-gameplay.mp4`; Apple reports processing **Complete**. It shows the TestFlight listing for build 18, launch, normal gameplay, results, the Lab, charge refill and ability use. Review Notes answer the Guideline 2.1 demonstration request. The recording is retained only in the reviewer attachment, not in this public repository.
+
+English and Russian descriptions, names, subtitles, search keywords and website/support/privacy URLs were checked. Categories are Games → Puzzle and Action. Each localization has 10 screenshots in both iPhone groups, 6 iPad, 4 Duo and 4 Apple Watch screenshots; every screenshot is **Complete**. The product-page creative artwork was prepared earlier. No new app code was needed for resubmission.
