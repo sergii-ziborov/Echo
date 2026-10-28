@@ -21,6 +21,7 @@
 | Physical iPhone 13 mini update to 24 / saved preferences | PASS installed 1.1.0 (24), iOS 26.5; private backup copied, all 15 existing progress/settings keys unchanged. [Device evidence](PHYSICAL_24_VERIFICATION.json). Purchase/restore not inferred from this check. |
 | Focused purchase/policy/navigation regressions | PASS: 31, zero failures/skips; see cabinet report |
 | SDK Release cold launch/rendering | PASS on isolated iPhone 17 Pro / iOS 26.5 Simulator, alive after 183.6 s; prior build-23 binary with same SDK/configuration code, not a device purchase test |
+| Physical normal launch / activation | PASS after owner unlocked the phone; no termination/reset/fixture arguments. This is not a completed visual-render or cold-launch test. |
 | Genuine Sandbox purchase / restore / pending / refund | NOT RUN |
 | Original production-owner update/reinstall/another device | NOT RUN |
 | Real SDK UMP/test-creative load and discard on an isolated Simulator | PASS: 1, zero failures/skips; [evidence](AD_NETWORK_VERIFICATION.json) |

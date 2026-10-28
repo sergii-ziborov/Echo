@@ -163,3 +163,13 @@ The owner subsequently confirmed updating through TestFlight and unlocking the c
 
 
 An existing iPhone Mirroring setup was opened as an alternative to the stalled Device Hub view. macOS explicitly requires Touch ID or the owner's Mac login before it can be used. Authentication was handed to the owner; no password was entered, automatic authentication was not enabled and security settings were not changed. This route requires the physical iPhone to remain locked near the Mac, as documented by [Apple](https://support.apple.com/en-us/120421). The earlier request to keep the phone awake is superseded if mirroring is authenticated.
+
+
+## Subsequent physical activation retry
+
+After the owner unlocked the physical iPhone again, a normal devicectl launch/activation succeeded, process 72427. No terminate-existing, fixture arguments, install or reset was used. This supersedes the earlier Locked launch failure; it is not proof of a cold launch, rendered UI or purchase.
+
+Device Hub's display connection was retried immediately and again remained at Connecting display. Accessibility Inspector was then targeted specifically at the physical iPhone/ECHO process. The process appeared and could be selected, but no element hierarchy or device screenshot was obtained. Invoking Run Audit did not produce a completed result; an empty inspector is not reported as a passing accessibility audit. The owner was asked for the actual Ads and Purchases screen state to continue genuine-device verification.
+
+
+**Concrete display blocker confirmed visually**: after the connection attempt finished, Device Hub rendered “Screen Sharing Unavailable” and “iPhone s must be running iOS 27.0 or above to screen share with this Mac.” The actual phone remains on 26.5. This replaces an unspecified display-connection diagnosis with the tool's explicit OS requirement. No phone OS upgrade or security-setting change was performed. Purchase-screen checking now awaits the owner's reading from the physical phone, or an authenticated compatible mirroring route.

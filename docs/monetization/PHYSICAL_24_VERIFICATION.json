@@ -38,19 +38,37 @@
     "freshPurchaseOrRestore": false
   },
   "launch": {
-    "status": "BLOCKED",
-    "domain": "com.apple.dt.CoreDeviceError",
-    "code": 10002,
-    "reason": "SBMainWorkspace denied launch: Locked"
+    "status": "PASS",
+    "kind": "Normal launch/activation, no terminate-existing or fixture arguments",
+    "processIdentifier": 72427,
+    "command": "xcrun devicectl device process launch --device <paired-iPhone> com.sergiiziborov.Echo",
+    "isColdLaunchProven": false,
+    "visualRenderProven": false
   },
   "screenView": {
-    "status": "BLOCKED",
-    "reason": "Device Hub remained Connecting display; stopped screen sharing to release connection",
-    "alternative": "Existing iPhone Mirroring opened; awaiting owner Touch ID / Mac login authentication. Auto-authentication/security settings unchanged."
+    "status": "BLOCKED_OS_REQUIREMENT",
+    "reason": "Device Hub visibly reports Screen Sharing Unavailable: device must run iOS 27.0 or above; actual device runs 26.5",
+    "alternative": "Existing iPhone Mirroring opened; awaiting owner Touch ID / Mac login authentication. Auto-authentication/security settings unchanged.",
+    "latestRetry": "Retried immediately after owner unlocked the iPhone; still Connecting display",
+    "source": "Native Device Hub screenshot after connection attempt completed",
+    "phoneOSChanged": false
   },
   "genuinePurchase": "NOT RUN",
   "restore": "NOT RUN",
   "legacyReinstall": "NOT RUN",
   "pendingRefund": "NOT RUN",
-  "appInstalledDeletedOrResetByAgent": false
+  "appInstalledDeletedOrResetByAgent": false,
+  "earlierLaunch": {
+    "status": "BLOCKED",
+    "domain": "com.apple.dt.CoreDeviceError",
+    "code": 10002,
+    "reason": "SBMainWorkspace denied launch: Locked"
+  },
+  "accessibilityInspector": {
+    "target": "Physical iPhone 13 mini / ECHO process",
+    "processSelection": "PASS",
+    "hierarchyAndScreenshot": "UNAVAILABLE — selected app but no inspected element or device screenshot",
+    "audit": "NOT RUN — invoking Run Audit did not produce a completed result; empty panel is not a zero-issues PASS"
+  },
+  "purchaseUIScreen": "Owner asked to report real purchase-screen state; no price or purchase outcome invented"
 }

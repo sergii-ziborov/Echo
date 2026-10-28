@@ -215,5 +215,5 @@
     "allUnchanged": true,
     "missingPriorKeys": 0
   },
-  "physicalUI": "BLOCKED — launch explicitly Locked after auto-lock; existing iPhone Mirroring awaits owner authentication"
+  "physicalUI": "BLOCKED — launch/activation PASS; Device Hub explicitly requires iOS 27+ for screen sharing while phone is 26.5; real purchase-screen state requested from owner"
 }
