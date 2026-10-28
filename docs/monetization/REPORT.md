@@ -2,7 +2,7 @@
 
 > Дополнительная проверка SDK: реальный UMP → официальный тестовый interstitial → отмена готовности, **PASS: 1, 0 failures/skips**, изолированный Simulator. [Доказательства](AD_NETWORK_VERIFICATION.json). Полный список файлов ветки — [CHANGED_FILES.txt](CHANGED_FILES.txt).
 >
-> Последний TestFlight: **1.1.0 (24)** с SDK доступен Keepers, `IN_BETA_TESTING`. [Проверенная доставка и ограничения](TESTFLIGHT_24.md). Политика и условия сайта обновлены на EN/RU. Европейское сообщение UMP **опубликовано**, EN/RU; американская форма, runtime privacy и реальные покупки ещё не подтверждены.
+> Последний TestFlight: **1.1.0 (24)** с SDK доступен Keepers, `IN_BETA_TESTING`. [Проверенная доставка и ограничения](TESTFLIGHT_24.md). Политика и условия сайта обновлены на EN/RU. Европейское сообщение UMP **опубликовано**, EN/RU; американская EN-US форма также опубликована. Runtime privacy и реальные покупки ещё не подтверждены.
 >
 > Обновление кабинетов 28 октября: единственный Remove Ads создан, настроены EN/RU, цена USD 1.99 и доступность во всех 175 территориях. Правильный app-ads.txt опубликован на действующем сайте. SKU пока `MISSING_METADATA`, проверка Google не завершена. Текущие доказательства и оставшиеся шаги — [CABINET_SETUP_2026-10-28.md](CABINET_SETUP_2026-10-28.md). Ниже сохранён исходный отчёт подготовки; его прежние статусы кабинетов исторические.
 
@@ -10,7 +10,7 @@
 
 Дата: 28 октября 2026. База: `740c8fc244823249eacf9e39eec35e407ccaa787`, совпала с полученным `origin/main`. Исходники подготовлены для 1.1.0 (23); это не опубликованная версия.
 
-**Статус: SDK-сборка 24 доставлена во внутренний TestFlight; публичный выпуск R1 BLOCKED незакрытыми настройками и аппаратными проверками.** App Store остаётся 1.0.0 (18), USD 1.99. Один Remove Ads настроен во всех 175 территориях, но пока `MISSING_METADATA`. Сайт переопубликован с app-ads.txt, подписанной preFree-политикой и переходными legal-страницами. В AdMob платёжный профиль готов, аккаунт ожидает проверки Google; успешная проверка приложения ещё не подтверждена. Цена приложения, App Review, Family Sharing и live-реклама не включались. Исходный рабочий каталог с посторонними изменениями не затронут.
+**Статус: SDK-сборка 24 доставлена во внутренний TestFlight; публичный выпуск R1 BLOCKED незакрытыми настройками и аппаратными проверками.** App Store остаётся 1.0.0 (18), USD 1.99. Один Remove Ads настроен во всех 175 территориях, но пока `MISSING_METADATA`. Сайт переопубликован с app-ads.txt, подписанной preFree-политикой и переходными legal-страницами. В AdMob платёжный профиль готов, аккаунт **одобрен Google**; успешная проверка приложения ещё не подтверждена. Цена приложения, App Review, Family Sharing и live-реклама не включались. Исходный рабочий каталог с посторонними изменениями не затронут.
 
 Commit реализации: `1acd424da7de4d26150f86ce105744b2d9cad012`, ветка `codex/free-remove-ads`. Отчёт фиксируется отдельным следующим коммитом. Полный перечень файлов — [CHANGED_FILES.md](CHANGED_FILES.md).
 
@@ -126,7 +126,7 @@ git diff --check
 
 1. История paid/free по витринам, реальные paid builds, UTC-переход, goodwill и утверждённый cutover — **BLOCKED**, [ledger](CUTOVER_LEDGER.template.md). Дата не придумана.
 2. Единственный SKU, EN/RU, цена/доступность — **PASS**; настоящий review screenshot и первая подача IAP — **BLOCKED**. Family Sharing не включён и не обещан. Готовность платёжного профиля Google не подменяет проверку договорных/налоговых условий Apple.
-3. Настоящие AdMob app/unit/publisher и публикация европейской EN/RU формы — **PASS**. Google account/app approval, US-форма, audience и runtime privacy audit — **BLOCKED/NOT RUN**. app-ads.txt корректно доступен по HTTP, но успешный Google crawl не подтверждён. `npa=1` не приравнен к Data Not Collected.
+3. Настоящие AdMob app/unit/publisher и публикация европейской EN/RU и американской EN-US форм — **PASS**. Google account approval — **PASS**; app verification, audience и runtime privacy audit — **BLOCKED/NOT RUN**. app-ads.txt корректно доступен по HTTP, но успешный Google crawl не подтверждён. `npa=1` не приравнен к Data Not Collected.
 4. Подписанный HTTPS preFree endpoint, приватный ключ вне git и public key в сборке — **PASS**; hosting logs/retention — **NOT VERIFIED**.
 5. Физический прогон и покупки исходного владельца после update/reset/reinstall/другого устройства — **NOT RUN**. Пока нет этих доказательств, R1 не соответствует полному Definition of Done.
 

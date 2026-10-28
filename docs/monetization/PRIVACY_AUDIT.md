@@ -6,7 +6,7 @@ Status: **BLOCKED for live advertising**. Including an SDK is not evidence that 
 | --- | --- | --- | --- |
 | StoreKit 2 | Verified app acquisition and non-consumable transaction metadata; local provenance cache | Apple processes payment; app stores minimal evidence in device-only Keychain | API integration + fixtures; real account NOT RUN |
 | Google Mobile Ads | Contextual `npa=1`; publisher first-party ID disabled; content rating G; no IDFA access request by ECHO | Google may receive IP/network, device, diagnostics and ad interaction data for delivery/measurement | Actual traffic, retention, subprocessors and App Privacy mapping BLOCKED |
-| UMP | SDK-managed consent updates; options retained after purchase | Google / applicable consent framework | European EN/RU form published, exact list read-back; Google-only vendor and restrictive consent settings saved. US form and real-account regional presentation remain BLOCKED/NOT RUN |
+| UMP | SDK-managed consent updates; options retained after purchase | Google / applicable consent framework | European EN/RU and US EN-US forms published, exact list read-back; Google-only vendor lists saved for both. US targets all current/future supported states with do-not-sell/share available. Real-account regional presentation remains NOT RUN |
 | Signed policy endpoint | No device/account/query identifier; ephemeral HTTPS request | Hosting may log IP and user agent | Signed HTTPS preFree endpoint/key configured 28 October; actual host log retention NOT VERIFIED. See CABINET_SETUP_2026-10-28.md. |
 | WatchConnectivity | Existing controls, progress and wrist rewards | Paired user devices | No new monetization payload |
 | Optional telemetry | None added | No custom analytics backend | Source audit PASS |

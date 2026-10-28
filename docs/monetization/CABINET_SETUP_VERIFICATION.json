@@ -20,7 +20,11 @@
     "http": 200,
     "contentType": "text/plain",
     "redirects": 0,
-    "googleVerification": "BLOCKED — Check for Changes retried; AdMob still reports verification failure. HTTP delivery is verified, Google acceptance is not."
+    "googleVerification": "BLOCKED — fresh application list requires verification; Verify App and Check for Changes again returned app-ads.txt verification failure",
+    "lastHTTPCheckUTC": "2026-10-28T18:29:41Z",
+    "googleBotUserAgent": "Mediapartners-Google",
+    "exactPublisherLine": true,
+    "consoleDetails": "No data rows / no ad requests with app-ads.txt; the console does not expose an actual crawled URL or last crawl for this app"
   },
   "site": {
     "version": 6,
@@ -121,9 +125,16 @@
     "consentModeForAdvertising": false,
     "specialFeature2": false,
     "runtimeConsentTest": "NOT RUN",
-    "USMessage": "BLOCKED — builder/vendor-list work attempted; no saved message or publication confirmed",
-    "publication": "EU PASS; US work incomplete; real regional presentation NOT RUN",
-    "USVendorList": "NOT VERIFIED — focus lost before authoritative save/read-back"
+    "USMessage": "PUBLISHED — exact list read-back Опубликовано after confirmation",
+    "publication": "EU PASS; US PASS; real regional presentation NOT RUN",
+    "USVendorList": "PASS — custom Google-only list saved; main settings show 1 partner and disabled Save",
+    "USMessageName": "ECHO — US privacy choices",
+    "USLanguages": [
+      "en-US"
+    ],
+    "USAppID": "6811673094",
+    "USTargeting": "All current and future supported US states — switch ON",
+    "USDoNotSellOrShare": true
   },
   "ageDeclaration": {
     "appStoreRating": "NINE_PLUS",
@@ -159,17 +170,34 @@
   "githubPullRequest": "https://github.com/sergii-ziborov/Echo/pull/1",
   "googleRegistration": {
     "paymentProfile": "READY",
-    "accountApproval": "PENDING",
+    "accountApproval": "APPROVED — actual Home card: Ваш аккаунт одобрен; Данные аккаунта проверены. Показ объявлений включен.",
     "welcomeEmailPublisherMatches": true,
     "approvalEmailFound": false,
-    "morePaymentDataRequested": false
+    "morePaymentDataRequested": false,
+    "approvalEvidence": "Native Home AX text and visible screenshot; welcome email was not used as proof"
   },
   "uiCompletion": {
     "EuropeanPublication": "PASS — list row reports Опубликовано",
     "pendingMechanicalUserRequest": false,
-    "USSettings": "BLOCKED — native Window selection did not switch to AdMob; ScreenCaptureKit -3811; CUA reset/rebind did not restore reliable input",
+    "USSettings": "PASS — clean Chrome tab restored control; Google-only vendor settings saved and US message published",
     "chromeBrowserAdapter": "UNAVAILABLE",
     "hiddenBrowserAPIsUsed": false,
-    "accountWideFirstPartyDeletionAccepted": false
+    "accountWideFirstPartyDeletionAccepted": false,
+    "previousWindowFailure": "Historical — resolved for US configuration during subsequent retry"
+  },
+  "appleRecheck": {
+    "build24": "IN_BETA_TESTING",
+    "iapState": "MISSING_METADATA",
+    "familySharable": false,
+    "date": "2026-10-28"
+  },
+  "physicalLatestQuery": {
+    "result": "BLOCKED",
+    "date": "2026-10-28",
+    "domain": "com.apple.dt.CoreDeviceError",
+    "code": 4016,
+    "description": "The device is not able to fulfill the requested usage assertion requirements.",
+    "appModified": false,
+    "purchaseTested": false
   }
 }
