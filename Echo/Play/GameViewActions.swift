@@ -98,6 +98,8 @@ extension GameView {
                 activeModel.audio.play(.death)
                 activeModel.audio.notify(.error)
             case .won(let result):
+                guard !session.rewardRecorded else { continue }
+                session.rewardRecorded = true
                 if let key = request.endless {
                     awardedPoints = activeModel.recordEndlessWin(key, result: result)
                 } else {
@@ -109,13 +111,19 @@ extension GameView {
                     )
                 }
                 activeModel.audio.notify(.success)
-                archiveFinds = activeModel.progress.pendingArchiveDiscoveries
+                let discoveries = activeModel.progress.pendingArchiveDiscoveries
+                archiveFinds = discoveries
+                session.hasProtectedDiscovery = !discoveries.isEmpty
+                activeModel.monetization.budget.recordWin(adContext)
             }
         }
     }
 
     func restart(playSound: Bool = true) {
+        // A remote Retry cannot start the arena behind an owned fullscreen operation.
+        guard activeModel.monetization.modal.owner == nil else { return }
         if playSound { activeModel.audio.play(.tap) }
+        activeModel.monetization.leaveResult()
         overlay = .none
         archiveFinds = []
         session.restart()
@@ -229,6 +237,12 @@ extension GameView {
     }
 
     func nextLevel() {
+        if request.endless != nil || request.daily || session.level.number == LevelCatalog.playable.count {
+            continueToNextLevel()
+        } else { monetizedNext() }
+    }
+
+    func continueToNextLevel() {
         activeModel.audio.play(.tap)
         if let key = request.endless {
             activeModel.play(endless: key.next)

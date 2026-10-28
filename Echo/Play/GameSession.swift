@@ -13,6 +13,12 @@ enum GamePhase: Equatable {
 @MainActor
 @Observable
 final class GameSession {
+    var viewSetupComplete = false
+    var runID = UUID()
+    var rewardRecorded = false
+    var nextRequested = false
+    var hasProtectedDiscovery = false
+    var usedWatchRemote = false
     let level: LevelDefinition
     let daily: Bool
     let dailyKey: String?
@@ -79,6 +85,11 @@ final class GameSession {
     }
 
     func restart() {
+        runID = UUID()
+        rewardRecorded = false
+        nextRequested = false
+        hasProtectedDiscovery = false
+        usedWatchRemote = PhoneWatchLink.shared.isSteering
         sim.reset()
         phase = .playing
         inputTarget = nil

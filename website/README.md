@@ -10,7 +10,7 @@ Run `python3 build.py` and `python3 verify.py`, then `python3 -m http.server 417
 
 Change `origin` in `site.json` to the new HTTPS origin, rebuild, and upload all of `dist/` to any static host. Preserve directory URLs with `index.html` resolution. The sitemap and metadata rebuild for the new domain. `.openai/hosting.json` is only needed for the temporary Sites deployment.
 
-When the app is publicly available, update the release status and add the actual App Store URL. The site currently states that ECHO is coming to the App Store.
+The App Store link is fixed to app ID 6811673094. `site.json` defaults to `release_phase: preFree` with the verified paid download price USD 1.99. It does not announce a free release. Change phase only after the owner-approved price transition is observed: freeQuiet/freeLive/adsOff select free copy, zero download price in JSON-LD, restore/legacy FAQ and the EN/RU R1 legal sources. Remove Ads is explained separately from download price. Complete the actual privacy/provider/retention audit before publishing those R1 legal texts. This repository preparation has not redeployed the hosted Site.
 
 ## Content maintenance
 

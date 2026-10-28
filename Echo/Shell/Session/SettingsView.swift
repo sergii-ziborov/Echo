@@ -33,6 +33,8 @@ struct SettingsView: View {
                         sectionLabel(Copy.text("settings.echo"))
                         legalCard
 
+                        MonetizationSettingsRow()
+
                         resetButton
                         footer
                     }

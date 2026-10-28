@@ -57,6 +57,7 @@ struct HomeView: View {
                 WristRelicsCard(appeared: appeared, reduceMotion: reduceMotion)
                     .homeEntrance(appeared, delay: 0.22, reduceMotion: reduceMotion)
             }
+            HomeMonetizationRow()
             tagline.homeEntrance(appeared, delay: 0.26, reduceMotion: reduceMotion)
         }
     }
@@ -90,6 +91,7 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
             }
 
+            HomeMonetizationRow()
             tagline.homeEntrance(appeared, delay: 0.26, reduceMotion: reduceMotion)
         }
     }

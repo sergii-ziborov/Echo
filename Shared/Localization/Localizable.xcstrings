@@ -1605,13 +1605,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Progress is stored locally. Supported Apple Watch results and rewards can sync between paired devices. A bug report is sent only when you choose to send it."
+            "value": "Core play works offline. Progress stays local; purchases and restoration may need an App Store connection. Optional Game Center is Apple’s service. See Privacy for advertising-provider data and choices."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Прогресс хранится локально. Поддерживаемые результаты и награды Apple Watch могут синхронизироваться между сопряжёнными устройствами. Отчёт об ошибке отправляется только по твоему решению."
+            "value": "Основная игра работает без интернета. Прогресс хранится локально; для покупки и восстановления может потребоваться App Store. Game Center — необязательный сервис Apple. Сведения о рекламном поставщике и выборе — в разделе конфиденциальности."
           }
         }
       }
@@ -1656,13 +1656,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "One paid download. No ads, subscriptions, in-app purchases or account."
+            "value": "Original paid owners keep ad-free access. After the free transition, one Remove Ads purchase turns off all ads, without a subscription or paid content unlocks. Current download terms are shown in the App Store."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Разовая покупка игры. Без рекламы, подписок, встроенных покупок и учётной записи."
+            "value": "Прежние покупатели сохраняют игру без рекламы. После бесплатного перехода одна покупка «Отключить рекламу» убирает все показы, без подписки и платного открытия контента. Текущие условия загрузки указаны в App Store."
           }
         }
       }
@@ -13631,13 +13631,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "If this policy changes, the App Store listing and the public PRIVACY.md file will be updated together."
+            "value": "Remove Ads stops future advertising requests and shows from ECHO; it does not erase previously transmitted data. Privacy options remain available in Settings → Ads and Purchases. The website policy and App Store disclosures describe the enabled release."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Если политика изменится, страница в App Store и публичный файл PRIVACY.md будут обновлены одновременно."
+            "value": "Отключение рекламы прекращает будущие рекламные запросы и показы ECHO, но не стирает уже переданные данные. Настройки приватности остаются доступны в разделе «Реклама и покупки». Политика сайта и сведения App Store описывают действующий выпуск."
           }
         }
       }
@@ -13648,13 +13648,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seals, research points, skills, research, the last map and sound or haptic preferences are stored on this device with Apple's standard UserDefaults."
+            "value": "Game records, inventory, research, Archive, language and audio settings remain local. Reset progress does not reset purchase rights or privacy choices. Uninstalling may erase game progress; restoring purchases does not synchronize campaign saves."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Знаки, очки исследований, способности, исследования, последняя карта и настройки звука и вибрации хранятся на этом устройстве в стандартном хранилище Apple UserDefaults."
+            "value": "Игровые записи, инвентарь, исследования, Архив, язык и звук хранятся локально. Сброс прогресса не сбрасывает покупки или выбор приватности. Удаление может стереть прогресс; восстановление покупок не синхронизирует кампанию."
           }
         }
       }
@@ -13665,13 +13665,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The app does not include analytics, advertising, tracking or network calls required to play."
+            "value": "Eligible free sessions may use Google Mobile Ads and UMP after rights, release and privacy checks. The SDK may process IP/network, device, diagnostic and ad-interaction information, even for non-personalized ads. ECHO does not request IDFA or add developer analytics. A configured policy host may process technical request logs; no route or account identifier is sent. Core gameplay works offline."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "В приложении нет аналитики, рекламы, отслеживания и сетевых запросов, необходимых для игры."
+            "value": "В подходящих бесплатных сессиях Google Mobile Ads и UMP могут использоваться после проверки прав, условий выпуска и приватности. SDK может обрабатывать IP и сеть, сведения об устройстве, диагностику и рекламные события, в том числе при неперсонализированной рекламе. ECHO не запрашивает IDFA и не добавляет собственную аналитику. Хостинг настроенной политики может обрабатывать технические данные запросов; маршрут или идентификатор аккаунта не передаются. Основная игра работает без интернета."
           }
         }
       }
@@ -13682,13 +13682,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ECHO does not collect personal data and does not require an account."
+            "value": "ECHO has no developer account. Progress stays on your devices. Apple handles purchases; StoreKit verifies original ownership and Remove Ads. Minimal verified evidence is kept locally for restoration and offline protection. The developer does not receive your card details or Apple ID."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "ECHO не собирает персональные данные и не требует учётной записи."
+            "value": "В ECHO нет учётной записи разработчика. Прогресс остаётся на ваших устройствах. Покупки обрабатывает Apple; StoreKit проверяет исходное приобретение и отключение рекламы. Минимальное подтверждение хранится локально для восстановления и защиты без сети. Разработчик не получает данные карты или Apple ID."
           }
         }
       }
@@ -13699,13 +13699,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report a bug opens your mail app with a message to the developer that already names the app version, device model and system version. Nothing is sent unless you send it, and the message is used only to answer you and fix the problem."
+            "value": "Bug reports and ad reports open your mail app. You choose whether to send them. Reports may include the app/device/system version or ad placement, time and a limited diagnostic reference, never a receipt, raw transaction, advertising ID or route history."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "«Сообщить об ошибке» открывает почтовое приложение с письмом разработчику, где уже указаны версия приложения, модель устройства и версия системы. Ничего не отправляется без вашего действия, а письмо используется только для ответа и исправления ошибки."
+            "value": "Сообщения об ошибках и рекламе открывают почтовое приложение. Отправку выполняете вы. Письмо может содержать версию игры, устройства и системы либо место и время показа с ограниченным диагностическим кодом, но не receipt, полную транзакцию, рекламный ID или историю маршрута."
           }
         }
       }
@@ -18788,13 +18788,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A paid App Store download of ECHO grants a personal, non-transferable license to play the compiled app, including its Apple Watch app, on devices associated with your Apple ID, subject to Apple's Licensed Application End User License Agreement."
+            "value": "ECHO is licensed under Apple’s Standard EULA and applicable usage rules, including its Apple Watch app. Your statutory consumer rights remain unchanged."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Платная загрузка ECHO из App Store даёт личную непередаваемую лицензию на использование скомпилированного приложения, включая приложение для Apple Watch, на устройствах, связанных с Apple ID, на условиях Лицензионного соглашения Apple с конечным пользователем."
+            "value": "Для ECHO, включая приложение Apple Watch, действуют стандартное лицензионное соглашение Apple и применимые правила использования. Установленные законом права потребителя сохраняются."
           }
         }
       }
@@ -18822,13 +18822,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Progress, settings and records are stored on this device, and wrist results sync with a paired Apple Watch. Uninstalling the app or using Reset progress permanently removes that local data."
+            "value": "Game progress is stored on your device. Reset or uninstall may remove local game data. Progress reset does not remove purchase rights or privacy choices; restoring a purchase does not synchronize campaign saves."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Прогресс, настройки и рекорды хранятся на этом устройстве, а результаты с часов синхронизируются с сопряжёнными Apple Watch. Удаление приложения или сброс прогресса безвозвратно стирает эти локальные данные."
+            "value": "Игровой прогресс хранится на устройстве. Сброс или удаление могут удалить локальные игровые данные. Сброс не удаляет права покупки или выбор приватности; восстановление покупки не синхронизирует кампанию."
           }
         }
       }
@@ -18839,13 +18839,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The purchase is a one-time app download. The current build does not offer subscriptions, consumable items or advertising. Features, maps and balance may change in later updates."
+            "value": "Current download terms are shown in the App Store. After the free transition, all existing worlds and modes remain available through normal progression. One Remove Ads non-consumable disables all advertising; there is no subscription or sale of gameplay power. Original paid owners keep ad-free access without another payment. Restore Purchases checks both rights; a connection may be needed."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Покупка — разовая загрузка приложения. Текущая версия не содержит подписок, расходуемых покупок и рекламы. Функции, карты и баланс могут меняться в обновлениях."
+            "value": "Текущие условия загрузки указаны в App Store. После бесплатного перехода все существующие миры и режимы доступны по обычной прогрессии. Одна разовая покупка «Отключить рекламу» убирает все показы; нет подписки или продажи игровой силы. Прежние покупатели сохраняют игру без рекламы без новой оплаты. Восстановление проверяет оба права; может потребоваться интернет."
           }
         }
       }
@@ -26402,6 +26402,465 @@
           "stringUnit": {
             "state": "translated",
             "value": "Эхо"
+          }
+        }
+      }
+    },
+    "monetization.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ads and Purchases"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Реклама и покупки"
+          }
+        }
+      }
+    },
+    "monetization.headline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ECHO without ads"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ECHO без рекламы"
+          }
+        }
+      }
+    },
+    "monetization.description": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove all in-game advertising with one purchase. No subscription. Worlds, research and knowledge remain available in the free version too."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все игровые рекламные показы отключаются одной покупкой. Без подписки. Миры, исследования и знания остаются доступны и в бесплатной версии."
+          }
+        }
+      }
+    },
+    "monetization.removeAds": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove Ads"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отключить рекламу"
+          }
+        }
+      }
+    },
+    "monetization.restore": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore Purchases"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Восстановить покупки"
+          }
+        }
+      }
+    },
+    "monetization.continueFree": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue Free"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжить бесплатно"
+          }
+        }
+      }
+    },
+    "monetization.close": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Закрыть"
+          }
+        }
+      }
+    },
+    "monetization.adFree": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ads are off"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Реклама отключена"
+          }
+        }
+      }
+    },
+    "monetization.legacy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your original ECHO purchase is preserved. No ads will be shown."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Исходная покупка ECHO сохранена. Рекламы не будет."
+          }
+        }
+      }
+    },
+    "monetization.legacyNotice": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You bought ECHO earlier. Your game stays ad-free; there is nothing to buy again."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вы приобрели ECHO раньше. Игра остаётся для вас без рекламы — ничего покупать не нужно."
+          }
+        }
+      }
+    },
+    "monetization.checking": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking purchases. No ads are shown while we check."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверяем покупки. Пока реклама не показывается."
+          }
+        }
+      }
+    },
+    "monetization.pending": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your purchase is awaiting App Store approval."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Покупка ожидает подтверждения App Store."
+          }
+        }
+      }
+    },
+    "monetization.productUnavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The purchase is currently unavailable. You can keep playing."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Покупка сейчас недоступна. Игру можно продолжить."
+          }
+        }
+      }
+    },
+    "monetization.restoreNone": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching purchase was found. Check your App Store account."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подходящая покупка не найдена. Проверьте аккаунт App Store."
+          }
+        }
+      }
+    },
+    "monetization.restoreError": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purchases could not be checked. Please try again later."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверить покупки пока не удалось. Повторите позже."
+          }
+        }
+      }
+    },
+    "monetization.purchaseError": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The purchase could not be verified. You can keep playing without ads while we check."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось проверить покупку. Пока идёт проверка, можно играть без рекламы."
+          }
+        }
+      }
+    },
+    "monetization.thanks": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done. Ads are off."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Готово. Реклама отключена."
+          }
+        }
+      }
+    },
+    "monetization.loadingProduct": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading the App Store price…"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Загружаем цену App Store…"
+          }
+        }
+      }
+    },
+    "monetization.legacyHelp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bought the original paid ECHO? You do not need to pay again. Use Restore Purchases to check your access. Purchasing and restoring may require internet."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ранее покупали платную ECHO? Повторная оплата не требуется. Проверьте восстановление покупок. Для покупки и восстановления может потребоваться интернет."
+          }
+        }
+      }
+    },
+    "monetization.preFree": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ECHO’s paid release stays ad-free. No additional purchase is offered before the free transition is complete."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Платная версия ECHO остаётся без рекламы. До завершения бесплатного перехода дополнительные покупки не предлагаются."
+          }
+        }
+      }
+    },
+    "monetization.free": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The full game is available. The first five campaign maps are always ad-free."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вся игра доступна. Первые пять карт кампании всегда без рекламы."
+          }
+        }
+      }
+    },
+    "monetization.playAdFree": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play without ads"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Играть без рекламы"
+          }
+        }
+      }
+    },
+    "privacy.options": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Options"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки приватности"
+          }
+        }
+      }
+    },
+    "privacy.unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy options are not available now. No ads will be requested."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки рекламной приватности сейчас недоступны. Реклама не запрашивается."
+          }
+        }
+      }
+    },
+    "ads.report": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report an Inappropriate Ad"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сообщить о неподходящей рекламе"
+          }
+        }
+      }
+    },
+    "ads.reportPrompt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Describe the ad and when you saw it. This email is sent only if you choose to send it."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Опишите рекламу и когда вы её видели. Письмо отправляется только по вашему действию."
+          }
+        }
+      }
+    },
+    "ads.transitionLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An ad may appear after this result"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "После результата может появиться реклама"
           }
         }
       }

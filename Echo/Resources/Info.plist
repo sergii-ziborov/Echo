@@ -25,6 +25,14 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>EchoAdSDKIncluded</key>
+	<false/>
+	<key>EchoInterstitialUnitID</key>
+	<string>$(ECHO_INTERSTITIAL_UNIT_ID)</string>
+	<key>EchoReleasePolicyPublicKey</key>
+	<string>$(ECHO_RELEASE_POLICY_PUBLIC_KEY)</string>
+	<key>EchoReleasePolicyURL</key>
+	<string>$(ECHO_RELEASE_POLICY_URL)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>

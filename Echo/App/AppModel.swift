@@ -28,12 +28,24 @@ final class AppModel {
     var progress = ProgressStore()
     let audio = SoundPlayer()
     var archiveFocus: ArchiveDiscovery?
+    let monetization: MonetizationCoordinator
+
+    init(monetization: MonetizationCoordinator = .application()) {
+        self.monetization = monetization
+    }
 
     var continueLevel: LevelDefinition {
-        progress.continueLevel()
+        if let number = monetization.budget.value.pendingNextCampaignNumber,
+           let planned = LevelCatalog.level(number: number), progress.isUnlocked(planned) { return planned }
+        return progress.continueLevel()
     }
 
     func appear() {
+        monetization.onPresentationChange = { [weak self] showing in
+            guard let self else { return }
+            self.audio.suspendForAdvertising(showing)
+        }
+        monetization.start()
         PhoneWatchLink.shared.onProgress = { [weak self] incoming in
             self?.progress.mergeWrist(incoming)
             self?.syncGameCenter()
@@ -181,6 +193,7 @@ final class AppModel {
     func playPrimary() {
         audio.play(.confirm)
         let request = PlayRequest(levelID: continueLevel.id, daily: false, difficultyCycle: progress.difficultyCycle)
+        monetization.budget.completeTransition()
         if progress.hasSeenTutorial {
             screen = .playing(request)
         } else {
@@ -230,6 +243,7 @@ final class AppModel {
 
     func play(level: LevelDefinition, daily: Bool) {
         guard progress.isUnlocked(level) || daily else { return }
+        monetization.budget.completeTransition()
         audio.play(.confirm)
         let request = PlayRequest(
             levelID: daily ? LevelCatalog.daily().id : level.id,
@@ -265,6 +279,7 @@ final class AppModel {
     }
 
     func play(endless key: EndlessKey) {
+        monetization.budget.completeTransition()
         let request = PlayRequest(levelID: key.levelID, daily: false, difficultyCycle: 0, endless: key)
         if progress.hasSeenTutorial {
             screen = .playing(request)

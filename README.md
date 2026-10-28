@@ -1,12 +1,14 @@
 # ECHO
 
+> **Prepared R1 transition · 28 October 2026:** this branch adds StoreKit rights/restoration, original-owner protection, rare interstitial policy and iOS-only AdMob/UMP adapters. The default `project.yml` is SDK-free `preFree`; `project-admob.yml` explicitly opts into the pinned iOS SDK with a guarded Release build. Production ads remain disabled; no App Store price, live advertising or submission was changed. [Evidence, configuration and release gates](docs/monetization/RELEASE.md).
+
 ECHO is a top-down route-planning survival puzzle for iPhone, iPad and Apple Watch. You guide the Signal, collect every spark, and reach the exit. Every few seconds an echo appears and walks the line you already drew. Your own route becomes the hazard.
 
 > You don't cooperate with your past. You survive it.
 
 Seventy-seven maps sit in eleven seven-map regions of space, strung along one road through a broken galaxy. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later regions add moving debris, timed crystals, beams, fold faults, field wells, and a short Candy Timeline training pocket. The in-game Keeper Archive documents every rule. The Archive gradually recovers field notes, places and Keeper records as you encounter mechanics and restore regions. A compact reward strip on the result screen opens numbered fragments with text excerpts, on demand. Encounters never interrupt play. The first route offers optional interactive practice. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio and language preferences.
 
-The App Store build is a **$1.99 one-time download**. No ads, accounts, or in-app purchases. Progress stays on the device.
+The published 1.0.0 remains the original **$1.99 one-time download**. The prepared R1 transition will make downloading free after owner approval, with one Remove Ads purchase and protected access for original owners. The live transition is not complete. Progress stays on the device; no developer account is required.
 
 The game is in **English and Russian**. It follows the device language by default. Settings → Language offers Auto, English and Русский, and changes visible text immediately.
 
@@ -70,7 +72,7 @@ Explore the [ECHO website](https://echo-survive-your-past.serhiiright.chatgpt.si
 
 See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store listing copy](docs/app-store/LISTING.md), [release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
 
-> **App Store status · 12 October 2026:** version 1.0.0 (build 18) was resubmitted and is Waiting for Review. The requested device gameplay video is attached to App Review. Build 18 remains available in TestFlight. [Release details](docs/APP_STORE_RELEASE.md).
+> **App Store status · 28 October 2026:** version 1.0.0 is publicly available at $1.99 in the US. The prepared R1 source remains protected in `preFree`; no price transition or live advertising has been enabled. [Release details](docs/monetization/RELEASE.md).
 
 ## The story
 

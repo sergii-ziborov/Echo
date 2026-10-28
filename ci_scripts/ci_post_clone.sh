@@ -9,4 +9,8 @@ if ! command -v xcodegen >/dev/null 2>&1; then
 fi
 
 cd "${CI_PRIMARY_REPOSITORY_PATH:?Xcode Cloud checkout path is required}"
-xcodegen generate
+if [ "${ECHO_BUILD_ADS:-0}" = "1" ]; then
+    xcodegen generate --spec project-admob.yml
+else
+    xcodegen generate
+fi
