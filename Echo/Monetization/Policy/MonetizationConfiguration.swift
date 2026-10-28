@@ -2,7 +2,7 @@ import Foundation
 
 struct MonetizationConfiguration {
     static let bundleID = "com.sergiiziborov.Echo"
-    /// Proposed SKU, not a claim that App Store Connect has a configured product.
+    /// App Store Connect non-consumable 6828008885; approval is a separate release gate.
     static let productID = "com.sergiiziborov.Echo.removeAds"
     static var adsCompiledIn: Bool {
 #if ECHO_ADMOB

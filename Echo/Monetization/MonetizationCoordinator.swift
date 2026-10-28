@@ -7,6 +7,7 @@ final class MonetizationCoordinator {
     let privacy: PrivacyCoordinator
     let modal = MonetizationModalGate()
     let budget: AdBudgetStore
+    let connectivity: AdConnectivity
     private let provider: any AdProvider
     private let configuration: MonetizationConfiguration
     private(set) var isForeground = true
@@ -24,12 +25,17 @@ final class MonetizationCoordinator {
 
     init(purchases: StoreKitPurchaseService = StoreKitPurchaseService(), privacy: PrivacyCoordinator = PrivacyCoordinator(),
          budget: AdBudgetStore = AdBudgetStore(), provider: any AdProvider = DisabledAdProvider(),
-         configuration: MonetizationConfiguration = .init()) {
+         configuration: MonetizationConfiguration = .init(), connectivity: AdConnectivity = .init()) {
         self.purchases = purchases; self.privacy = privacy; self.budget = budget
+        self.connectivity = connectivity
         self.provider = provider; self.configuration = configuration
         purchases.entitlements.onChange = { [weak self] in self?.invalidate() }
         purchases.release.onChange = { [weak self] in self?.invalidate() }
         privacy.onChange = { [weak self] in self?.provider.discardPreparedAds() }
+        connectivity.onChange = { [weak self] in
+            guard let self, !self.connectivity.isOnline else { return }
+            self.invalidate()
+        }
     }
     func start() { purchases.start() }
     func sceneChanged(active: Bool) {
@@ -64,7 +70,7 @@ final class MonetizationCoordinator {
         return MonetizationConfiguration.adsCompiledIn && configuration.hasLiveIdentifiers
     }
     func prepare(context: AdContext, isCurrent: @escaping @MainActor () -> Bool) {
-        guard deploymentAllowed, purchases.entitlements.state.isConclusiveFree,
+        guard deploymentAllowed, connectivity.isOnline, context.isOnline, purchases.entitlements.state.isConclusiveFree,
               purchases.effectivePolicy.permitsAds(at: Date()), context.isEligibleWin,
               context.uniqueCampaignClears >= 5, isForeground, modal.owner == nil,
               preparedResult != context.resultID else { return }
@@ -74,7 +80,9 @@ final class MonetizationCoordinator {
             await self.purchases.loadProduct()
             guard !Task.isCancelled, !self.purchases.productUnavailableThisSession,
                   isCurrent(), self.modal.acquire(.privacy) else { return }
-            await self.privacy.prepare(mayPresent: { !Task.isCancelled && isCurrent() && self.isForeground })
+            await self.privacy.prepare(mayPresent: {
+                !Task.isCancelled && isCurrent() && self.isForeground && self.connectivity.isOnline
+            })
             self.modal.release(.privacy)
             guard !Task.isCancelled, isCurrent(), self.decision(context, preparing: true) == .allow else { return }
             let creative = AdCreative(loadedAt: Date(), privacyGeneration: self.privacy.generation,
@@ -145,6 +153,7 @@ final class MonetizationCoordinator {
     private func evaluate(_ context: AdContext, budget: AdBudget, preparing: Bool = false) -> AdDecision {
         var context = context
         context.isForeground = context.isForeground && isForeground
+        context.isOnline = context.isOnline && connectivity.isOnline
         return AdPolicy.evaluate(context: context, entitlement: purchases.entitlements.state,
             privacyAllowed: privacy.canRequestAds, release: purchases.effectivePolicy, budget: budget,
             creative: provider.creative, now: Date(), privacyGeneration: privacy.generation,

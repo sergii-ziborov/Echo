@@ -44,7 +44,8 @@ final class CoordinatorTests: XCTestCase {
         let context = AdContext(runID: UUID(), resultID: UUID(), campaignNumber: 9, uniqueCampaignClears: 5)
         for _ in 0..<3 { budget.recordWin(AdContext(runID: UUID(), resultID: UUID(), campaignNumber: 9)) }
         for _ in 0..<960 { budget.addActiveSeconds(0.25) }
-        let coordinator = MonetizationCoordinator(purchases: service, privacy: PrivacyCoordinator(client: privacy), budget: budget, provider: provider)
+        let coordinator = MonetizationCoordinator(purchases: service, privacy: PrivacyCoordinator(client: privacy),
+            budget: budget, provider: provider, connectivity: AdConnectivity(initialStatus: true))
         return (coordinator, provider, privacy, context)
     }
     func prepare(_ coordinator: MonetizationCoordinator, _ provider: TestAdProvider, _ context: AdContext) async {
@@ -105,6 +106,31 @@ final class CoordinatorTests: XCTestCase {
         await Task.yield()
         XCTAssertEqual(provider.prepares, 0)
         XCTAssertEqual(privacy.requests, 0)
+    }
+    func testOfflineDoesNotRequestConsentOrAdsAndNextContinues() async {
+        let (coordinator, provider, privacy, context) = await setup()
+        coordinator.connectivity.update(online: false)
+        coordinator.prepare(context: context, isCurrent: { true })
+        await Task.yield()
+        XCTAssertEqual(privacy.requests, 0)
+        XCTAssertEqual(provider.prepares, 0)
+        var transitions = 0
+        coordinator.next(context: context, isCurrent: { true }) { transitions += 1 }
+        XCTAssertEqual(transitions, 1)
+        XCTAssertEqual(provider.presents, 0)
+    }
+    func testLosingNetworkDiscardsReadyCreativeWithoutLatePresentation() async {
+        let (coordinator, provider, _, context) = await setup()
+        await prepare(coordinator, provider, context)
+        coordinator.connectivity.update(online: false)
+        XCTAssertNil(provider.creative)
+        XCTAssertEqual(coordinator.decision(context), .deny(.offline))
+        var transitions = 0
+        coordinator.next(context: context, isCurrent: { true }) { transitions += 1 }
+        coordinator.connectivity.update(online: true)
+        XCTAssertEqual(transitions, 1)
+        XCTAssertEqual(provider.presents, 0)
+        XCTAssertEqual(provider.prepares, 1)
     }
     func testWatchProtectionIsStickyAndWinCallbackDoesNotDuplicateReward() {
         let model = CoverageFixtures.model(rich: false)

@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-28",
+  "app": "6811673094",
+  "testflightBuild": "1.1.0 (23)",
+  "productionAdsEnabled": false,
+  "iap": {
+    "id": "6828008885",
+    "productID": "com.sergiiziborov.Echo.removeAds",
+    "type": "NON_CONSUMABLE",
+    "USBasePrice": "1.99",
+    "territories": 175,
+    "availableInNewTerritories": true,
+    "familySharable": false,
+    "state": "MISSING_METADATA"
+  },
+  "publisherID": "pub-7387441604864948",
+  "appAds": {
+    "url": "https://echo-survive-your-past.serhiiright.chatgpt.site/app-ads.txt",
+    "http": 200,
+    "contentType": "text/plain",
+    "redirects": 0,
+    "googleVerification": "BLOCKED — browser control unavailable, no accepted recrawl confirmed"
+  },
+  "site": {
+    "version": 6,
+    "commit": "7ad1a46926ed4c025b7e80b04d27e1ca9574fd72",
+    "deployment": "appgdep_6ae2077c59a88191b3838c0c91b29ff1",
+    "status": "succeeded"
+  },
+  "tests": {
+    "xcode": "27.1 (27A9275)",
+    "device": "iPhone 17 Pro Simulator",
+    "os": "26.5",
+    "result": "Passed",
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "xcresult": "/tmp/echo-r1-completion/policy-regression.xcresult",
+    "suites": [
+      "PurchaseTests",
+      "PurchaseServiceTests",
+      "AdPolicyTests",
+      "CoordinatorTests"
+    ]
+  },
+  "nativeStoreKit": "BLOCKED — configuration service error, stalled lookup; initial run cancelled",
+  "physicalPurchases": "NOT RUN",
+  "cutover": "NOT APPROVED",
+  "liveAppID": "NOT CONFIGURED",
+  "interstitialUnitID": "NOT CONFIGURED"
+}

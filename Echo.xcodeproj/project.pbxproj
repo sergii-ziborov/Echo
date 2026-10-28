@@ -18,6 +18,7 @@
 		07E57E5D723BA533FD2F22C1 /* SimulationClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9418282F22A74AA5C49EE99 /* SimulationClock.swift */; };
 		08070C2C42D70514ECB61118 /* WorldSimulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9740D1BCE9319217DB7E2979 /* WorldSimulationTests.swift */; };
 		0888B3C3E01B03255AF8CF95 /* ArchiveRecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC16F64E8D67CBA107E02B /* ArchiveRecoveryView.swift */; };
+		0898750E9A31CFD446046212 /* AdConnectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752BCBD16BB476BB9AF4FAC /* AdConnectivity.swift */; };
 		08A1DB97CCA0C6E41C4AEE7B /* RemoteWire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E99D7D804B1F8DDF58061AB /* RemoteWire.swift */; };
 		09DD77556486AEB8D27A1ED3 /* win.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7667BFF4E65A6C68B48445A8 /* win.wav */; };
 		0A4C75C4E57DA9E62651954A /* TutorialPracticeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF66BBA0A061614629D69E4 /* TutorialPracticeTests.swift */; };
@@ -384,6 +385,7 @@
 		2042C1C5EE1E0CDC47C60202 /* Echo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Echo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2284B415450680799E6045D1 /* LevelFraming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelFraming.swift; sourceTree = "<group>"; };
 		2587703AF3B71F993AF1070C /* WikiGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiGuide.swift; sourceTree = "<group>"; };
+		2752BCBD16BB476BB9AF4FAC /* AdConnectivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdConnectivity.swift; sourceTree = "<group>"; };
 		277604BBAEBDE79B46BEAFCE /* EchoWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoWatchApp.swift; sourceTree = "<group>"; };
 		2956A36EA492FC6EA80661C1 /* LabCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabCoverageTests.swift; sourceTree = "<group>"; };
 		299A03BBE7DFB0B777AA40B3 /* BaselineSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineSnapshotTests.swift; sourceTree = "<group>"; };
@@ -1434,6 +1436,7 @@
 			isa = PBXGroup;
 			children = (
 				1ACF74AE8BA0C23ED53231B1 /* AdBudgetStore.swift */,
+				2752BCBD16BB476BB9AF4FAC /* AdConnectivity.swift */,
 				9DF270EE092EC66EA3AB4AA0 /* AdPolicy.swift */,
 				4D9D1CD7FCDB15FD2C15DFE9 /* AdPresentationHost.swift */,
 				764C6AA15C943444961A3712 /* AdProvider.swift */,
@@ -1634,6 +1637,7 @@
 				05B1048A65250B497E720DF7 /* Achievements.swift in Sources */,
 				D27B0F4102D97BCE416B458B /* ActorFactory.swift in Sources */,
 				57571154DCE312DE2CFE4811 /* AdBudgetStore.swift in Sources */,
+				0898750E9A31CFD446046212 /* AdConnectivity.swift in Sources */,
 				A1C4D55DBEAEDBBA302DAC38 /* AdPolicy.swift in Sources */,
 				9309B75146C616DDD54F172C /* AdPresentationHost.swift in Sources */,
 				5A0D8137A2085B9EA49D1546 /* AdProvider.swift in Sources */,

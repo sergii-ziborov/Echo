@@ -91,6 +91,11 @@ final class EntitlementStore {
             unresolved()
             return
         }
+        // A verified family transaction conflicting with release configuration is uncertainty,
+        // never evidence that the family member should see ads or pay again.
+        if current.isEmpty, !policy.familySharingEnabled, purchases.contains(where: {
+            $0.environment == environment && $0.productID == MonetizationConfiguration.productID && $0.source == .family
+        }) { unresolved(); return }
         let allEnvironments = evidence.filter { $0.environment != environment } + current
         try cache.save(allEnvironments)
         evidence = allEnvironments

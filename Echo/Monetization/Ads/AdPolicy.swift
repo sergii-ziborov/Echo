@@ -18,6 +18,7 @@ struct AdContext: Equatable, Sendable {
     var nextIntentIsCurrent = true
     var uniqueCampaignClears = 0
     var isTestingRun = false
+    var isOnline = true
 
     var isEligibleWin: Bool {
         placement == .campaignResultToNext && campaignNumber > 5 && !isEducational && !hasMajorDiscovery
@@ -37,7 +38,7 @@ enum AdDecision: Equatable {
     case allow
     case deny(Reason)
     enum Reason: String { case releaseNotEnabled, entitlementProtected, privacy, placement, protectedLevel,
-        protectedContent, protectedMode, presentationState, onboarding, cadence, dailyCap, notReady, clock }
+        protectedContent, protectedMode, presentationState, onboarding, cadence, dailyCap, notReady, clock, offline }
 }
 
 enum AdPolicy {
@@ -46,6 +47,7 @@ enum AdPolicy {
         privacyGeneration: UInt64, entitlementGeneration: UInt64, preparing: Bool = false) -> AdDecision {
         guard release.permitsAds(at: now) else { return .deny(.releaseNotEnabled) }
         guard entitlement.isConclusiveFree else { return .deny(.entitlementProtected) }
+        guard context.isOnline else { return .deny(.offline) }
         guard privacyAllowed else { return .deny(.privacy) }
         guard context.placement == .campaignResultToNext else { return .deny(.placement) }
         guard context.campaignNumber > 5 else { return .deny(.protectedLevel) }

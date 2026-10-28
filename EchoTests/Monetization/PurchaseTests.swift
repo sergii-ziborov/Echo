@@ -103,5 +103,14 @@ final class PurchaseTests: XCTestCase {
         try store.resolve(acquisition: acquisition(offset: 70), purchases: [evidence()], policy: policy())
         XCTAssertTrue(store.state.isAdFree)
     }
+    func testFamilyConfigurationConflictNeverClassifiesAPayingMemberAsFree() throws {
+        let store = EntitlementStore(cache: MemoryEvidenceCache())
+        try store.resolve(acquisition: acquisition(offset: 70), purchases: [evidence(.family)], policy: policy())
+        XCTAssertFalse(store.state.isConclusiveFree)
+        guard case .unresolved = store.state else { return XCTFail("Conflicting family evidence must stay protected") }
+        var enabled = policy(); enabled.familySharingEnabled = true
+        try store.resolve(acquisition: acquisition(offset: 70), purchases: [evidence(.family)], policy: enabled)
+        guard case .adFreeFamily = store.state else { return XCTFail("Verified configured family purchase must restore") }
+    }
 
 }

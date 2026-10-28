@@ -249,6 +249,7 @@ def main():
     if OUT.exists():shutil.rmtree(OUT)
     OUT.mkdir()
     shutil.copytree(ROOT/'public/assets',OUT/'assets')
+    shutil.copyfile(ROOT/'public/app-ads.txt', OUT/'app-ads.txt')
     for name in ('style.css','site.js'):shutil.copy(ROOT/'src'/name,OUT/name)
     for LANG in ('en','ru'):
         for page in PAGES:

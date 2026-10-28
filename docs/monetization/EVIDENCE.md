@@ -1,5 +1,7 @@
 # R1 evidence — 28 October 2026
 
+Current cabinet changes and root-file deployment are recorded in [CABINET_SETUP_2026-10-28.md](CABINET_SETUP_2026-10-28.md). The initial read-only audit below predates those authorized changes.
+
 ## Scope
 
 Implementation baseline: `740c8fc244823249eacf9e39eec35e407ccaa787` (`origin/main`, fetched 28 October 2026). The owner's 27 October specification governs this package. R1.1 rescue, new lore, new maps, progression changes, subscriptions, and paid content unlocks are excluded.

@@ -36,6 +36,8 @@ final class AdPolicyTests: XCTestCase {
         XCTAssertEqual(evaluate(background), .deny(.presentationState))
         var stale = context(); stale.nextIntentIsCurrent = false
         XCTAssertEqual(evaluate(stale), .deny(.presentationState))
+        var offline = context(); offline.isOnline = false
+        XCTAssertEqual(evaluate(offline), .deny(.offline))
     }
     func testCadenceRollingWindowAndClockRollback() {
         var value = budget(); value.eligibleWins = 2
