@@ -201,6 +201,7 @@
 		A27F474B806E8A4FBDA8E956 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2494146AE8C6E2EA8C3486 /* SettingsView.swift */; };
 		A2A90E2EB5F866133E8E9199 /* ArenaBurstFX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD213FC3B66EE94F9571429 /* ArenaBurstFX.swift */; };
 		A33F864D68142FAB7AF261E9 /* collect.wav in Resources */ = {isa = PBXBuildFile; fileRef = A499390892B6961CC6458790 /* collect.wav */; };
+		A37872448B4E87531A545A47 /* AdMobNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B0779F42043AF8DA02A085 /* AdMobNetworkTests.swift */; };
 		A3D1769007B14C2235C64765 /* LevelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C1412C5BED8201B14E0DC9 /* LevelFactory.swift */; };
 		A44D3CAD2FF956A2DD447674 /* CoverageHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655296264A5EF4FAE83D1834 /* CoverageHost.swift */; };
 		A46A023E9A0707D1F00585D2 /* WatchRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E1EF98ABFC54F34279F916 /* WatchRun.swift */; };
@@ -410,6 +411,7 @@
 		3EA87C83674C75BFA109F5C9 /* AsteroidScaleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidScaleTests.swift; sourceTree = "<group>"; };
 		3F2B33CC7E41404A49EF12BA /* ArenaFXCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArenaFXCoverageTests.swift; sourceTree = "<group>"; };
 		3FB701352DB455C9CAE8E58A /* GameViewCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewCoverageTests.swift; sourceTree = "<group>"; };
+		40B0779F42043AF8DA02A085 /* AdMobNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobNetworkTests.swift; sourceTree = "<group>"; };
 		41C1412C5BED8201B14E0DC9 /* LevelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelFactory.swift; sourceTree = "<group>"; };
 		41E838D2866B649C39C66247 /* LevelLore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelLore.swift; sourceTree = "<group>"; };
 		44459BB1CE215F37A776D135 /* WikiResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiResearch.swift; sourceTree = "<group>"; };
@@ -630,6 +632,7 @@
 		1126D6826A6EB6DE4D2627C3 /* Monetization */ = {
 			isa = PBXGroup;
 			children = (
+				40B0779F42043AF8DA02A085 /* AdMobNetworkTests.swift */,
 				00853FD9FE8E3030694DB69D /* AdPolicyTests.swift */,
 				96F31E554529B5F16719E241 /* BaselineProgress.json */,
 				299A03BBE7DFB0B777AA40B3 /* BaselineSnapshotTests.swift */,
@@ -1888,6 +1891,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A37872448B4E87531A545A47 /* AdMobNetworkTests.swift in Sources */,
 				35D33D6C518F60DBBE4AD3E3 /* AdPolicyTests.swift in Sources */,
 				1369403B28086FA04A9EE178 /* AppModelCoverageTests.swift in Sources */,
 				84A7F225B1ECFF65AA907CD1 /* ArchiveDiscoveryTests.swift in Sources */,
