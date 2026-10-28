@@ -165,7 +165,7 @@
     "purchaseTested": false,
     "resultBundle": "/tmp/echo-r1-completion/ad-network-configured.xcresult"
   },
-  "physicalInstalledBuild": "1.1.0 (23)",
+  "physicalInstalledBuild": "1.1.0 (24)",
   "physicalBackupHashRechecked": true,
   "githubPullRequest": "https://github.com/sergii-ziborov/Echo/pull/1",
   "googleRegistration": {
@@ -191,7 +191,7 @@
     "familySharable": false,
     "date": "2026-10-28"
   },
-  "physicalLatestQuery": {
+  "physicalEarlierQuery": {
     "result": "BLOCKED",
     "date": "2026-10-28",
     "domain": "com.apple.dt.CoreDeviceError",
@@ -199,5 +199,21 @@
     "description": "The device is not able to fulfill the requested usage assertion requirements.",
     "appModified": false,
     "purchaseTested": false
-  }
+  },
+  "physicalLatestQuery": {
+    "result": "PASS",
+    "date": "2026-10-28",
+    "version": "1.1.0",
+    "build": "24",
+    "containerAccessible": true,
+    "appModified": false
+  },
+  "physicalUpdateEvidence": "PHYSICAL_24_VERIFICATION.json",
+  "physicalUpdatePreservation": {
+    "result": "PASS",
+    "existingProgressAndSettingsKeys": 15,
+    "allUnchanged": true,
+    "missingPriorKeys": 0
+  },
+  "physicalUI": "BLOCKED — launch explicitly Locked after auto-lock; existing iPhone Mirroring awaits owner authentication"
 }

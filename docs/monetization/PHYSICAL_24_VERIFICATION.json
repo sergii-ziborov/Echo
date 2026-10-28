@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-28",
+  "device": "iPhone 13 mini",
+  "os": "26.5",
+  "isHardware": true,
+  "installedVersion": "1.1.0",
+  "installedBuild": "24",
+  "installationQuery": "PASS",
+  "reportedTestFlightUpdate": "Owner confirmed; installed version/build independently matched",
+  "deviceMetadata": {
+    "builtByDeveloper": true,
+    "containerAccessible": true
+  },
+  "backup": {
+    "status": "PASS",
+    "privateOutsideRepository": true,
+    "permissions": "0600",
+    "bytes": 1787,
+    "sha256": "c19a763f754493234ae3c4c9458ee711f09a791e8c00059ab96ce167b67b1664",
+    "priorKeys": 20,
+    "currentKeys": 20,
+    "missingPriorKeys": [],
+    "changedPriorKeys": [
+      "echo.monetization.diagnostics.v1",
+      "echo.monetization.adBudget.v1",
+      "SKTransactionUpdatesLastChecked"
+    ]
+  },
+  "progressAndSettingsComparison": {
+    "status": "PASS",
+    "existingProtectedKeys": 15,
+    "allUnchanged": true,
+    "scope": "Installed-device preferences before versus after update; no reinstall/reset or alternate-account assertion"
+  },
+  "storedDiagnostics": {
+    "entitlementResult": "monetization.free",
+    "source": "Actual device preferences; no raw transaction or receipt extracted",
+    "freshPurchaseOrRestore": false
+  },
+  "launch": {
+    "status": "BLOCKED",
+    "domain": "com.apple.dt.CoreDeviceError",
+    "code": 10002,
+    "reason": "SBMainWorkspace denied launch: Locked"
+  },
+  "screenView": {
+    "status": "BLOCKED",
+    "reason": "Device Hub remained Connecting display; stopped screen sharing to release connection",
+    "alternative": "Existing iPhone Mirroring opened; awaiting owner Touch ID / Mac login authentication. Auto-authentication/security settings unchanged."
+  },
+  "genuinePurchase": "NOT RUN",
+  "restore": "NOT RUN",
+  "legacyReinstall": "NOT RUN",
+  "pendingRefund": "NOT RUN",
+  "appInstalledDeletedOrResetByAgent": false
+}

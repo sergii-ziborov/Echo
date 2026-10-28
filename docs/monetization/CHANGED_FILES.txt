@@ -60,6 +60,7 @@ docs/monetization/CHANGED_FILES.txt
 docs/monetization/CUTOVER_LEDGER.md
 docs/monetization/CUTOVER_LEDGER.template.md
 docs/monetization/EVIDENCE.md
+docs/monetization/PHYSICAL_24_VERIFICATION.json
 docs/monetization/PRIVACY_AUDIT.md
 docs/monetization/PUBLIC_COPY.md
 docs/monetization/RELEASE.md

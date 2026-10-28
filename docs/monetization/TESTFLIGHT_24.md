@@ -18,13 +18,14 @@
 | Signed SDK archive, manual export, bundle versions and profile entitlements | PASS |
 | Apple validation and upload | PASS, `VERIFY SUCCEEDED` / `UPLOAD SUCCEEDED` |
 | Processing and internal availability | PASS; server state and Keepers membership confirmed |
+| Physical iPhone 13 mini update to 24 / saved preferences | PASS installed 1.1.0 (24), iOS 26.5; private backup copied, all 15 existing progress/settings keys unchanged. [Device evidence](PHYSICAL_24_VERIFICATION.json). Purchase/restore not inferred from this check. |
 | Focused purchase/policy/navigation regressions | PASS: 31, zero failures/skips; see cabinet report |
 | SDK Release cold launch/rendering | PASS on isolated iPhone 17 Pro / iOS 26.5 Simulator, alive after 183.6 s; prior build-23 binary with same SDK/configuration code, not a device purchase test |
 | Genuine Sandbox purchase / restore / pending / refund | NOT RUN |
 | Original production-owner update/reinstall/another device | NOT RUN |
 | Real SDK UMP/test-creative load and discard on an isolated Simulator | PASS: 1, zero failures/skips; [evidence](AD_NETWORK_VERIFICATION.json) |
 | Visible fullscreen dismissal, real-account consent choices/traffic; physical iPad/Watch | NOT RUN |
-| Google account/app verification | PENDING / BLOCKED; a reachable file is not Google approval |
+| Google account/app verification | Account APPROVED; app-ads.txt/application verification still BLOCKED. European and US privacy messages published; runtime consent tests remain separate. |
 
 The modern altool validation endpoint returned HTTP 500 and stalled; that validation process was cancelled. The official `--use-old-altool` path validated and uploaded the unchanged IPA successfully. A subsequent beta-detail read briefly returned 404 during processing; a fresh independent read confirmed IN_BETA_TESTING. No unsuccessful attempt is treated as PASS.
 
