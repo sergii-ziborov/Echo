@@ -2,7 +2,7 @@
 
 > Дополнительная проверка SDK: реальный UMP → официальный тестовый interstitial → отмена готовности, **PASS: 1, 0 failures/skips**, изолированный Simulator. [Доказательства](AD_NETWORK_VERIFICATION.json). Полный список файлов ветки — [CHANGED_FILES.txt](CHANGED_FILES.txt).
 >
-> Последний TestFlight: **1.1.0 (24)** с SDK доступен Keepers, `IN_BETA_TESTING`. [Проверенная доставка и ограничения](TESTFLIGHT_24.md). Политика и условия сайта обновлены на EN/RU. Европейское сообщение UMP сохранено черновиком; runtime privacy и реальные покупки ещё не подтверждены.
+> Последний TestFlight: **1.1.0 (24)** с SDK доступен Keepers, `IN_BETA_TESTING`. [Проверенная доставка и ограничения](TESTFLIGHT_24.md). Политика и условия сайта обновлены на EN/RU. Европейское сообщение UMP **опубликовано**, EN/RU; американская форма, runtime privacy и реальные покупки ещё не подтверждены.
 >
 > Обновление кабинетов 28 октября: единственный Remove Ads создан, настроены EN/RU, цена USD 1.99 и доступность во всех 175 территориях. Правильный app-ads.txt опубликован на действующем сайте. SKU пока `MISSING_METADATA`, проверка Google не завершена. Текущие доказательства и оставшиеся шаги — [CABINET_SETUP_2026-10-28.md](CABINET_SETUP_2026-10-28.md). Ниже сохранён исходный отчёт подготовки; его прежние статусы кабинетов исторические.
 
@@ -10,7 +10,7 @@
 
 Дата: 28 октября 2026. База: `740c8fc244823249eacf9e39eec35e407ccaa787`, совпала с полученным `origin/main`. Исходники подготовлены для 1.1.0 (23); это не опубликованная версия.
 
-**Статус: код подготовлен, выпуск R1 BLOCKED внешними настройками и аппаратными проверками.** App Store по проверке остаётся 1.0.0 (18), USD 1.99. IAP в кабинете отсутствует. Цена, публикация, App Review, Family Sharing, договоры и live-реклама не изменялись. Сайт не переопубликован. Исходный рабочий каталог с посторонними изменениями не затронут.
+**Статус: SDK-сборка 24 доставлена во внутренний TestFlight; публичный выпуск R1 BLOCKED незакрытыми настройками и аппаратными проверками.** App Store остаётся 1.0.0 (18), USD 1.99. Один Remove Ads настроен во всех 175 территориях, но пока `MISSING_METADATA`. Сайт переопубликован с app-ads.txt, подписанной preFree-политикой и переходными legal-страницами. В AdMob платёжный профиль готов, аккаунт ожидает проверки Google; успешная проверка приложения ещё не подтверждена. Цена приложения, App Review, Family Sharing и live-реклама не включались. Исходный рабочий каталог с посторонними изменениями не затронут.
 
 Commit реализации: `1acd424da7de4d26150f86ce105744b2d9cad012`, ветка `codex/free-remove-ads`. Отчёт фиксируется отдельным следующим коммитом. Полный перечень файлов — [CHANGED_FILES.md](CHANGED_FILES.md).
 
@@ -22,7 +22,7 @@ Commit реализации: `1acd424da7de4d26150f86ce105744b2d9cad012`, вет�
 - Чистая AdPolicy, отдельный budget, поколения прав/согласия, одноразовый creative и navigation ticket, дедупликация побед, защита результата/Архива/Watch, фон и модальный lock. Только явный Next после подходящей solo-победы. Watch-защита запрещает рекламу, сохраняя нормальный переход на следующую карту.
 - Победа сохраняется до рекламной возможности. Двойные callbacks не начисляют награды повторно. Reservation и выбранная следующая карта переживают завершение приложения; неопределённый показ учитывается консервативно. Fullscreen-представление не считается уходом с результата и не расходует второй раз Ward при возврате. Remote Retry не запускает арену под рекламой.
 - AdMob/UMP адаптеры только iOS; предварительная настройка приватности, `npa=1`, отключён publisher first-party ID, ограничительный G/child request configuration, один creative и backoff. Это не утверждение о соответствии детской аудитории: фактическая аудитория и трафик требуют проверки.
-- Ed25519-политика через CryptoKit, HTTPS, версия/срок/границы частоты. Нет ключа подписи, выдуманной даты cutover, live IDs или работающего production endpoint.
+- Ed25519-политика через CryptoKit, HTTPS, версия/срок/границы частоты. Подписанный preFree endpoint и настоящие рекламные IDs настроены; приватный ключ хранится вне git. Дата cutover не придумана, разрешение live-рекламы не выдано.
 - Документы, EN/RU listing/review copy и локальная подготовка сайта: цена/SEO/legal зависят от фактической фазы. `preFree` сохраняет платное описание. R1.1 rescue, новый лор, подписки, валюты и gameplay-баланс не добавлялись.
 
 ## Флаги и зависимости
@@ -33,8 +33,9 @@ Commit реализации: `1acd424da7de4d26150f86ce105744b2d9cad012`, вет�
 | Основной `project.yml` | `EchoAdSDKIncluded=false`, vendor adapters исключены, SDK не линкуется |
 | `project-admob.yml` | Явный вариант того же iOS target/bundle; `ECHO_ADMOB`, test App ID только Debug |
 | SDK Release без настоящего App ID | Сборка завершается ошибкой; test/пустой ID не подставляется |
-| SKU | `com.sergiiziborov.Echo.removeAds`, предложен, не создан в кабинете |
-| Cutover / public key / policy URL / live unit | Не настроены; production не получает разрешение |
+| SKU | `com.sergiiziborov.Echo.removeAds`, создан один non-consumable `6828008885`; `MISSING_METADATA` |
+| Cutover | Не утверждён; production не получает разрешение |
+| Public key / policy URL / live unit | Настроены и включены в SDK-сборку 24; опубликованная политика остаётся `preFree` |
 | Sandbox/Xcode | Только проверенное окружение StoreKit выбирает тестовую free-политику; не выдаёт production legacy |
 | Rewarded / banners / app-open / mediation | Отсутствуют |
 | Google Mobile Ads | **13.11.0**, revision `d1fa1f5c1dfe3b43d56c73f4de388ad3316618bc` |
@@ -42,7 +43,9 @@ Commit реализации: `1acd424da7de4d26150f86ce105744b2d9cad012`, вет�
 
 Версии зафиксированы exact в XcodeGen и Package.resolved. Watch не зависит от рекламных пакетов. SDK-free production не предлагает повторную покупку даже при ошибочно разрешающей remote policy.
 
-## Реально выполненные проверки
+## Первоначальные проверки реализации
+
+Эта таблица фиксирует исходный прогон до настройки кабинетов. Последующие 31 regression tests, SDK network smoke и доставка 24 записаны выше и в CABINET_SETUP_2026-10-28.md. Физический iPhone по последнему read-back всё ещё содержит 23; обновление до 24 не выдано за аппаратный PASS.
 
 Среда: Xcode 27.0 (27A5228h), Swift 6; iOS Simulator 26.5 на отдельном iPhone 17 Pro. Дополнительный StoreKit-прогон — отдельный iPhone Duo с iOS 27.1. Это не физические устройства. Read-only `devicectl list devices` показал, что подключённые записи принадлежат CoreSimulator, а известное физическое устройство отключено. Поддерживаемые deployment targets сохранены: iOS 18 / watchOS 11.
 
@@ -122,9 +125,9 @@ git diff --check
 ## Незакрытые gates и выпуск
 
 1. История paid/free по витринам, реальные paid builds, UTC-переход, goodwill и утверждённый cutover — **BLOCKED**, [ledger](CUTOVER_LEDGER.template.md). Дата не придумана.
-2. Создание единственного SKU, цена/доступность, review screenshot, соглашения/банк/налоги — **BLOCKED**. Family Sharing не включён и не обещан.
-3. Настоящие AdMob app/unit/publisher, app-ads.txt crawl, UMP markets/messages/audience и SDK privacy audit — **BLOCKED**. `npa=1` не приравнен к Data Not Collected.
-4. Контролируемый HTTPS policy endpoint, private signing key вне git, public key в сборке, hosting logs/retention — **BLOCKED**.
+2. Единственный SKU, EN/RU, цена/доступность — **PASS**; настоящий review screenshot и первая подача IAP — **BLOCKED**. Family Sharing не включён и не обещан. Готовность платёжного профиля Google не подменяет проверку договорных/налоговых условий Apple.
+3. Настоящие AdMob app/unit/publisher и публикация европейской EN/RU формы — **PASS**. Google account/app approval, US-форма, audience и runtime privacy audit — **BLOCKED/NOT RUN**. app-ads.txt корректно доступен по HTTP, но успешный Google crawl не подтверждён. `npa=1` не приравнен к Data Not Collected.
+4. Подписанный HTTPS preFree endpoint, приватный ключ вне git и public key в сборке — **PASS**; hosting logs/retention — **NOT VERIFIED**.
 5. Физический прогон и покупки исходного владельца после update/reset/reinstall/другого устройства — **NOT RUN**. Пока нет этих доказательств, R1 не соответствует полному Definition of Done.
 
 После закрытия gates: реальный SDK Release → Sandbox/устройства → действие владельца на подачу версии и IAP → одобрение → preFree выпуск → согласованная смена цены → наблюдение витрин/ledger → freeQuiet → проверки → подписанный freeLive. Только затем публичные free-тексты/SEO. Подробности в [RELEASE.md](RELEASE.md), privacy-поля в [PRIVACY_AUDIT.md](PRIVACY_AUDIT.md), соответствие матрице в [TEST_MATRIX.md](TEST_MATRIX.md).

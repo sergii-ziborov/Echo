@@ -104,7 +104,7 @@
   },
   "testflightEvidence": "TESTFLIGHT_24_VERIFICATION.json",
   "ump": {
-    "EuropeanMessage": "SAVED DRAFT",
+    "EuropeanMessage": "PUBLISHED — exact list read-back Опубликовано",
     "languages": [
       "en",
       "ru"
@@ -121,8 +121,9 @@
     "consentModeForAdvertising": false,
     "specialFeature2": false,
     "runtimeConsentTest": "NOT RUN",
-    "USMessage": "NOT CONFIGURED",
-    "publication": "BLOCKED UI control"
+    "USMessage": "BLOCKED — builder/vendor-list work attempted; no saved message or publication confirmed",
+    "publication": "EU PASS; US work incomplete; real regional presentation NOT RUN",
+    "USVendorList": "NOT VERIFIED — focus lost before authoritative save/read-back"
   },
   "ageDeclaration": {
     "appStoreRating": "NINE_PLUS",
@@ -155,5 +156,20 @@
   },
   "physicalInstalledBuild": "1.1.0 (23)",
   "physicalBackupHashRechecked": true,
-  "githubPullRequest": "https://github.com/sergii-ziborov/Echo/pull/1"
+  "githubPullRequest": "https://github.com/sergii-ziborov/Echo/pull/1",
+  "googleRegistration": {
+    "paymentProfile": "READY",
+    "accountApproval": "PENDING",
+    "welcomeEmailPublisherMatches": true,
+    "approvalEmailFound": false,
+    "morePaymentDataRequested": false
+  },
+  "uiCompletion": {
+    "EuropeanPublication": "PASS — list row reports Опубликовано",
+    "pendingMechanicalUserRequest": false,
+    "USSettings": "BLOCKED — native Window selection did not switch to AdMob; ScreenCaptureKit -3811; CUA reset/rebind did not restore reliable input",
+    "chromeBrowserAdapter": "UNAVAILABLE",
+    "hiddenBrowserAPIsUsed": false,
+    "accountWideFirstPartyDeletionAccepted": false
+  }
 }
