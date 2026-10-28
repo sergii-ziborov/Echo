@@ -1,6 +1,8 @@
 # R1 release runbook
 
-This branch implements the owner's free + rare interstitial + one non-consumable contract. **It does not authorize changing the live price or submitting a binary.** The production default is `preFree`; there is no approved cutoff, production policy key/URL or live ad unit.
+This branch implements the owner's free + rare interstitial + one non-consumable contract. **It does not authorize changing the live price or submitting to App Store Review.** The production default is `preFree`; there is no approved cutoff, production policy key/URL or live ad unit.
+
+The owner subsequently authorized an internal TestFlight upload: **1.1.0 (23)** is available in Keepers. This is the SDK-free preparation build, not the full advertising review candidate. See [TESTFLIGHT_23.md](TESTFLIGHT_23.md) for actual delivery evidence and limitations.
 
 ## Build-time configuration
 

@@ -1,6 +1,8 @@
 # ECHO App Store release guide
 
-> The 1.0.0 App Store version is now Ready for Distribution. The 1.1.0 (23) source is a **prepared monetization transition**, not an authorized submission or price change. Use [the R1 runbook](monetization/RELEASE.md) before any new release; earlier notes below describe the historical paid launch.
+> **Internal TestFlight update:** 1.1.0 (23) is now `IN_BETA_TESTING` in Keepers after the owner-authorized upload. [Package evidence and EN/RU testing notes](monetization/TESTFLIGHT_23.md). Public App Store pricing/release remains unchanged.
+>
+> The 1.0.0 App Store version is now Ready for Distribution. The 1.1.0 (23) source is a **prepared monetization transition**, not approved for public release or a price change. Use [the R1 runbook](monetization/RELEASE.md) before any new release; earlier notes below describe the historical paid launch.
 
 App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Published version **1.0.0 (18)**. Prepared source version **1.1.0**, local project build **23**; the free transition has not been activated.
 

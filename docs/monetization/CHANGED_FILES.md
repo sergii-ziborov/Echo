@@ -1,6 +1,6 @@
 # Изменённые файлы R1
 
-Сравнение с `740c8fc244823249eacf9e39eec35e407ccaa787` (`origin/main`). Включает код, конфигурацию, fixtures, native captures, сайт и отчёт.
+Сравнение с `740c8fc244823249eacf9e39eec35e407ccaa787`. Включает код, конфигурацию, fixtures, native captures, сайт, отчёт и последующую запись о внутренней доставке TestFlight 23.
 
 - [`ABOUT.md`](../../ABOUT.md)
 - [`Echo.xcodeproj/project.pbxproj`](../../Echo.xcodeproj/project.pbxproj)
@@ -61,6 +61,8 @@
 - [`docs/monetization/PUBLIC_COPY.md`](../../docs/monetization/PUBLIC_COPY.md)
 - [`docs/monetization/RELEASE.md`](../../docs/monetization/RELEASE.md)
 - [`docs/monetization/REPORT.md`](../../docs/monetization/REPORT.md)
+- [`docs/monetization/TESTFLIGHT_23.md`](../../docs/monetization/TESTFLIGHT_23.md)
+- [`docs/monetization/TESTFLIGHT_23_VERIFICATION.json`](../../docs/monetization/TESTFLIGHT_23_VERIFICATION.json)
 - [`docs/monetization/TEST_MATRIX.md`](../../docs/monetization/TEST_MATRIX.md)
 - [`docs/monetization/VERIFICATION.json`](../../docs/monetization/VERIFICATION.json)
 - [`docs/monetization/screenshots/README.md`](../../docs/monetization/screenshots/README.md)
