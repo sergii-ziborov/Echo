@@ -74,6 +74,8 @@ final class LoreAndRussianLayoutTests: XCTestCase {
         request.recognitionLevel = .accurate
         try VNImageRequestHandler(cgImage: try XCTUnwrap(image.cgImage)).perform([request])
         let words = request.results?.compactMap { $0.topCandidates(1).first?.string } ?? []
-        XCTAssertTrue(words.contains { $0.uppercased().contains("СЛЕДУЮЩИЙ") }, "Split rank label: \(words)")
+        for word in ["СЛЕДУЮЩИЙ", "КОНДЕНСАТОР", "КИНЕТИЧЕСКИЙ"] {
+            XCTAssertTrue(words.contains { $0.uppercased().contains(word) }, "Split word \(word): \(words)")
+        }
     }
 }

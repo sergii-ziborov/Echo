@@ -155,12 +155,8 @@ extension ShopView {
                         .foregroundStyle(level > 0 ? EchoTheme.cyan : available ? tint : EchoTheme.muted)
                         .offset(x: 3, y: -2)
                 }
-                Text(kind.title)
-                    .font(.system(size: 10, weight: .semibold))
+                ResearchNodeTitle(title: kind.title)
                     .foregroundStyle(.white)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-                    .frame(height: 26)
                 HStack(spacing: 3) {
                     if kind.prerequisites.contains(where: { $0.kind.branch != kind.branch }) {
                         Image(systemName: "link")

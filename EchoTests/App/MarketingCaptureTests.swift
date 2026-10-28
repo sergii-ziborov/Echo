@@ -12,8 +12,9 @@ final class MarketingCaptureTests: XCTestCase {
         let model = CoverageFixtures.model(rich: false)
         model.progress.debugShowcase(cleared: 27)
         model.progress.debugLabShowcase()
-        _ = model.progress.toggleEquipped(.shield)
-        _ = model.progress.toggleEquipped(.freeze)
+        for kind in [BonusKind.shield, .freeze] where !model.progress.equippedSkills.contains(kind) {
+            _ = model.progress.toggleEquipped(kind)
+        }
         model.progress.lastLevelID = "awakening-28"
         let sizes: [(String, CGSize, CGFloat)] = [
             ("phone69", CGSize(width: 440, height: 956), 3),
@@ -43,6 +44,30 @@ final class MarketingCaptureTests: XCTestCase {
             await purchases.resolve(); await purchases.loadProduct()
             try await capture(RemoveAdsView(purchases: purchases), size: CGSize(width: 393, height: 852), scale: 3,
                               name: "review-fixture-\(language.rawValue)-purchase")
+        }
+    }
+
+    func testCaptureEquippedLoadouts() async throws {
+        let previous = LanguagePreference.shared.selection
+        defer { LanguagePreference.shared.selection = previous; CoverageHost.teardown() }
+        let model = CoverageFixtures.model(rich: false)
+        model.progress.debugLabShowcase()
+        for kind in [BonusKind.shield, .freeze] where !model.progress.equippedSkills.contains(kind) {
+            _ = model.progress.toggleEquipped(kind)
+        }
+        XCTAssertEqual(model.progress.equippedSkills.count, 2)
+        for language in [AppLanguage.english, .russian] {
+            LanguagePreference.shared.selection = language
+            for (device, size, scale) in [
+                ("phone69", CGSize(width: 440, height: 956), 3.0),
+                ("phone65", CGSize(width: 428, height: 926), 3.0),
+                ("ipad", CGSize(width: 1032, height: 1376), 2.0),
+                ("duo-outer", CGSize(width: 466, height: 678), 2.0),
+                ("duo-inner", CGSize(width: 669, height: 951), 2.0),
+            ] {
+                try await capture(ShopView(section: .loadout).environment(model), size: size, scale: scale,
+                                  name: "equipped-\(language.rawValue)-\(device)-loadout")
+            }
         }
     }
 
