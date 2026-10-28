@@ -2,7 +2,7 @@
 
 > **Prepared R1 transition · 28 October 2026:** this branch adds StoreKit rights/restoration, original-owner protection, rare interstitial policy and iOS-only AdMob/UMP adapters. The default `project.yml` is SDK-free `preFree`; `project-admob.yml` explicitly opts into the pinned iOS SDK with a guarded Release build. Production ads remain disabled; no App Store price, live advertising or App Store Review submission was changed. [Evidence, configuration and release gates](docs/monetization/RELEASE.md).
 >
-> **Internal TestFlight · 28 October 2026:** **1.1.0 (23)** is available to **Keepers**, confirmed `IN_BETA_TESTING`. This SDK-free preparation build has no ads and cannot test the unconfigured Remove Ads product. [Delivery evidence and test notes](docs/monetization/TESTFLIGHT_23.md).
+> **Internal TestFlight · 28 October 2026:** **1.1.0 (24)** is available to **Keepers**, confirmed `IN_BETA_TESTING`. It includes the pinned iOS AdMob/UMP SDKs; production remains `preFree`, with live advertising off. The real Remove Ads product is configured; genuine purchases and original-owner restoration still need device verification. [Delivery evidence and test notes](docs/monetization/TESTFLIGHT_24.md).
 
 ECHO is a top-down route-planning survival puzzle for iPhone, iPad and Apple Watch. You guide the Signal, collect every spark, and reach the exit. Every few seconds an echo appears and walks the line you already drew. Your own route becomes the hazard.
 

@@ -1,0 +1,87 @@
+{
+  "app": "6811673094",
+  "version": "1.1.0",
+  "build": "24",
+  "date": "2026-10-28",
+  "sourceCommit": "f90372363d068dda7e9c535e45ef711066d77710",
+  "manifest": "project-admob.yml",
+  "deliveryID": "11b08b9e-cfce-4a84-a863-ab93a1060d10",
+  "buildID": "11b08b9e-cfce-4a84-a863-ab93a1060d10",
+  "processingState": "VALID",
+  "buildAudienceType": "INTERNAL_ONLY",
+  "betaDetail": {
+    "autoNotifyEnabled": true,
+    "internalBuildState": "IN_BETA_TESTING",
+    "externalBuildState": "NOT_APPLICABLE"
+  },
+  "KeepersContainsBuild": true,
+  "ipa": {
+    "ipaBytes": 41647718,
+    "sha256": "e7d04e7be75f095c83dafd440923db59e9980a594aaa424a8614c7a4cc6bef52",
+    "internalOnly": true,
+    "sdkIncluded": true,
+    "profiles": [
+      {
+        "name": "Echo TestFlight 23 2026-10-28",
+        "uuid": "0b60980c-d748-4320-af6e-445a807ac4c2",
+        "appID": "XMS5ZC28UJ.com.sergiiziborov.Echo",
+        "gameCenter": true,
+        "development": false
+      },
+      {
+        "name": "Echo Watch TestFlight 23 2026-10-28",
+        "uuid": "a52c4939-3571-455c-bff7-01b6d2516aba",
+        "appID": "XMS5ZC28UJ.com.sergiiziborov.Echo.watchkitapp",
+        "gameCenter": true,
+        "development": false
+      }
+    ]
+  },
+  "archive": {
+    "version": "1.1.0",
+    "build": "24",
+    "sdkIncluded": true,
+    "watchVersion": "24",
+    "watchAdSymbols": false,
+    "fixturesInApp": false,
+    "privateKeyInApp": false,
+    "identity": "com.sergiiziborov.Echo",
+    "artifact": "PASS"
+  },
+  "sdk": {
+    "GoogleMobileAds": "13.11.0",
+    "UMP": "3.1.0",
+    "includedInWatch": false
+  },
+  "xcode": "27.1 (27A9275)",
+  "phoneSDK": "27.1",
+  "watchSDK": "27.0",
+  "production": {
+    "phase": "preFree",
+    "liveAds": false,
+    "freePriceChange": false,
+    "appReviewSubmitted": false,
+    "cutover": null,
+    "familySharing": false
+  },
+  "checks": {
+    "archive": "PASS",
+    "export": "PASS",
+    "appleValidation": "PASS via official legacy altool",
+    "upload": "PASS via official legacy altool",
+    "betaNotes": "PASS exact EN/RU read-back",
+    "hardwarePurchase": "NOT RUN",
+    "legacyReinstall": "NOT RUN",
+    "consentPresentation": "NOT RUN"
+  },
+  "googleAccount": "PENDING last observed",
+  "googleAppVerification": "BLOCKED last observed failure; root file public200",
+  "originalProgress": "Physical save backed up before tests; 31 regression tests pass. No claim of real paid-account update/reinstall verification.",
+  "website": {
+    "version": 8,
+    "sourceCommit": "0e23dd2735364242d589600a67d27355b76ede62",
+    "deployment": "appgdep_6ae2191ba8788191a0457a8c9c392170",
+    "status": "succeeded",
+    "purpose": "EN/RU transition privacy and terms; public paid copy preserved"
+  }
+}

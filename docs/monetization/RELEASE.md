@@ -1,8 +1,8 @@
 # R1 release runbook
 
-This branch implements the owner's free + rare interstitial + one non-consumable contract. **It does not authorize changing the live price or submitting to App Store Review.** The production default is `preFree`; there is no approved cutoff, production policy key/URL or live ad unit.
+This branch implements the owner's free + rare interstitial + one non-consumable contract. **It does not authorize changing the live price or submitting to App Store Review.** The production default is `preFree`; there is no approved acquisition cutoff or permission for live ads. Actual publisher IDs and the signed HTTPS policy endpoint/public key are configured; see the cabinet record.
 
-The owner subsequently authorized an internal TestFlight upload: **1.1.0 (23)** is available in Keepers. This is the SDK-free preparation build, not the full advertising review candidate. See [TESTFLIGHT_23.md](TESTFLIGHT_23.md) for actual delivery evidence and limitations.
+The owner authorized internal TestFlight uploads: **1.1.0 (24)** is now available in Keepers with the iOS SDKs and actual publisher configuration. Production remains preFree. [TESTFLIGHT_24.md](TESTFLIGHT_24.md) records delivery, what can be tested and remaining limits. Build 23 is the earlier SDK-free preparation build.
 
 ## Build-time configuration
 
@@ -14,7 +14,7 @@ The first full R1 review candidate must use the AdMob variant after publisher se
 
 - `ECHO_ADMOB_APP_ID`: used only by the opt-in AdMob variant. Debug uses Google’s official test app ID; Release requires the owner’s real App ID.
 - `ECHO_INTERSTITIAL_UNIT_ID`: empty by default; no production test-ID fallback.
-- `ECHO_RELEASE_POLICY_URL` / `ECHO_RELEASE_POLICY_PUBLIC_KEY`: empty by default. Use HTTPS and the base64 raw Ed25519 public key (32 bytes). The private key stays outside the repo/app.
+- `ECHO_RELEASE_POLICY_URL` / `ECHO_RELEASE_POLICY_PUBLIC_KEY`: configured to the signed preFree endpoint in `project.yml`. Use HTTPS and the base64 raw Ed25519 public key (32 bytes). The private key stays outside the repo/app.
 - Banners, app-open, rewarded and mediation are absent. R1.1 rescue is not implemented or advertised.
 
 ## Signed policy format
@@ -25,8 +25,8 @@ The HTTPS document is `{ "payload": "<base64 exact UTF-8 JSON>", "signature": "<
 
 ## Order of operations — owner-controlled gates
 
-1. Complete `CUTOVER_LEDGER.template.md` from actual price/distribution history. Decide the goodwill interval. Read-only audit found no IAP on 28 October.
-2. Create exactly one non-consumable, proposed ID `com.sergiiziborov.Echo.removeAds`. Configure EN/RU copy and real storefront price (base USD 1.99). Do not enable irrevocable Family Sharing without explicit owner approval.
+1. Complete `CUTOVER_LEDGER.template.md` from actual price/distribution history. Decide the goodwill interval. The initial read-only audit found no IAP; the later authorized setup created exactly one.
+2. The single configured non-consumable uses ID `com.sergiiziborov.Echo.removeAds`. EN/RU, base USD 1.99 and all 175 territories are configured; approval/review screenshot remain. Do not enable irrevocable Family Sharing without explicit owner approval.
 3. Configure real AdMob app/unit/publisher, UMP messages/markets/audience, family-appropriate filtering, and root app-ads.txt. Verify the actual hosting hostname and network crawl. No domain purchase is authorized.
 4. Complete the traffic/device/privacy audit. Update App Privacy answers from the real SDK behavior; the historical Data Not Collected answer is not inherited.
 5. Run StoreKit Testing, real Sandbox/TestFlight purchases, pending, refund, offline, previous paid account update/reinstall/another device, Watch remote, iPad and accessibility smoke tests. Mark actual results, never infer hardware PASS from simulator fixtures.

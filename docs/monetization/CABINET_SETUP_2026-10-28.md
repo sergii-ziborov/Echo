@@ -11,6 +11,7 @@ This records actual cabinet changes after the owner requested completion. It doe
 | English / Russian metadata | **PASS**: Remove Ads / Отключить рекламу, localized one-time-purchase descriptions. |
 | Price / availability | **PASS**: real Apple US $1.99 price point selected, schedule created; all 175 territories and future territories enabled. Localized UI prices still come from StoreKit. |
 | Family Sharing | **PASS**: read-back `familySharable=false`; irreversible enablement not performed. |
+| IAP review instructions | **PASS**: purchase/restore and production/Sandbox behavior saved in the product and read back exactly. No submission performed. |
 | IAP approval | **BLOCKED**: read-back `MISSING_METADATA`; real review screenshot and submission with a complete app candidate remain. |
 | Public app / price | **PASS**: US listing still 1.0.0, $1.99; no Free transition or submission performed. |
 
@@ -39,8 +40,10 @@ google.com, pub-7387441604864948, DIRECT, f08c47fec0942fa0
 | Interstitial unit | **PASS**: created exactly one `campaign_result_to_next`, `ca-app-pub-7387441604864948/9838007664`. Saved list read-back confirms standard interstitial, 1–1 of 1, unit cap **2 impressions / 24 hours**; no campaigns or mediation groups. Creation does not enable production requests. |
 | High-engagement ads | **PASS**: disabled and saved in ECHO's app settings; reopened editor reports OFF. This avoids the console option for extra steps/time before closing fullscreen ads. |
 | Publisher first-party ID (console) | **PASS owner preference**: account-wide setting remains ON. Owner explicitly declined irreversible account-wide deletion and chose the per-app ECHO prohibition. Confirmation was never accepted; subsequent read-back shows ON with no dialog. The SDK disables first-party ID before start. Analytics linking and surveys are visibly OFF. |
-| UMP / audience | **NOT RUN**: remaining console privacy configuration and actual traffic audit are separate gates. |
-| Production ads | **OFF**: shipped TestFlight 1.1.0 (23) remains SDK-free, production preFree. |
+| UMP European form | **PASS draft**: ECHO only, EN default + RU, policy URL set, refusal in every region and close-without-consent ON. Saved row reports Draft. Publication and actual device presentation still pending. |
+| UMP European settings | **PASS saved**: fixed Google-only vendor list (755), automatic partners and fallback/maximized-message coverage OFF, RTB consent checking ON, legitimate-interest default OFF. Advertising consent mode and special feature 2 remain OFF. Actual SDK consent/traffic audit remains NOT RUN. |
+| Age declaration | **PASS read-only**: current App Store rating 9+, `kidsAgeBand=null`, `advertising=false`. No category/age changes were made. A low rating alone is not proof of audience compliance; advertising answers must be updated for the eventual live version. |
+| Production ads | **OFF**: SDK-enabled TestFlight **1.1.0 (24)** is available in Keepers; production remains preFree. [Delivery evidence](TESTFLIGHT_24.md). The earlier 23 remains SDK-free. |
 
 The deployed website's current source was opened through Sites at `/Users/serhiirihgt/.codex/sites/echo-r1-release`; the repository's older website mirror was not deployed over it. The mirror now retains the same publisher file for future builds.
 
@@ -89,3 +92,13 @@ git diff --check
 ```
 
 The repository mirror passed its 12-page check; the newer canonical hosted source separately passed its 14-page check before publication. The differing page counts are intentional source versions, not a claim that the older mirror replaced the live site.
+
+## Completion update — TestFlight 24 and public legal pages
+
+**PASS**: SDK-enabled build 24 archived, exported, server-validated and uploaded with stable Xcode. Apple reports VALID / INTERNAL_ONLY / IN_BETA_TESTING; Keepers includes it and EN/RU notes were read back. The modern validation endpoint returned HTTP 500; the official legacy altool path completed validation/upload. [TESTFLIGHT_24.md](TESTFLIGHT_24.md) records the exact source SHA, IPA hash and commands.
+
+**PASS**: public Site version 8, source `0e23dd2735364242d589600a67d27355b76ede62`, deployment `appgdep_6ae2191ba8788191a0457a8c9c392170`, succeeded `2026-10-28T15:47:55Z`. EN/RU privacy and terms now explain the current paid public release, the SDK-enabled transition beta, StoreKit, future advertising and signed-policy connection. Public price/brand/marketing remain unchanged. All 14 canonical pages passed links/metadata/assets verification; repository mirror passed 12 pages.
+
+**PASS inspection, not compliance certification**: exact privacy manifests from the archived app, Google 13.11.0, UMP 3.1.0 and Watch are retained in [SDK_PRIVACY_MANIFESTS_24.json](SDK_PRIVACY_MANIFESTS_24.json). Google declares potential device-ID tracking, linked coarse location, ad data and interactions plus diagnostics/performance; UMP declares coarse location/performance/interactions for functionality. ECHO's restrictive request flags do not erase these vendor disclosures or prove their actual network behavior. App Privacy mapping and device traffic tests remain NOT RUN.
+
+**BLOCKED UI publication**: native Chrome control again returned `noWindowsAvailable`, ScreenCaptureKit -3812 and intermittent non-reacting clicks. The saved European draft/settings are proven; message publication, US-state form and fresh Google app/account read-back are not claimed. A request to leave the Mac unlocked with AdMob active is pending.

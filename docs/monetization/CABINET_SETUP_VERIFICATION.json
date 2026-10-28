@@ -1,7 +1,7 @@
 {
   "date": "2026-10-28",
   "app": "6811673094",
-  "testflightBuild": "1.1.0 (23)",
+  "testflightBuild": "1.1.0 (24)",
   "productionAdsEnabled": false,
   "iap": {
     "id": "6828008885",
@@ -11,7 +11,8 @@
     "territories": 175,
     "availableInNewTerritories": true,
     "familySharable": false,
-    "state": "MISSING_METADATA"
+    "state": "MISSING_METADATA",
+    "reviewNotes": "PASS exact read-back"
   },
   "publisherID": "pub-7387441604864948",
   "appAds": {
@@ -26,9 +27,10 @@
     "commit": "7ad1a46926ed4c025b7e80b04d27e1ca9574fd72",
     "deployment": "appgdep_6ae2077c59a88191b3838c0c91b29ff1",
     "status": "succeeded",
-    "latestVersion": 7,
-    "latestCommit": "5538c0642f711308ee386dde54c648d2d06c08cf",
-    "latestDeployment": "appgdep_6ae20c8b995081919fd10a247f971bec"
+    "latestVersion": 8,
+    "latestCommit": "0e23dd2735364242d589600a67d27355b76ede62",
+    "latestDeployment": "appgdep_6ae2191ba8788191a0457a8c9c392170",
+    "legalUpdated": true
   },
   "tests": {
     "xcode": "27.1 (27A9275)",
@@ -99,5 +101,33 @@
     },
     "uploadedToTestFlight": false,
     "infrastructureLimit": "Original focused-test simulator was no longer registered. A new iOS 27.1 Duo failed initial data migration; iOS 26.5 iPhone 17 Pro completed migration and launched successfully. Initial launch timeout during migration was retried only after boot finished."
+  },
+  "testflightEvidence": "TESTFLIGHT_24_VERIFICATION.json",
+  "ump": {
+    "EuropeanMessage": "SAVED DRAFT",
+    "languages": [
+      "en",
+      "ru"
+    ],
+    "refuseAllRegions": true,
+    "closeWithoutConsent": true,
+    "vendors": [
+      "Google Advertising Products (755)"
+    ],
+    "autoPartners": false,
+    "maximizedMessageCoverage": false,
+    "RTBConsentCheck": true,
+    "legitimateInterestDefault": false,
+    "consentModeForAdvertising": false,
+    "specialFeature2": false,
+    "runtimeConsentTest": "NOT RUN",
+    "USMessage": "NOT CONFIGURED",
+    "publication": "BLOCKED UI control"
+  },
+  "ageDeclaration": {
+    "appStoreRating": "NINE_PLUS",
+    "kidsAgeBand": null,
+    "advertising": false,
+    "source": "read-only App Store Connect"
   }
 }
