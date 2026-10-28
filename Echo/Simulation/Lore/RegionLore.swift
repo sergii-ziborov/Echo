@@ -60,6 +60,9 @@ extension Act {
     /// Where the fiction parts with real science, for the Archive.
     var scienceNote: String { Copy.text("region.\(key).science") }
 
+    /// An interpretation of a philosophical text, distinct from a scientific claim.
+    var philosophyNote: String { Copy.text("region.\(key).philosophy") }
+
     var theme: ArenaTheme {
         switch self {
         case .trace: .void

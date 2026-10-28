@@ -196,7 +196,9 @@ struct WikiRegionsContent: View {
 
                     paragraph(nil, act.intro, tint: act.wikiColor)
                     paragraph(Copy.text("wiki.region.meaning"), act.meaning, tint: act.wikiColor)
+                    paragraph(Copy.text("wiki.region.philosophy"), act.philosophyNote, tint: EchoTheme.gold)
                     paragraph(Copy.text("wiki.region.science"), act.scienceNote, tint: act.wikiColor)
+                    LoreSourcesView(act: act)
 
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .leading, spacing: 6) {
                         ForEach(levels) { level in

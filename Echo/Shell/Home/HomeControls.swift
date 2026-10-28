@@ -87,6 +87,8 @@ struct ResourcePill: View {
     var body: some View {
         Label("\(value)", systemImage: systemImage)
             .font(.system(size: 13, weight: .bold, design: .rounded))
+            .monospacedDigit()
+            .lineLimit(1)
             .foregroundStyle(tint)
             .contentTransition(.numericText())
             .padding(.horizontal, 10)

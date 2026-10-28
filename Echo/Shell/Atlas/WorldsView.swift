@@ -90,35 +90,9 @@ struct WorldsView: View {
     }
 
     private func header(tablet: Bool) -> some View {
-        HStack(spacing: 11) {
-            IconCircle(system: "chevron.left") {
-                model.audio.play(.tap)
-                model.goHome()
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(Copy.text("atlas.title"))
-                    .font(.system(size: tablet ? 19 : 14, weight: .black, design: .rounded))
-                    .tracking(2.2)
-                Text(Copy.text("atlas.subtitle"))
-                    .font(.system(size: tablet ? 10 : 8, weight: .bold, design: .rounded))
-                    .tracking(1.3)
-                    .foregroundStyle(EchoTheme.muted)
-            }
-
-            Spacer(minLength: 4)
-
-            VStack(alignment: .trailing, spacing: 1) {
-                Label("\(model.progress.totalStars)/\(LevelCatalog.playable.count * 3)", systemImage: "checkmark.seal.fill")
-                    .foregroundStyle(EchoTheme.gold)
-                Text(model.progress.difficulty.shortTitle)
-                    .foregroundStyle(EchoTheme.magenta)
-            }
-            .font(.system(size: tablet ? 11 : 9, weight: .bold, design: .rounded))
-            .padding(.horizontal, 10)
-            .frame(height: 38)
-            .background(EchoTheme.gold.opacity(0.08), in: Capsule())
-            .overlay(Capsule().stroke(EchoTheme.gold.opacity(0.20), lineWidth: 1))
+        AtlasHeader(tablet: tablet) {
+            model.audio.play(.tap)
+            model.goHome()
         }
     }
 

@@ -187,27 +187,7 @@ struct ShopView: View {
     }
 
     var header: some View {
-        HStack {
-            IconCircle(system: "chevron.left") { goBack() }
-            Text(Copy.text("lab.title"))
-                .font(.system(size: 19, weight: .bold))
-            Spacer()
-            Label("\(model.progress.points)", systemImage: "diamond.fill")
-                .font(.system(size: 14, weight: .semibold, design: .rounded))
-                .foregroundStyle(.white)
-                .padding(.horizontal, 12)
-                .frame(height: 36)
-                .background(EchoTheme.magenta.opacity(0.15), in: Capsule())
-                .overlay(Capsule().stroke(EchoTheme.magenta.opacity(0.25), lineWidth: 1))
-            if let flash {
-                Text(flash)
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(EchoTheme.gold)
-                    .multilineTextAlignment(.trailing)
-                    .lineLimit(2)
-                    .transition(.opacity)
-            }
-        }
+        LabHeader(flash: flash) { goBack() }
     }
 
     var sectionPicker: some View {
