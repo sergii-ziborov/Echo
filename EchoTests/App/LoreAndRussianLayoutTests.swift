@@ -51,4 +51,29 @@ final class LoreAndRussianLayoutTests: XCTestCase {
             XCTAssertTrue(words.contains { $0.uppercased().contains("ПРОБУЖДЕНИЕ") }, "Split or missing recovery title at \(width): \(words)")
         }
     }
+
+    func testRussianNextRankLabelDoesNotSplitItsLastLetter() async throws {
+        let previous = LanguagePreference.shared.selection
+        defer { LanguagePreference.shared.selection = previous; CoverageHost.teardown() }
+        LanguagePreference.shared.selection = .russian
+        let model = CoverageFixtures.model(rich: false)
+        model.progress.debugLabShowcase()
+        let view = CoverageHost.render(
+            ShopView(section: .research, researchBranch: .motion).environment(model),
+            size: CGSize(width: 320, height: 852))
+        try await Task.sleep(for: .milliseconds(450))
+        let format = UIGraphicsImageRendererFormat(); format.scale = 3
+        let image = UIGraphicsImageRenderer(bounds: view.bounds, format: format).image { _ in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
+        let attachment = XCTAttachment(image: image)
+        attachment.name = "russian-next-rank-narrow-phone"
+        attachment.lifetime = .keepAlways; add(attachment)
+        let request = VNRecognizeTextRequest()
+        request.recognitionLanguages = ["ru-RU"]
+        request.recognitionLevel = .accurate
+        try VNImageRequestHandler(cgImage: try XCTUnwrap(image.cgImage)).perform([request])
+        let words = request.results?.compactMap { $0.topCandidates(1).first?.string } ?? []
+        XCTAssertTrue(words.contains { $0.uppercased().contains("СЛЕДУЮЩИЙ") }, "Split rank label: \(words)")
+    }
 }

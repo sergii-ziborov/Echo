@@ -129,9 +129,7 @@ struct WatchRemoteView: View {
         case .dead:
             WatchRunCard(title: Copy.text("watch.lost"), subtitle: frame.cause?.watchLabel, tint: .pink) {
                 if frame.rewindsLeft > 0 {
-                    Label(Copy.format("watch.crownBack", frame.rewindsLeft), systemImage: "digitalcrown.arrow.counterclockwise")
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.cyan)
+                    WatchCrownHint(rewindsLeft: frame.rewindsLeft)
                 }
                 Button(Copy.text("watch.retry"), systemImage: "arrow.counterclockwise") { link.send(.retry) }
             }

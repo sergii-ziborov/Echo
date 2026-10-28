@@ -221,7 +221,7 @@ extension ShopView {
                 HStack(alignment: .top, spacing: 8) {
                     Text(Copy.text("lab.card.current"))
                         .foregroundStyle(EchoTheme.muted)
-                        .frame(width: 68, alignment: .leading)
+                        .frame(width: 90, alignment: .leading)
                     Text(kind.effect(atRank: level, progress: model.progress))
                         .foregroundStyle(.white.opacity(0.88))
                         .fixedSize(horizontal: false, vertical: true)
@@ -231,7 +231,7 @@ extension ShopView {
                     HStack(alignment: .top, spacing: 8) {
                         Text(Copy.text("lab.card.next"))
                             .foregroundStyle(EchoTheme.muted)
-                            .frame(width: 68, alignment: .leading)
+                            .frame(width: 90, alignment: .leading)
                         Text(kind.effect(atRank: level + 1, progress: model.progress))
                             .foregroundStyle(EchoTheme.cyan)
                             .fixedSize(horizontal: false, vertical: true)

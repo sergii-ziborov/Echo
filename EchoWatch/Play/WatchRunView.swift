@@ -176,9 +176,7 @@ struct WatchRunView: View {
         case .dead(let cause):
             WatchRunCard(title: Copy.text("watch.lost"), subtitle: cause.watchLabel, tint: .pink) {
                 if run.canRewind {
-                    Label(Copy.format("watch.crownBack", run.rewindsLeft), systemImage: "digitalcrown.arrow.counterclockwise")
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.cyan)
+                    WatchCrownHint(rewindsLeft: run.rewindsLeft)
                 }
                 cardActions(primary: Button(Copy.text("watch.retry"), systemImage: "arrow.counterclockwise") { run.restart() }, leaveIcon: "xmark", leaveLabel: Copy.text("watch.leave"))
             }
@@ -340,6 +338,8 @@ struct WatchRunCard<Actions: View>: View {
                         .font(.system(size: 17, weight: .heavy, design: .rounded))
                         .tracking(1.5)
                         .foregroundStyle(tint)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                     if let subtitle {
                         Text(subtitle)
                             .font(.system(size: 12, weight: .medium, design: .rounded))
@@ -349,8 +349,26 @@ struct WatchRunCard<Actions: View>: View {
                     actions
                 }
                 .padding(.horizontal, 10)
-                .padding(.top, 26)
+                // The arena ignores safe areas, so the result must explicitly
+                // leave room for watchOS's system clock on every face size.
+                .padding(.top, 44)
+                .padding(.bottom, 12)
             }
         }
+    }
+}
+
+struct WatchCrownHint: View {
+    let rewindsLeft: Int
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 5) {
+            Image(systemName: "digitalcrown.arrow.counterclockwise")
+            Text(Copy.format("watch.crownBack", rewindsLeft))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .font(.system(size: 11, weight: .semibold, design: .rounded))
+        .foregroundStyle(.cyan)
     }
 }
