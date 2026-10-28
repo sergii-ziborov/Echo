@@ -3,6 +3,10 @@ include: project.yml
 name: Echo
 
 targets:
+  EchoTests:
+    settings:
+      base:
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) ECHO_ADMOB"
   Echo:
     sources:REPLACE:
       - path: Echo

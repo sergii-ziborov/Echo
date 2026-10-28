@@ -102,3 +102,21 @@ The repository mirror passed its 12-page check; the newer canonical hosted sourc
 **PASS inspection, not compliance certification**: exact privacy manifests from the archived app, Google 13.11.0, UMP 3.1.0 and Watch are retained in [SDK_PRIVACY_MANIFESTS_24.json](SDK_PRIVACY_MANIFESTS_24.json). Google declares potential device-ID tracking, linked coarse location, ad data and interactions plus diagnostics/performance; UMP declares coarse location/performance/interactions for functionality. ECHO's restrictive request flags do not erase these vendor disclosures or prove their actual network behavior. App Privacy mapping and device traffic tests remain NOT RUN.
 
 **BLOCKED UI publication**: native Chrome control again returned `noWindowsAvailable`, ScreenCaptureKit -3812 and intermittent non-reacting clicks. The saved European draft/settings are proven; message publication, US-state form and fresh Google app/account read-back are not claimed. A request to leave the Mac unlocked with AdMob active is pending.
+
+## Native SDK network smoke
+
+**PASS: 1 test, 0 failures/skips**, Xcode 27.1, isolated iPhone 17 Pro / iOS 26.5 Simulator. Actual UMP update completed, `canRequestAds` allowed the request, and the real AdMobProvider loaded the official Google test interstitial. Discard cleared readiness; presenting the discarded object failed immediately with one completion and no started callback. No mock privacy/readiness or live ad unit was substituted. [Sanitized result](AD_NETWORK_VERIFICATION.json).
+
+This verifies adapter networking and cancellation, not a visible fullscreen presentation/dismissal, choices in ECHO's real-account UMP form, real StoreKit, production data collection or hardware. StoreKit AppTransaction reported a Simulator service error independently; no production legacy right was fabricated. The initial network-test launch was correctly SKIPPED because Xcode inherited the Run environment instead of the dedicated Test environment; the helper now explicitly disables that inheritance. The corrected run is the PASS above. Both owned SDK smoke simulators were removed; archives/IPAs, results and private phone backup were retained.
+
+Reproduce using a newly created isolated simulator (never the owner's phone):
+
+```sh
+python3 scripts/test_admob_network.py --simulator <isolated-simulator-UUID> \
+  --derived-data /tmp/echo-ad-network-derived \
+  --result /tmp/echo-ad-network.xcresult
+```
+
+The helper selects the explicit SDK Debug variant and official test App ID, creates an opt-in test scheme, and restores the safe default generated project on exit. Normal unit runs do not initiate this network test.
+
+**Physical status read-back**: the connected iPhone still reports 1.1.0 (23). It was not deleted, overwritten or reset. The original private backup's SHA256 still matches. Update-to-24 data retention and purchases are therefore NOT RUN, rather than inferred from an upload.

@@ -72,7 +72,7 @@
     "betaNotes": "PASS exact EN/RU read-back",
     "hardwarePurchase": "NOT RUN",
     "legacyReinstall": "NOT RUN",
-    "consentPresentation": "NOT RUN"
+    "consentPresentation": "NOT RUN — actual UMP update/test-creative load/discard passed separately; visible presentation not tested"
   },
   "googleAccount": "PENDING last observed",
   "googleAppVerification": "BLOCKED last observed failure; root file public200",
@@ -83,5 +83,29 @@
     "deployment": "appgdep_6ae2191ba8788191a0457a8c9c392170",
     "status": "succeeded",
     "purpose": "EN/RU transition privacy and terms; public paid copy preserved"
-  }
+  },
+  "adNetworkSmoke": {
+    "result": "Passed",
+    "passedTests": 1,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "totalTestCount": 1,
+    "runtimeWarnings": [],
+    "model": "iPhone 17 Pro Simulator",
+    "os": "26.5",
+    "isHardware": false,
+    "sdk": {
+      "GoogleMobileAds": "13.11.0",
+      "UMP": "3.1.0"
+    },
+    "durationSeconds": 2.748,
+    "test": "AdMobNetworkTests.testOfficialTestCreativeLoadsAfterPrivacyAndIsDiscarded",
+    "appID": "official Google test App ID",
+    "unitID": "official Google test interstitial",
+    "privacyBypassed": false,
+    "nativePresentationTested": false,
+    "purchaseTested": false,
+    "resultBundle": "/tmp/echo-r1-completion/ad-network-configured.xcresult"
+  },
+  "physicalInstalledBuild": "23"
 }

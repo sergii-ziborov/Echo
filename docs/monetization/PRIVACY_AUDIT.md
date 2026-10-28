@@ -31,3 +31,5 @@ The default `project.yml` build contains no ad SDK. `project-admob.yml` is the e
 [SDK_PRIVACY_MANIFESTS_24.json](SDK_PRIVACY_MANIFESTS_24.json) is the exact plist-to-JSON extraction from the distribution archive. Google declares potential device-ID tracking plus linked coarse location, ad data and interactions; diagnostics/performance are also declared. UMP declares coarse location, performance and interactions for app functionality. Watch declares only its existing required-reason UserDefaults API. No vendor manifest was edited. This is a source disclosure inspection, not proof of runtime data collection or its absence.
 
 The public EN/RU privacy and terms pages were updated in Site version 8 to cover the transition beta while identifying 1.0.0 as the current paid, advertising-free public release. No fictional hosting retention period is asserted.
+
+The opt-in Simulator SDK smoke now confirms a real UMP update followed by an allowed official test-creative request and discard. See AD_NETWORK_VERIFICATION.json. It does not exercise ECHO's real-account regional forms, production tracking/refusal behavior or physical-device traffic, so those gates remain open.
