@@ -22,7 +22,9 @@ targets:
     settings:
       base:
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) ECHO_ADMOB"
-        ECHO_ADMOB_APP_ID: "$(ECHO_ADMOB_APP_ID_FROM_ENV)"
+        # Existing ECHO app in the owner's AdMob console; this is a public identifier.
+        ECHO_ADMOB_APP_ID: "ca-app-pub-7387441604864948~4899495427"
+        ECHO_INTERSTITIAL_UNIT_ID: "ca-app-pub-7387441604864948/9838007664"
     preBuildScripts:
       - name: Validate production AdMob bootstrap
         basedOnDependencyAnalysis: false

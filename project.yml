@@ -14,7 +14,7 @@ settings:
     # One version for the phone app and its embedded watch app: App Store
     # validation rejects an archive whose two bundles disagree.
     MARKETING_VERSION: 1.1.0
-    CURRENT_PROJECT_VERSION: 23
+    CURRENT_PROJECT_VERSION: 24
     DEVELOPMENT_TEAM: XMS5ZC28UJ
     IPHONEOS_DEPLOYMENT_TARGET: "18.0"
     TARGETED_DEVICE_FAMILY: "1,2"
@@ -80,8 +80,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.sergiiziborov.Echo
         ECHO_ADMOB_APP_ID: ""
         ECHO_INTERSTITIAL_UNIT_ID: ""
-        ECHO_RELEASE_POLICY_URL: ""
-        ECHO_RELEASE_POLICY_PUBLIC_KEY: ""
+        ECHO_RELEASE_POLICY_URL: "https://echo-survive-your-past.serhiiright.chatgpt.site/monetization-policy.json"
+        ECHO_RELEASE_POLICY_PUBLIC_KEY: "2LaSspVe2K9SZ4V/lAl1qLVt7tcMEAQx7dDNDpOeq9I="
         PRODUCT_NAME: Echo
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor

@@ -7,7 +7,7 @@ Status: **BLOCKED for live advertising**. Including an SDK is not evidence that 
 | StoreKit 2 | Verified app acquisition and non-consumable transaction metadata; local provenance cache | Apple processes payment; app stores minimal evidence in device-only Keychain | API integration + fixtures; real account NOT RUN |
 | Google Mobile Ads | Contextual `npa=1`; publisher first-party ID disabled; content rating G; no IDFA access request by ECHO | Google may receive IP/network, device, diagnostics and ad interaction data for delivery/measurement | Actual traffic, retention, subprocessors and App Privacy mapping BLOCKED |
 | UMP | SDK-managed consent updates; options retained after purchase | Google / applicable consent framework | Actual messages, markets and child/audience settings BLOCKED |
-| Signed policy endpoint | No device/account/query identifier; ephemeral HTTPS request | Hosting may log IP and user agent | Endpoint, actual log retention and owner key NOT CONFIGURED |
+| Signed policy endpoint | No device/account/query identifier; ephemeral HTTPS request | Hosting may log IP and user agent | Signed HTTPS preFree endpoint/key configured 28 October; actual host log retention NOT VERIFIED. See CABINET_SETUP_2026-10-28.md. |
 | WatchConnectivity | Existing controls, progress and wrist rewards | Paired user devices | No new monetization payload |
 | Optional telemetry | None added | No custom analytics backend | Source audit PASS |
 | Ad report | User-written message, app version, placement and UTC; no raw receipt, JWS, advertising ID or routes | Developer email; user sends manually | UI/code path; no automatic submission |
@@ -19,7 +19,7 @@ Status: **BLOCKED for live advertising**. Including an SDK is not evidence that 
 3. Verify context-only configuration works without cross-app tracking. ECHO does not request ATT or access IDFA. Do not add an alternate tracking identifier. If this configuration does not meet the intended no-tracking contract, keep ads off and review the design.
 4. Configure UMP messages and supported markets in the real account. Test refusal, closure, changed choices, ATT denied/restricted, legacy and cold-start purchase paths.
 5. Publish the actual provider/hosting policy and retention, update App Privacy, and capture a dated cabinet audit. Never assert compliance just because `npa=1` is set.
-6. Configure a real publisher line in root `/app-ads.txt`, confirm the hostname extracted by AdMob from the App Store developer website and successful crawl. Do not publish a sample publisher ID. No domain purchase is authorized.
+6. Real publisher line is published at the existing developer website's root `/app-ads.txt` and matches the console. Google verification still returns failure after retry; successful crawl remains required. Do not equate HTTP 200 with Google acceptance. No domain purchase is authorized.
 7. Verify that an ad-free cold start creates no advertising requests. An already running third-party SDK is not promised to unload; prior network processing is not reversed by buying Remove Ads.
 
 Primary sources: [Google SDK disclosures](https://developers.google.com/admob/ios/privacy/data-disclosure), [UMP](https://developers.google.com/admob/ios/privacy), [Apple App Privacy](https://developer.apple.com/app-store/app-privacy-details/), [ATT](https://developer.apple.com/app-store/user-privacy-and-data-use/), [app-ads.txt](https://support.google.com/admob/answer/9363762).

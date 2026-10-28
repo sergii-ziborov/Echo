@@ -19,13 +19,16 @@
     "http": 200,
     "contentType": "text/plain",
     "redirects": 0,
-    "googleVerification": "BLOCKED — browser control unavailable, no accepted recrawl confirmed"
+    "googleVerification": "BLOCKED — Check for Changes retried; AdMob still reports verification failure. HTTP delivery is verified, Google acceptance is not."
   },
   "site": {
     "version": 6,
     "commit": "7ad1a46926ed4c025b7e80b04d27e1ca9574fd72",
     "deployment": "appgdep_6ae2077c59a88191b3838c0c91b29ff1",
-    "status": "succeeded"
+    "status": "succeeded",
+    "latestVersion": 7,
+    "latestCommit": "5538c0642f711308ee386dde54c648d2d06c08cf",
+    "latestDeployment": "appgdep_6ae20c8b995081919fd10a247f971bec"
   },
   "tests": {
     "xcode": "27.1 (27A9275)",
@@ -46,6 +49,55 @@
   "nativeStoreKit": "BLOCKED — configuration service error, stalled lookup; initial run cancelled",
   "physicalPurchases": "NOT RUN",
   "cutover": "NOT APPROVED",
-  "liveAppID": "NOT CONFIGURED",
-  "interstitialUnitID": "NOT CONFIGURED"
+  "liveAppID": "ca-app-pub-7387441604864948~4899495427",
+  "interstitialUnitID": "ca-app-pub-7387441604864948/9838007664",
+  "adMobUnit": {
+    "name": "campaign_result_to_next",
+    "format": "INTERSTITIAL",
+    "count": 1,
+    "cap": {
+      "impressions": 2,
+      "hours": 24
+    },
+    "readback": "PASS",
+    "campaigns": 0,
+    "mediationGroups": 0
+  },
+  "highEngagementAds": "OFF — saved and read back in app settings",
+  "publisherFirstPartyConsole": "ON — owner explicitly chose to preserve account setting; irreversible deletion was not confirmed",
+  "sdkPublisherFirstPartyID": "DISABLED",
+  "releasePolicy": {
+    "url": "https://echo-survive-your-past.serhiiright.chatgpt.site/monetization-policy.json",
+    "http": 200,
+    "mime": "application/json",
+    "signature": "PASS",
+    "version": 1,
+    "phase": "preFree",
+    "issuedAt": "2026-10-28T14:52:50Z",
+    "expiresAt": "2026-11-04T14:52:50Z",
+    "audienceReviewed": false,
+    "cutover": null,
+    "privateKeyInGit": false
+  },
+  "sdkReleaseSimulatorBuild": {
+    "result": "PASS",
+    "xcode": "27.1 (27A9275)",
+    "googleMobileAds": "13.11.0",
+    "ump": "3.1.0",
+    "log": "/tmp/echo-r1-completion/sdk-release-build.log",
+    "artifactChecks": "PASS",
+    "watchAdImports": false,
+    "coldLaunch": {
+      "result": "PASS_PROCESS_ALIVE",
+      "pid": 45017,
+      "elapsedSeconds": 183.6,
+      "model": "iPhone 17 Pro",
+      "os": "iOS 26.5",
+      "isHardware": false,
+      "visual": "PASS — intro and Tap to Enter visible",
+      "screenshot": "screenshots/sdk-release-cold-start.png"
+    },
+    "uploadedToTestFlight": false,
+    "infrastructureLimit": "Original focused-test simulator was no longer registered. A new iOS 27.1 Duo failed initial data migration; iOS 26.5 iPhone 17 Pro completed migration and launched successfully. Initial launch timeout during migration was retried only after boot finished."
+  }
 }

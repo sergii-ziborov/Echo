@@ -250,6 +250,7 @@ def main():
     OUT.mkdir()
     shutil.copytree(ROOT/'public/assets',OUT/'assets')
     shutil.copyfile(ROOT/'public/app-ads.txt', OUT/'app-ads.txt')
+    shutil.copyfile(ROOT/'public/monetization-policy.json', OUT/'monetization-policy.json')
     for name in ('style.css','site.js'):shutil.copy(ROOT/'src'/name,OUT/name)
     for LANG in ('en','ru'):
         for page in PAGES:

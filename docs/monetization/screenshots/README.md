@@ -7,3 +7,5 @@ The displayed ₪7.90 is supplied by the fake client's `displayPrice` fixture. I
 Export command and the final result bundle are recorded in [REPORT.md](../REPORT.md). Do not upload these as evidence of a real purchase without completing the actual SKU/Sandbox review path.
 
 `release-cold-start.png` is a separate actual SDK-free Release cold-start capture of the entry screen, not a purchase fixture.
+
+`sdk-release-cold-start.png` is the separate SDK-enabled Release launch on an isolated iPhone 17 Pro / iOS 26.5 Simulator. The intro rendered and the process remained alive for 183.6 seconds. It is not proof of a real purchase, ad presentation or physical-device performance.
