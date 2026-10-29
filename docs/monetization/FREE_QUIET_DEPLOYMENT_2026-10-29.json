@@ -1,0 +1,37 @@
+{
+  "checkedUTC": "2026-10-29T14:03:25.863829+00:00",
+  "policy": {
+    "audienceReviewed": false,
+    "cutover": {
+      "approved": true,
+      "goodwillBuilds": [
+        "28"
+      ],
+      "id": "echo-free-2026-10-29-v1",
+      "legacyEligibilityEnd": "2026-10-31T13:40:28Z",
+      "paidBuilds": [
+        "18",
+        "27"
+      ],
+      "rolloutUncertaintyEnd": "2026-10-31T13:40:28Z"
+    },
+    "expiresAt": "2026-11-28T13:49:14Z",
+    "familySharingEnabled": false,
+    "issuedAt": "2026-10-29T13:48:44Z",
+    "limits": {
+      "cacheMaxAge": 3000,
+      "maxPer24Hours": 2,
+      "minimumActiveSeconds": 240,
+      "minimumEligibleWins": 3
+    },
+    "phase": "freeQuiet",
+    "schema": 1,
+    "version": 2
+  },
+  "signature": "PASS compiled public key",
+  "appAdsHTTP": 200,
+  "publisherLineMatches": true,
+  "siteVersion": 15,
+  "deploymentID": "appgdep_6ae351e88e9481919ab6bdc72c563c11",
+  "sourceCommit": "324ed19496a32274c3ff3dbde01ac74cba683640"
+}

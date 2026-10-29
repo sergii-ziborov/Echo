@@ -1,0 +1,79 @@
+{
+  "checkedUTC": "2026-10-29T14:22:24.395408+00:00",
+  "status": "PUBLISHED",
+  "source": "Native App Store Connect form, then independent public US App Store browser read",
+  "categories": [
+    {
+      "type": "Coarse Location",
+      "linked": true,
+      "purposes": [
+        "Third-Party Advertising",
+        "Analytics",
+        "App Functionality"
+      ],
+      "tracking": false
+    },
+    {
+      "type": "Device ID",
+      "linked": true,
+      "purposes": [
+        "Third-Party Advertising",
+        "Analytics"
+      ],
+      "tracking": false
+    },
+    {
+      "type": "Product Interaction",
+      "linked": true,
+      "purposes": [
+        "Third-Party Advertising",
+        "Analytics",
+        "App Functionality"
+      ],
+      "tracking": false
+    },
+    {
+      "type": "Advertising Data",
+      "linked": true,
+      "purposes": [
+        "Third-Party Advertising",
+        "Analytics"
+      ],
+      "tracking": false
+    },
+    {
+      "type": "Crash Data",
+      "linked": false,
+      "purposes": [
+        "Analytics"
+      ],
+      "tracking": false
+    },
+    {
+      "type": "Performance Data",
+      "linked": false,
+      "purposes": [
+        "Third-Party Advertising",
+        "Analytics",
+        "App Functionality"
+      ],
+      "tracking": false
+    },
+    {
+      "type": "Other Diagnostic Data",
+      "linked": false,
+      "purposes": [
+        "Third-Party Advertising",
+        "Analytics"
+      ],
+      "tracking": false
+    }
+  ],
+  "configurationBasis": "Pinned SDK manifests plus current provider guidance and actual restricted request code: personalization=false, publisher first-party ID=false, age treatment=child, creative maximum=General, no ATT/IDFA access request",
+  "runtimeTrafficAudit": "NOT RUN in all regions; not substituted with a manifest or simulator mock",
+  "screenshots": [
+    "screenshots/app-privacy-overview-2026-10-29.png",
+    "screenshots/app-privacy-published-2026-10-29.png",
+    "screenshots/app-store-free-2026-10-29.png"
+  ]
+}

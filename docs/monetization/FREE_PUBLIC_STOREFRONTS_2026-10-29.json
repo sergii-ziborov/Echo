@@ -1,0 +1,53 @@
+{
+  "checkedUTC": "2026-10-29T14:11:41.690595+00:00",
+  "checks": [
+    {
+      "storefront": "us",
+      "version": "1.1.0",
+      "price": 0.0,
+      "currency": "USD"
+    },
+    {
+      "storefront": "il",
+      "version": "1.0.0",
+      "price": 4.9,
+      "currency": "ILS"
+    },
+    {
+      "storefront": "gb",
+      "version": "1.0.0",
+      "price": 1.99,
+      "currency": "GBP"
+    },
+    {
+      "storefront": "de",
+      "version": "1.1.0",
+      "price": 0.0,
+      "currency": "EUR"
+    },
+    {
+      "storefront": "fr",
+      "version": "1.1.0",
+      "price": 0.0,
+      "currency": "EUR"
+    },
+    {
+      "storefront": "jp",
+      "version": "1.1.0",
+      "price": 0.0,
+      "currency": "JPY"
+    },
+    {
+      "storefront": "ca",
+      "version": "1.1.0",
+      "price": 0.0,
+      "currency": "CAD"
+    },
+    {
+      "storefront": "ua",
+      "version": "1.1.0",
+      "price": 0.0,
+      "currency": "USD"
+    }
+  ]
+}

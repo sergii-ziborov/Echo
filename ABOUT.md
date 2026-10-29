@@ -4,9 +4,10 @@ ECHO is a route-planning survival puzzle for iPhone, iPad and Apple Watch, in En
 
 It has 77 campaign maps, the Deep Time expedition, a Daily Rift, and thirty-six Keeper Chronometer rooms on the watch, which can also steer a run on the phone. Home keeps two ratings, one per device.
 
-The published 1.0.0 is the original paid release. The prepared 1.1.0 transition adds StoreKit restoration, original-owner protection and one Remove Ads non-consumable, with advertising disabled by default. The owner-controlled free transition has not been performed by this source change. See [R1 status and gates](docs/monetization/RELEASE.md). Progress remains local.
+ECHO is free to download. The released 1.1.0 (27) includes StoreKit restoration, original-owner protection and one optional Remove Ads non-consumable. Download price is zero in all 175 configured territories. All existing content is available through normal progression. Current phase is freeQuiet, with live advertising off while 1.1.1 (28) awaits review of the corrected advertising declaration. Progress remains local. See [the transition evidence](docs/monetization/FREE_TRANSITION_2026-10-29.md).
 
-- Prepared source version: 1.1.0 (24)
+- Published version: 1.1.0 (27)
+- Review/TestFlight version: 1.1.1 (28)
 - Bundle ID: `com.sergiiziborov.Echo`
 - Developer: Sergii Ziborov
 - Support and bug reports: [sergii.ziborov@gmail.com](mailto:sergii.ziborov@gmail.com), **Settings → Report a bug** in the app, or [GitHub Issues](https://github.com/sergii-ziborov/Echo/issues)

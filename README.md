@@ -1,6 +1,6 @@
 # ECHO
 
-> **TestFlight · 29 October 2026:** **1.1.0 (27)** is available to **Keepers**, independently confirmed `IN_BETA_TESTING`. This candidate expands the sourced philosophy/science Archive and fixes Russian headings, whole research-node words, Lab effect labels and Watch result cards. Production remains `preFree`; live advertising and the paid-to-free price change are off. [Build, checks and remaining release gates](docs/monetization/TESTFLIGHT_27.md).
+> **App Store · 29 October 2026:** **1.1.0 (27)** is released. Download price was set to **zero in all 175 territories**; the public US page shows **Free · In-App Purchases**. One optional Remove Ads purchase is approved. Production is `freeQuiet` while **1.1.1 (28)** waits for review of its corrected advertising declaration; 28 is also available in Keepers TestFlight. [Transition evidence and limits](docs/monetization/FREE_TRANSITION_2026-10-29.md).
 
 ECHO is a top-down route-planning survival puzzle for iPhone, iPad and Apple Watch. You guide the Signal, collect every spark, and reach the exit. Every few seconds an echo appears and walks the line you already drew. Your own route becomes the hazard.
 
@@ -8,7 +8,7 @@ ECHO is a top-down route-planning survival puzzle for iPhone, iPad and Apple Wat
 
 Seventy-seven maps sit in eleven seven-map regions of space, strung along one road through a broken galaxy. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later regions add moving debris, timed crystals, beams, fold faults, field wells, and a short Candy Timeline training pocket. The in-game Keeper Archive documents every rule. The Archive gradually recovers field notes, places and Keeper records as you encounter mechanics and restore regions. A compact reward strip on the result screen opens numbered fragments with text excerpts, on demand. Encounters never interrupt play. The first route offers optional interactive practice. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio and language preferences.
 
-The published 1.0.0 remains the original **$1.99 one-time download**. The prepared R1 transition will make downloading free after owner approval, with one Remove Ads purchase and protected access for original owners. The live transition is not complete. Progress stays on the device; no developer account is required.
+ECHO is free to download. All existing regions, modes, research and Archive records remain available through normal progression. One optional non-consumable Remove Ads purchase disables all in-game advertising, with no subscription. Original owners and protected early acquisitions retain ad-free access. Rare interstitials are restricted to suitable transitions after eligible solo wins; live shows are currently off pending the corrected advertising declaration. Progress stays on the device; no developer account is required.
 
 The game is in **English and Russian**. It follows the device language by default. Settings → Language offers Auto, English and Русский, and changes visible text immediately.
 
@@ -53,7 +53,7 @@ Explore the [ECHO website](https://echo-survive-your-past.serhiiright.chatgpt.si
 
 See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGRATION.md), [App Store listing copy](docs/app-store/LISTING.md), [release guide](docs/APP_STORE_RELEASE.md), [About](ABOUT.md), [Terms of Use](TERMS.md), and [Privacy Policy](PRIVACY.md).
 
-> **App Store status · 28 October 2026:** version 1.0.0 is publicly available at $1.99 in the US. The prepared R1 source remains protected in `preFree`; no price transition or live advertising has been enabled. [Release details](docs/monetization/RELEASE.md).
+> **Release boundary:** download price is zero; current production is `freeQuiet`. The first five maps, retries, discoveries and Watch remain protected. Live advertising will be enabled manually after the corrected review. [Release details](docs/monetization/FREE_TRANSITION_2026-10-29.md).
 
 ## The story
 

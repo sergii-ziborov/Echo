@@ -1,3 +1,5 @@
+> **29 October 2026 update:** App Privacy was published in App Store Connect and independently observed on the public US product page: linked Location/Identifiers/Usage Data and unlinked Diagnostics, seven SDK data types in total. Configuration keeps personalization and publisher first-party ID disabled, child-restricted treatment and General creatives, with no ATT/IDFA request. AdMob now reports ECHO Ready / ad serving enabled; the actual root app-ads line still matches. The previous released age declaration could not be edited (Apple 409), so 1.1.1 (28), advertising=true / not Kids Category, is WAITING_FOR_REVIEW. Current production phase is freeQuiet. Runtime regional/refusal traffic, exact hosting retention and original paid-account reinstall are not falsely marked PASS; older statements below remain historical. The owner reported no paid customers.
+
 # R1 privacy audit and release gate
 
 Status: **BLOCKED for live advertising**. Including an SDK is not evidence that its traffic has been audited. Non-personalized requests do not mean no data collection. Do not retain the old App Privacy “Data Not Collected” answer for a future advertising release.

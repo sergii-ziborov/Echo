@@ -1,3 +1,5 @@
+> **Current release · 29 October 2026:** 1.1.0 (27) remains released and was not withdrawn. Zero download price was accepted in all 175 territories; 1.1.1 (28) is VALID / IN_BETA_TESTING / WAITING_FOR_REVIEW, with advertising=true in its draft age declaration. Phase is freeQuiet. [Current transition report](monetization/FREE_TRANSITION_2026-10-29.md). The original paid-launch instructions below are historical.
+
 # ECHO App Store release guide
 
 > **Internal TestFlight update:** 1.1.0 (23) is now `IN_BETA_TESTING` in Keepers after the owner-authorized upload. [Package evidence and EN/RU testing notes](monetization/TESTFLIGHT_23.md). Public App Store pricing/release remains unchanged.
