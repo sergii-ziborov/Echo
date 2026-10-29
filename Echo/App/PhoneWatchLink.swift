@@ -55,6 +55,7 @@ final class PhoneWatchLink: NSObject {
 
     func attach(session: GameSession, scene: GameScene, level: RemoteLevel, actions: RunActions = RunActions()) {
         self.session = session
+        if isSteering { session.usedWatchRemote = true }
         self.scene = scene
         self.actions = actions
         let data = level.data
@@ -62,6 +63,11 @@ final class PhoneWatchLink: NSObject {
         stick = nil
         levelInFlight = false
         framesInFlight = []
+    }
+
+    func stopInput() {
+        stick = nil
+        session?.inputTarget = nil
     }
 
     func detach(session: GameSession) {
@@ -84,6 +90,7 @@ final class PhoneWatchLink: NSObject {
     func apply(_ command: RemoteCommand, now: TimeInterval = CACurrentMediaTime()) {
         lastHello = now
         isSteering = true
+        session?.usedWatchRemote = true
         switch command {
         case .hello(let token):
             watchLevel = token

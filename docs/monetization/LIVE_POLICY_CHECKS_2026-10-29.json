@@ -1,0 +1,9 @@
+{
+  "checks": 38,
+  "liveAdRequested": false,
+  "phase": "freeLive",
+  "policyVersion": 3,
+  "result": "PASS",
+  "scope": "Domain fixtures, not StoreKit transactions or SDK impressions",
+  "source": "Actual Swift policy, eligibility, budget and entitlement model definitions; exact signed envelope; shipped build-27 public key"
+}

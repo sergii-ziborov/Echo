@@ -57,6 +57,7 @@ struct HomeView: View {
                 WristRelicsCard(appeared: appeared, reduceMotion: reduceMotion)
                     .homeEntrance(appeared, delay: 0.22, reduceMotion: reduceMotion)
             }
+            HomeMonetizationRow()
             tagline.homeEntrance(appeared, delay: 0.26, reduceMotion: reduceMotion)
         }
     }
@@ -90,32 +91,13 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
             }
 
+            HomeMonetizationRow()
             tagline.homeEntrance(appeared, delay: 0.26, reduceMotion: reduceMotion)
         }
     }
 
     private var topBar: some View {
-        HStack(spacing: 10) {
-            IconCircle(system: "gearshape") { model.openSettings() }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(model.progress.difficulty.title)
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .tracking(1.8)
-                HStack(spacing: 5) {
-                    HomePulseDot(tint: .green, reduceMotion: reduceMotion)
-                    Text(Copy.text("home.online"))
-                        .font(.system(size: 8, weight: .bold, design: .rounded))
-                        .tracking(1.1)
-                        .foregroundStyle(EchoTheme.cyan)
-                }
-            }
-
-            Spacer(minLength: 6)
-
-            ResourcePill(value: model.progress.totalStars, systemImage: "checkmark.seal.fill", tint: EchoTheme.gold)
-            ResourcePill(value: model.progress.points, systemImage: "diamond.fill", tint: EchoTheme.magenta)
-        }
+        HomeTopBar(reduceMotion: reduceMotion)
     }
 
     private var routeBar: some View {

@@ -1,5 +1,10 @@
 {
   "origin": "https://echo-survive-your-past.serhiiright.chatgpt.site",
-  "source_commit": "35377a6f28bac5a34e0b1e3b64163e091aa3f94b",
-  "app_store_url": null
+  "source_commit": "3952d80e210ab0b07fdfbb34520c094438799aa4",
+  "app_store_url": "https://apps.apple.com/us/app/echo-survive-your-past/id6811673094",
+  "lore_revision": "2026-10-29",
+  "lore_app_status": "Published in 1.1.0 (27)",
+  "prepared_app_version": "1.1.0 (27)",
+  "monetization": "Free download; optional one-time Remove Ads",
+  "download_price": 0
 }

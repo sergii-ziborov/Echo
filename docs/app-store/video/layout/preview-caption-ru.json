@@ -1,0 +1,92 @@
+[
+  {
+    "width": 384,
+    "height": 164,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/ru/preview/preview-caption-ru-0.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 12.0,
+        "y": 12.0,
+        "w": 360.0,
+        "h": 26.0,
+        "size": 15.0,
+        "align": "center",
+        "color": "62DDF6",
+        "bold": true
+      },
+      {
+        "text": "Твой путь становится опасностью.",
+        "x": 18.0,
+        "y": 52.0,
+        "w": 348.0,
+        "h": 100.0,
+        "size": 25.0,
+        "align": "center",
+        "color": "F1F5FA",
+        "bold": true
+      }
+    ]
+  },
+  {
+    "width": 384,
+    "height": 164,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/ru/preview/preview-caption-ru-1.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 12.0,
+        "y": 12.0,
+        "w": 360.0,
+        "h": 26.0,
+        "size": 15.0,
+        "align": "center",
+        "color": "62DDF6",
+        "bold": true
+      },
+      {
+        "text": "Оставь место для нового выбора.",
+        "x": 18.0,
+        "y": 52.0,
+        "w": 348.0,
+        "h": 100.0,
+        "size": 25.0,
+        "align": "center",
+        "color": "F1F5FA",
+        "bold": true
+      }
+    ]
+  },
+  {
+    "width": 384,
+    "height": 164,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/ru/preview/preview-caption-ru-2.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 12.0,
+        "y": 12.0,
+        "w": 360.0,
+        "h": 26.0,
+        "size": 15.0,
+        "align": "center",
+        "color": "62DDF6",
+        "bold": true
+      },
+      {
+        "text": "ECHO: Переживи прошлое",
+        "x": 18.0,
+        "y": 52.0,
+        "w": 348.0,
+        "h": 100.0,
+        "size": 25.0,
+        "align": "center",
+        "color": "F1F5FA",
+        "bold": true
+      }
+    ]
+  }
+]

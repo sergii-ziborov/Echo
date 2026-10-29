@@ -119,6 +119,16 @@ final class SoundPlayer {
     static var testSilent = false
 #endif
     var enabled = true
+    private var advertisingSuspended = false
+    func suspendForAdvertising(_ showing: Bool) {
+        advertisingSuspended = showing
+        if showing { voices.forEach { $0.stop() }; engine.pause() }
+        else {
+            let session = AVAudioSession.sharedInstance()
+            try? session.setCategory(.ambient, mode: .default, options: [.mixWithOthers])
+            try? session.setActive(true)
+        }
+    }
     private(set) var masterVolume: Float = 0.82
 
     private let engine = AVAudioEngine()
@@ -174,7 +184,7 @@ final class SoundPlayer {
     }
 
     func play(_ sound: EchoSound, volume: Float = 1, pan: Float = 0) {
-        guard enabled, let options = buffers[sound], !options.isEmpty, !voices.isEmpty else { return }
+        guard enabled, !advertisingSuspended, let options = buffers[sound], !options.isEmpty, !voices.isEmpty else { return }
         if !engine.isRunning { try? engine.start() }
 
         let now = ProcessInfo.processInfo.systemUptime
@@ -212,7 +222,7 @@ final class SoundPlayer {
     }
 
     func haptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        guard hapticsEnabled else { return }
+        guard hapticsEnabled, !advertisingSuspended else { return }
         switch style {
         case .light: lightHaptic.impactOccurred()
         case .medium: mediumHaptic.impactOccurred()
@@ -223,7 +233,7 @@ final class SoundPlayer {
     }
 
     func notify(_ type: UINotificationFeedbackGenerator.FeedbackType) {
-        guard hapticsEnabled else { return }
+        guard hapticsEnabled, !advertisingSuspended else { return }
         notificationHaptic.notificationOccurred(type)
     }
 

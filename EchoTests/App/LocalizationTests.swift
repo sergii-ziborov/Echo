@@ -116,7 +116,7 @@ final class LocalizationTests: XCTestCase {
                 ["title", "log", "tip"].forEach { expect("level.\(number).\($0)") }
             }
             for act in Act.allCases {
-                ["name", "arrival", "meaning", "science", "act", "blurb", "trait1", "trait2", "trait3"]
+                ["name", "arrival", "meaning", "science", "philosophy", "act", "blurb", "trait1", "trait2", "trait3"]
                     .forEach { expect("region.\(act.key).\($0)") }
             }
             for kind in BonusKind.allCases {

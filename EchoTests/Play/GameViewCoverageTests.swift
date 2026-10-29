@@ -45,6 +45,8 @@ final class GameViewCoverageTests: XCTestCase {
         CoverageHost.render(won.environment(model))
 
         won.modelOverride = model
+        model.screen = .playing(won.request)
+        won.session.phase = .won(SessionResult(time: 20, moves: 8, stars: 3, sparks: 5, echoesFaced: 1))
         won.nextLevel()
         XCTAssertEqual(model.screen, .playing(PlayRequest(levelID: key.next.levelID, daily: false, endless: key.next)))
 
@@ -135,15 +137,21 @@ final class GameViewCoverageTests: XCTestCase {
         view.offerAbilityHint(.ward)
         view.restart()
         view.paradoxRewind()
+        model.screen = .playing(view.request)
+        view.session.phase = .won(SessionResult(time: 20, moves: 8, stars: 3, sparks: 5, echoesFaced: 1))
         view.nextLevel()
         _ = view.resultKey
 
         var daily = GameView(request: CoverageFixtures.playRequest(1, daily: true))
         daily.modelOverride = model
+        model.screen = .playing(daily.request)
+        daily.session.phase = .won(SessionResult(time: 20, moves: 8, stars: 3, sparks: 5, echoesFaced: 1))
         daily.nextLevel()
 
         var last = GameView(request: CoverageFixtures.playRequest(77))
         last.modelOverride = model
+        model.screen = .playing(last.request)
+        last.session.phase = .won(SessionResult(time: 20, moves: 8, stars: 3, sparks: 5, echoesFaced: 1))
         last.nextLevel()
 
         var fresh = GameView(request: request)

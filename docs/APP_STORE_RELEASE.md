@@ -1,6 +1,12 @@
+> **Current release · 29 October 2026:** 1.1.0 (27) remains released and was not withdrawn. Zero download price was accepted in all 175 territories; 1.1.1 (28) is VALID / IN_BETA_TESTING / WAITING_FOR_REVIEW, with advertising=true in its draft age declaration. Phase is freeQuiet. [Current transition report](monetization/FREE_TRANSITION_2026-10-29.md). The original paid-launch instructions below are historical.
+
 # ECHO App Store release guide
 
-App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Version **1.0.0**, local project build **22**. The listing is not public yet.
+> **Internal TestFlight update:** 1.1.0 (23) is now `IN_BETA_TESTING` in Keepers after the owner-authorized upload. [Package evidence and EN/RU testing notes](monetization/TESTFLIGHT_23.md). Public App Store pricing/release remains unchanged.
+>
+> The 1.0.0 App Store version is now Ready for Distribution. The 1.1.0 (23) source is a **prepared monetization transition**, not approved for public release or a price change. Use [the R1 runbook](monetization/RELEASE.md) before any new release; earlier notes below describe the historical paid launch.
+
+App Store Connect record: [ECHO: Survive Your Past](https://appstoreconnect.apple.com/apps/6811673094/distribution/ios/version/inflight). App ID `com.sergiiziborov.Echo`. Published version **1.0.0 (18)**. Prepared source version **1.1.0**, local project build **23**; the free transition has not been activated.
 
 ## Price and product type
 

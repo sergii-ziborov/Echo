@@ -18,6 +18,7 @@ struct ResultsView: View {
     var nextTitle = Copy.text("button.next")
     var archiveFinds: [ArchiveDiscovery] = []
     var onArchive: (() -> Void)? = nil
+    var adMayAppear = false
 
     var body: some View {
         GameModalShell(tint: EchoTheme.gold) {
@@ -131,6 +132,9 @@ struct ResultsView: View {
                     ArchiveRewardStrip(finds: archiveFinds, onOpen: onArchive)
                 }
 
+                if adMayAppear {
+                    Text(Copy.text("ads.transitionLabel")).font(.footnote).foregroundStyle(EchoTheme.muted)
+                }
                 HStack(spacing: 10) {
                     PrimaryButton(title: Copy.text("button.retry"), systemImage: "arrow.counterclockwise", action: onRetry)
                     if cycleComplete, let onNextCycle {

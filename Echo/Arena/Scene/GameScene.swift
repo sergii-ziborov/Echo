@@ -6,6 +6,7 @@ import UIKit
 final class GameScene: SKScene {
     let session: GameSession
     var onEvents: (([SimEvent]) -> Void)?
+    var onActiveSoloTime: ((TimeInterval) -> Void)?
 
     var playerNode: SKNode!
     var echoNodes: [SKNode] = []
@@ -210,6 +211,9 @@ final class GameScene: SKScene {
             break
         }
 
+        if session.hasStarted, session.inputTarget != nil, dt > 0, dt <= 0.25 {
+            onActiveSoloTime?(dt)
+        }
         session.advanceCooldowns(dt: dt)
         let events = session.sim.step(dt: dt, target: session.inputTarget)
         noteTrailEvents(events)

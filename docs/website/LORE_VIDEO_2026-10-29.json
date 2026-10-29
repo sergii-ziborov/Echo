@@ -1,0 +1,21 @@
+{
+  "siteVersion": 12,
+  "sourceCommit": "7a6db1a148291693bb2ffc99a771883eccc99b6f",
+  "deployment": "appgdep_6ae2db343cac81918a82459dfcc538c9",
+  "status": "succeeded",
+  "url": "https://echo-survive-your-past.serhiiright.chatgpt.site",
+  "audience": "public (preserved)",
+  "appLoreSourceCommit": "3952d80e210ab0b07fdfbb34520c094438799aa4",
+  "checks": "PASS: 14 EN/RU pages; internal links/fragments/assets, bilingual canonical/hreflang/SEO and separate actual-gameplay/creative videos; raster decoding checked",
+  "browserQA": "PASS: mobile RU home, real teaser playback, source accordions, no horizontal overflow; final captioned press gallery visible images load. One WebP derivative did not decode in browser and screenshot derivatives were switched to JPEG before publication.",
+  "priceChanged": false,
+  "adsPolicyChanged": false,
+  "currentAppCandidate": "1.1.0 (27)",
+  "finalCopy": "Player-facing video copy verified EN/RU; technical source/redaction notes remain in developer provenance.",
+  "publicScreenshot": "site-published-ru.png",
+  "attributionReview": "PASS: visible Created with Grok credit in both EN/RU; source policies linked in ../lore/EDITORIAL_RIGHTS_AUDIT_2026-10-29.md",
+  "attributionScreenshots": [
+    "grok-credit-en-v12.png",
+    "grok-credit-ru-v12.png"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "checkedUTC": "2026-10-29T14:17:49.458943+00:00",
+  "version": "1.1.1",
+  "build": 28,
+  "buildID": "1d8d473e-d37a-4d50-8708-1cd6391f169f",
+  "processing": "VALID",
+  "submissionID": "000de90f-3771-4802-b207-732c88f47321",
+  "submissionState": "WAITING_FOR_REVIEW",
+  "versionID": "7ddefcbd-f211-468c-a392-d22c268dd46e",
+  "versionState": "WAITING_FOR_REVIEW",
+  "releaseType": "AFTER_APPROVAL",
+  "submittedDate": "2026-10-29T14:17:12.91Z",
+  "betaState": "IN_BETA_TESTING",
+  "keepersContainsBuild": true,
+  "productionPhase": "freeQuiet",
+  "liveAds": false,
+  "priorApproved27NotWithdrawn": true
+}

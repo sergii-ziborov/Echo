@@ -1,0 +1,227 @@
+{
+  "date": "2026-10-28",
+  "app": "6811673094",
+  "testflightBuild": "1.1.0 (24)",
+  "productionAdsEnabled": false,
+  "iap": {
+    "id": "6828008885",
+    "productID": "com.sergiiziborov.Echo.removeAds",
+    "type": "NON_CONSUMABLE",
+    "USBasePrice": "1.99",
+    "territories": 175,
+    "availableInNewTerritories": true,
+    "familySharable": false,
+    "state": "MISSING_METADATA",
+    "reviewNotes": "PASS exact read-back"
+  },
+  "publisherID": "pub-7387441604864948",
+  "appAds": {
+    "url": "https://echo-survive-your-past.serhiiright.chatgpt.site/app-ads.txt",
+    "http": 200,
+    "contentType": "text/plain",
+    "redirects": 0,
+    "googleVerification": "BLOCKED — fresh application list requires verification; Verify App and Check for Changes again returned app-ads.txt verification failure",
+    "lastHTTPCheckUTC": "2026-10-28T18:29:41Z",
+    "googleBotUserAgent": "Mediapartners-Google",
+    "exactPublisherLine": true,
+    "consoleDetails": "No data rows / no ad requests with app-ads.txt; the console does not expose an actual crawled URL or last crawl for this app"
+  },
+  "site": {
+    "version": 6,
+    "commit": "7ad1a46926ed4c025b7e80b04d27e1ca9574fd72",
+    "deployment": "appgdep_6ae2077c59a88191b3838c0c91b29ff1",
+    "status": "succeeded",
+    "latestVersion": 8,
+    "latestCommit": "0e23dd2735364242d589600a67d27355b76ede62",
+    "latestDeployment": "appgdep_6ae2191ba8788191a0457a8c9c392170",
+    "legalUpdated": true
+  },
+  "tests": {
+    "xcode": "27.1 (27A9275)",
+    "device": "iPhone 17 Pro Simulator",
+    "os": "26.5",
+    "result": "Passed",
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "xcresult": "/tmp/echo-r1-completion/policy-regression.xcresult",
+    "suites": [
+      "PurchaseTests",
+      "PurchaseServiceTests",
+      "AdPolicyTests",
+      "CoordinatorTests"
+    ]
+  },
+  "nativeStoreKit": "BLOCKED — configuration service error, stalled lookup; initial run cancelled",
+  "physicalPurchases": "NOT RUN",
+  "cutover": "NOT APPROVED",
+  "liveAppID": "ca-app-pub-7387441604864948~4899495427",
+  "interstitialUnitID": "ca-app-pub-7387441604864948/9838007664",
+  "adMobUnit": {
+    "name": "campaign_result_to_next",
+    "format": "INTERSTITIAL",
+    "count": 1,
+    "cap": {
+      "impressions": 2,
+      "hours": 24
+    },
+    "readback": "PASS",
+    "campaigns": 0,
+    "mediationGroups": 0
+  },
+  "highEngagementAds": "OFF — saved and read back in app settings",
+  "publisherFirstPartyConsole": "ON — owner explicitly chose to preserve account setting; irreversible deletion was not confirmed",
+  "sdkPublisherFirstPartyID": "DISABLED",
+  "releasePolicy": {
+    "url": "https://echo-survive-your-past.serhiiright.chatgpt.site/monetization-policy.json",
+    "http": 200,
+    "mime": "application/json",
+    "signature": "PASS",
+    "version": 1,
+    "phase": "preFree",
+    "issuedAt": "2026-10-28T14:52:50Z",
+    "expiresAt": "2026-11-04T14:52:50Z",
+    "audienceReviewed": false,
+    "cutover": null,
+    "privateKeyInGit": false
+  },
+  "sdkReleaseSimulatorBuild": {
+    "result": "PASS",
+    "xcode": "27.1 (27A9275)",
+    "googleMobileAds": "13.11.0",
+    "ump": "3.1.0",
+    "log": "/tmp/echo-r1-completion/sdk-release-build.log",
+    "artifactChecks": "PASS",
+    "watchAdImports": false,
+    "coldLaunch": {
+      "result": "PASS_PROCESS_ALIVE",
+      "pid": 45017,
+      "elapsedSeconds": 183.6,
+      "model": "iPhone 17 Pro",
+      "os": "iOS 26.5",
+      "isHardware": false,
+      "visual": "PASS — intro and Tap to Enter visible",
+      "screenshot": "screenshots/sdk-release-cold-start.png"
+    },
+    "uploadedToTestFlight": false,
+    "infrastructureLimit": "Original focused-test simulator was no longer registered. A new iOS 27.1 Duo failed initial data migration; iOS 26.5 iPhone 17 Pro completed migration and launched successfully. Initial launch timeout during migration was retried only after boot finished."
+  },
+  "testflightEvidence": "TESTFLIGHT_24_VERIFICATION.json",
+  "ump": {
+    "EuropeanMessage": "PUBLISHED — exact list read-back Опубликовано",
+    "languages": [
+      "en",
+      "ru"
+    ],
+    "refuseAllRegions": true,
+    "closeWithoutConsent": true,
+    "vendors": [
+      "Google Advertising Products (755)"
+    ],
+    "autoPartners": false,
+    "maximizedMessageCoverage": false,
+    "RTBConsentCheck": true,
+    "legitimateInterestDefault": false,
+    "consentModeForAdvertising": false,
+    "specialFeature2": false,
+    "runtimeConsentTest": "NOT RUN",
+    "USMessage": "PUBLISHED — exact list read-back Опубликовано after confirmation",
+    "publication": "EU PASS; US PASS; real regional presentation NOT RUN",
+    "USVendorList": "PASS — custom Google-only list saved; main settings show 1 partner and disabled Save",
+    "USMessageName": "ECHO — US privacy choices",
+    "USLanguages": [
+      "en-US"
+    ],
+    "USAppID": "6811673094",
+    "USTargeting": "All current and future supported US states — switch ON",
+    "USDoNotSellOrShare": true
+  },
+  "ageDeclaration": {
+    "appStoreRating": "NINE_PLUS",
+    "kidsAgeBand": null,
+    "advertising": false,
+    "source": "read-only App Store Connect"
+  },
+  "adNetworkSmoke": {
+    "result": "Passed",
+    "passedTests": 1,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "totalTestCount": 1,
+    "runtimeWarnings": [],
+    "model": "iPhone 17 Pro Simulator",
+    "os": "26.5",
+    "isHardware": false,
+    "sdk": {
+      "GoogleMobileAds": "13.11.0",
+      "UMP": "3.1.0"
+    },
+    "durationSeconds": 2.748,
+    "test": "AdMobNetworkTests.testOfficialTestCreativeLoadsAfterPrivacyAndIsDiscarded",
+    "appID": "official Google test App ID",
+    "unitID": "official Google test interstitial",
+    "privacyBypassed": false,
+    "nativePresentationTested": false,
+    "purchaseTested": false,
+    "resultBundle": "/tmp/echo-r1-completion/ad-network-configured.xcresult"
+  },
+  "physicalInstalledBuild": "1.1.0 (24)",
+  "physicalBackupHashRechecked": true,
+  "githubPullRequest": "https://github.com/sergii-ziborov/Echo/pull/1",
+  "googleRegistration": {
+    "paymentProfile": "READY",
+    "accountApproval": "APPROVED — actual Home card: Ваш аккаунт одобрен; Данные аккаунта проверены. Показ объявлений включен.",
+    "welcomeEmailPublisherMatches": true,
+    "approvalEmailFound": false,
+    "morePaymentDataRequested": false,
+    "approvalEvidence": "Native Home AX text and visible screenshot; welcome email was not used as proof"
+  },
+  "uiCompletion": {
+    "EuropeanPublication": "PASS — list row reports Опубликовано",
+    "pendingMechanicalUserRequest": false,
+    "USSettings": "PASS — clean Chrome tab restored control; Google-only vendor settings saved and US message published",
+    "chromeBrowserAdapter": "UNAVAILABLE",
+    "hiddenBrowserAPIsUsed": false,
+    "accountWideFirstPartyDeletionAccepted": false,
+    "previousWindowFailure": "Historical — resolved for US configuration during subsequent retry"
+  },
+  "appleRecheck": {
+    "build24": "IN_BETA_TESTING",
+    "iapState": "MISSING_METADATA",
+    "familySharable": false,
+    "date": "2026-10-28"
+  },
+  "physicalEarlierQuery": {
+    "result": "BLOCKED",
+    "date": "2026-10-28",
+    "domain": "com.apple.dt.CoreDeviceError",
+    "code": 4016,
+    "description": "The device is not able to fulfill the requested usage assertion requirements.",
+    "appModified": false,
+    "purchaseTested": false
+  },
+  "physicalLatestQuery": {
+    "result": "PASS",
+    "date": "2026-10-28",
+    "version": "1.1.0",
+    "build": "24",
+    "containerAccessible": true,
+    "appModified": false
+  },
+  "physicalUpdateEvidence": "PHYSICAL_24_VERIFICATION.json",
+  "physicalUpdatePreservation": {
+    "result": "PASS",
+    "existingProgressAndSettingsKeys": 15,
+    "allUnchanged": true,
+    "missingPriorKeys": 0
+  },
+  "physicalUI": "BLOCKED — launch/activation PASS; Device Hub explicitly requires iOS 27+ for screen sharing while phone is 26.5; real purchase-screen state requested from owner",
+  "physicalProductUI": {
+    "date": "2026-10-29",
+    "status": "PASS_USER_REPORTED",
+    "purchaseButtonVisible": true,
+    "priceVisible": true,
+    "exactPrice": null,
+    "transactionOrRestoreProven": false
+  }
+}

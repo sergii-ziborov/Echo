@@ -1,0 +1,58 @@
+{
+  "version": "1.1.0",
+  "build": 26,
+  "buildID": "c17343a5-11ab-4639-b481-1ea57c6c0005",
+  "processing": "VALID",
+  "audience": "APP_STORE_ELIGIBLE",
+  "betaDetails": [
+    {
+      "autoNotifyEnabled": true,
+      "internalBuildState": "IN_BETA_TESTING",
+      "externalBuildState": "READY_FOR_BETA_SUBMISSION"
+    }
+  ],
+  "keepersContainsBuild": true,
+  "notesReadBack": true,
+  "draftBuildAttached": true,
+  "confirmedUTC": "2026-10-28T23:43:20.390173+00:00",
+  "sourceCommit": "99a22e63df8b657dee19ba0848bcb94b45a9de6c",
+  "sdkVersions": {
+    "GoogleMobileAds": "13.11.0",
+    "UMP": "3.1.0"
+  },
+  "ipaBytes": 41691654,
+  "ipaSHA256": "75dd47693072e444bb22362e41990f0e7fa9952806b9972c3f6e7f5b2eeac4b5",
+  "archive": "PASS",
+  "export": "PASS",
+  "appleValidation": "PASS",
+  "appleUpload": "PASS",
+  "productionPhase": "preFree",
+  "liveAds": false,
+  "defaultProject": "SDK-free",
+  "sdkVariant": "project-admob.yml; phone only",
+  "reviewSubmission": "BLOCKED: Mac locked; first IAP requires App Store Connect website submission with the binary",
+  "iapReviewScreenshot": "UPLOAD_COMPLETE; native UI fixture, not a real transaction proof",
+  "iapProduct": "READY_TO_SUBMIT",
+  "physicalPurchase24": "PASS: device journal",
+  "physicalRestore24": "PASS_USER_REPORTED",
+  "legacyProductionReinstall": "NOT RUN",
+  "priceCutover": "NOT APPROVED / NOT CHANGED",
+  "currentRegression": {
+    "status": "PASS",
+    "tests": 53,
+    "failures": 0,
+    "skips": 0,
+    "resultBundle": "/tmp/echo-final26-retry-tests.xcresult",
+    "commandExit": 0
+  },
+  "watchResultVisual": "PASS: header below clock and Crown hint readable in watchOS 26.5 Simulator",
+  "diagnosticCollection": "Automatic global simctl diagnose interrupted after all tests completed; result finalized successfully with exit 0. No global diagnostic logs published.",
+  "iPadNativeCaptureTest": {
+    "status": "PASS",
+    "tests": 1,
+    "failures": 0,
+    "skips": 0,
+    "resultBundle": "/tmp/echo-equipped26-ipad.xcresult",
+    "scope": "native equipped-loadout views; not a physical-iPad gameplay/purchase test"
+  }
+}

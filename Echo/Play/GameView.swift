@@ -193,7 +193,8 @@ struct GameView: View {
                         onMenu: { acknowledgeFinds(); activeModel.goHome() },
                         nextTitle: request.endless.map { Copy.format("endless.depth", $0.depth + 1) } ?? Copy.text("button.next"),
                         archiveFinds: archiveFinds,
-                        onArchive: presentArchiveFinds
+                        onArchive: presentArchiveFinds,
+                        adMayAppear: activeModel.monetization.decision(adContext) == .allow
                     )
                 }
 
@@ -250,13 +251,24 @@ struct GameView: View {
             }
         }
         .ignoresSafeArea()
-        .onDisappear { PhoneWatchLink.shared.detach(session: session) }
+        .onDisappear { disappearedFromGame() }
+        .onChange(of: session.phase) { _, phase in
+            if case .won = phase { prepareResultAdvertising() }
+        }
         .onChange(of: LanguagePreference.shared.selection) {
             // SpriteKit captions are nodes, so refresh them without restarting
             // the simulation or changing this run's route and results.
             scene.rebuild()
         }
         .onAppear {
+            PhoneWatchLink.shared.attach(
+                session: session,
+                scene: scene,
+                level: remoteLevel,
+                actions: PhoneWatchLink.RunActions(rewind: { paradoxRewind() }, retry: { restart() })
+            )
+            guard !session.viewSetupComplete else { return }
+            session.viewSetupComplete = true
             session.configure(tuning: activeModel.progress.playerTuning)
             if let landing = ArrivalCard.Arrival.first(for: request, level: session.level, seen: activeModel.progress.seenHints) {
                 _ = activeModel.progress.markHint(landing.key)
@@ -265,13 +277,13 @@ struct GameView: View {
                 session.banner = Copy.format("play.depthTitle", key.depth)
             }
             scene.onEvents = { events in handle(events) }
+            scene.onActiveSoloTime = { duration in
+                guard request.endless == nil, !request.daily,
+                      !session.usedWatchRemote, activeModel.monetization.isForeground else { return }
+                activeModel.monetization.budget.addActiveSeconds(duration)
+            }
             scene.cometStyle = activeModel.progress.usesTourbillonTail ? .tourbillon : .classic
-            PhoneWatchLink.shared.attach(
-                session: session,
-                scene: scene,
-                level: remoteLevel,
-                actions: PhoneWatchLink.RunActions(rewind: { paradoxRewind() }, retry: { restart() })
-            )
+
             session.autoReplay = activeModel.progress.autoReplayEnabled
             activeModel.audio.setHapticsEnabled(activeModel.progress.hapticsEnabled)
             activeModel.audio.enabled = activeModel.progress.soundEnabled

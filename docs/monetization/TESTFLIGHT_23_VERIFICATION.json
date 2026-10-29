@@ -1,0 +1,72 @@
+{
+  "sourceCommit": "49a602a63a747fef3ea4b3891d7a9e4acc3e6e47",
+  "apple": {
+    "buildID": "eba105bd-70d5-480d-aa15-c9762d8fc707",
+    "version": "1.1.0",
+    "build": "23",
+    "processingState": "VALID",
+    "buildAudienceType": "INTERNAL_ONLY",
+    "uploadedDate": "2026-10-28T03:32:56-07:00",
+    "usesNonExemptEncryption": false,
+    "internalBuildState": "IN_BETA_TESTING",
+    "externalBuildState": "NOT_APPLICABLE",
+    "groups": [
+      {
+        "id": "e4807ea6-5a50-471b-8761-f251271702eb",
+        "name": "Keepers",
+        "internal": true
+      }
+    ],
+    "notesLocales": [
+      "ru",
+      "en-US"
+    ],
+    "confirmedAt": "2026-10-28T10:35:26.170880+00:00"
+  },
+  "ipa": {
+    "sha256": "e021ddf7fdb3c7c35fbefac95ac778c61f28cb173ba9b7727c4f8e61e8ed29ee",
+    "sizeBytes": 40155564,
+    "bundles": {
+      "phone": {
+        "bundleID": "com.sergiiziborov.Echo",
+        "version": "1.1.0",
+        "build": "23",
+        "distributionProfile": "Echo TestFlight 23 2026-10-28",
+        "gameCenter": true,
+        "adSDK": false
+      },
+      "watch": {
+        "bundleID": "com.sergiiziborov.Echo.watchkitapp",
+        "version": "1.1.0",
+        "build": "23",
+        "distributionProfile": "Echo Watch TestFlight 23 2026-10-28",
+        "gameCenter": true,
+        "adSDK": false
+      }
+    }
+  },
+  "archive": {
+    "sourceCommit": "49a602a63a747fef3ea4b3891d7a9e4acc3e6e47",
+    "bundles": {
+      "phone": {
+        "CFBundleIdentifier": "com.sergiiziborov.Echo",
+        "CFBundleShortVersionString": "1.1.0",
+        "CFBundleVersion": "23",
+        "DTXcode": "2710",
+        "DTXcodeBuild": "27A9275",
+        "DTSDKName": "iphoneos27.1",
+        "EchoAdSDKIncluded": false
+      },
+      "watch": {
+        "CFBundleIdentifier": "com.sergiiziborov.Echo.watchkitapp",
+        "CFBundleShortVersionString": "1.1.0",
+        "CFBundleVersion": "23",
+        "DTXcode": "2710",
+        "DTXcodeBuild": "27A9275",
+        "DTSDKName": "watchos27.0",
+        "EchoAdSDKIncluded": null
+      }
+    },
+    "archiveSignatureVerified": true
+  }
+}

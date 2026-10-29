@@ -1,0 +1,47 @@
+{
+  "sourceCommit": "62c2f3f33a7a7a74969a2861a27a79d2890ae819",
+  "version": "1.1.1",
+  "build": 28,
+  "ipaBytes": 41699685,
+  "ipaSHA256": "44a2ce3ed5a4cb600ade2d4e31fc5d9d73238b98d419dd76a6d4d65739ccd514",
+  "archive": "PASS",
+  "export": "PASS",
+  "appleValidation": "PASS",
+  "appleUpload": "PASS",
+  "deliveryID": "1d8d473e-d37a-4d50-8708-1cd6391f169f",
+  "sdkVersions": {
+    "GoogleMobileAds": "13.11.0",
+    "UMP": "3.1.0"
+  },
+  "productionPhase": "freeQuiet",
+  "liveAds": false,
+  "tests": {
+    "passed": 36,
+    "failed": 0,
+    "skipped": 0,
+    "evidence": "CUTOVER_TESTS_28.json"
+  },
+  "reviewStatus": "WAITING_FOR_REVIEW",
+  "buildID": "1d8d473e-d37a-4d50-8708-1cd6391f169f",
+  "submissionID": "000de90f-3771-4802-b207-732c88f47321",
+  "submissionState": "WAITING_FOR_REVIEW",
+  "versionID": "7ddefcbd-f211-468c-a392-d22c268dd46e",
+  "versionState": "WAITING_FOR_REVIEW",
+  "releaseType": "AFTER_APPROVAL",
+  "submittedDate": "2026-10-29T14:17:12.91Z",
+  "betaState": "IN_BETA_TESTING",
+  "keepersContainsBuild": true,
+  "priorApproved27NotWithdrawn": true,
+  "processing": "VALID",
+  "followUp": "Owner subsequently authorized immediate live policy v3; review and automatic after-approval app release remain unchanged; no background automation",
+  "marketing": {
+    "screenshots": 64,
+    "previews": 2,
+    "headerAssets": 2,
+    "searchAssets": 2,
+    "readBack": "PASS active placements cloned from approved 27"
+  },
+  "currentProductionPhase": "freeLive",
+  "currentLiveAdsEnabled": true,
+  "activationEvidence": "LIVE_ACTIVATION_2026-10-29.json"
+}

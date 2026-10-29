@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-28",
+  "baseline": "740c8fc244823249eacf9e39eec35e407ccaa787",
+  "tests": {
+    "sdk": {
+      "result": "Passed",
+      "totalTestCount": 78,
+      "passedTests": 77,
+      "failedTests": 0,
+      "skippedTests": 1,
+      "startTime": 1793154743.31,
+      "finishTime": 1793154789.246
+    },
+    "default": {
+      "result": "Passed",
+      "totalTestCount": 78,
+      "passedTests": 77,
+      "failedTests": 0,
+      "skippedTests": 1,
+      "startTime": 1793154688.026,
+      "finishTime": 1793154725.424
+    }
+  },
+  "releaseArtifacts": {
+    "Release-iphonesimulator": {
+      "phone": {
+        "CFBundleIdentifier": "com.sergiiziborov.Echo",
+        "CFBundleShortVersionString": "1.1.0",
+        "CFBundleVersion": "23",
+        "EchoAdSDKIncluded": false,
+        "advertisingSymbolCount": 0
+      },
+      "watch": {
+        "CFBundleIdentifier": "com.sergiiziborov.Echo.watchkitapp",
+        "CFBundleShortVersionString": "1.1.0",
+        "CFBundleVersion": "23",
+        "EchoAdSDKIncluded": null,
+        "advertisingSymbolCount": 0
+      }
+    },
+    "Release-iphoneos": {
+      "phone": {
+        "CFBundleIdentifier": "com.sergiiziborov.Echo",
+        "CFBundleShortVersionString": "1.1.0",
+        "CFBundleVersion": "23",
+        "EchoAdSDKIncluded": false,
+        "advertisingSymbolCount": 0
+      },
+      "watch": {
+        "CFBundleIdentifier": "com.sergiiziborov.Echo.watchkitapp",
+        "CFBundleShortVersionString": "1.1.0",
+        "CFBundleVersion": "23",
+        "EchoAdSDKIncluded": null,
+        "advertisingSymbolCount": 0
+      }
+    }
+  }
+}

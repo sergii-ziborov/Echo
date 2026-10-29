@@ -1,0 +1,182 @@
+[
+  {
+    "width": 720,
+    "height": 240,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/en/teaser/caption-en-0.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 20.0,
+        "y": 18.0,
+        "w": 680.0,
+        "h": 40.0,
+        "size": 20.0,
+        "color": "D4B679",
+        "align": "center",
+        "bold": true
+      },
+      {
+        "text": "The road remembers.",
+        "x": 20.0,
+        "y": 82.0,
+        "w": 680.0,
+        "h": 140.0,
+        "size": 36.0,
+        "color": "F1F5FA",
+        "align": "center",
+        "bold": true
+      }
+    ]
+  },
+  {
+    "width": 720,
+    "height": 240,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/en/teaser/caption-en-1.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 20.0,
+        "y": 18.0,
+        "w": 680.0,
+        "h": 40.0,
+        "size": 20.0,
+        "color": "D4B679",
+        "align": "center",
+        "bold": true
+      },
+      {
+        "text": "The next turn is yours.",
+        "x": 20.0,
+        "y": 82.0,
+        "w": 680.0,
+        "h": 140.0,
+        "size": 36.0,
+        "color": "F1F5FA",
+        "align": "center",
+        "bold": true
+      }
+    ]
+  },
+  {
+    "width": 720,
+    "height": 240,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/en/teaser/caption-en-2.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 20.0,
+        "y": 18.0,
+        "w": 680.0,
+        "h": 40.0,
+        "size": 20.0,
+        "color": "D4B679",
+        "align": "center",
+        "bold": true
+      },
+      {
+        "text": "ECHO · Survive Your Past",
+        "x": 20.0,
+        "y": 82.0,
+        "w": 680.0,
+        "h": 140.0,
+        "size": 36.0,
+        "color": "F1F5FA",
+        "align": "center",
+        "bold": true
+      }
+    ]
+  },
+  {
+    "width": 720,
+    "height": 240,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/ru/teaser/caption-ru-0.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 20.0,
+        "y": 18.0,
+        "w": 680.0,
+        "h": 40.0,
+        "size": 20.0,
+        "color": "D4B679",
+        "align": "center",
+        "bold": true
+      },
+      {
+        "text": "Дорога помнит.",
+        "x": 20.0,
+        "y": 82.0,
+        "w": 680.0,
+        "h": 140.0,
+        "size": 36.0,
+        "color": "F1F5FA",
+        "align": "center",
+        "bold": true
+      }
+    ]
+  },
+  {
+    "width": 720,
+    "height": 240,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/ru/teaser/caption-ru-1.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 20.0,
+        "y": 18.0,
+        "w": 680.0,
+        "h": 40.0,
+        "size": 20.0,
+        "color": "D4B679",
+        "align": "center",
+        "bold": true
+      },
+      {
+        "text": "Следующий поворот — твой.",
+        "x": 20.0,
+        "y": 82.0,
+        "w": 680.0,
+        "h": 140.0,
+        "size": 36.0,
+        "color": "F1F5FA",
+        "align": "center",
+        "bold": true
+      }
+    ]
+  },
+  {
+    "width": 720,
+    "height": 240,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/ru/teaser/caption-ru-2.png",
+    "items": [
+      {
+        "text": "E C H O",
+        "x": 20.0,
+        "y": 18.0,
+        "w": 680.0,
+        "h": 40.0,
+        "size": 20.0,
+        "color": "D4B679",
+        "align": "center",
+        "bold": true
+      },
+      {
+        "text": "ECHO · Переживи прошлое",
+        "x": 20.0,
+        "y": 82.0,
+        "w": 680.0,
+        "h": 140.0,
+        "size": 36.0,
+        "color": "F1F5FA",
+        "align": "center",
+        "bold": true
+      }
+    ]
+  }
+]

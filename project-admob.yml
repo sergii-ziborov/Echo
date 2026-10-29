@@ -1,0 +1,52 @@
+# Explicit opt-in SDK variant; same app identity and schemes, never a second app.
+include: project.yml
+name: Echo
+
+targets:
+  EchoTests:
+    settings:
+      base:
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) ECHO_ADMOB"
+  Echo:
+    sources:REPLACE:
+      - path: Echo
+        excludes:
+          - Resources/Info.plist
+      - path: Shared
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      properties:
+        EchoAdSDKIncluded: true
+        GADApplicationIdentifier: "$(ECHO_ADMOB_APP_ID)"
+        GADDelayAppMeasurementInit: true
+        SKAdNetworkItems:
+          - SKAdNetworkIdentifier: cstr6suwn9.skadnetwork
+    settings:
+      base:
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) ECHO_ADMOB"
+        # Existing ECHO app in the owner's AdMob console; this is a public identifier.
+        ECHO_ADMOB_APP_ID: "ca-app-pub-7387441604864948~4899495427"
+        ECHO_INTERSTITIAL_UNIT_ID: "ca-app-pub-7387441604864948/9838007664"
+    preBuildScripts:
+      - name: Validate production AdMob bootstrap
+        basedOnDependencyAnalysis: false
+        script: |
+          if [ "$CONFIGURATION" = "Release" ]; then
+            if ! printf '%s' "$ECHO_ADMOB_APP_ID" | /usr/bin/grep -Eq '^ca-app-pub-[0-9]{16}~[0-9]{10}$'; then
+              echo "error: Configure a real, well-formed AdMob App ID before building the SDK Release variant." >&2
+              exit 1
+            fi
+            case "$ECHO_ADMOB_APP_ID" in
+              ""|*3940256099942544*)
+                echo "error: The AdMob Release variant requires a real ECHO_ADMOB_APP_ID. A blank or test App ID is unsafe; use the SDK-free project.yml until publisher setup is complete." >&2
+                exit 1
+                ;;
+              ca-app-pub-*~*) ;;
+              *)
+                echo "error: Invalid AdMob App ID; no test or placeholder fallback is permitted in Release." >&2
+                exit 1
+                ;;
+            esac
+          fi

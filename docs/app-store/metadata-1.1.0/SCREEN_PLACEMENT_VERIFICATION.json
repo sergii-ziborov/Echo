@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "draftOnly": true,
+  "screenshots": 64,
+  "locales": [
+    "en-US",
+    "ru"
+  ],
+  "groupsPerLocale": {
+    "iPhone69": 8,
+    "iPhone65": 8,
+    "iPad13": 8,
+    "Duo": 4,
+    "Watch46": 4
+  },
+  "liveAppStoreVersionChanged": false
+}

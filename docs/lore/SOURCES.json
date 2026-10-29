@@ -1,0 +1,168 @@
+{
+  "trace": [
+    {
+      "id": "epictetus",
+      "title": "Epictetus · Enchiridion §1",
+      "kind": "primary",
+      "url": "https://classics.mit.edu/Epictetus/epicench.html"
+    },
+    {
+      "id": "clock",
+      "title": "NIST · One-way time transfer",
+      "kind": "official",
+      "url": "https://www.nist.gov/pml/time-and-frequency-division/time-services/one-way-gnss-time-transfer"
+    }
+  ],
+  "drift": [
+    {
+      "id": "aristotle",
+      "title": "Aristotle · Nicomachean Ethics II.1",
+      "kind": "primary",
+      "url": "https://classics.mit.edu/Aristotle/nicomachaen.2.ii.html"
+    },
+    {
+      "id": "feedback",
+      "title": "Åström & Murray · Feedback Systems",
+      "kind": "research",
+      "url": "https://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-intro_28Sep12.pdf"
+    }
+  ],
+  "fracture": [
+    {
+      "id": "heraclitus",
+      "title": "Heraclitus · Fragments",
+      "kind": "primary",
+      "url": "https://sourcebooks.web.fordham.edu/ancient/heraklitos-fragments.asp"
+    },
+    {
+      "id": "ice",
+      "title": "Rhoden et al. · Fracture mechanics",
+      "kind": "research",
+      "url": "https://doi.org/10.1029/2020JE006710"
+    }
+  ],
+  "debris": [
+    {
+      "id": "marcus",
+      "title": "Marcus Aurelius · Meditations VII.54",
+      "kind": "primary",
+      "url": "https://classics.mit.edu/Antoninus/meditations.7.seven.html"
+    },
+    {
+      "id": "landauer",
+      "title": "Landauer · Irreversibility and heat",
+      "kind": "research",
+      "url": "https://www.dna.caltech.edu/courses/cs191/paperscs191/landauer1961.pdf"
+    }
+  ],
+  "paradox": [
+    {
+      "id": "popper",
+      "title": "Popper · Conjectures and Refutations",
+      "kind": "primary",
+      "url": "https://joelvelasco.net/teaching/hum9/popper-conjecturesrefutations.pdf"
+    },
+    {
+      "id": "echo",
+      "title": "Shaffer et al. · Verification protocols",
+      "kind": "research",
+      "url": "https://arxiv.org/abs/2003.04500"
+    }
+  ],
+  "singularity": [
+    {
+      "id": "socrates",
+      "title": "Plato · Apology 21b–23b",
+      "kind": "primary",
+      "url": "https://classics.mit.edu/Plato/apology.html"
+    },
+    {
+      "id": "light",
+      "title": "NASA · Looking into the past",
+      "kind": "official",
+      "url": "https://science.nasa.gov/blogs/webb/2023/12/06/measuring-the-distances-to-galaxies-with-space-telescopes/"
+    },
+    {
+      "id": "singularity",
+      "title": "NASA · Singularity",
+      "kind": "official",
+      "url": "https://science.nasa.gov/universe/glossary/"
+    }
+  ],
+  "rift": [
+    {
+      "id": "kant",
+      "title": "Kant · Orientation, AA 8:134–135",
+      "kind": "primary",
+      "url": "https://assets.cambridge.org/97811071/49595/excerpt/9781107149595_excerpt.pdf"
+    },
+    {
+      "id": "einstein",
+      "title": "Einstein · Relativity (1905), §§1–3",
+      "kind": "research",
+      "url": "https://physics.umd.edu/courses/Phys371/AnlageSpring17/Einstein_1905_relativity.pdf"
+    }
+  ],
+  "gravity": [
+    {
+      "id": "spinoza",
+      "title": "Spinoza · Ethics I, Axiom IV",
+      "kind": "primary",
+      "url": "https://www.gutenberg.org/cache/epub/3800/pg3800-images.html"
+    },
+    {
+      "id": "gravity",
+      "title": "NASA · Black holes and orbits",
+      "kind": "official",
+      "url": "https://science.nasa.gov/universe/black-holes/"
+    }
+  ],
+  "mirage": [
+    {
+      "id": "plato",
+      "title": "Plato · Republic VII, 514a–517a",
+      "kind": "primary",
+      "url": "https://classics.mit.edu/Plato/republic.8.vii.html"
+    },
+    {
+      "id": "lensing",
+      "title": "NASA · Gravitational lenses",
+      "kind": "official",
+      "url": "https://science.nasa.gov/mission/hubble/science/universe-uncovered/hubbles-gravitational-lenses/"
+    }
+  ],
+  "confection": [
+    {
+      "id": "epicurus",
+      "title": "Epicurus · Principal Doctrines 27",
+      "kind": "primary",
+      "url": "https://classics.mit.edu/Epicurus/princdoc.html"
+    },
+    {
+      "id": "pleasure",
+      "title": "Epicurus · Letter to Menoeceus",
+      "kind": "primary",
+      "url": "https://classics.mit.edu/Epicurus/menoec.html"
+    },
+    {
+      "id": "teaching",
+      "title": "Skinner · Teaching Machines (1958)",
+      "kind": "research",
+      "url": "https://doi.org/10.1126/science.128.3330.969"
+    }
+  ],
+  "eternity": [
+    {
+      "id": "camus",
+      "title": "Stanford · Camus §3.4",
+      "kind": "commentary",
+      "url": "https://plato.stanford.edu/entries/camus/"
+    },
+    {
+      "id": "bennett",
+      "title": "Bennett · Logical reversibility (1973)",
+      "kind": "research",
+      "url": "https://www.cs.princeton.edu/courses/archive/fall04/cos576/papers/bennett73.html"
+    }
+  ]
+}

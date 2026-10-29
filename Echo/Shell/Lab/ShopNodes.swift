@@ -124,7 +124,7 @@ extension ShopView {
                     }
                 }
                 ForEach(kinds) { kind in
-                    researchTreeNode(kind)
+                    researchTreeNode(kind, width: min(96, (geometry.size.width - 12) / 4))
                         .frame(width: min(96, (geometry.size.width - 12) / 4))
                         .position(layout.point(for: kind, width: geometry.size.width))
                         .id(kind)
@@ -136,11 +136,12 @@ extension ShopView {
         .overlay(RoundedRectangle(cornerRadius: 20).stroke(tint.opacity(0.14), lineWidth: 1))
     }
 
-    func researchTreeNode(_ kind: UpgradeKind) -> some View {
+    func researchTreeNode(_ kind: UpgradeKind, width: CGFloat = 96) -> some View {
         let level = model.progress.upgradeLevel(kind)
         let available = model.progress.prerequisitesMet(for: kind)
         let selected = selectedResearch == kind
         let tint = color(kind.branch.tint)
+        let title = ResearchNodeTitle.layout(kind.title, width: width)
         return Button {
             selectedResearch = kind
             model.audio.play(.select)
@@ -155,8 +156,8 @@ extension ShopView {
                         .foregroundStyle(level > 0 ? EchoTheme.cyan : available ? tint : EchoTheme.muted)
                         .offset(x: 3, y: -2)
                 }
-                Text(kind.title)
-                    .font(.system(size: 10, weight: .semibold))
+                Text(title.text)
+                    .font(.system(size: title.fontSize, weight: .semibold))
                     .foregroundStyle(.white)
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
@@ -221,7 +222,7 @@ extension ShopView {
                 HStack(alignment: .top, spacing: 8) {
                     Text(Copy.text("lab.card.current"))
                         .foregroundStyle(EchoTheme.muted)
-                        .frame(width: 68, alignment: .leading)
+                        .frame(width: 90, alignment: .leading)
                     Text(kind.effect(atRank: level, progress: model.progress))
                         .foregroundStyle(.white.opacity(0.88))
                         .fixedSize(horizontal: false, vertical: true)
@@ -231,7 +232,7 @@ extension ShopView {
                     HStack(alignment: .top, spacing: 8) {
                         Text(Copy.text("lab.card.next"))
                             .foregroundStyle(EchoTheme.muted)
-                            .frame(width: 68, alignment: .leading)
+                            .frame(width: 90, alignment: .leading)
                         Text(kind.effect(atRank: level + 1, progress: model.progress))
                             .foregroundStyle(EchoTheme.cyan)
                             .fixedSize(horizontal: false, vertical: true)

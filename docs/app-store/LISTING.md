@@ -1,3 +1,7 @@
+> **Current copy · 29 October 2026:** the app is free to download; approved 1.1.0 copy plus live EN/RU promotional text is in metadata-1.1.0/. The submitted 1.1.1 free-transition copy is in metadata-1.1.1/. The historical paid-build text below must not be reapplied.
+
+> Historical paid-build listing. Do not overwrite the live listing with future Free claims. The staged R1 English/Russian copy is in [PUBLIC_COPY.md](../monetization/PUBLIC_COPY.md); publish only at the owner-approved release phase.
+
 # App Store listing · ECHO 1.0.0
 
 These are the live English (U.S.) and Russian product-page texts. Keep the description factual as the game changes. Apple limits subtitles to 30 characters, promotional text to 170 characters, descriptions to 4,000 characters, and keywords to 100 bytes.

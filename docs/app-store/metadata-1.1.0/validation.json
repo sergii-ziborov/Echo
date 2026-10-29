@@ -1,0 +1,24 @@
+{
+  "ru": {
+    "counts": {
+      "name": 22,
+      "subtitle": 30,
+      "keywords": 99,
+      "promotionalText": 158,
+      "description": 3990
+    },
+    "keywordUnit": "UTF-8 bytes",
+    "status": "PASS_LIMITS"
+  },
+  "en-US": {
+    "counts": {
+      "name": 23,
+      "subtitle": 29,
+      "keywords": 97,
+      "promotionalText": 162,
+      "description": 3997
+    },
+    "keywordUnit": "UTF-8 bytes",
+    "status": "PASS_LIMITS"
+  }
+}

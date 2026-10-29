@@ -1,0 +1,43 @@
+{
+  "checkedUTC": "2026-10-29T13:01:12.836642+00:00",
+  "appID": "6811673094",
+  "versionID": "d2b18a31-2b33-49ea-abe9-63ccf94f699f",
+  "version": "1.1.0",
+  "build": 27,
+  "releaseRequest": {
+    "type": "appStoreVersionReleaseRequests",
+    "id": "d2b18a31-2b33-49ea-abe9-63ccf94f699f",
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/appStoreVersionReleaseRequests/d2b18a31-2b33-49ea-abe9-63ccf94f699f"
+    }
+  },
+  "stateAfterRequest": "READY_FOR_SALE",
+  "productionPhase": "preFree",
+  "liveAds": false,
+  "priceChanged": false,
+  "scope": "Approved build release only; no paid-to-free cutover or live-ad activation.",
+  "publicStorefrontReadBack": {
+    "checkedUTC": "2026-10-29T13:01:27.807880+00:00",
+    "checks": [
+      {
+        "storefront": "us",
+        "trackId": 6811673094,
+        "version": "1.0.0",
+        "price": 1.99,
+        "currency": "USD",
+        "currentVersionReleaseDate": "2026-10-14T06:14:28Z",
+        "trackViewUrl": "https://apps.apple.com/us/app/echo-survive-your-past/id6811673094?uo=4"
+      },
+      {
+        "storefront": "il",
+        "trackId": 6811673094,
+        "version": "1.0.0",
+        "price": 4.9,
+        "currency": "ILS",
+        "currentVersionReleaseDate": "2026-10-14T06:14:28Z",
+        "trackViewUrl": "https://apps.apple.com/il/app/echo-survive-your-past/id6811673094?uo=4"
+      }
+    ]
+  },
+  "publicPropagation": "PENDING \u2014 public US/IL lookup still reports 1.0.0 immediately after the accepted release; App Store Connect reports READY_FOR_SALE."
+}

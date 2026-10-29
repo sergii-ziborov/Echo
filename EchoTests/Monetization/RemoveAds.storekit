@@ -1,0 +1,36 @@
+{
+  "identifier": "088b454b-5ae6-46dc-8c3e-b9afaec2e3c0",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "1000000001",
+      "localizations": [
+        {
+          "description": "One-time purchase. Removes all ads.",
+          "displayName": "Remove Ads",
+          "locale": "en_US"
+        },
+        {
+          "description": "Разовая покупка. Отключает всю рекламу.",
+          "displayName": "Отключить рекламу",
+          "locale": "ru"
+        }
+      ],
+      "productID": "com.sergiiziborov.Echo.removeAds",
+      "referenceName": "Remove Ads",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_failTransactionsEnabled": false,
+    "_locale": "en_US",
+    "_storefront": "USA"
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 3,
+    "minor": 0
+  }
+}

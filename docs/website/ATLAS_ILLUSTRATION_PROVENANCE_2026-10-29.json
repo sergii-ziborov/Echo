@@ -1,0 +1,95 @@
+{
+  "provider": "built-in image_gen",
+  "date": "2026-10-29",
+  "transformation": "PNG to JPEG encoding with sips; composition unchanged; layout crops via object-fit only",
+  "artwork": [
+    {
+      "region": "trace",
+      "asset": "website/public/assets/regions/trace.jpg",
+      "sourceGenerationFile": "exec-428a9df1-0e97-4b1b-8b38-1dd4a6fe1422.png",
+      "sourceSHA256": "e5d81e0c208c80f6c17bafa8d666cb9cb58da04870ad730b7375d0ae74fda175",
+      "finalSHA256": "6894be544106b36291f4433963867ef774053f45b1885cf878cdeebc751979d0",
+      "bytes": 625199
+    },
+    {
+      "region": "drift",
+      "asset": "website/public/assets/regions/drift.jpg",
+      "sourceGenerationFile": "exec-3597efda-a5d0-480a-8503-1fa2c4d6fb86.png",
+      "sourceSHA256": "6e8e18e63737291633f134009d45a12a1bfdf6be1d3548c29d2757fca7b8f1b9",
+      "finalSHA256": "6c544cd27bc49791e4e713ef666ab3fbde488747aafe964e9724e5afd6740260",
+      "bytes": 888742
+    },
+    {
+      "region": "fracture",
+      "asset": "website/public/assets/regions/fracture.jpg",
+      "sourceGenerationFile": "exec-4e8296ef-d1f8-4336-85a8-80b047a20b48.png",
+      "sourceSHA256": "df4c748be85131d26a721b9fc1f4bf19afb46a9715a7e1acd97069665d750118",
+      "finalSHA256": "8f865802fcdb86d3b7059cb3c1819683b2f9cb5b0709334fa4bd5e9e74f1638e",
+      "bytes": 753238
+    },
+    {
+      "region": "debris",
+      "asset": "website/public/assets/regions/debris.jpg",
+      "sourceGenerationFile": "exec-2299e093-71e5-423e-8c39-a700451fbfbd.png",
+      "sourceSHA256": "c915858246151816b8c2b4d92dd033b1b5455cd6ee6c7f9e29ef3b51e67ca1cc",
+      "finalSHA256": "4b40b82831473289f86fb6abe171f1c45ad03e8fc7c6951bf07c2e3785e03360",
+      "bytes": 720707
+    },
+    {
+      "region": "paradox",
+      "asset": "website/public/assets/regions/paradox.jpg",
+      "sourceGenerationFile": "exec-93079273-c979-4a8a-bba7-4f37ab86af2d.png",
+      "sourceSHA256": "54a9dad70bf91a65dd52e311c30b761c51f9413a8795ae6c0563f3ce35466280",
+      "finalSHA256": "e6b8a679c923063d7f7040407713c06e00f5f11446221c06f811e3d74d2577b0",
+      "bytes": 767273
+    },
+    {
+      "region": "singularity",
+      "asset": "website/public/assets/regions/singularity.jpg",
+      "sourceGenerationFile": "exec-c287f876-70ef-41a0-84b1-72bf7fdeb903.png",
+      "sourceSHA256": "c2446c8dae4024d155c369aae13c00e0615c0229a2c57404056e5ffc4039dccd",
+      "finalSHA256": "d8c616c3836326b7e9d66ef0117f0bb7e24fc992855a7b562bd854ffd310a2a8",
+      "bytes": 743509
+    },
+    {
+      "region": "rift",
+      "asset": "website/public/assets/regions/rift.jpg",
+      "sourceGenerationFile": "exec-602034c7-3ffa-4c0d-8860-02956a3d744a.png",
+      "sourceSHA256": "9610a390a054bfd755eca5fc899264c553cc5ef850f3999f6a66e2c73bb87ffa",
+      "finalSHA256": "1ca32111b2fbe26a68a13293a3747cb2bf1bb666b66d68ffd8c88c49b0a5a385",
+      "bytes": 770122
+    },
+    {
+      "region": "gravity",
+      "asset": "website/public/assets/regions/gravity.jpg",
+      "sourceGenerationFile": "exec-a5868029-7b70-4452-8cb7-504fea5025d9.png",
+      "sourceSHA256": "ff4b022e4a461dac84101837e36a3a26e071fbf7363d1157668b5b0b96e429fe",
+      "finalSHA256": "1b4cbd1b9b5b5ffafa4f8ae7573c16cd3f9517b59020f363643d94edcc4196f1",
+      "bytes": 554225
+    },
+    {
+      "region": "mirage",
+      "asset": "website/public/assets/regions/mirage.jpg",
+      "sourceGenerationFile": "exec-7433a9f9-92c1-4306-8e3f-44ff97b08d94.png",
+      "sourceSHA256": "779159a3b86d775bc016f1cbc37687b5714b5c6627ee38fd23560f247ebc51d5",
+      "finalSHA256": "3abcc115486d4c6165ee7fd73b7ff67939dd5ecc7f2f8ffd6b23f47d3eb1c0f2",
+      "bytes": 709596
+    },
+    {
+      "region": "confection",
+      "asset": "website/public/assets/regions/confection.jpg",
+      "sourceGenerationFile": "exec-6d4548f4-02d8-4cea-9465-32379ba9dff5.png",
+      "sourceSHA256": "c938b800d393d325f7e37994e9efa1e6bdaf4fef8fd4b43a2640536a68879651",
+      "finalSHA256": "55e36730b826d543287103cbbc4733c6cc6091db6d26278152629cf0386de977",
+      "bytes": 614435
+    },
+    {
+      "region": "eternity",
+      "asset": "website/public/assets/regions/eternity.jpg",
+      "sourceGenerationFile": "exec-0c928b2c-3e8a-40e9-bca7-387af5e64269.png",
+      "sourceSHA256": "ddf148aaddffe474b5dc442678f8b683d10b4d99a53293ceeb7040e73bbd2039",
+      "finalSHA256": "de010f4593d387c3a78cf8b99518cfcfa3b2d385959aa3464e53a85b775d1ebd",
+      "bytes": 549846
+    }
+  ]
+}

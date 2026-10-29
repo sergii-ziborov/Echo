@@ -1,0 +1,67 @@
+{
+  "version": "1.1.0",
+  "build": 27,
+  "buildID": "e1970e5e-1646-4cf1-af84-b1d900a0df89",
+  "processing": "VALID",
+  "audience": "APP_STORE_ELIGIBLE",
+  "betaDetails": [
+    {
+      "autoNotifyEnabled": true,
+      "internalBuildState": "IN_BETA_TESTING",
+      "externalBuildState": "READY_FOR_BETA_SUBMISSION"
+    }
+  ],
+  "keepersContainsBuild": true,
+  "notesReadBack": true,
+  "draftBuildAttached": true,
+  "confirmedUTC": "2026-10-29T00:13:55.784099+00:00",
+  "sourceCommit": "3952d80e210ab0b07fdfbb34520c094438799aa4",
+  "ipaBytes": 41699353,
+  "ipaSHA256": "95c875bd311e801cbec3026496fbf999b2bfb1e225246d8715844abd56393814",
+  "archive": "PASS",
+  "export": "PASS",
+  "appleValidation": "PASS",
+  "appleUpload": "PASS",
+  "sdkVersions": {
+    "GoogleMobileAds": "13.11.0",
+    "UMP": "3.1.0"
+  },
+  "productionPhase": "preFree",
+  "liveAds": false,
+  "priceChanged": false,
+  "regressions": {
+    "status": "PASS",
+    "tests": 53,
+    "failures": 0,
+    "skips": 0,
+    "build": 26,
+    "resultBundle": "/tmp/echo-final26-retry-tests.xcresult"
+  },
+  "currentLayoutAndLocalization": {
+    "status": "PASS",
+    "tests": 11,
+    "failures": 0,
+    "skips": 0,
+    "build": 27,
+    "resultBundle": "/tmp/echo-russian27-fixed-tests.xcresult"
+  },
+  "nativeMenus": 60,
+  "captionedScreenshots": 56,
+  "nativeWatchScreenshots": 8,
+  "physicalPurchase24": "PASS independently corroborated",
+  "physicalRestore24": "PASS_USER_REPORTED",
+  "legacyReinstall": "NOT RUN",
+  "reviewSubmission": "PASS: COMPLETE; application PENDING_DEVELOPER_RELEASE; first Remove Ads APPROVED; release MANUAL",
+  "failedTrial": "Earlier node-label View crashed in native UI tests. Replaced with a font-measurement helper and ordinary Text. Current 11-test run passed. Failed trial archive was not uploaded.",
+  "editorialReview": "../lore/EDITORIAL_RIGHTS_AUDIT_2026-10-29.md",
+  "reviewEvidence": "APP_REVIEW_27_2026-10-29.json",
+  "physicalBuild27Evidence": "PHYSICAL_27_VERIFICATION.json",
+  "physicalInstalledBuild27": "PASS",
+  "physicalExistingSave27": "PASS",
+  "physicalRetainedAdFree27": "PASS local device journal",
+  "physicalVisualUI27": "BLOCKED — launch denied as Locked; Device Hub screen sharing requires iOS 27+",
+  "approvalReadBackUTC": "2026-10-29T09:30:46.078796+00:00",
+  "publicRelease": "PASS release request accepted; App Store Connect READY_FOR_SALE",
+  "publicReleaseEvidence": "APP_STORE_RELEASE_27_2026-10-29.json",
+  "publicStorefrontPropagation": "PENDING immediate public US/IL lookup"
+}

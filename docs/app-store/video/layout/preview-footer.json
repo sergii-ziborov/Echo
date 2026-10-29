@@ -1,0 +1,60 @@
+[
+  {
+    "width": 886,
+    "height": 286,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/en/preview/preview-footer-en.png",
+    "items": [
+      {
+        "text": "77 maps · 11 regions",
+        "x": 40.0,
+        "y": 45.0,
+        "w": 806.0,
+        "h": 80.0,
+        "size": 49.0,
+        "align": "center",
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "iPhone · iPad · Apple Watch",
+        "x": 40.0,
+        "y": 150.0,
+        "w": 806.0,
+        "h": 70.0,
+        "size": 32.0,
+        "align": "center",
+        "color": "62DDF6"
+      }
+    ]
+  },
+  {
+    "width": 886,
+    "height": 286,
+    "background": "061020",
+    "output": "docs/app-store/video/layout/ru/preview/preview-footer-ru.png",
+    "items": [
+      {
+        "text": "77 карт · 11 регионов",
+        "x": 40.0,
+        "y": 45.0,
+        "w": 806.0,
+        "h": 80.0,
+        "size": 49.0,
+        "align": "center",
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "iPhone · iPad · Apple Watch",
+        "x": 40.0,
+        "y": 150.0,
+        "w": 806.0,
+        "h": 70.0,
+        "size": 32.0,
+        "align": "center",
+        "color": "62DDF6"
+      }
+    ]
+  }
+]

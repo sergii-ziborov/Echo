@@ -1,0 +1,11 @@
+{
+  "title": "Test - Echo",
+  "totalTestCount": 36,
+  "passedTests": 36,
+  "failedTests": 0,
+  "skippedTests": 0,
+  "result": "Passed",
+  "startTime": 1793282308.323,
+  "finishTime": 1793282393.794,
+  "resultBundle": "/tmp/echo-cutover28-tests.xcresult"
+}
