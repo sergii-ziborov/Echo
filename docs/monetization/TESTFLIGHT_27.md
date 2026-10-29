@@ -1,6 +1,6 @@
 # ECHO 1.1.0 (27) — final prepared candidate
 
-**PASS: VALID, APP_STORE_ELIGIBLE, IN_BETA_TESTING; available to Keepers.** The editable 1.1.0 App Store version references build 27. No App Review submission or public release has occurred: the Mac is locked and the first Remove Ads IAP must be included through App Store Connect’s website.
+**PASS: VALID, APP_STORE_ELIGIBLE, IN_BETA_TESTING; available to Keepers.** The editable 1.1.0 App Store version references build 27. No App Review submission or public release has occurred: Chrome returns `authResult=FAILED` followed by an empty login page, and the first Remove Ads IAP must be included through App Store Connect’s website.
 
 Application source: `3952d80e210ab0b07fdfbb34520c094438799aa4`. IPA: 41,699,353 bytes, SHA256 `95c875bd311e801cbec3026496fbf999b2bfb1e225246d8715844abd56393814`. Delivery/build: `e1970e5e-1646-4cf1-af84-b1d900a0df89`. Stable Xcode 27.1 (27A9275), iOS SDK 27.1 and watchOS SDK 27.0. Google Mobile Ads 13.11.0 / UMP 3.1.0 are pinned, iOS only. The generated default project was restored to SDK-free configuration after archiving.
 
@@ -19,7 +19,7 @@ Application source: `3952d80e210ab0b07fdfbb34520c094438799aa4`. IPA: 41,699,353 
 | Physical TestFlight purchase | Build 24 PASS in device journal; cancellation and restore also completed by owner, restore PASS_USER_REPORTED |
 | Original paid-owner reinstall / other device, physical iPad/Watch, regional consent traffic | NOT RUN |
 | First IAP metadata | Review screenshot UPLOAD_COMPLETE; product READY_TO_SUBMIT; fixture provenance explicit |
-| App Review / free-price cutover / live advertising | Review BLOCKED on locked Mac; price and live advertising NOT CHANGED |
+| App Review / free-price cutover / live advertising | Review BLOCKED on App Store Connect web authentication; price and live advertising NOT CHANGED |
 
 The initial node-label View implementation failed during native UI tests and was replaced before delivery. Its failed result bundle remains `/tmp/echo-russian27-tests.xcresult`; it is not a passing run. The current source uses an ordinary Text with measured, balanced lines and passed `/tmp/echo-russian27-fixed-tests.xcresult`. An automatic global diagnostic collector was interrupted after the earlier 53 cases had completed; that run finalized successfully with exit 0. Raw system diagnostics are not published.
 
@@ -51,3 +51,5 @@ xcodegen --spec project.yml
 ```
 
 Changed-file list: CHANGED_FILES_2026-10-29.txt (relative to the original main source). Private authentication arguments are omitted. Archive, export and logs are under `/tmp/echo-testflight-27/`. See TESTFLIGHT_27_VERIFICATION.json for hashes and server evidence.
+
+The subsequent [bilingual editorial and rights review](../lore/EDITORIAL_RIGHTS_AUDIT_2026-10-29.md) checks all 50 changed EN/RU pairs and the new media provenance. The Site credits Grok explicitly in both languages. This documentation-only follow-up does not change the build-27 binary.

@@ -11,3 +11,5 @@ Grok produced `echo-grok-cinematic.mp4`, 720×1280, H.264, 30 fps, 9.5 seconds, 
 `previews/echo-app-preview-{en,ru}.mp4` are 25-second App Store preview candidates using the real arena excerpt, native editorial captions, 886×1920 H.264 at 30 fps and an AAC silent track required by Apple’s asset specification. The cinematic Grok clip is not used for these previews. Apple processed both videos successfully on 2026-10-29; placements are saved in the editable 1.1.0 draft, not publicly released.
 
 Editable typography layouts and overlay PNGs are in `layout/`; render those JSON files with `swift scripts/render_marketing.swift <layout.json>`.
+
+Artistic teaser attribution: **Created with Grok**. Commercial-use and attribution sources were reviewed separately in [the bilingual editorial and rights audit](../../lore/EDITORIAL_RIGHTS_AUDIT_2026-10-29.md). No provider endorsement is claimed.
