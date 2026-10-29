@@ -60,3 +60,7 @@ xcodegen generate --spec project.yml
 ```
 
 The safe default generated project was restored after archiving. Archive/export/logs are under `/tmp/echo-testflight-24/`. R1 remains protected until the real purchase, original-owner, privacy and cutover checks pass. Rollback: higher-version signed adsOff policy; invalid/expired policy also suppresses new live ads. Purchase evidence and game progress remain independent.
+
+## Update — 29 October 2026
+
+The owner subsequently completed cancellation, a genuine TestFlight purchase and restoration on the physical iPhone 13 mini. The copied device journal independently corroborates the successful purchase and ad-free entitlement. Post-purchase restore is PASS_USER_REPORTED; that copied journal does not independently include a later restore success. Pending/refund and original production-owner reinstall remain NOT RUN. See PHYSICAL_24_VERIFICATION.json. The IAP review screenshot is now accepted as UPLOAD_COMPLETE and the product is READY_TO_SUBMIT; it is a clearly identified native UI fixture. These later facts supersede the corresponding NOT RUN/missing-image statements above; build-24 delivery data remains historical.

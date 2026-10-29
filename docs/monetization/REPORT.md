@@ -1,3 +1,5 @@
+> **29 October 2026 — latest candidate:** [1.1.0 (27)](TESTFLIGHT_27.md) is VALID / IN_BETA_TESTING for Keepers, with sourced lore, Russian UI fixes and an updated marketing package. Production remains preFree with live ads off. App Review is prepared but blocked on the locked Mac/first-IAP web submission. The dated findings below remain the R1 implementation history.
+
 # ECHO R1 — отчёт реализации
 
 > Дополнительная проверка SDK: реальный UMP → официальный тестовый interstitial → отмена готовности, **PASS: 1, 0 failures/skips**, изолированный Simulator. [Доказательства](AD_NETWORK_VERIFICATION.json). Полный список файлов ветки — [CHANGED_FILES.txt](CHANGED_FILES.txt).
@@ -6,7 +8,7 @@
 >
 > Обновление кабинетов 28 октября: единственный Remove Ads создан, настроены EN/RU, цена USD 1.99 и доступность во всех 175 территориях. Правильный app-ads.txt опубликован на действующем сайте. SKU пока `MISSING_METADATA`, проверка Google не завершена. Текущие доказательства и оставшиеся шаги — [CABINET_SETUP_2026-10-28.md](CABINET_SETUP_2026-10-28.md). Ниже сохранён исходный отчёт подготовки; его прежние статусы кабинетов исторические.
 
-> Аппаратная проверка обновления: физический iPhone 13 mini / iOS 26.5 независимо сообщает **1.1.0 (24)**. Приватная копия preferences сохранена; **15 существующих ключей прогресса и настроек не изменились**. [Доказательства](PHYSICAL_24_VERIFICATION.json). Обычный запуск/активация после повторной разблокировки подтверждены. Покупка/restore ещё NOT RUN: Device Hub явно требует iOS 27+ для трансляции, тогда как телефон работает на 26.5; Accessibility Inspector также не выдал элементы приложения.
+> Аппаратная проверка: iPhone 13 mini / iOS 26.5 независимо сообщает **1.1.0 (24)**. Сразу после обновления все 15 существующих ключей прогресса/настроек сохранились. Затем владелец подтвердил отмену, покупку и восстановление; журнал устройства независимо подтвердил `purchaseResult=monetization.thanks` и `entitlementResolution=monetization.adFree`. Успешный restore после покупки — **PASS_USER_REPORTED**, отдельное успешное событие в копии журнала не обнаружено. После обычной игры появились 4 записи и 11 звёзд без потери прежних записей; инвентарь и исследования сохранены. [Подробности и границы проверки](PHYSICAL_24_VERIFICATION.json).
 
 > Последующее действие владельца: SDK-free **1.1.0 (23)** загружена во внутренний TestFlight и доступна Keepers. [Подтверждение Apple и заметки](TESTFLIGHT_23.md). Исходный отчёт подготовки ниже не является аппаратной проверкой или разрешением public/free-релиза.
 

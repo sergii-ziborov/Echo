@@ -35,7 +35,7 @@
   "storedDiagnostics": {
     "entitlementResult": "monetization.free",
     "source": "Actual device preferences; no raw transaction or receipt extracted",
-    "freshPurchaseOrRestore": false
+    "freshPurchaseOrRestore": true
   },
   "launch": {
     "status": "PASS",
@@ -53,8 +53,19 @@
     "source": "Native Device Hub screenshot after connection attempt completed",
     "phoneOSChanged": false
   },
-  "genuinePurchase": "NOT RUN",
-  "restore": "NOT RUN",
+  "genuinePurchase": {
+    "status": "PASS",
+    "ownerReported": "Cancellation, purchase and restore completed on physical iPhone",
+    "independentEvidence": "Device journal purchaseResult=monetization.thanks and entitlementResolution=monetization.adFree at 2026-10-28T22:37:05Z; service grants only a verified StoreKit transaction",
+    "environment": "TestFlight test purchase per owner; no receipt/environment payload exported",
+    "backupSHA256": "953728a945e9ce8c6f8b49bd6c297a35e34a32f59323d9008f6157afb2d77df8"
+  },
+  "restore": {
+    "status": "PASS_USER_REPORTED",
+    "independentSuccessfulRestoreEvent": "NOT OBSERVED in copied journal",
+    "earlierObservation": "restoreError at 22:36:55Z preceded purchase success at 22:37:05Z",
+    "recheck": "BLOCKED: later device preferences read failed; no claim of independently verified post-purchase restore"
+  },
   "legacyReinstall": "NOT RUN",
   "pendingRefund": "NOT RUN",
   "appInstalledDeletedOrResetByAgent": false,
@@ -70,5 +81,19 @@
     "hierarchyAndScreenshot": "UNAVAILABLE — selected app but no inspected element or device screenshot",
     "audit": "NOT RUN — invoking Run Audit did not produce a completed result; empty panel is not a zero-issues PASS"
   },
-  "purchaseUIScreen": "Owner asked to report real purchase-screen state; no price or purchase outcome invented"
+  "purchaseUIScreen": "PASS owner-reported on 2026-10-29: purchase button with price is visible on iPhone 13 mini; exact amount not reported, no independent screenshot captured",
+  "lastUpdated": "2026-10-29",
+  "productAvailability": {
+    "status": "PASS_USER_REPORTED",
+    "date": "2026-10-29",
+    "observation": "Remove Ads button and price visible",
+    "exactPrice": null,
+    "genuineTransactionVerified": true
+  },
+  "postPurchaseProgress": {
+    "status": "PASS",
+    "scope": "No missing or downgraded prior records; prior baseline had zero campaign clears, current has four records and 11 stars; inventory/upgrades unchanged; hints and Archive acknowledgements grew during play",
+    "is77MapLegacyMigrationProven": false,
+    "allKeysUnchanged": false
+  }
 }

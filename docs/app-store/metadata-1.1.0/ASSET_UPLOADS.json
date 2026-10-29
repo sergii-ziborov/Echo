@@ -1,0 +1,100 @@
+[
+  {
+    "path": "docs/app-store/creative/2026-10-29/header-en.png",
+    "id": "17c00019-601e-8206-801d-c754d12aad49",
+    "resource": "appAssetLibraryImages",
+    "placementType": "PRODUCT_PAGE_HEADER_ASSET",
+    "placementGroup": "DEFAULT_PROFILE",
+    "localeID": "5f78b828-a259-49e8-8053-f9a30ba1f26b",
+    "sha256": "b87820d47f55cfee6ad7422cf8e7d2a172734c44d0ef84d607e1a87d5ec2f6a5",
+    "state": "PREPARE_FOR_SUBMISSION",
+    "specId": "1eb43b80-e0b7-4d96-bd32-47a42a8c5fed",
+    "stateDetails": null,
+    "placementID": "4bc00019-601e-8206-8f28-297d5d3d6556",
+    "placementState": "ACTIVE",
+    "replacedPlacementIDs": [
+      "26c00019-601e-8206-8f15-f24443e838b0"
+    ]
+  },
+  {
+    "path": "docs/app-store/creative/2026-10-29/search-en.png",
+    "id": "d6000019-601e-8206-803a-6864afdbf165",
+    "resource": "appAssetLibraryImages",
+    "placementType": "APP_STORE_SEARCH_RESULTS_ASSET",
+    "placementGroup": "DEFAULT_PROFILE",
+    "localeID": "5f78b828-a259-49e8-8053-f9a30ba1f26b",
+    "sha256": "4df1e915d6c39e62a8a29756fc6146ce9d2d4c8dc87dac8e4cc961a536ea3a90",
+    "state": "PREPARE_FOR_SUBMISSION",
+    "specId": "d2ffa3b7-6c55-5cdf-8512-229d92791333",
+    "stateDetails": null,
+    "placementID": "11c00019-601e-8206-8f2e-a65431511afa",
+    "placementState": "ACTIVE",
+    "replacedPlacementIDs": [
+      "efc00019-601e-8206-8f30-06d86b39bb6d"
+    ]
+  },
+  {
+    "path": "docs/app-store/video/previews/echo-app-preview-en.mp4",
+    "id": "68400019-601e-8206-812d-f394a04b40c3",
+    "resource": "appAssetLibraryVideos",
+    "placementType": "APP_PREVIEW",
+    "placementGroup": "IPHONE_DYNAMIC_ISLAND_LARGE_PROFILE",
+    "localeID": "5f78b828-a259-49e8-8053-f9a30ba1f26b",
+    "sha256": "f668b2fa0d72dbff2e8cdf28b8deb26667be549d210a823092890a3c370fd73b",
+    "state": "PREPARE_FOR_SUBMISSION",
+    "specId": "a7adff12-330a-5fa5-97d4-c5c7953edb0c",
+    "stateDetails": null,
+    "placementID": "22000019-601e-8206-8f1e-a90698b52989",
+    "placementState": "ACTIVE",
+    "replacedPlacementIDs": []
+  },
+  {
+    "path": "docs/app-store/creative/2026-10-29/header-ru.png",
+    "id": "23c00019-601e-8206-8010-b481d8e8dd6a",
+    "resource": "appAssetLibraryImages",
+    "placementType": "PRODUCT_PAGE_HEADER_ASSET",
+    "placementGroup": "DEFAULT_PROFILE",
+    "localeID": "b6459033-a706-4d6b-bd68-0b5de9af3477",
+    "sha256": "59d6bf54f29684cf46400bb2a0bf355b1c26a7e031307b302e2fdd8ddfa2ca7b",
+    "state": "PREPARE_FOR_SUBMISSION",
+    "specId": "1eb43b80-e0b7-4d96-bd32-47a42a8c5fed",
+    "stateDetails": null,
+    "placementID": "99000019-601e-8206-8f2c-a77685e26218",
+    "placementState": "ACTIVE",
+    "replacedPlacementIDs": [
+      "57400019-601e-8206-8f3b-9047643b322c"
+    ]
+  },
+  {
+    "path": "docs/app-store/creative/2026-10-29/search-ru.png",
+    "id": "62c00019-601e-8206-803a-9800edefa9ae",
+    "resource": "appAssetLibraryImages",
+    "placementType": "APP_STORE_SEARCH_RESULTS_ASSET",
+    "placementGroup": "DEFAULT_PROFILE",
+    "localeID": "b6459033-a706-4d6b-bd68-0b5de9af3477",
+    "sha256": "9405090d376bb23e4e3df8318fdf06d177ddfda3a195cdcecf0c2528ce9b9ba5",
+    "state": "PREPARE_FOR_SUBMISSION",
+    "specId": "d2ffa3b7-6c55-5cdf-8512-229d92791333",
+    "stateDetails": null,
+    "placementID": "dfc00019-601e-8206-8f0f-cf799e3339c5",
+    "placementState": "ACTIVE",
+    "replacedPlacementIDs": [
+      "6b000019-601e-8206-8f06-5bf421529f29"
+    ]
+  },
+  {
+    "path": "docs/app-store/video/previews/echo-app-preview-ru.mp4",
+    "id": "67800019-601e-8206-8115-485f48676329",
+    "resource": "appAssetLibraryVideos",
+    "placementType": "APP_PREVIEW",
+    "placementGroup": "IPHONE_DYNAMIC_ISLAND_LARGE_PROFILE",
+    "localeID": "b6459033-a706-4d6b-bd68-0b5de9af3477",
+    "sha256": "b2ace7d3a30231ea06875f1d580c0dd8843a57d2019d9efff000c198cf9d8473",
+    "state": "COMPLETE",
+    "specId": null,
+    "stateDetails": null,
+    "placementID": "99000019-601e-8206-8f07-3b3b9ce184c3",
+    "placementState": "ACTIVE",
+    "replacedPlacementIDs": []
+  }
+]

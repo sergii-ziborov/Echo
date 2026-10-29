@@ -1,0 +1,506 @@
+[
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/01.png",
+    "source": "docs/app-store/iphone/play/01-gameplay.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Your route becomes\nyour echo.",
+      "Collect the sparks. Find the exit. Your past is already following."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/02.png",
+    "source": "docs/app-store/captures-1.1.0/en/phone69/atlas.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "11 regions.\nOne Fold Road.",
+      "77 maps through damaged stations. Bring a new record to the Lighthouse."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/03.png",
+    "source": "docs/app-store/captures-1.1.0/watch/en/01-wrist-run.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "A whole world\non your wrist.",
+      "36 rooms on Apple Watch. Turn the Crown back to change your route."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/04.png",
+    "source": "docs/app-store/captures-1.1.0/en/remote-phone.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "iPhone is the screen.\nWatch is the controller.",
+      "Launch ECHO on iPhone and choose the remote on your Watch."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/05.png",
+    "source": "docs/app-store/captures-1.1.0/en/phone69/archive.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Find meaning,\nfragment by fragment.",
+      "Epictetus, Camus and science notes. Recover the Archive as you play."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/06.png",
+    "source": "docs/app-store/captures-1.1.0/en/phone69/research.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Keep what\nyou have learned.",
+      "Calibrate the Signal’s tools. Your research survives each attempt."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/07.png",
+    "source": "docs/app-store/captures-1.1.0/en/phone69/loadout.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Prepare for\na different route.",
+      "Choose your abilities. The next turn is yours to make."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/08.png",
+    "source": "docs/app-store/iphone/play/04-deep-time.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Beyond lies\nthe unknown.",
+      "Daily routes and procedural depths. Keep discovering something new."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/01.png",
+    "source": "docs/app-store/iphone/play/01-gameplay.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Your route becomes\nyour echo.",
+      "Collect the sparks. Find the exit. Your past is already following."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/02.png",
+    "source": "docs/app-store/captures-1.1.0/en/phone65/atlas.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "11 regions.\nOne Fold Road.",
+      "77 maps through damaged stations. Bring a new record to the Lighthouse."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/03.png",
+    "source": "docs/app-store/captures-1.1.0/watch/en/01-wrist-run.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "A whole world\non your wrist.",
+      "36 rooms on Apple Watch. Turn the Crown back to change your route."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/04.png",
+    "source": "docs/app-store/captures-1.1.0/en/remote-phone.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "iPhone is the screen.\nWatch is the controller.",
+      "Launch ECHO on iPhone and choose the remote on your Watch."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/05.png",
+    "source": "docs/app-store/captures-1.1.0/en/phone65/archive.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Find meaning,\nfragment by fragment.",
+      "Epictetus, Camus and science notes. Recover the Archive as you play."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/06.png",
+    "source": "docs/app-store/captures-1.1.0/en/phone65/research.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Keep what\nyou have learned.",
+      "Calibrate the Signal’s tools. Your research survives each attempt."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/07.png",
+    "source": "docs/app-store/captures-1.1.0/en/phone65/loadout.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Prepare for\na different route.",
+      "Choose your abilities. The next turn is yours to make."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/08.png",
+    "source": "docs/app-store/iphone/play/04-deep-time.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Beyond lies\nthe unknown.",
+      "Daily routes and procedural depths. Keep discovering something new."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/01.png",
+    "source": "docs/app-store/ipad/01-gameplay.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Your route becomes\nyour echo.",
+      "Collect the sparks. Find the exit. Your past is already following."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/02.png",
+    "source": "docs/app-store/captures-1.1.0/en/ipad/atlas.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "11 regions.\nOne Fold Road.",
+      "77 maps through damaged stations. Bring a new record to the Lighthouse."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/03.png",
+    "source": "docs/app-store/captures-1.1.0/watch/en/01-wrist-run.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "A whole world\non your wrist.",
+      "36 rooms on Apple Watch. Turn the Crown back to change your route."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/04.png",
+    "source": "docs/app-store/captures-1.1.0/en/remote-phone.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "iPhone is the screen.\nWatch is the controller.",
+      "Launch ECHO on iPhone and choose the remote on your Watch."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/05.png",
+    "source": "docs/app-store/captures-1.1.0/en/ipad/archive.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Find meaning,\nfragment by fragment.",
+      "Epictetus, Camus and science notes. Recover the Archive as you play."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/06.png",
+    "source": "docs/app-store/captures-1.1.0/en/ipad/research.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Keep what\nyou have learned.",
+      "Calibrate the Signal’s tools. Your research survives each attempt."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/07.png",
+    "source": "docs/app-store/captures-1.1.0/en/ipad/loadout.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Prepare for\na different route.",
+      "Choose your abilities. The next turn is yours to make."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/08.png",
+    "source": "docs/app-store/ipad/03-deep-time.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Beyond lies\nthe unknown.",
+      "Daily routes and procedural depths. Keep discovering something new."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/01.png",
+    "source": "docs/app-store/ru/iphone/play/01-gameplay.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Твой маршрут\nстановится эхом.",
+      "Собери искры. Найди выход. Прошлое уже идёт по твоему следу."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/02.png",
+    "source": "docs/app-store/captures-1.1.0/ru/phone69/atlas.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "11 регионов.\nОдна Дорога.",
+      "77 карт через повреждённые станции. Унеси к Маяку новую запись."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/03.png",
+    "source": "docs/app-store/captures-1.1.0/watch/ru/01-wrist-run.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Целый мир\nна запястье.",
+      "36 комнат на Apple Watch. Поверни колёсико — исправь маршрут."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/04.png",
+    "source": "docs/app-store/captures-1.1.0/ru/remote-phone.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "iPhone — экран.\nЧасы — пульт.",
+      "Запусти ECHO на iPhone и выбери пульт на часах."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/05.png",
+    "source": "docs/app-store/captures-1.1.0/ru/phone69/archive.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Собирай смысл\nпо крупицам.",
+      "Эпиктет, Камю и научные заметки. Архив открывается по мере пути."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/06.png",
+    "source": "docs/app-store/captures-1.1.0/ru/phone69/research.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Знание остаётся\nс тобой.",
+      "Настраивай инструменты Сигнала. Исследования переживают попытку."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/07.png",
+    "source": "docs/app-store/captures-1.1.0/ru/phone69/loadout.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Подготовься\nк новому пути.",
+      "Выбери способности. Следующий маршрут построишь сам."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/08.png",
+    "source": "docs/app-store/ru/iphone/play/04-deep-time.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Дальше —\nнеизвестность.",
+      "Ежедневный маршрут и процедурные глубины. Продолжай открывать новое."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/01.png",
+    "source": "docs/app-store/ru/iphone/play/01-gameplay.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Твой маршрут\nстановится эхом.",
+      "Собери искры. Найди выход. Прошлое уже идёт по твоему следу."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/02.png",
+    "source": "docs/app-store/captures-1.1.0/ru/phone65/atlas.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "11 регионов.\nОдна Дорога.",
+      "77 карт через повреждённые станции. Унеси к Маяку новую запись."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/03.png",
+    "source": "docs/app-store/captures-1.1.0/watch/ru/01-wrist-run.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Целый мир\nна запястье.",
+      "36 комнат на Apple Watch. Поверни колёсико — исправь маршрут."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/04.png",
+    "source": "docs/app-store/captures-1.1.0/ru/remote-phone.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "iPhone — экран.\nЧасы — пульт.",
+      "Запусти ECHO на iPhone и выбери пульт на часах."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/05.png",
+    "source": "docs/app-store/captures-1.1.0/ru/phone65/archive.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Собирай смысл\nпо крупицам.",
+      "Эпиктет, Камю и научные заметки. Архив открывается по мере пути."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/06.png",
+    "source": "docs/app-store/captures-1.1.0/ru/phone65/research.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Знание остаётся\nс тобой.",
+      "Настраивай инструменты Сигнала. Исследования переживают попытку."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/07.png",
+    "source": "docs/app-store/captures-1.1.0/ru/phone65/loadout.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Подготовься\nк новому пути.",
+      "Выбери способности. Следующий маршрут построишь сам."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/08.png",
+    "source": "docs/app-store/ru/iphone/play/04-deep-time.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Дальше —\nнеизвестность.",
+      "Ежедневный маршрут и процедурные глубины. Продолжай открывать новое."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/01.png",
+    "source": "docs/app-store/ru/ipad/01-gameplay.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Твой маршрут\nстановится эхом.",
+      "Собери искры. Найди выход. Прошлое уже идёт по твоему следу."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/02.png",
+    "source": "docs/app-store/captures-1.1.0/ru/ipad/atlas.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "11 регионов.\nОдна Дорога.",
+      "77 карт через повреждённые станции. Унеси к Маяку новую запись."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/03.png",
+    "source": "docs/app-store/captures-1.1.0/watch/ru/01-wrist-run.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Целый мир\nна запястье.",
+      "36 комнат на Apple Watch. Поверни колёсико — исправь маршрут."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/04.png",
+    "source": "docs/app-store/captures-1.1.0/ru/remote-phone.png",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "iPhone — экран.\nЧасы — пульт.",
+      "Запусти ECHO на iPhone и выбери пульт на часах."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/05.png",
+    "source": "docs/app-store/captures-1.1.0/ru/ipad/archive.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Собирай смысл\nпо крупицам.",
+      "Эпиктет, Камю и научные заметки. Архив открывается по мере пути."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/06.png",
+    "source": "docs/app-store/captures-1.1.0/ru/ipad/research.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Знание остаётся\nс тобой.",
+      "Настраивай инструменты Сигнала. Исследования переживают попытку."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/07.png",
+    "source": "docs/app-store/captures-1.1.0/ru/ipad/loadout.png",
+    "native_capture": "Build 27 native menu fixture",
+    "caption": [
+      "Подготовься\nк новому пути.",
+      "Выбери способности. Следующий маршрут построишь сам."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/08.png",
+    "source": "docs/app-store/ru/ipad/03-deep-time.jpg",
+    "native_capture": "Earlier unchanged gameplay or native Watch/setup capture; see capture README",
+    "caption": [
+      "Дальше —\nнеизвестность.",
+      "Ежедневный маршрут и процедурные глубины. Продолжай открывать новое."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/duo/duo-outer-research.png",
+    "source": "docs/app-store/captures-1.1.0/en/duo-outer/research.png",
+    "native_capture": "Native width fixture; not a physical Duo purchase or hardware test",
+    "caption": [
+      "Keep what\nyou have learned.",
+      "Calibrate the Signal’s tools. Your research survives each attempt."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/duo/duo-outer-loadout.png",
+    "source": "docs/app-store/captures-1.1.0/en/duo-outer/loadout.png",
+    "native_capture": "Native width fixture; not a physical Duo purchase or hardware test",
+    "caption": [
+      "Prepare for\na different route.",
+      "Choose your abilities. The next turn is yours to make."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/duo/duo-inner-research.png",
+    "source": "docs/app-store/captures-1.1.0/en/duo-inner/research.png",
+    "native_capture": "Native width fixture; not a physical Duo purchase or hardware test",
+    "caption": [
+      "Keep what\nyou have learned.",
+      "Calibrate the Signal’s tools. Your research survives each attempt."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/en/duo/duo-inner-loadout.png",
+    "source": "docs/app-store/captures-1.1.0/en/duo-inner/loadout.png",
+    "native_capture": "Native width fixture; not a physical Duo purchase or hardware test",
+    "caption": [
+      "Prepare for\na different route.",
+      "Choose your abilities. The next turn is yours to make."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/duo/duo-outer-research.png",
+    "source": "docs/app-store/captures-1.1.0/ru/duo-outer/research.png",
+    "native_capture": "Native width fixture; not a physical Duo purchase or hardware test",
+    "caption": [
+      "Знание остаётся\nс тобой.",
+      "Настраивай инструменты Сигнала. Исследования переживают попытку."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/duo/duo-outer-loadout.png",
+    "source": "docs/app-store/captures-1.1.0/ru/duo-outer/loadout.png",
+    "native_capture": "Native width fixture; not a physical Duo purchase or hardware test",
+    "caption": [
+      "Подготовься\nк новому пути.",
+      "Выбери способности. Следующий маршрут построишь сам."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/duo/duo-inner-research.png",
+    "source": "docs/app-store/captures-1.1.0/ru/duo-inner/research.png",
+    "native_capture": "Native width fixture; not a physical Duo purchase or hardware test",
+    "caption": [
+      "Знание остаётся\nс тобой.",
+      "Настраивай инструменты Сигнала. Исследования переживают попытку."
+    ]
+  },
+  {
+    "output": "docs/app-store/marketing-1.1.0/ru/duo/duo-inner-loadout.png",
+    "source": "docs/app-store/captures-1.1.0/ru/duo-inner/loadout.png",
+    "native_capture": "Native width fixture; not a physical Duo purchase or hardware test",
+    "caption": [
+      "Подготовься\nк новому пути.",
+      "Выбери способности. Следующий маршрут построишь сам."
+    ]
+  }
+]

@@ -20,8 +20,8 @@
     "ru": "Сахарная линия"
   },
   "region.confection.science": {
-    "en": "The candy mode makes you faster and widens the collection chain for a while. It is not another universe.",
-    "ru": "Сахарный режим на время ускоряет и расширяет окно цепочки сбора. Это не другая Вселенная."
+    "en": "Teaching machines used small tasks and immediate feedback long before this fiction. Candy Timeline preserves that training design. Its temporary speed and collection bonuses are game rules, not a quantum effect or a guarantee of learning.",
+    "ru": "Учебные машины использовали небольшие задания и немедленную обратную связь задолго до этой истории. Сахарная линия хранит такой учебный замысел. Временные бонусы скорости и сбора — игровые правила, а не квантовый эффект или гарантия обучения."
   },
   "region.confection.trait1": {
     "en": "CANDY",
@@ -56,8 +56,8 @@
     "ru": "Полый пояс"
   },
   "region.debris.science": {
-    "en": "Time does not tear planets apart. The materials, cracks and glowing cores here are simplified for play.",
-    "ru": "Время не разрушает планеты. Материалы, трещины и светящиеся ядра здесь упрощены ради игры."
+    "en": "A record preserves selected distinctions. Erasing information has physical consequences, studied by Landauer; this does not prove that a planet cannot be rebuilt. Cinder’s incomplete archive cannot supply details it never retained.",
+    "ru": "Запись сохраняет определённые различия. Стирание информации имеет физические последствия, исследованные Ландауэром; это не доказательство невозможности восстановить планету. Неполный Архив Синдера не выдаст деталей, которых не сохранил."
   },
   "region.debris.trait1": {
     "en": "ROCKS",
@@ -84,16 +84,16 @@
     "ru": "Оранжереи, дрейфующие по сбитым расписаниям."
   },
   "region.drift.meaning": {
-    "en": "The orbital modules drift, and the rhythms of their controllers drift apart. The gardens were real greenhouses, not quantum plants.",
-    "ru": "Орбитальные модули дрейфуют, а ритмы их контроллеров расходятся. Сады были настоящими оранжереями, а не «квантовыми растениями»."
+    "en": "Orbital gardens drift, and their controllers drift out of rhythm. The Keepers once adjusted their routines to living plants. The empty modules still perform those routines.",
+    "ru": "Орбитальные сады дрейфуют, а их контроллеры теряют общий ритм. Когда-то Хранители подстраивали распорядки под живые растения. Пустые модули продолжают выполнять эти распорядки."
   },
   "region.drift.name": {
     "en": "Drift Gardens",
     "ru": "Дрейфующие сады"
   },
   "region.drift.science": {
-    "en": "Clocks that drift apart do not put plants in parallel universes. Every gate here simply keeps its own cycle.",
-    "ru": "Расходящиеся часы не переносят растения в параллельные вселенные. Каждый шлюз здесь просто работает по своему циклу."
+    "en": "Feedback compares a measured condition with a target and adjusts a system. Poorly tuned feedback can cause oscillation. The gardens turn this engineering problem into gates whose cycles no longer agree.",
+    "ru": "Обратная связь сопоставляет измеренное состояние с целью и корректирует работу системы. Неудачная настройка способна вызвать колебания. В садах эта инженерная проблема стала шлюзами с рассогласованными циклами."
   },
   "region.drift.trait1": {
     "en": "GATES",
@@ -128,8 +128,8 @@
     "ru": "Последний рассвет"
   },
   "region.eternity.science": {
-    "en": "Returning to the first station does not close a loop in time. The next pass is a new pass with a new archive, not an undone victory.",
-    "ru": "Возвращение к первой станции не замыкает петлю времени. Следующий обход — новый проход с новым архивом, а не отменённая победа."
+    "en": "A machine that retains a new output has a different final state, even if its working parts return to a familiar configuration. The Lighthouse receives new records; the next pass preserves progress instead of erasing the previous victory.",
+    "ru": "Машина с сохранённым новым результатом имеет другое конечное состояние, даже если её рабочие части вернулись к знакомой конфигурации. Маяк получает новые записи; следующий обход сохраняет прогресс, а не стирает прежнюю победу."
   },
   "region.eternity.trait1": {
     "en": "EVERY HAZARD",
@@ -164,8 +164,8 @@
     "ru": "Шельф Тессеры"
   },
   "region.fracture.science": {
-    "en": "A crack in ice, a collision scar in the game and a quantum many-body scar are three different things.",
-    "ru": "Трещина во льду, шрам столкновения в игре и квантовый «шрам» многих тел — три разных понятия."
+    "en": "Stresses can fracture an icy shell, opening and closing passages. Tessera borrows this material process. Its ice cracks, arena collision scars and quantum many-body scars describe different phenomena.",
+    "ru": "Напряжения могут раскалывать ледяную оболочку, меняя проходы. Тессера заимствует этот процесс разрушения материала. Трещины льда, игровые шрамы столкновений и квантовые шрамы многих тел обозначают разные явления."
   },
   "region.fracture.trait1": {
     "en": "NARROW LANES",
@@ -200,8 +200,8 @@
     "ru": "Обратное течение"
   },
   "region.gravity.science": {
-    "en": "One compact remnant does not become a flock of black holes. The field wells in the arena are game fields with a limited reach.",
-    "ru": "Один компактный остаток не превращается в стаю чёрных дыр. Полевые ловушки на арене — игровые поля с ограниченным радиусом."
+    "en": "Gravity changes trajectories; a compact remnant can have orbiting bodies rather than swallowing everything around it. Arena wells are engineered game fields with limited reach. Their lethal cores are a rule of the simulation.",
+    "ru": "Тяготение меняет траектории; вокруг компактного остатка могут обращаться тела, а не исчезать всё подряд. Ловушки арены — искусственные игровые поля с ограниченным радиусом. Опасные ядра заданы правилами симуляции."
   },
   "region.gravity.trait1": {
     "en": "PULL",
@@ -236,8 +236,8 @@
     "ru": "Стеклянная туманность"
   },
   "region.mirage.science": {
-    "en": "Gravitational lensing bends the paths of light, not the commands of your hand. Flipped steering comes from a transfer, not from the view.",
-    "ru": "Гравитационное линзирование искривляет пути света, а не команды руки. Инверсия управления возникает от перехода, а не от вида."
+    "en": "Gravitational lensing bends light paths and can produce several images of one source. It changes what is seen. A transfer’s inverted steering is a separate fictional fault of the control frame.",
+    "ru": "Гравитационное линзирование искривляет пути света и может создавать несколько изображений одного источника. Оно меняет видимое. Инверсия управления после перехода — отдельный вымышленный сбой привязки команд."
   },
   "region.mirage.trait1": {
     "en": "MIRROR",
@@ -272,8 +272,8 @@
     "ru": "Испытательные полигоны"
   },
   "region.paradox.science": {
-    "en": "A pulsar is a living, spinning stellar remnant — not a dead star that mysteriously keeps ticking.",
-    "ru": "Пульсар — действующий вращающийся остаток звезды, а не мёртвый объект, мистически продолжающий тикать."
+    "en": "A Loschmidt echo probes how well controlled dynamics can be reversed. Some errors can cancel during reversal and evade a test. The pulsar beyond the stations is a rotating neutron star whose beams sweep past an observer.",
+    "ru": "Эхо Лошмидта позволяет исследовать, насколько хорошо обращается управляемая динамика. Некоторые ошибки при обращении компенсируются и ускользают от проверки. Пульсар за станциями — вращающаяся нейтронная звезда, чьи пучки излучения проходят мимо наблюдателя."
   },
   "region.paradox.trait1": {
     "en": "BEAMS",
@@ -308,8 +308,8 @@
     "ru": "Область разрывов"
   },
   "region.rift.science": {
-    "en": "A transfer moves the Signal, shifts the replay clock and flips steering for a while. It is not a full rewind or travel into the past.",
-    "ru": "Переход переносит Сигнал, сдвигает часы повтора и на время инвертирует управление. Это не полный откат и не путешествие в прошлое."
+    "en": "Changing a coordinate frame changes how an event is described, not where it happens. The Keepers’ transfers are fictional technology: they move the carrier and temporarily change its control frame and replay timing.",
+    "ru": "Смена системы координат меняет описание события, а не место, где оно происходит. Переходы Хранителей — вымышленная технология: они переносят носитель, временно меняют привязку управления и ритм повтора."
   },
   "region.rift.trait1": {
     "en": "TRANSFER",
@@ -328,12 +328,12 @@
     "ru": "СИНГУЛЯРНОСТЬ"
   },
   "region.singularity.arrival": {
-    "en": "The Road passes observation stations around dying Ashcrown. Their last stable readings have become commands they cannot stop obeying.",
-    "ru": "Дорога проходит через станции наблюдения умирающего Эшкрауна. Последние устойчивые показания стали командами, которым станции не могут перестать подчиняться."
+    "en": "Observation stations preserve Ashcrown’s earlier light. Their last stable readings became commands they cannot stop obeying.",
+    "ru": "Станции наблюдения хранят прежний свет Эшкрауна. Последние устойчивые показания стали командами, которым станции не могут перестать подчиняться."
   },
   "region.singularity.blurb": {
-    "en": "Observation stations around a dying star.",
-    "ru": "Станции наблюдения у умирающей звезды."
+    "en": "Stations holding the star’s earlier light.",
+    "ru": "Станции, хранящие прежний свет звезды."
   },
   "region.singularity.meaning": {
     "en": "Ashcrown was named for the ash-grey rim in the station's images; the corona is its outer glow. Singularity is where the old model stops working.",
@@ -344,8 +344,8 @@
     "ru": "Корона Эшкрауна"
   },
   "region.singularity.science": {
-    "en": "A singularity is not an observed ball of infinite density, and the game does not simulate a stellar collapse.",
-    "ru": "Сингулярность — не наблюдаемый шарик бесконечной плотности, и игра не моделирует коллапс звезды."
+    "en": "Light takes time to arrive, so observations reveal earlier states. These stations retain Ashcrown’s older light and records; the route does not make a star collapse in minutes. A predicted singularity can mark a limit of classical relativity.",
+    "ru": "Свету нужно время, чтобы дойти до наблюдателя, поэтому мы видим прежние состояния. Станции хранят старый свет и записи Эшкрауна; маршрут не заставляет звезду коллапсировать за минуты. Предсказанная сингулярность может отмечать предел классической теории относительности."
   },
   "region.singularity.trait1": {
     "en": "FLARES",
@@ -380,8 +380,8 @@
     "ru": "Маяк"
   },
   "region.trace.science": {
-    "en": "Network time is an agreement between clocks. The Lighthouse never held one time for the whole universe.",
-    "ru": "Время сети — соглашение между часами. Маяк никогда не держал единое время всей Вселенной."
+    "en": "Clock synchronization accounts for the travel time of a reference signal. The Lighthouse helps stations compare records; it supplies a network reference rather than a universal cosmic clock.",
+    "ru": "При синхронизации часов учитывают время прохождения опорного сигнала. Маяк помогает станциям сопоставлять записи: это ориентир сети, а не единые часы космоса."
   },
   "region.trace.trait1": {
     "en": "ECHOES",
@@ -400,8 +400,8 @@
     "ru": "Нара, инженер"
   },
   "story.ashcrown.text": {
-    "en": "We were trying to keep the channels open, not to stop the star from dying.",
-    "ru": "Мы пытались сохранить каналы, а не остановить гибель звезды."
+    "en": "These instruments hold light that left the star long before this pass. I cannot save Ashcrown by refusing its latest reading. I can keep a channel open long enough for someone else to learn what happened. An uncertainty written down is more useful than certainty invented.",
+    "ru": "Эти приборы хранят свет, покинувший звезду задолго до нынешнего обхода. Я не спасу Эшкраун, отказавшись от нового измерения. Зато могу удержать канал, чтобы кто-то узнал случившееся. Записанная неопределённость полезнее придуманной уверенности."
   },
   "story.ashcrown.title": {
     "en": "Ashcrown",
@@ -412,8 +412,8 @@
     "ru": "Нара, инженер"
   },
   "story.break.text": {
-    "en": "The failed controller treated the last confirmed state as an instruction to restore it. Every correction demanded another correction.",
-    "ru": "Отказавший контроллер принял последнее подтверждённое состояние за команду к восстановлению. Каждое исправление требовало нового исправления."
+    "en": "The controller restored the last confirmed state. New readings differed, so it restored again. We had built a test that rewarded agreement with the archive. I changed the test: a living system must be allowed to bring evidence that the archive is wrong.",
+    "ru": "Контроллер возвращал последнее подтверждённое состояние. Новые показания отличались — он возвращал его снова. Мы построили тест, поощрявший согласие с архивом. Я изменила проверку: живой системе нужно позволить принести свидетельство ошибки архива."
   },
   "story.break.title": {
     "en": "The Break",
@@ -424,8 +424,8 @@
     "ru": "Запись Архива"
   },
   "story.cinder.text": {
-    "en": "Cinder survived in the Archive as a world. On the Road, only its fragments answered.",
-    "ru": "В Архиве Синдер сохранился как мир. На Дороге отвечали только его обломки."
+    "en": "The old chart still showed a whole world. The receivers answered from separate fragments. We kept both records and their dates. Care began with that disagreement: the map had to admit what had happened before it could guide anyone home.",
+    "ru": "Старая карта ещё показывала целый мир. Приёмники отвечали из разных обломков. Мы сохранили обе записи и их даты. Забота началась с этого несогласия: карте нужно было признать случившееся, прежде чем вести кого-то домой."
   },
   "story.cinder.title": {
     "en": "Cinder",
@@ -436,8 +436,8 @@
     "ru": "Журнал Маяка"
   },
   "story.final.text": {
-    "en": "The first recovery pass is confirmed. The past remains in the Archive; it no longer has to command every next move.",
-    "ru": "Первый контур восстановления подтверждён. Прошлое осталось в Архиве; оно больше не обязано командовать каждым следующим движением."
+    "en": "First recovery pass confirmed. The new records remain beside the old ones. The Lighthouse can compare them without ordering the world to become its earlier image. The past stays in the Archive; it no longer has to command every next move.",
+    "ru": "Первый контур восстановления подтверждён. Новые записи остаются рядом со старыми. Маяк может сравнивать их, не приказывая миру стать своим прежним изображением. Прошлое осталось в Архиве; оно больше не обязано командовать каждым следующим движением."
   },
   "story.final.title": {
     "en": "First pass confirmed",
@@ -448,8 +448,8 @@
     "ru": "Журнал сада"
   },
   "story.gardens.text": {
-    "en": "The gardens kept watering after the last gardener left. Preserving a routine was not the same as preserving a life.",
-    "ru": "Сады продолжали полив после ухода последнего садовника. Сохранить распорядок — не то же самое, что сохранить жизнь."
+    "en": "The watering cycle was perfect. The beds were empty. I left a question in the maintenance log: what are we preserving when the routine survives the life it served? The next gardener must be allowed to change the schedule.",
+    "ru": "Цикл полива был безупречен. Грядки пустовали. Я оставила в журнале обслуживания вопрос: что мы бережём, когда распорядок пережил жизнь, которой служил? Следующему садовнику нужно позволить изменить расписание."
   },
   "story.gardens.title": {
     "en": "Routine",
@@ -460,8 +460,8 @@
     "ru": "Смотритель стеклянной станции"
   },
   "story.glass.text": {
-    "en": "Two images. One source. Neither instrument had the right to call that two homes.",
-    "ru": "Два изображения. Один источник. Ни один прибор не имел права назвать это двумя домами."
+    "en": "Two images arrived at different angles. For a while we counted two homes. The instruments were working; our explanation was not. We kept the images, corrected the catalog and left the correction visible. Learning should leave a trace too.",
+    "ru": "Два изображения пришли под разными углами. Некоторое время мы считали их двумя домами. Приборы работали; ошибалось объяснение. Мы сохранили снимки, исправили каталог и оставили исправление видимым. У обучения тоже должен быть след."
   },
   "story.glass.title": {
     "en": "Two images",
@@ -472,8 +472,8 @@
     "ru": "Журнал Маяка"
   },
   "story.lighthouse.text": {
-    "en": "The Lighthouse did not command time. It helped distant stations compare their records.",
-    "ru": "Маяк не управлял временем. Он помогал далёким станциям сопоставлять записи."
+    "en": "We compared clocks so a distant record could be understood where it arrived. Nobody gave the Lighthouse authority over the universe. Its promise was smaller, and worth keeping: let one station hear another accurately.",
+    "ru": "Мы сверяли часы, чтобы далёкую запись поняли там, куда она придёт. Никто не давал Маяку власти над Вселенной. Его обещание было скромнее и стоило усилий: дать одной станции точно услышать другую."
   },
   "story.lighthouse.title": {
     "en": "Reference",
@@ -484,8 +484,8 @@
     "ru": "Мика, учебная запись"
   },
   "story.mika.text": {
-    "en": "I left a turn here. Not for me. For whoever comes next.",
-    "ru": "Здесь остался мой поворот. Не для меня. Для того, кто будет после."
+    "en": "I used to take every spark first. Then my echo filled the crossing and nobody could pass. Today I left a turn here. Not for a score. For whoever comes next. Teacher says a route can be a small act of friendship.",
+    "ru": "Раньше я старалась первой собрать все искры. Потом моё эхо заполнило перекрёсток, и пройти стало негде. Сегодня я оставила здесь поворот. Не ради счёта. Для того, кто придёт следом. Учитель говорит: маршрут бывает маленьким поступком дружбы."
   },
   "story.mika.title": {
     "en": "A turn left behind",
@@ -496,8 +496,8 @@
     "ru": "Журнал Маяка"
   },
   "story.next.text": {
-    "en": "The next pass tests a deeper layer of the network. Your confirmed records remain.",
-    "ru": "Следующий обход проверяет более глубокий слой сети. Подтверждённые записи сохраняются."
+    "en": "A deeper layer still needs examination. The next pass begins with what you have learned and recovered. Returning is not proof that nothing changed. Check the records: there is a new line here, and you carried it home.",
+    "ru": "Глубокий слой ещё требует проверки. Следующий обход начинается с того, что ты узнал и восстановил. Возвращение не доказывает, что ничего не изменилось. Сверь записи: здесь появилась новая строка, и ты доставил её домой."
   },
   "story.next.title": {
     "en": "The next pass",
@@ -604,8 +604,8 @@
     "ru": "Опора, а не часы Вселенной"
   },
   "wiki.story.rewind.body": {
-    "en": "Restores a recent local state. The discarded route leaves a temporary Paradox Ghost.",
-    "ru": "Восстанавливает недавнее локальное состояние. Отброшенный путь оставляет временного Парадоксального призрака."
+    "en": "The Keepers kept short local snapshots so an operator could recover from a faulty command. Rewind restores one recent cell state; the discarded route leaves a temporary Paradox Ghost. A new attempt still needs a new decision.",
+    "ru": "Хранители сохраняли короткие локальные снимки, чтобы оператор мог исправить ошибочную команду. Откат восстанавливает недавнее состояние ячейки; отброшенный путь оставляет временного Парадоксального призрака. Новой попытке всё равно нужно новое решение."
   },
   "wiki.story.rewind.eyebrow": {
     "en": "PARADOX REWIND",
@@ -624,8 +624,8 @@
     "ru": "Восстановление ячейки, а не Вселенной"
   },
   "wiki.story.road.body": {
-    "en": "Every map is one node of the Fold Road. Each region lies in a different part of space, so its sky, walls and hazards change with it: gardens adrift, an ice moon, the remains of Cinder, the stations around dying Ashcrown.",
-    "ru": "Каждая карта — узел Дороги складок. Регионы лежат в разных частях космоса, поэтому вместе с ними меняются небо, стены и угрозы: дрейфующие сады, ледяная луна, остатки Синдера, станции у умирающего Эшкрауна."
+    "en": "The Fold Road joins 77 nodes across 11 regions: gardens, an ice moon, Cinder’s debris and stations holding Ashcrown’s earlier light. Traveling the network is not a chronological tour of a star’s death. Each place preserves different observations, damage and human records.",
+    "ru": "Дорога складок соединяет 77 узлов в 11 регионах: сады, ледяную луну, обломки Синдера и станции, хранящие прежний свет Эшкрауна. Путь по сети не показывает гибель звезды в хронологическом порядке. Каждое место хранит свои наблюдения, повреждения и человеческие записи."
   },
   "wiki.story.road.eyebrow": {
     "en": "THE FOLD ROAD",
@@ -674,5 +674,93 @@
   "wiki.story.signal.title": {
     "en": "The carrier you steer",
     "ru": "Носитель, которым ты управляешь"
+  },
+  "wiki.story.philosophy.body": {
+    "en": "The Keepers built recovery to protect a living world. During the Break, a controller began treating the last confirmed state as an order to repeat it. Across the Road, the same question changes shape: what should memory preserve, and when should judgment choose a new action? Stoic attention, Aristotle’s practical wisdom and later questions about knowledge offer different ways to read the journey. Science tests the network’s models; ethics asks whom its recovery serves.",
+    "ru": "Хранители создали восстановление ради живого мира. Во время Разлада контроллер принял последнее подтверждённое состояние за приказ повторять его. На Дороге один вопрос принимает разные формы: что должна сохранять память и когда суждению пора выбрать новое действие? Стоическое внимание, практическая мудрость Аристотеля и позднейшие вопросы о знании предлагают разные прочтения пути. Наука проверяет модели сети; этика спрашивает, кому служит восстановление."
+  },
+  "wiki.story.philosophy.eyebrow": {
+    "en": "A READING OF THE ROAD",
+    "ru": "ПРОЧТЕНИЕ ДОРОГИ"
+  },
+  "wiki.story.philosophy.fact1": {
+    "en": "Echoes carry a route, not an intention.",
+    "ru": "Эхо переносит маршрут, а не намерение."
+  },
+  "wiki.story.philosophy.fact2": {
+    "en": "Returning is another choice, not the same moment.",
+    "ru": "Возвращение — новый выбор, а не тот же момент."
+  },
+  "wiki.story.philosophy.title": {
+    "en": "Memory is evidence. The next turn is a choice.",
+    "ru": "Память хранит опыт. Следующий поворот — выбор."
+  },
+  "region.trace.philosophy": {
+    "en": "Epictetus asks us to distinguish our choices from outcomes we cannot command. The Signal cannot stop its recorded echo. It can choose the next turn. What remains yours to decide?",
+    "ru": "Эпиктет предлагает различать свои решения и результаты, которыми мы не распоряжаемся. Сигнал не остановит записанное эхо. Зато может выбрать следующий поворот. Что ещё зависит от твоего решения?"
+  },
+  "region.drift.philosophy": {
+    "en": "For Aristotle, repeated actions shape character, while practical wisdom attends to the particular situation. The gardens keep their routines after their purpose is lost. When should a useful habit change?",
+    "ru": "У Аристотеля повторяемые поступки формируют характер, а практическая мудрость учитывает обстоятельства. Сады хранят распорядок, утратив его цель. Когда полезной привычке пора измениться?"
+  },
+  "region.fracture.philosophy": {
+    "en": "Heraclitus makes change and persistence a question to consider together. Tessera is still a home in the records, yet its passages have changed. What should a faithful map preserve: an old outline or a way through?",
+    "ru": "Гераклит заставляет рассматривать изменение вместе с сохранением. В записях Тессера остаётся домом, хотя её проходы изменились. Что должна беречь верная карта: прежний контур или возможность пройти?"
+  },
+  "region.debris.philosophy": {
+    "en": "Marcus Aurelius places acceptance of present conditions beside just action toward others. Accepting Cinder’s loss does not excuse the harm. It asks what care is still possible for what remains.",
+    "ru": "Марк Аврелий ставит принятие настоящего рядом со справедливым действием по отношению к другим. Признать утрату Синдера — не оправдать вред. Вопрос в том, как позаботиться об уцелевшем."
+  },
+  "region.paradox.philosophy": {
+    "en": "Popper asks whether an explanation risks failing a test. The Keepers’ controller passed tests that only confirmed its own assumptions. Which observation would make you change your explanation?",
+    "ru": "Поппер спрашивает, допускает ли объяснение проверку, способную его опровергнуть. Контроллер Хранителей проходил тесты, подтверждавшие его собственные допущения. Какое наблюдение заставило бы тебя изменить объяснение?"
+  },
+  "region.singularity.philosophy": {
+    "en": "Plato’s Socrates refuses to claim knowledge he does not possess. Nara keeps an uncertainty beside every reading. Admitting a model’s limit can be the first useful step toward a better one.",
+    "ru": "Сократ у Платона отказывается приписывать себе знание, которого у него нет. Нара отмечает неопределённость рядом с каждым измерением. Признать границу модели — первый полезный шаг к более точной."
+  },
+  "region.rift.philosophy": {
+    "en": "Kant begins his account of orientation with a reference direction and the distinction between left and right. When a familiar reference fails, the Signal must compare it with what the instruments now show.",
+    "ru": "Кант начинает рассуждение об ориентировании с опорного направления и различения правого и левого. Когда привычный ориентир подводит, Сигналу приходится сопоставлять его с нынешними показаниями приборов."
+  },
+  "region.gravity.philosophy": {
+    "en": "Spinoza connects understanding an effect with understanding its cause. Learning how the pull acts helps the Signal choose a route. Understanding a danger gives room for action without making the danger disappear.",
+    "ru": "Спиноза связывает понимание следствия с пониманием причины. Знание того, как действует притяжение, помогает Сигналу выбрать маршрут. Понимание опасности оставляет место действию, хотя сама опасность сохраняется."
+  },
+  "region.mirage.philosophy": {
+    "en": "Plato’s cave asks what learning demands when familiar appearances are taken for reality. At the glass station, the honest answer begins by separating the image, the record and the object.",
+    "ru": "Платонова пещера ставит вопрос об обучении, когда привычный образ принимают за действительность. На стеклянной станции честный ответ начинается с различения изображения, записи и самого объекта."
+  },
+  "region.confection.philosophy": {
+    "en": "Epicurus values friendship and pleasures chosen with attention to their consequences. Mika’s lesson leaves space for the next traveler. Small joys can belong to a serious life without becoming its only measure.",
+    "ru": "Эпикур ценит дружбу и удовольствия, выбранные с учётом последствий. Урок Мики оставляет место следующему путнику. Маленькая радость может быть частью серьёзной жизни, не становясь единственной мерой её ценности."
+  },
+  "region.eternity.philosophy": {
+    "en": "Camus gives Sisyphus’s repeated effort a lucid, defiant meaning without a promised final resolution. ECHO adds its own possibility: new records remain. Returning can be a renewed choice in a changed world.",
+    "ru": "Камю придаёт повторяющемуся усилию Сизифа ясный и непокорный смысл без обещания окончательного разрешения. ECHO добавляет свою возможность: новые записи сохраняются. Возвращение может стать новым выбором в изменившемся мире."
+  },
+  "lore.sources": {
+    "en": "Follow the ideas",
+    "ru": "Откуда эти идеи"
+  },
+  "lore.sources.note": {
+    "en": "These are ECHO’s interpretations, not quotations or one unified doctrine. Science notes distinguish research from the Keepers’ fiction.",
+    "ru": "Это прочтения ECHO, а не цитаты или единое учение. Научные заметки отделяют исследования от вымысла о Хранителях."
+  },
+  "lore.source.primary": {
+    "en": "Primary text",
+    "ru": "Первоисточник"
+  },
+  "lore.source.research": {
+    "en": "Research",
+    "ru": "Исследование"
+  },
+  "lore.source.official": {
+    "en": "Official explanation",
+    "ru": "Официальное пояснение"
+  },
+  "lore.source.commentary": {
+    "en": "Commentary",
+    "ru": "Комментарий"
   }
 }

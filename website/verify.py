@@ -18,7 +18,8 @@ class Page(HTMLParser):
         if tag=='h1':self.h1+=1
         if tag=='title':self.title=True
         if tag=='a' and a.get('href'):self.links.append(a['href'])
-        if tag in ('script','img') and a.get('src'):self.assets.append(a['src'])
+        if tag in ('script','img','source') and a.get('src'):self.assets.append(a['src'])
+        if tag=='video' and a.get('poster'):self.assets.append(a['poster'])
         if tag=='link' and a.get('rel')=='stylesheet':self.assets.append(a['href'])
         if tag=='link' and a.get('rel')=='canonical':self.canonical=a.get('href')
         if tag=='link' and a.get('rel')=='alternate':self.alternates.add(a.get('hreflang'))
@@ -37,6 +38,12 @@ for file,page in pages.items():
         if target.is_dir():target=target/'index.html'
         if not target.exists():errors.append(f'{file.relative_to(ROOT)}: missing {href}')
         elif u.fragment and target in pages and unquote(u.fragment) not in pages[target].ids:errors.append(f'{file.relative_to(ROOT)}: missing anchor {href}')
-assert len(pages)==12,f'Expected 12 localized pages; got {len(pages)}'
+assert len(pages)==14,f'Expected 14 localized pages; got {len(pages)}'
 assert not errors,'\n'.join(errors)
 print(f'PASS: {len(pages)} pages; internal links, fragments, assets and bilingual metadata verified.')
+
+for language, path in [("en", ROOT/"index.html"),("ru", ROOT/"ru/index.html")]:
+    text=path.read_text()
+    assert text.count("<video ")==2, f"{language}: expected separate gameplay and artistic teaser"
+    assert f"echo-teaser-{language}.mp4" in text
+print("PASS: localized teaser and authentic gameplay remain distinct.")

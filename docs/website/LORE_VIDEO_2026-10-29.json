@@ -1,0 +1,14 @@
+{
+  "siteVersion": 10,
+  "sourceCommit": "7ce9602ace55c662f09f25d2c401cc11c7222d4a",
+  "deployment": "appgdep_6ae28fc50d888191a769e8752f8151c4",
+  "status": "succeeded",
+  "url": "https://echo-survive-your-past.serhiiright.chatgpt.site",
+  "audience": "public (preserved)",
+  "appLoreSourceCommit": "3952d80e210ab0b07fdfbb34520c094438799aa4",
+  "checks": "PASS: 14 EN/RU pages; internal links/fragments/assets, bilingual canonical/hreflang/SEO and separate actual-gameplay/creative videos; raster decoding checked",
+  "browserQA": "PASS: mobile RU home, real teaser playback, source accordions, no horizontal overflow; final captioned press gallery visible images load. One WebP derivative did not decode in browser and screenshot derivatives were switched to JPEG before publication.",
+  "priceChanged": false,
+  "adsPolicyChanged": false,
+  "currentAppCandidate": "1.1.0 (27)"
+}

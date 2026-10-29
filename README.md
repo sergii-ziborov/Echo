@@ -1,12 +1,10 @@
 # ECHO
 
-> **Prepared R1 transition · 28 October 2026:** this branch adds StoreKit rights/restoration, original-owner protection, rare interstitial policy and iOS-only AdMob/UMP adapters. The default `project.yml` is SDK-free `preFree`; `project-admob.yml` explicitly opts into the pinned iOS SDK with a guarded Release build. Production ads remain disabled; no App Store price, live advertising or App Store Review submission was changed. [Evidence, configuration and release gates](docs/monetization/RELEASE.md).
->
-> **Internal TestFlight · 28 October 2026:** **1.1.0 (24)** is available to **Keepers**, confirmed `IN_BETA_TESTING`. It includes the pinned iOS AdMob/UMP SDKs; production remains `preFree`, with live advertising off. The real Remove Ads product is configured; genuine purchases and original-owner restoration still need device verification. [Delivery evidence and test notes](docs/monetization/TESTFLIGHT_24.md).
+> **TestFlight · 29 October 2026:** **1.1.0 (27)** is available to **Keepers**, independently confirmed `IN_BETA_TESTING`. This candidate expands the sourced philosophy/science Archive and fixes Russian headings, whole research-node words, Lab effect labels and Watch result cards. Production remains `preFree`; live advertising and the paid-to-free price change are off. [Build, checks and remaining release gates](docs/monetization/TESTFLIGHT_27.md).
 
 ECHO is a top-down route-planning survival puzzle for iPhone, iPad and Apple Watch. You guide the Signal, collect every spark, and reach the exit. Every few seconds an echo appears and walks the line you already drew. Your own route becomes the hazard.
 
-> You don't cooperate with your past. You survive it.
+> Memory keeps the past. You choose the next turn.
 
 Seventy-seven maps sit in eleven seven-map regions of space, strung along one road through a broken galaxy. Clearing the complete timeline starts a new named difficulty cycle while preserving previous records. Later regions add moving debris, timed crystals, beams, fold faults, field wells, and a short Candy Timeline training pocket. The in-game Keeper Archive documents every rule. The Archive gradually recovers field notes, places and Keeper records as you encounter mechanics and restore regions. A compact reward strip on the result screen opens numbered fragments with text excerpts, on demand. Encounters never interrupt play. The first route offers optional interactive practice. Settings includes About, Terms, Privacy, and a confirmed progress reset that keeps audio and language preferences.
 
@@ -15,23 +13,13 @@ The published 1.0.0 remains the original **$1.99 one-time download**. The prepar
 The game is in **English and Russian**. It follows the device language by default. Settings → Language offers Auto, English and Русский, and changes visible text immediately.
 
 <p align="center">
-  <img src="docs/app-store/iphone/play/01-gameplay.jpg" width="220" alt="A run in the Undertow near Ashcrown's remnant, with rocks, beams and sparks">
-  <img src="docs/app-store/iphone/menu/03-atlas.jpg" width="220" alt="Atlas: the Hollow Belt route under its broken world, the Signal looping round the selected stop">
-  <img src="docs/app-store/iphone/play/05-archive.jpg" width="220" alt="Numbered Keeper fragments recovered after a route">
+  <img src="docs/app-store/marketing-1.1.0/en/phone69/01.png" width="220" alt="Your route becomes your echo: actual gameplay">
+  <img src="docs/app-store/marketing-1.1.0/en/phone69/02.png" width="220" alt="Eleven regions along one Fold Road">
+  <img src="docs/app-store/marketing-1.1.0/en/phone69/03.png" width="220" alt="Thirty-six rooms played directly on Apple Watch">
   <br>
-  <img src="docs/app-store/iphone/play/02-lasers.jpg" width="220" alt="Laser arena under Ashcrown">
-  <img src="docs/app-store/iphone/play/04-deep-time.jpg" width="220" alt="Deep Time, the endless mode">
-  <img src="docs/app-store/iphone/menu/08-wiki.jpg" width="220" alt="Keeper Archive: the story">
-  <br>
-  <img src="docs/app-store/iphone/menu/06-research.jpg" width="220" alt="Signal Matrix research tree">
-  <img src="docs/app-store/iphone/menu/07-lab.jpg" width="220" alt="Signal Lab loadout">
-  <img src="docs/app-store/iphone/menu/10-recharge.jpg" width="220" alt="One-charge refill prices in Signal Lab">
-  <img src="docs/app-store/iphone/menu/09-home.jpg" width="220" alt="Home screen with Deep Time">
-  <br>
-  <img src="docs/app-store/watch/01-wrist-run.jpg" width="150" alt="A wrist map on Apple Watch">
-  <img src="docs/app-store/watch/02-wrist-maps.jpg" width="150" alt="Chronometer rooms">
-  <img src="docs/app-store/watch/03-relics.jpg" width="150" alt="Chronometer Rewards that carry over to iPhone">
-  <img src="docs/app-store/watch/04-skills.jpg" width="150" alt="Watch skills">
+  <img src="docs/app-store/marketing-1.1.0/en/phone69/04.png" width="220" alt="Setting up Apple Watch as the iPhone controller">
+  <img src="docs/app-store/marketing-1.1.0/en/phone69/05.png" width="220" alt="Philosophy, memory and science in the Keeper Archive">
+  <img src="docs/app-store/marketing-1.1.0/en/phone69/06.png" width="220" alt="Permanent research and the current build’s effects">
 </p>
 
 The Lab shows equipped abilities and their charges at a glance. Its research tree shows exact prerequisites and the effects of the current build; tapping a requirement jumps to that node. Recharge buys one charge at a time.
@@ -42,29 +30,20 @@ On iPad, Home uses a dashboard and the Atlas keeps its route and selected map si
 <summary>More screen sizes: iPad and iPhone Duo</summary>
 
 <p align="center">
-  <img src="docs/app-store/ipad/02-atlas.jpg" width="240" alt="Wide iPad Atlas with route and selected map side by side">
-  <img src="docs/app-store/ipad/06-home.jpg" width="240" alt="Two-column iPad Home dashboard">
+  <img src="docs/app-store/captures-1.1.0/en/ipad/atlas.png" width="260" alt="iPad Atlas route and selected map side by side">
+  <img src="docs/app-store/captures-1.1.0/en/ipad/home.png" width="260" alt="iPad Home dashboard">
   <br>
-  <img src="docs/app-store/ipad/04-research.jpg" width="240" alt="Signal Matrix research tree on iPad">
-  <img src="docs/app-store/ipad/05-lab.jpg" width="240" alt="Signal Lab loadout on iPad">
-  <br>
-  <img src="docs/app-store/duo/duo-outer-loadout.png" width="180" alt="Duo outer display: compact ability loadout">
-  <img src="docs/app-store/duo/duo-outer-research.png" width="180" alt="Duo outer display: one research branch and its effects">
-  <img src="docs/app-store/duo/duo-inner-loadout.png" width="240" alt="Duo inner display: loadout beside charge refill">
-  <img src="docs/app-store/duo/duo-inner-research.png" width="240" alt="Duo inner display: research branch beside selected effect">
+  <img src="docs/app-store/marketing-1.1.0/en/duo/duo-outer-research.png" width="180" alt="Duo outer screen: research branch and effects">
+  <img src="docs/app-store/marketing-1.1.0/en/duo/duo-inner-loadout.png" width="240" alt="Duo inner screen: abilities and refill">
 </p>
 
 </details>
 
-The complete screenshot sets are in [iPhone 6.9-inch](docs/app-store/iphone), [iPhone 6.5-inch](docs/app-store/iphone65), [iPad](docs/app-store/ipad), [iPhone Duo](docs/app-store/duo), and [Apple Watch](docs/app-store/watch). The [App Store header and search artwork](docs/app-store/creative/README.md) is kept beside those captures.
+The current [captioned EN/RU marketing sets](docs/app-store/marketing-1.1.0/README.md), [native captures](docs/app-store/captures-1.1.0/README.md), and [localized header/search artwork](docs/app-store/creative/2026-10-29/README.md) include phone, iPad, both Duo viewports and Apple Watch. Width fixtures are identified separately from physical-device testing.
 
-<p align="center">
-  <img src="docs/app-store/archive/archive-ru-phone.png" width="220" alt="New Keeper records recovered after restoring a region">
-  <img src="docs/app-store/archive/practice-ru-duo-outer.png" width="220" alt="Optional interactive first route on the outer Duo screen">
-  <img src="docs/app-store/archive/results-finds-en-phone.png" width="220" alt="New fragments appear as an optional reward on the result screen">
-</p>
+Watch the [Grok cinematic teaser](docs/app-store/video/echo-teaser-en.mp4) or the [Russian teaser](docs/app-store/video/echo-teaser-ru.mp4). The [actual physical-device gameplay excerpt](docs/app-store/video/echo-gameplay-grok-source.mp4) and [App Store previews](docs/app-store/video/previews/) remain separate from that artistic film. [Sources and provenance](docs/app-store/video/README.md).
 
-New Archive, practice, result and arena screenshots for phone, both Duo displays and iPad are in [the collection captures](docs/app-store/archive/README.md).
+The Archive relates each of eleven regions to an explicitly attributed philosophical question and a scientific note. These are distinct readings, with optional sources, rather than invented quotations or a claim that every thinker taught the same doctrine. [Canon and changes](docs/lore/CANON_2026-10-29.md).
 
 Explore the [ECHO website](https://echo-survive-your-past.serhiiright.chatgpt.site), its [world and philosophy](https://echo-survive-your-past.serhiiright.chatgpt.site/story/) and [field guide](https://echo-survive-your-past.serhiiright.chatgpt.site/guide/). The portable source and migration instructions are in [website/](website/README.md).
 
@@ -78,6 +57,9 @@ See the [player guide](docs/GUIDE.md), [environment asset map](docs/ASSET_INTEGR
 
 ## The story
 
+
+The expanded Archive connects each region to a philosophical question and a scientific idea, with optional sources: Epictetus on choice, Aristotle on habit, Plato on appearances, Popper on testing and Camus on renewed effort. These remain distinct interpretations, linked by a common question: what should memory preserve, and when should judgment choose a new action? [Canon and scientific boundaries](docs/lore/CANON_2026-10-29.md).
+
 The Keepers built the Lighthouse as a reference station. It never ruled time; it let distant stations along the **Fold Road** compare their records. Then came **the Break**: a failed controller began treating the last confirmed state as an order to restore it, and every correction demanded another. The recovery network still replays recorded movement a few seconds late. Those replays are the echoes, and your own route is one of them. The orb is the Signal, the reference the Lighthouse still sends. Sparks are state records; gathering all of them confirms the route and opens the exit, a fold that carries the Signal to the next station.
 
 Each act is one region along the Road. That is why the sky, the walls and the hazards change between acts, and why they stay the same inside one:
@@ -89,7 +71,7 @@ Each act is one region along the Road. That is why the sky, the walls and the ha
 | FRACTURE | Tessera Shelf | An ice moon split into narrow passages. |
 | DEBRIS | Hollow Belt | What is left of Cinder — still moving. |
 | PARADOX | Proving Grounds | Test chambers still running their old trials. |
-| SINGULARITY | Ashcrown Corona | Observation stations around a dying star. |
+| SINGULARITY | Ashcrown Corona | Stations preserving Ashcrown’s earlier light. |
 | RIFT | The Riftlands | Damaged links that move the Signal elsewhere. |
 | GRAVITY | The Undertow | Field wells near Ashcrown's compact remnant. |
 | MIRAGE | Glass Nebula | Where image, record and object disagree. |
@@ -121,7 +103,7 @@ A crash can **Paradox Rewind** three seconds. The discarded branch replays once 
 
 New phenomena and region arrivals are recorded quietly. They never pause play or open help cards. At the end of an attempt, a compact Archive reward opens numbered fragments on request; unread finds are marked on Home. The first route offers a small optional practice arena, with a delayed echo and no charge cost.
 
-Behind every arena a distant sky moves slowly, and it tells you where you are. Each region has its own landmark that draws nearer as you cross it: the Lighthouse's ringed giant, the red sun over the gardens, cracked Tessera, the broken world of the Hollow Belt, a sweeping pulsar, collapsing Ashcrown, a tear across the sky, Ashcrown's compact remnant with its disc, mirrored giants, a candy world with its moon, and the light of Last Dawn rising at the edge. Around it drift a galaxy, twinkling stars, the odd meteor and a soft light that breathes and sweeps past. It all holds still when Reduce Motion is on.
+Behind every arena a distant sky moves slowly, and it tells you where you are. Each region has its own landmark that draws nearer as you cross it: the Lighthouse's ringed giant, the red sun over the gardens, cracked Tessera, the broken world of the Hollow Belt, a sweeping pulsar, older observations of Ashcrown, a tear across the sky, Ashcrown's compact remnant with its disc, mirrored giants, a candy world with its moon, and the light of Last Dawn rising at the edge. Around it drift a galaxy, twinkling stars, the odd meteor and a soft light that breathes and sweeps past. It all holds still when Reduce Motion is on.
 
 ## Deep Time
 

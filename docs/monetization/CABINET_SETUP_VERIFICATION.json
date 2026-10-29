@@ -215,5 +215,13 @@
     "allUnchanged": true,
     "missingPriorKeys": 0
   },
-  "physicalUI": "BLOCKED — launch/activation PASS; Device Hub explicitly requires iOS 27+ for screen sharing while phone is 26.5; real purchase-screen state requested from owner"
+  "physicalUI": "BLOCKED — launch/activation PASS; Device Hub explicitly requires iOS 27+ for screen sharing while phone is 26.5; real purchase-screen state requested from owner",
+  "physicalProductUI": {
+    "date": "2026-10-29",
+    "status": "PASS_USER_REPORTED",
+    "purchaseButtonVisible": true,
+    "priceVisible": true,
+    "exactPrice": null,
+    "transactionOrRestoreProven": false
+  }
 }

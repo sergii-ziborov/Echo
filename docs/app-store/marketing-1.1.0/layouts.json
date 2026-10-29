@@ -1,0 +1,3558 @@
+[
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/01.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Your route becomes\nyour echo.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Collect the sparks. Find the exit. Your past is already following.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/iphone/play/01-gameplay.jpg",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "01 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/02.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "11 regions.\nOne Fold Road.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "77 maps through damaged stations. Bring a new record to the Lighthouse.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/phone69/atlas.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "02 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/03.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "A whole world\non your wrist.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "36 rooms on Apple Watch. Turn the Crown back to change your route.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/en/01-wrist-run.png",
+        "x": 140.0,
+        "y": 850.0,
+        "w": 1040.0,
+        "h": 1240.0,
+        "radius": 70.0
+      },
+      {
+        "text": "Play on your Watch\nCrown to rewind · touch to steer",
+        "x": 100.0,
+        "y": 2300.0,
+        "w": 1120.0,
+        "h": 290.0,
+        "size": 47.0,
+        "color": "EDC675",
+        "bold": true
+      },
+      {
+        "text": "03 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/04.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "iPhone is the screen.\nWatch is the controller.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Launch ECHO on iPhone and choose the remote on your Watch.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/remote-phone.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/en/05-remote.png",
+        "x": 633.6,
+        "y": 1903.7353846153846,
+        "w": 607.2,
+        "h": 723.9692307692309,
+        "radius": 45.0
+      },
+      {
+        "text": "04 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/05.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Find meaning,\nfragment by fragment.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Epictetus, Camus and science notes. Recover the Archive as you play.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/phone69/archive.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "05 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/06.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Keep what\nyou have learned.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Calibrate the Signal’s tools. Your research survives each attempt.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/phone69/research.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "06 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/07.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Prepare for\na different route.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Choose your abilities. The next turn is yours to make.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/phone69/loadout.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "07 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone69/08.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Beyond lies\nthe unknown.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Daily routes and procedural depths. Keep discovering something new.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/iphone/play/04-deep-time.jpg",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "08 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/01.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Your route becomes\nyour echo.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Collect the sparks. Find the exit. Your past is already following.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/iphone/play/01-gameplay.jpg",
+        "x": 187.7216260219535,
+        "y": 658.6610878661088,
+        "w": 908.5567479560931,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "01 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/02.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "11 regions.\nOne Fold Road.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "77 maps through damaged stations. Bring a new record to the Lighthouse.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/phone65/atlas.png",
+        "x": 185.79497907949798,
+        "y": 658.6610878661088,
+        "w": 912.4100418410042,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "02 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/03.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "A whole world\non your wrist.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "36 rooms on Apple Watch. Turn the Crown back to change your route.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/en/01-wrist-run.png",
+        "x": 136.18181818181824,
+        "y": 820.7793837961202,
+        "w": 1011.6363636363635,
+        "h": 1206.181818181818,
+        "radius": 68.0909090909091
+      },
+      {
+        "text": "Play on your Watch\nCrown to rewind · touch to steer",
+        "x": 97.27272727272728,
+        "y": 2227.824267782427,
+        "w": 1089.4545454545455,
+        "h": 280.89958158995813,
+        "size": 45.52510460251046,
+        "color": "EDC675",
+        "bold": true
+      },
+      {
+        "text": "03 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/04.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "iPhone is the screen.\nWatch is the controller.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Launch ECHO on iPhone and choose the remote on your Watch.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/remote-phone.png",
+        "x": 187.7216260219535,
+        "y": 658.6610878661088,
+        "w": 908.5567479560931,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/en/05-remote.png",
+        "x": 616.3199999999999,
+        "y": 1842.5076923076924,
+        "w": 590.64,
+        "h": 704.2246153846154,
+        "radius": 43.77272727272727
+      },
+      {
+        "text": "04 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/05.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Find meaning,\nfragment by fragment.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Epictetus, Camus and science notes. Recover the Archive as you play.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/phone65/archive.png",
+        "x": 185.79497907949798,
+        "y": 658.6610878661088,
+        "w": 912.4100418410042,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "05 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/06.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Keep what\nyou have learned.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Calibrate the Signal’s tools. Your research survives each attempt.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/phone65/research.png",
+        "x": 185.79497907949798,
+        "y": 658.6610878661088,
+        "w": 912.4100418410042,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "06 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/07.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Prepare for\na different route.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Choose your abilities. The next turn is yours to make.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/phone65/loadout.png",
+        "x": 185.79497907949798,
+        "y": 658.6610878661088,
+        "w": 912.4100418410042,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "07 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/phone65/08.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Beyond lies\nthe unknown.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Daily routes and procedural depths. Keep discovering something new.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/iphone/play/04-deep-time.jpg",
+        "x": 187.7216260219535,
+        "y": 658.6610878661088,
+        "w": 908.5567479560931,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "08 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/01.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Your route becomes\nyour echo.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Collect the sparks. Find the exit. Your past is already following.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/ipad/01-gameplay.jpg",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "01 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/02.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "11 regions.\nOne Fold Road.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "77 maps through damaged stations. Bring a new record to the Lighthouse.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/ipad/atlas.png",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "02 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/03.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "A whole world\non your wrist.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "36 rooms on Apple Watch. Turn the Crown back to change your route.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/en/01-wrist-run.png",
+        "x": 460.60125073109293,
+        "y": 729.2608089260808,
+        "w": 1142.7974985378141,
+        "h": 1362.5662482566247,
+        "radius": 109.45454545454545
+      },
+      {
+        "text": "Play on your Watch\nCrown to rewind · touch to steer",
+        "x": 156.36363636363637,
+        "y": 2206.97350069735,
+        "w": 1751.2727272727273,
+        "h": 278.27057182705715,
+        "size": 45.09902370990237,
+        "color": "EDC675",
+        "bold": true
+      },
+      {
+        "text": "03 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/04.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "iPhone is the screen.\nWatch is the controller.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Launch ECHO on iPhone and choose the remote on your Watch.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/remote-phone.png",
+        "x": 581.9733314659525,
+        "y": 652.4965132496513,
+        "w": 900.0533370680952,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/en/05-remote.png",
+        "x": 1142.301935483871,
+        "y": 1788.8,
+        "w": 646.2761290322582,
+        "h": 770.5600000000001,
+        "radius": 70.36363636363637
+      },
+      {
+        "text": "04 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/05.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Find meaning,\nfragment by fragment.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Epictetus, Camus and science notes. Recover the Archive as you play.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/ipad/archive.png",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "05 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/06.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Keep what\nyou have learned.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Calibrate the Signal’s tools. Your research survives each attempt.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/ipad/research.png",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "06 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/07.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Prepare for\na different route.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Choose your abilities. The next turn is yours to make.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/ipad/loadout.png",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "07 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/ipad/08.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Beyond lies\nthe unknown.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Daily routes and procedural depths. Keep discovering something new.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/ipad/03-deep-time.jpg",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "08 / 08   ·   MEMORY · CHOICE · CONSEQUENCES",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/01.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Твой маршрут\nстановится эхом.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Собери искры. Найди выход. Прошлое уже идёт по твоему следу.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/ru/iphone/play/01-gameplay.jpg",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "01 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/02.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "11 регионов.\nОдна Дорога.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "77 карт через повреждённые станции. Унеси к Маяку новую запись.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/phone69/atlas.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "02 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/03.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Целый мир\nна запястье.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "36 комнат на Apple Watch. Поверни колёсико — исправь маршрут.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/ru/01-wrist-run.png",
+        "x": 140.0,
+        "y": 850.0,
+        "w": 1040.0,
+        "h": 1240.0,
+        "radius": 70.0
+      },
+      {
+        "text": "Играй на часах\nКолёсико — откат · касание — маршрут",
+        "x": 100.0,
+        "y": 2300.0,
+        "w": 1120.0,
+        "h": 290.0,
+        "size": 47.0,
+        "color": "EDC675",
+        "bold": true
+      },
+      {
+        "text": "03 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/04.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "iPhone — экран.\nЧасы — пульт.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Запусти ECHO на iPhone и выбери пульт на часах.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/remote-phone.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/ru/05-remote.png",
+        "x": 633.6,
+        "y": 1903.7353846153846,
+        "w": 607.2,
+        "h": 723.9692307692309,
+        "radius": 45.0
+      },
+      {
+        "text": "04 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/05.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Собирай смысл\nпо крупицам.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Эпиктет, Камю и научные заметки. Архив открывается по мере пути.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/phone69/archive.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "05 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/06.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Знание остаётся\nс тобой.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Настраивай инструменты Сигнала. Исследования переживают попытку.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/phone69/research.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "06 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/07.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Подготовься\nк новому пути.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Выбери способности. Следующий маршрут построишь сам.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/phone69/loadout.png",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "07 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1320,
+    "height": 2868,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone69/08.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1320,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 100.0,
+        "y": 65.0,
+        "w": 1120.0,
+        "h": 90.0,
+        "size": 45.0,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Дальше —\nнеизвестность.",
+        "x": 100.0,
+        "y": 190.0,
+        "w": 1120.0,
+        "h": 270.0,
+        "size": 91.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Ежедневный маршрут и процедурные глубины. Продолжай открывать новое.",
+        "x": 100.0,
+        "y": 465.0,
+        "w": 1120.0,
+        "h": 170.0,
+        "size": 40.0,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/ru/iphone/play/04-deep-time.jpg",
+        "x": 191.0041841004184,
+        "y": 679.9999999999999,
+        "w": 937.9916317991632,
+        "h": 2038.0000000000002,
+        "radius": 24
+      },
+      {
+        "text": "08 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 100.0,
+        "y": 2773.0,
+        "w": 1120.0,
+        "h": 60.0,
+        "size": 26.0,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/01.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Твой маршрут\nстановится эхом.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Собери искры. Найди выход. Прошлое уже идёт по твоему следу.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/ru/iphone/play/01-gameplay.jpg",
+        "x": 187.7216260219535,
+        "y": 658.6610878661088,
+        "w": 908.5567479560931,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "01 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/02.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "11 регионов.\nОдна Дорога.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "77 карт через повреждённые станции. Унеси к Маяку новую запись.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/phone65/atlas.png",
+        "x": 185.79497907949798,
+        "y": 658.6610878661088,
+        "w": 912.4100418410042,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "02 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/03.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Целый мир\nна запястье.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "36 комнат на Apple Watch. Поверни колёсико — исправь маршрут.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/ru/01-wrist-run.png",
+        "x": 136.18181818181824,
+        "y": 820.7793837961202,
+        "w": 1011.6363636363635,
+        "h": 1206.181818181818,
+        "radius": 68.0909090909091
+      },
+      {
+        "text": "Играй на часах\nКолёсико — откат · касание — маршрут",
+        "x": 97.27272727272728,
+        "y": 2227.824267782427,
+        "w": 1089.4545454545455,
+        "h": 280.89958158995813,
+        "size": 45.52510460251046,
+        "color": "EDC675",
+        "bold": true
+      },
+      {
+        "text": "03 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/04.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "iPhone — экран.\nЧасы — пульт.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Запусти ECHO на iPhone и выбери пульт на часах.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/remote-phone.png",
+        "x": 187.7216260219535,
+        "y": 658.6610878661088,
+        "w": 908.5567479560931,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/ru/05-remote.png",
+        "x": 616.3199999999999,
+        "y": 1842.5076923076924,
+        "w": 590.64,
+        "h": 704.2246153846154,
+        "radius": 43.77272727272727
+      },
+      {
+        "text": "04 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/05.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Собирай смысл\nпо крупицам.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Эпиктет, Камю и научные заметки. Архив открывается по мере пути.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/phone65/archive.png",
+        "x": 185.79497907949798,
+        "y": 658.6610878661088,
+        "w": 912.4100418410042,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "05 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/06.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Знание остаётся\nс тобой.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Настраивай инструменты Сигнала. Исследования переживают попытку.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/phone65/research.png",
+        "x": 185.79497907949798,
+        "y": 658.6610878661088,
+        "w": 912.4100418410042,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "06 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/07.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Подготовься\nк новому пути.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Выбери способности. Следующий маршрут построишь сам.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/phone65/loadout.png",
+        "x": 185.79497907949798,
+        "y": 658.6610878661088,
+        "w": 912.4100418410042,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "07 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1284,
+    "height": 2778,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/phone65/08.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1284,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 97.27272727272728,
+        "y": 62.96025104602511,
+        "w": 1089.4545454545455,
+        "h": 87.17573221757323,
+        "size": 43.58786610878661,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Дальше —\nнеизвестность.",
+        "x": 97.27272727272728,
+        "y": 184.03765690376568,
+        "w": 1089.4545454545455,
+        "h": 261.5271966527197,
+        "size": 88.14435146443515,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Ежедневный маршрут и процедурные глубины. Продолжай открывать новое.",
+        "x": 97.27272727272728,
+        "y": 450.407949790795,
+        "w": 1089.4545454545455,
+        "h": 164.6652719665272,
+        "size": 38.74476987447699,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/ru/iphone/play/04-deep-time.jpg",
+        "x": 187.7216260219535,
+        "y": 658.6610878661088,
+        "w": 908.5567479560931,
+        "h": 1974.0460251046024,
+        "radius": 24
+      },
+      {
+        "text": "08 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 97.27272727272728,
+        "y": 2685.9811715481173,
+        "w": 1089.4545454545455,
+        "h": 58.11715481171548,
+        "size": 25.184100418410043,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/01.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Твой маршрут\nстановится эхом.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Собери искры. Найди выход. Прошлое уже идёт по твоему следу.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/ru/ipad/01-gameplay.jpg",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "01 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/02.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "11 регионов.\nОдна Дорога.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "77 карт через повреждённые станции. Унеси к Маяку новую запись.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/ipad/atlas.png",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "02 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/03.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Целый мир\nна запястье.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "36 комнат на Apple Watch. Поверни колёсико — исправь маршрут.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/ru/01-wrist-run.png",
+        "x": 460.60125073109293,
+        "y": 729.2608089260808,
+        "w": 1142.7974985378141,
+        "h": 1362.5662482566247,
+        "radius": 109.45454545454545
+      },
+      {
+        "text": "Играй на часах\nКолёсико — откат · касание — маршрут",
+        "x": 156.36363636363637,
+        "y": 2206.97350069735,
+        "w": 1751.2727272727273,
+        "h": 278.27057182705715,
+        "size": 45.09902370990237,
+        "color": "EDC675",
+        "bold": true
+      },
+      {
+        "text": "03 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/04.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "iPhone — экран.\nЧасы — пульт.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Запусти ECHO на iPhone и выбери пульт на часах.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/remote-phone.png",
+        "x": 581.9733314659525,
+        "y": 652.4965132496513,
+        "w": 900.0533370680952,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/watch/ru/05-remote.png",
+        "x": 1142.301935483871,
+        "y": 1788.8,
+        "w": 646.2761290322582,
+        "h": 770.5600000000001,
+        "radius": 70.36363636363637
+      },
+      {
+        "text": "04 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/05.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Собирай смысл\nпо крупицам.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Эпиктет, Камю и научные заметки. Архив открывается по мере пути.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/ipad/archive.png",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "05 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/06.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Знание остаётся\nс тобой.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Настраивай инструменты Сигнала. Исследования переживают попытку.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/ipad/research.png",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "06 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/07.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Подготовься\nк новому пути.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Выбери способности. Следующий маршрут построишь сам.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/ipad/loadout.png",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "07 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 2064,
+    "height": 2752,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/ipad/08.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2064,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 156.36363636363637,
+        "y": 62.37099023709902,
+        "w": 1751.2727272727273,
+        "h": 86.35983263598325,
+        "size": 43.179916317991626,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Дальше —\nнеизвестность.",
+        "x": 156.36363636363637,
+        "y": 182.3152022315202,
+        "w": 1751.2727272727273,
+        "h": 259.07949790794976,
+        "size": 87.31938633193863,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Ежедневный маршрут и процедурные глубины. Продолжай открывать новое.",
+        "x": 156.36363636363637,
+        "y": 446.1924686192468,
+        "w": 1751.2727272727273,
+        "h": 163.12412831241284,
+        "size": 38.382147838214784,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/ru/ipad/03-deep-time.jpg",
+        "x": 298.6610878661087,
+        "y": 652.4965132496513,
+        "w": 1466.6778242677826,
+        "h": 1955.5704323570433,
+        "radius": 24
+      },
+      {
+        "text": "08 / 08   ·   ПАМЯТЬ · ВЫБОР · ПОСЛЕДСТВИЯ",
+        "x": 156.36363636363637,
+        "y": 2660.84239888424,
+        "w": 1751.2727272727273,
+        "h": 57.57322175732217,
+        "size": 24.94839609483961,
+        "color": "8199B9",
+        "bold": false
+      }
+    ]
+  },
+  {
+    "width": 1398,
+    "height": 2034,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/duo/duo-outer-research.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1398,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 80,
+        "y": 55,
+        "w": 1238,
+        "h": 90,
+        "size": 28.368200836820083,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Keep what\nyou have learned.",
+        "x": 80,
+        "y": 113.47280334728033,
+        "w": 1238,
+        "h": 191.48535564853557,
+        "size": 64.5376569037657,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Calibrate the Signal’s tools. Your research survives each attempt.",
+        "x": 80,
+        "y": 312.0502092050209,
+        "w": 1238,
+        "h": 120.56485355648536,
+        "size": 28.368200836820083,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/duo-outer/research.png",
+        "x": 180.3556485355649,
+        "y": 453.89121338912133,
+        "w": 1037.2887029288702,
+        "h": 1509.1882845188284,
+        "radius": 28
+      }
+    ]
+  },
+  {
+    "width": 1398,
+    "height": 2034,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/duo/duo-outer-loadout.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1398,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 80,
+        "y": 55,
+        "w": 1238,
+        "h": 90,
+        "size": 28.368200836820083,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Prepare for\na different route.",
+        "x": 80,
+        "y": 113.47280334728033,
+        "w": 1238,
+        "h": 191.48535564853557,
+        "size": 64.5376569037657,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Choose your abilities. The next turn is yours to make.",
+        "x": 80,
+        "y": 312.0502092050209,
+        "w": 1238,
+        "h": 120.56485355648536,
+        "size": 28.368200836820083,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/duo-outer/loadout.png",
+        "x": 180.3556485355649,
+        "y": 453.89121338912133,
+        "w": 1037.2887029288702,
+        "h": 1509.1882845188284,
+        "radius": 28
+      }
+    ]
+  },
+  {
+    "width": 2007,
+    "height": 2853,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/duo/duo-inner-research.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2007,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 80,
+        "y": 55,
+        "w": 1847,
+        "h": 90,
+        "size": 39.79079497907949,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Keep what\nyou have learned.",
+        "x": 80,
+        "y": 159.16317991631797,
+        "w": 1847,
+        "h": 268.5878661087866,
+        "size": 90.52405857740585,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Calibrate the Signal’s tools. Your research survives each attempt.",
+        "x": 80,
+        "y": 437.69874476987445,
+        "w": 1847,
+        "h": 169.11087866108787,
+        "size": 39.79079497907949,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/duo-inner/research.png",
+        "x": 258.9225941422593,
+        "y": 636.6527196652719,
+        "w": 1489.1548117154814,
+        "h": 2116.8702928870293,
+        "radius": 28
+      }
+    ]
+  },
+  {
+    "width": 2007,
+    "height": 2853,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/en/duo/duo-inner-loadout.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2007,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 80,
+        "y": 55,
+        "w": 1847,
+        "h": 90,
+        "size": 39.79079497907949,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Prepare for\na different route.",
+        "x": 80,
+        "y": 159.16317991631797,
+        "w": 1847,
+        "h": 268.5878661087866,
+        "size": 90.52405857740585,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Choose your abilities. The next turn is yours to make.",
+        "x": 80,
+        "y": 437.69874476987445,
+        "w": 1847,
+        "h": 169.11087866108787,
+        "size": 39.79079497907949,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/en/duo-inner/loadout.png",
+        "x": 258.9225941422593,
+        "y": 636.6527196652719,
+        "w": 1489.1548117154814,
+        "h": 2116.8702928870293,
+        "radius": 28
+      }
+    ]
+  },
+  {
+    "width": 1398,
+    "height": 2034,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/duo/duo-outer-research.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1398,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 80,
+        "y": 55,
+        "w": 1238,
+        "h": 90,
+        "size": 28.368200836820083,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Знание остаётся\nс тобой.",
+        "x": 80,
+        "y": 113.47280334728033,
+        "w": 1238,
+        "h": 191.48535564853557,
+        "size": 64.5376569037657,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Настраивай инструменты Сигнала. Исследования переживают попытку.",
+        "x": 80,
+        "y": 312.0502092050209,
+        "w": 1238,
+        "h": 120.56485355648536,
+        "size": 28.368200836820083,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/duo-outer/research.png",
+        "x": 180.3556485355649,
+        "y": 453.89121338912133,
+        "w": 1037.2887029288702,
+        "h": 1509.1882845188284,
+        "radius": 28
+      }
+    ]
+  },
+  {
+    "width": 1398,
+    "height": 2034,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/duo/duo-outer-loadout.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1398,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 80,
+        "y": 55,
+        "w": 1238,
+        "h": 90,
+        "size": 28.368200836820083,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Подготовься\nк новому пути.",
+        "x": 80,
+        "y": 113.47280334728033,
+        "w": 1238,
+        "h": 191.48535564853557,
+        "size": 64.5376569037657,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Выбери способности. Следующий маршрут построишь сам.",
+        "x": 80,
+        "y": 312.0502092050209,
+        "w": 1238,
+        "h": 120.56485355648536,
+        "size": 28.368200836820083,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/duo-outer/loadout.png",
+        "x": 180.3556485355649,
+        "y": 453.89121338912133,
+        "w": 1037.2887029288702,
+        "h": 1509.1882845188284,
+        "radius": 28
+      }
+    ]
+  },
+  {
+    "width": 2007,
+    "height": 2853,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/duo/duo-inner-research.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2007,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 80,
+        "y": 55,
+        "w": 1847,
+        "h": 90,
+        "size": 39.79079497907949,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Знание остаётся\nс тобой.",
+        "x": 80,
+        "y": 159.16317991631797,
+        "w": 1847,
+        "h": 268.5878661087866,
+        "size": 90.52405857740585,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Настраивай инструменты Сигнала. Исследования переживают попытку.",
+        "x": 80,
+        "y": 437.69874476987445,
+        "w": 1847,
+        "h": 169.11087866108787,
+        "size": 39.79079497907949,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/duo-inner/research.png",
+        "x": 258.9225941422593,
+        "y": 636.6527196652719,
+        "w": 1489.1548117154814,
+        "h": 2116.8702928870293,
+        "radius": 28
+      }
+    ]
+  },
+  {
+    "width": 2007,
+    "height": 2853,
+    "background": "061020",
+    "output": "docs/app-store/marketing-1.1.0/ru/duo/duo-inner-loadout.png",
+    "items": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 2007,
+        "h": 12,
+        "fill": "64E2F5"
+      },
+      {
+        "text": "E C H O",
+        "x": 80,
+        "y": 55,
+        "w": 1847,
+        "h": 90,
+        "size": 39.79079497907949,
+        "color": "64E2F5",
+        "bold": true
+      },
+      {
+        "text": "Подготовься\nк новому пути.",
+        "x": 80,
+        "y": 159.16317991631797,
+        "w": 1847,
+        "h": 268.5878661087866,
+        "size": 90.52405857740585,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Выбери способности. Следующий маршрут построишь сам.",
+        "x": 80,
+        "y": 437.69874476987445,
+        "w": 1847,
+        "h": 169.11087866108787,
+        "size": 39.79079497907949,
+        "color": "B2C3D9",
+        "bold": false
+      },
+      {
+        "image": "docs/app-store/captures-1.1.0/ru/duo-inner/loadout.png",
+        "x": 258.9225941422593,
+        "y": 636.6527196652719,
+        "w": 1489.1548117154814,
+        "h": 2116.8702928870293,
+        "radius": 28
+      }
+    ]
+  }
+]

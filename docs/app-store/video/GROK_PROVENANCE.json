@@ -1,0 +1,20 @@
+{
+  "provider": "Grok website",
+  "conversation": "https://grok.com/c/fa986a63-38c5-4948-85f0-e9ed2d895e03",
+  "date": "2026-10-29",
+  "source": "echo-gameplay-grok-source.mp4",
+  "output": "echo-grok-cinematic.mp4",
+  "purpose": "Owner-requested artistic teaser based on actual gameplay",
+  "isAppStoreGameplayPreview": false,
+  "paidUpgradeOrPurchase": false,
+  "durationSeconds": 9.5,
+  "dimensions": "720x1280",
+  "fps": 30,
+  "codec": "H.264",
+  "localizedOutputs": [
+    "echo-teaser-en.mp4",
+    "echo-teaser-ru.mp4"
+  ],
+  "visualQA": "Five-frame contact sheet + Russian caption frame inspected",
+  "appStorePreview": "Kept separate; not submitted as authentic gameplay"
+}

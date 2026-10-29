@@ -1,0 +1,290 @@
+[
+  {
+    "width": 3840,
+    "height": 1646,
+    "background": "061020",
+    "items": [
+      {
+        "image": "docs/app-store/creative/2026-10-29/key-art-source.png",
+        "x": 0,
+        "y": -457.0,
+        "w": 3840,
+        "h": 2560.0
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1382.3999999999999,
+        "h": 1646,
+        "fill": "061020"
+      },
+      {
+        "text": "E C H O",
+        "x": 288.0,
+        "y": 263.36,
+        "w": 1689.6,
+        "h": 197.51999999999998,
+        "size": 140.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "SURVIVE YOUR PAST",
+        "x": 299.52,
+        "y": 477.34,
+        "w": 2112.0,
+        "h": 115.22000000000001,
+        "size": 40.0,
+        "color": "62DDF6",
+        "bold": true
+      },
+      {
+        "text": "Memory keeps the past.\nYou choose the next turn.",
+        "x": 299.52,
+        "y": 707.78,
+        "w": 2035.2,
+        "h": 362.12,
+        "size": 70.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "A journey through choice, consequence and science.",
+        "x": 299.52,
+        "y": 1135.74,
+        "w": 1958.4,
+        "h": 197.51999999999998,
+        "size": 37.0,
+        "color": "C2CEDF",
+        "bold": false
+      },
+      {
+        "text": "iPhone  ·  iPad  ·  Apple Watch",
+        "x": 299.52,
+        "y": 1432.02,
+        "w": 2304.0,
+        "h": 115.22000000000001,
+        "size": 33.0,
+        "color": "D4B679",
+        "bold": false
+      }
+    ],
+    "output": "docs/app-store/creative/2026-10-29/header-en.png"
+  },
+  {
+    "width": 2880,
+    "height": 1920,
+    "background": "061020",
+    "items": [
+      {
+        "image": "docs/app-store/creative/2026-10-29/key-art-source.png",
+        "x": 0,
+        "y": 0.0,
+        "w": 2880,
+        "h": 1920.0
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1036.8,
+        "h": 1920,
+        "fill": "061020"
+      },
+      {
+        "text": "E C H O",
+        "x": 216.0,
+        "y": 307.2,
+        "w": 1267.2,
+        "h": 230.39999999999998,
+        "size": 105.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "SURVIVE YOUR PAST",
+        "x": 224.64,
+        "y": 556.8,
+        "w": 1584.0000000000002,
+        "h": 134.4,
+        "size": 30.0,
+        "color": "62DDF6",
+        "bold": true
+      },
+      {
+        "text": "Memory keeps the past.\nYou choose the next turn.",
+        "x": 224.64,
+        "y": 825.6,
+        "w": 1526.4,
+        "h": 422.4,
+        "size": 52.5,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "A journey through choice, consequence and science.",
+        "x": 224.64,
+        "y": 1324.8,
+        "w": 1468.8,
+        "h": 230.39999999999998,
+        "size": 27.75,
+        "color": "C2CEDF",
+        "bold": false
+      },
+      {
+        "text": "iPhone  ·  iPad  ·  Apple Watch",
+        "x": 224.64,
+        "y": 1670.4,
+        "w": 1728.0,
+        "h": 134.4,
+        "size": 24.75,
+        "color": "D4B679",
+        "bold": false
+      }
+    ],
+    "output": "docs/app-store/creative/2026-10-29/search-en.png"
+  },
+  {
+    "width": 3840,
+    "height": 1646,
+    "background": "061020",
+    "items": [
+      {
+        "image": "docs/app-store/creative/2026-10-29/key-art-source.png",
+        "x": 0,
+        "y": -457.0,
+        "w": 3840,
+        "h": 2560.0
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1382.3999999999999,
+        "h": 1646,
+        "fill": "061020"
+      },
+      {
+        "text": "E C H O",
+        "x": 288.0,
+        "y": 263.36,
+        "w": 1689.6,
+        "h": 197.51999999999998,
+        "size": 140.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "ПЕРЕЖИВИ ПРОШЛОЕ",
+        "x": 299.52,
+        "y": 477.34,
+        "w": 2112.0,
+        "h": 115.22000000000001,
+        "size": 40.0,
+        "color": "62DDF6",
+        "bold": true
+      },
+      {
+        "text": "Прошлое хранится в памяти.\nСледующий поворот — твой.",
+        "x": 299.52,
+        "y": 707.78,
+        "w": 2035.2,
+        "h": 362.12,
+        "size": 64.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Путь через выбор, последствия и науку.",
+        "x": 299.52,
+        "y": 1135.74,
+        "w": 1958.4,
+        "h": 197.51999999999998,
+        "size": 37.0,
+        "color": "C2CEDF",
+        "bold": false
+      },
+      {
+        "text": "iPhone  ·  iPad  ·  Apple Watch",
+        "x": 299.52,
+        "y": 1432.02,
+        "w": 2304.0,
+        "h": 115.22000000000001,
+        "size": 33.0,
+        "color": "D4B679",
+        "bold": false
+      }
+    ],
+    "output": "docs/app-store/creative/2026-10-29/header-ru.png"
+  },
+  {
+    "width": 2880,
+    "height": 1920,
+    "background": "061020",
+    "items": [
+      {
+        "image": "docs/app-store/creative/2026-10-29/key-art-source.png",
+        "x": 0,
+        "y": 0.0,
+        "w": 2880,
+        "h": 1920.0
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 1036.8,
+        "h": 1920,
+        "fill": "061020"
+      },
+      {
+        "text": "E C H O",
+        "x": 216.0,
+        "y": 307.2,
+        "w": 1267.2,
+        "h": 230.39999999999998,
+        "size": 105.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "ПЕРЕЖИВИ ПРОШЛОЕ",
+        "x": 224.64,
+        "y": 556.8,
+        "w": 1584.0000000000002,
+        "h": 134.4,
+        "size": 30.0,
+        "color": "62DDF6",
+        "bold": true
+      },
+      {
+        "text": "Прошлое хранится в памяти.\nСледующий поворот — твой.",
+        "x": 224.64,
+        "y": 825.6,
+        "w": 1526.4,
+        "h": 422.4,
+        "size": 48.0,
+        "color": "F1F5FA",
+        "bold": true
+      },
+      {
+        "text": "Путь через выбор, последствия и науку.",
+        "x": 224.64,
+        "y": 1324.8,
+        "w": 1468.8,
+        "h": 230.39999999999998,
+        "size": 27.75,
+        "color": "C2CEDF",
+        "bold": false
+      },
+      {
+        "text": "iPhone  ·  iPad  ·  Apple Watch",
+        "x": 224.64,
+        "y": 1670.4,
+        "w": 1728.0,
+        "h": 134.4,
+        "size": 24.75,
+        "color": "D4B679",
+        "bold": false
+      }
+    ],
+    "output": "docs/app-store/creative/2026-10-29/search-ru.png"
+  }
+]
