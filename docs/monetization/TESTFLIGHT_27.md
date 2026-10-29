@@ -50,4 +50,4 @@ python3 scripts/check_monetization_release.py /tmp/echo-testflight-27/Echo.xcarc
 xcodegen --spec project.yml
 ```
 
-Private authentication arguments are omitted. Archive, export and logs are under `/tmp/echo-testflight-27/`. See TESTFLIGHT_27_VERIFICATION.json for hashes and server evidence.
+Changed-file list: CHANGED_FILES_2026-10-29.txt (relative to the original main source). Private authentication arguments are omitted. Archive, export and logs are under `/tmp/echo-testflight-27/`. See TESTFLIGHT_27_VERIFICATION.json for hashes and server evidence.
