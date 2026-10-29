@@ -60,5 +60,8 @@
   "physicalExistingSave27": "PASS",
   "physicalRetainedAdFree27": "PASS local device journal",
   "physicalVisualUI27": "BLOCKED — launch denied as Locked; Device Hub screen sharing requires iOS 27+",
-  "approvalReadBackUTC": "2026-10-29T09:30:46.078796+00:00"
+  "approvalReadBackUTC": "2026-10-29T09:30:46.078796+00:00",
+  "publicRelease": "PASS release request accepted; App Store Connect READY_FOR_SALE",
+  "publicReleaseEvidence": "APP_STORE_RELEASE_27_2026-10-29.json",
+  "publicStorefrontPropagation": "PENDING immediate public US/IL lookup"
 }

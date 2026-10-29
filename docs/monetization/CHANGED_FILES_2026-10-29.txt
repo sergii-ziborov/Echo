@@ -254,6 +254,8 @@ docs/lore/SOURCES.json
 docs/monetization/AD_NETWORK_VERIFICATION.json
 docs/monetization/APP_REVIEW_27_2026-10-29.json
 docs/monetization/APP_REVIEW_27_2026-10-29.md
+docs/monetization/APP_STORE_RELEASE_27_2026-10-29.json
+docs/monetization/APP_STORE_RELEASE_27_2026-10-29.md
 docs/monetization/CABINET_SETUP_2026-10-28.md
 docs/monetization/CABINET_SETUP_VERIFICATION.json
 docs/monetization/CHANGED_FILES.md

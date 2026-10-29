@@ -1,4 +1,6 @@
-> **29 October 2026 — latest candidate:** [1.1.0 (27)](TESTFLIGHT_27.md) is VALID / IN_BETA_TESTING for Keepers, with sourced lore, Russian UI fixes and an updated marketing package. Production remains preFree with live ads off. App Review is COMPLETE: application PENDING_DEVELOPER_RELEASE and first Remove Ads APPROVED; see [the dated submission evidence](APP_REVIEW_27_2026-10-29.md). The dated findings below remain the R1 implementation history.
+> **29 October 2026, 13:01 UTC — release:** owner-authorized manual release accepted; App Store Connect READY_FOR_SALE for 1.1.0 (27). Immediate public US/IL lookup still showed 1.0.0, so propagation was pending. Price/cutover/live ads were not changed. [Evidence](APP_STORE_RELEASE_27_2026-10-29.md).
+
+> **29 October 2026 — latest candidate:** [1.1.0 (27)](TESTFLIGHT_27.md) is VALID / IN_BETA_TESTING for Keepers, with sourced lore, Russian UI fixes and an updated marketing package. Production remains preFree with live ads off. App Review is COMPLETE: application released with READY_FOR_SALE and first Remove Ads APPROVED; see [the dated submission evidence](APP_REVIEW_27_2026-10-29.md). The dated findings below remain the R1 implementation history.
 
 # ECHO R1 — отчёт реализации
 
