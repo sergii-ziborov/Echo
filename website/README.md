@@ -10,7 +10,7 @@ Run `python3 build.py` and `python3 verify.py`, then `python3 -m http.server 417
 
 Change `origin` in `site.json` to the new HTTPS origin, rebuild, and upload all of `dist/` to any static host. Preserve directory URLs with `index.html` resolution. The sitemap and metadata rebuild for the new domain. `.openai/hosting.json` is only needed for the temporary Sites deployment.
 
-The App Store link is fixed to app ID 6811673094. `site.json` defaults to `release_phase: preFree` with the verified paid download price USD 1.99. It does not announce a free release. Change phase only after the owner-approved price transition is observed: freeQuiet/freeLive/adsOff select free copy, zero download price in JSON-LD, restore/legacy FAQ and the EN/RU R1 legal sources. Remove Ads is explained separately from download price. Complete the actual privacy/provider/retention audit before publishing those R1 legal texts. The newer canonical hosted source is maintained separately through Sites. The source includes the current 14 localized pages, transition-beta legal pages and illustrated region Atlas, while retaining the paid public marketing until the separately approved free-price transition.
+ECHO is available on the App Store. The download URL is configured in `site.json` and used by the bilingual purchase links and app metadata. `/press/` and `/ru/press/` provide review contacts, screenshots and a downloadable editorial asset pack. Regional pricing is read in the App Store rather than hardcoded into the website.
 
 ## Content maintenance
 

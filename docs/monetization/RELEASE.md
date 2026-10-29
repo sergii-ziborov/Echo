@@ -1,3 +1,5 @@
+> **29 October update:** the owner now explicitly authorized the free-price transition and live activation after checking the remaining conditions. Zero download price was accepted in all 175 territories at 13:40 UTC; build 27 remains released. Current phase is freeQuiet. See CUTOVER_LEDGER.md. The historical instructions below do not revoke this later authorization. The published version’s advertising age declaration was locked, so 1.1.1 is being prepared with advertising=true; live ads remain disabled until its approval.
+
 # R1 release runbook
 
 This branch implements the owner's free + rare interstitial + one non-consumable contract. **It does not authorize changing the live price or submitting to App Store Review.** The production default is `preFree`; there is no approved acquisition cutoff or permission for live ads. Actual publisher IDs and the signed HTTPS policy endpoint/public key are configured; see the cabinet record.

@@ -1,37 +1,33 @@
 # Privacy Policy — ECHO
 
-Updated: 28 October 2026.
+Updated 29 October 2026. ECHO is free to download. All existing game content is available through normal progression. An optional one-time Remove Ads purchase disables all in-game advertising. Original acquisitions in the protected transition period retain ad-free access. Apple Watch and Watch-controlled sessions have no advertising.
 
-## Current release and beta
+## Local game data
 
-The public App Store 1.0.0 remains the original paid, advertising-free game. The 1.1.0 TestFlight beta prepares a free version with an optional, one-time Remove Ads purchase. This page does not announce a change in the public price. Production advertising stays off until the transition is enabled. Verified StoreKit Sandbox sessions use test advertising.
+Progress, inventory, research, Archive records, settings and local diagnostics stay on the device. ECHO has no custom user account, developer analytics service or gameplay-telemetry backend. Local diagnostic entries contain result classes and limited event references, not routes, Archive answers, Apple IDs or raw signed transactions. Resetting progress does not intentionally clear purchase rights; removing the app may remove its local game data.
 
-## Your game stays on your device
+## Purchases and restoration
 
-ECHO requires no developer account. Campaign progress, research, inventory, Archive records, language and audio settings use local Apple storage. Reset removes game progress separately from purchase evidence and privacy choices. Removing the app may delete local progress. Restoring purchases does not transfer your campaign between iPhone and iPad.
+Apple processes payment under its own terms and privacy policy. ECHO uses StoreKit to verify the original app acquisition and the non-consumable Remove Ads entitlement. Necessary verified purchase evidence is cached locally in device-only Keychain. ECHO does not receive payment-card details or send receipts to a developer server. Restore Purchases checks both the original acquisition and Remove Ads; uncertain ownership suppresses advertising and a second-payment offer. Restoring a purchase does not synchronize game progress between devices.
 
-## Apple purchases
+## Advertising and privacy choices
 
-Apple processes payments. StoreKit verifies original app acquisition and Remove Ads transactions. ECHO stores minimal verification references and their source locally in device-only Keychain; it does not receive payment card details or collect your Apple ID. Uncertain purchase status suppresses advertising while it is checked. Original acquisitions in the protected transition period retain advertising-free access without another payment. Purchase or restoration may need an App Store connection; core gameplay works offline.
+Eligible free iPhone/iPad sessions use Google Mobile Ads and Google's User Messaging Platform. Advertising is limited to suitable breaks after successful solo campaign maps. The first five maps, death, Retry, Rewind, meaningful discoveries, region endings, Daily, Deep Time and all Watch sessions are protected. At most two interstitials may start in a rolling 24 hours, with at least three eligible wins and four active solo minutes between opportunities. No banner, app-open or rewarded ad is used. An unavailable ad never blocks gameplay.
 
-## Advertising in the transition beta
+Before requesting an ad, ECHO checks entitlement, the signed release policy, the context and the provider's current permission to request ads. Requests disable personalization and publisher first-party ID, apply child-restricted treatment and limit creative content to General. ECHO does not request ATT permission or access the advertising identifier. These restrictions do not mean that no data is collected.
 
-The SDK-enabled iPhone/iPad beta includes Google Mobile Ads and Google's User Messaging Platform (UMP). Advertising is prepared only after purchase rights, release policy, game context and privacy eligibility permit it. ECHO disables publisher first-party ID and personalization before starting the ad SDK, applies restrictive content/age settings and does not request ATT permission or access IDFA. These choices do not mean the SDK collects no data.
+Google may process approximate location inferred from IP, device-level information, advertising data, interactions, crash data, performance and other diagnostics to deliver and measure advertising, operate consent/privacy features, prevent fraud and improve its service. Device, location, advertising and interaction data may be associated with a device. SDK service diagnostics may be processed without that linkage. We do not add contact information, precise location, photos or philosophical answers to advertising requests. See [Google's SDK disclosures](https://developers.google.com/admob/ios/privacy/data-disclosure) and [Google Privacy Policy](https://policies.google.com/privacy) for the provider's processing and retention; ECHO does not set or promise a separate Google retention period.
 
-When used, Google's SDKs may process IP/network information and approximate location, device information, crash/performance diagnostics, and ad activity or interactions to deliver and measure advertising and manage privacy choices. See [Google's SDK disclosures](https://developers.google.com/admob/ios/privacy/data-disclosure) and [Google Privacy Policy](https://policies.google.com/privacy). ECHO adds no developer analytics SDK or advertising payload to WatchConnectivity.
+Settings → Ads and Purchases provides Privacy Options when required by the provider, Restore Purchases and Report an Inappropriate Ad. Provider-required forms and options follow the applicable SDK result; closing a form is not treated as automatic consent. Buying Remove Ads stops future advertising loads and presentations by ECHO. It does not erase previously transmitted information or unload a running SDK. The privacy-choice path remains available after purchase without requesting a new ad.
 
-The planned free release permits rare interstitials after eligible solo campaign wins and an explicit Next. The first five maps, death, Retry/Rewind, discoveries, region endings, Daily, Deep Time, Watch and watch-controlled attempts remain protected. There are no banners, app-open ads or rewarded continuation in R1. Missing advertisements never block the game.
+## Signed release-policy connection and this website
 
-Remove Ads stops ECHO's future advertising requests and presentations. It does not erase information already processed by a provider or unload a running framework. Privacy options remain available from Settings → Ads and Purchases when required by the provider, including after purchase. A changed privacy choice invalidates prepared advertising.
+ECHO fetches a small signed HTTPS policy from this site's /monetization-policy.json to restrict or disable advertising and protect prior owners. The request contains no account/device identifier or game payload. Missing, invalid or expired policy prevents new live ads. The website has no custom analytics, ad scripts or contact form. Hosting providers may process IP addresses, user agents and technical access/security logs under their policies. Their exact technical-log retention has not been independently verified; we do not claim a made-up deletion period. Contact us for questions about this hosting. This is separate from local gameplay data and Google's SDK processing.
 
-## Release-policy connection
+## Apple services and Watch
 
-Transition builds retrieve a small signed policy from this website over HTTPS. The request contains no device/account identifier or gameplay payload. The hosting provider may process technical access data, such as IP and user agent, under its policies. An unavailable, invalid or expired policy prevents new live advertising; gameplay and purchase rights remain available.
+Optional Game Center ratings and achievements use Apple's service and privacy policy. The developer does not receive your Apple ID or contacts. Progress and remote controls pass between paired devices through WatchConnectivity. Watch contains no advertising SDK or new ad telemetry. Core gameplay works offline; purchases and initial restoration may require the App Store.
 
-## Game Center, Watch and support
+## Reports and contact
 
-Optional Game Center sends ratings and achievement progress to Apple's service under Apple's privacy policy. The developer does not receive your Apple ID or contacts. Watch progress, rewards and remote commands pass between your paired devices. The Watch app contains no advertising SDK.
-
-Bug and ad reports open your mail app. Prepared diagnostics are limited to app/device/OS version or placement, time and an available ad diagnostic reference. They contain no receipt, raw signed transaction, advertising identifier, route history or Archive answers. Nothing is sent until you send the message.
-
-Contact: [sergii.ziborov@gmail.com](mailto:sergii.ziborov@gmail.com).
+Bug and ad reports open the user's mail application. An ad report may include version, placement, UTC time and a limited ad diagnostic reference. No receipt, raw signed transaction, advertising ID, route or Archive answer is attached. Nothing is sent unless you send it. Contact: [sergii.ziborov@gmail.com](mailto:sergii.ziborov@gmail.com).

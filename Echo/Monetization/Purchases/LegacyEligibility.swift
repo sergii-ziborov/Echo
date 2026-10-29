@@ -9,6 +9,9 @@ struct CutoverPolicy: Codable, Equatable, Sendable {
     /// Until this boundary has passed, conflicting/rollout acquisitions remain protected.
     var rolloutUncertaintyEnd: Date
     var paidBuilds: [String]?
+    /// Explicitly protected free builds released during the approved goodwill window.
+    /// Separate from the historical paid-build evidence; old policies decode this as nil.
+    var goodwillBuilds: [String]?
 }
 
 enum LegacyEligibility {
@@ -25,7 +28,9 @@ enum LegacyEligibility {
               acquisition.originalPurchaseDate.timeIntervalSince1970 > 0,
               !acquisition.originalBuild.isEmpty else { return .unresolved }
         if acquisition.originalPurchaseDate <= cutover.legacyEligibilityEnd {
-            return paidBuilds.contains(acquisition.originalBuild) ? .eligible : .unresolved
+            let protectedBuild = paidBuilds.contains(acquisition.originalBuild)
+                || (cutover.goodwillBuilds ?? []).contains(acquisition.originalBuild)
+            return protectedBuild ? .eligible : .unresolved
         }
         if acquisition.originalPurchaseDate <= cutover.rolloutUncertaintyEnd { return .unresolved }
         // Never use a version-only, install-date or local-progress heuristic.

@@ -37,6 +37,36 @@ final class PurchaseTests: XCTestCase {
         XCTAssertEqual(LegacyEligibility.assess(acquisition(offset: 1), policy: policy()), .unresolved)
         XCTAssertEqual(LegacyEligibility.assess(acquisition(offset: 61), policy: policy()), .notEligible)
     }
+    func testExplicitGoodwillFreeBuildDoesNotDependOnBeingHistoricallyPaid() {
+        var protected = policy()
+        protected.cutover?.goodwillBuilds = ["28"]
+        var original = acquisition(); original.originalBuild = "28"
+        XCTAssertEqual(LegacyEligibility.assess(original, policy: protected), .eligible)
+        XCTAssertEqual(LegacyEligibility.assess(original, policy: policy()), .unresolved)
+        original.originalPurchaseDate = date.addingTimeInterval(61)
+        XCTAssertEqual(LegacyEligibility.assess(original, policy: protected), .notEligible)
+        original.environment = .sandbox
+        XCTAssertEqual(LegacyEligibility.assess(original, policy: protected), .notEligible)
+    }
+    func testGoodwillGrantSurvivesLaterRemovalFromPolicy() throws {
+        var protected = policy(); protected.cutover?.goodwillBuilds = ["28"]
+        var original = acquisition(); original.originalBuild = "28"
+        let store = EntitlementStore(cache: MemoryEvidenceCache())
+        try store.resolve(acquisition: original, purchases: [], policy: protected)
+        XCTAssertTrue(store.state.isAdFree)
+        try store.resolve(acquisition: original, purchases: [], policy: policy())
+        guard case .adFreeLegacy = store.state else { return XCTFail("Granted goodwill must remain") }
+    }
+    func testHistoricalCutoverJSONRemainsCompatible() throws {
+        let encoder = JSONEncoder(); encoder.dateEncodingStrategy = .iso8601
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: encoder.encode(policy())) as? [String: Any])
+        var cutover = try XCTUnwrap(object["cutover"] as? [String: Any])
+        cutover.removeValue(forKey: "goodwillBuilds"); object["cutover"] = cutover
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        let restored = try decoder.decode(ReleasePolicy.self, from: JSONSerialization.data(withJSONObject: object))
+        XCTAssertNil(restored.cutover?.goodwillBuilds)
+        XCTAssertEqual(LegacyEligibility.assess(acquisition(), policy: restored), .eligible)
+    }
     func testLegacySurvivesIAPRefundAndNarrowerPolicy() throws {
         let store = EntitlementStore(cache: MemoryEvidenceCache())
         try store.resolve(acquisition: acquisition(), purchases: [], policy: policy())

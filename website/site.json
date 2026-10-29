@@ -3,6 +3,8 @@
   "source_commit": "3952d80e210ab0b07fdfbb34520c094438799aa4",
   "app_store_url": "https://apps.apple.com/us/app/echo-survive-your-past/id6811673094",
   "lore_revision": "2026-10-29",
-  "lore_app_status": "Prepared for 1.1.0; expanded notes available on website",
-  "prepared_app_version": "1.1.0 (27)"
+  "lore_app_status": "Published in 1.1.0 (27)",
+  "prepared_app_version": "1.1.0 (27)",
+  "monetization": "Free download; optional one-time Remove Ads",
+  "download_price": 0
 }
