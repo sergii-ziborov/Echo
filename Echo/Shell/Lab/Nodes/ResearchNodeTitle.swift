@@ -1,38 +1,29 @@
-import SwiftUI
+import UIKit
 
-/// Two balanced lines, each allowed to shrink as a whole. SwiftUI's normal
-/// wrapping can otherwise strand the last letter of a long Russian word.
-struct ResearchNodeTitle: View {
-    let title: String
-
-    private var lines: [String] {
+/// Keep whole words on two balanced lines. Measuring the actual font avoids
+/// UIKit's fallback to splitting the last letter of a long Russian word.
+@MainActor
+enum ResearchNodeTitle {
+    static func layout(_ title: String, width: CGFloat) -> (text: String, fontSize: CGFloat) {
         let words = title.split(whereSeparator: \.isWhitespace).map(String.init)
-        guard words.count > 1 else { return [title] }
-        let split = (1..<words.count).min { a, b in
-            longestLine(at: a, words: words) < longestLine(at: b, words: words)
-        } ?? 1
-        return [words[..<split].joined(separator: " "), words[split...].joined(separator: " ")]
+        let lines: [String]
+        if words.count > 1 {
+            let split = (1..<words.count).min { a, b in
+                longestLine(at: a, words: words) < longestLine(at: b, words: words)
+            } ?? 1
+            lines = [words[..<split].joined(separator: " "), words[split...].joined(separator: " ")]
+        } else {
+            lines = [title]
+        }
+        let font = UIFont.systemFont(ofSize: 10, weight: .semibold)
+        let longest = lines.map { ($0 as NSString).size(withAttributes: [.font: font]).width }.max() ?? 1
+        let fontSize = min(10, max(6.6, 10 * max(1, width - 4) / max(1, longest)))
+        return (lines.joined(separator: "\n"), fontSize)
     }
 
-    private func longestLine(at split: Int, words: [String]) -> Int {
+    private static func longestLine(at split: Int, words: [String]) -> Int {
         max(words[..<split].joined(separator: " ").count,
             words[split...].joined(separator: " ").count)
     }
 
-    var body: some View {
-        let lines = lines
-        VStack(spacing: 0) {
-            ForEach(lines.indices, id: \.self) { index in
-                Text(lines[index])
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.66)
-                    .frame(maxWidth: .infinity)
-            }
-        }
-        .font(.system(size: 10, weight: .semibold))
-        .multilineTextAlignment(.center)
-        .frame(height: 26)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(title)
-    }
 }
