@@ -1,0 +1,54 @@
+{
+  "appID": "6811673094",
+  "version": "1.1.0",
+  "build": 27,
+  "submissionID": "71d3b261-3808-4e35-97a9-2e2cb8d7ce8d",
+  "submissionState": "WAITING_FOR_REVIEW",
+  "submittedDate": "2026-10-29T06:06:10.343Z",
+  "versionState": "WAITING_FOR_REVIEW",
+  "releaseType": "MANUAL",
+  "buildID": "e1970e5e-1646-4cf1-af84-b1d900a0df89",
+  "items": [
+    {
+      "id": "NzFkM2IyNjEtMzgwOC00ZTM1LTk3YTktMmUyY2I4ZDdjZThkfDZ8ODk0MTExMjQy",
+      "state": "READY_FOR_REVIEW",
+      "relationships": {
+        "appStoreVersion": {
+          "data": {
+            "type": "appStoreVersions",
+            "id": "d2b18a31-2b33-49ea-abe9-63ccf94f699f"
+          }
+        },
+        "inAppPurchaseVersion": {
+          "data": null
+        }
+      }
+    },
+    {
+      "id": "NzFkM2IyNjEtMzgwOC00ZTM1LTk3YTktMmUyY2I4ZDdjZThkfDE3fDZjYmY4ZGJhLTk1MzgtNGNjYi05ZTU0LTY5MjQ1MDIyMzRlZQ",
+      "state": "READY_FOR_REVIEW",
+      "relationships": {
+        "appStoreVersion": {
+          "data": null
+        },
+        "inAppPurchaseVersion": {
+          "data": {
+            "type": "inAppPurchaseVersions",
+            "id": "6cbf8dba-9538-4ccb-9e54-6924502234ee"
+          }
+        }
+      }
+    }
+  ],
+  "iapVersionState": "WAITING_FOR_REVIEW",
+  "beta": {
+    "autoNotifyEnabled": true,
+    "internalBuildState": "IN_BETA_TESTING",
+    "externalBuildState": "READY_FOR_BETA_SUBMISSION"
+  },
+  "keepersContainsBuild": true,
+  "productionPhase": "preFree",
+  "liveAds": false,
+  "appPriceChanged": false,
+  "checkedUTC": "2026-10-29T06:32:59.871488+00:00"
+}

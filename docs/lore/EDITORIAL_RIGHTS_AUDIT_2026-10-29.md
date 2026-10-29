@@ -53,3 +53,5 @@ Primary policy sources checked on 29 October 2026:
 - [Grok consumer FAQ — output and commercial use](https://x.ai/legal/faq), [consumer terms](https://x.ai/legal/terms-of-service), [brand guidelines — attribution and endorsement](https://x.ai/legal/brand-guidelines).
 
 No new application code was changed by this review. The remaining paid-to-free, privacy and physical-device release gates in `docs/monetization/` are unaffected; editorial approval does not close them.
+
+Follow-up: the website Atlas now uses eleven original generated region illustrations instead of CSS celestial placeholders. Prompts and source/final hashes are recorded in `docs/website/ATLAS_ILLUSTRATION_*_2026-10-29.json`. Each is labeled an Atlas illustration, not a gameplay screenshot or scientific photograph. The app binary is unchanged.

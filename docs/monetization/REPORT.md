@@ -1,4 +1,4 @@
-> **29 October 2026 — latest candidate:** [1.1.0 (27)](TESTFLIGHT_27.md) is VALID / IN_BETA_TESTING for Keepers, with sourced lore, Russian UI fixes and an updated marketing package. Production remains preFree with live ads off. App Review is prepared but blocked on App Store Connect web authentication/first-IAP submission. The dated findings below remain the R1 implementation history.
+> **29 October 2026 — latest candidate:** [1.1.0 (27)](TESTFLIGHT_27.md) is VALID / IN_BETA_TESTING for Keepers, with sourced lore, Russian UI fixes and an updated marketing package. Production remains preFree with live ads off. App Review and the first Remove Ads IAP were submitted together and are WAITING_FOR_REVIEW; see [the dated submission evidence](APP_REVIEW_27_2026-10-29.md). The dated findings below remain the R1 implementation history.
 
 # ECHO R1 — отчёт реализации
 

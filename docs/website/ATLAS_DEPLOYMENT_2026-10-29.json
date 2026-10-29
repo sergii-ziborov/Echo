@@ -1,0 +1,28 @@
+{
+  "id": "appgdep_6ae2e7fef9bc8191bdef75e6bb5ff4d6",
+  "project_id": "appgprj_6acab88564fc8191a8012e434dabb194",
+  "title": "ECHO — The Fold Road",
+  "version_id": "appgprj_6acab88564fc8191a8012e434dabb194~appgver_7fa82b4cc96481919c77cca09baeeec9",
+  "type": "publish",
+  "status": "succeeded",
+  "url": "https://echo-survive-your-past.serhiiright.chatgpt.site",
+  "has_mcp": false,
+  "screenshot_asset_pointer": null,
+  "provider_deployment_id": "site---6acab88564fc8191a8012e434dabb194",
+  "failure_message": null,
+  "env_set_revision": 0,
+  "updated_at": "2026-10-29T06:30:40.675968+00:00",
+  "siteVersion": 14,
+  "sourceCommit": "4d247e99b3a22edc4801131de4c3f1e1d5892013",
+  "audience": "public (preserved)",
+  "illustrations": 11,
+  "localQA": "55 EN/RU viewport/region checks passed; final spacing and label checks at 375, 768 and default desktop passed",
+  "publicQA": "All 11 same illustration files decoded after network settled in version 13; final version 14 corrects native alt-text canon names and documentation only; final public EN screenshot verified",
+  "qaFiles": [
+    "ATLAS_BROWSER_QA_2026-10-29.json",
+    "ATLAS_PUBLIC_QA_2026-10-29.json"
+  ],
+  "screenshot": "atlas-published-en.png",
+  "appVersion": "1.1.0 (27)",
+  "appBinaryChanged": false
+}

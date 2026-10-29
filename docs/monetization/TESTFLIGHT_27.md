@@ -1,6 +1,6 @@
-# ECHO 1.1.0 (27) — final prepared candidate
+# ECHO 1.1.0 (27) — submitted review candidate
 
-**PASS: VALID, APP_STORE_ELIGIBLE, IN_BETA_TESTING; available to Keepers.** The editable 1.1.0 App Store version references build 27. No App Review submission or public release has occurred: Chrome returns `authResult=FAILED` followed by an empty login page, and the first Remove Ads IAP must be included through App Store Connect’s website.
+**PASS: VALID, APP_STORE_ELIGIBLE, IN_BETA_TESTING; available to Keepers.** **App Review: WAITING_FOR_REVIEW.** ECHO 1.1.0 and its first Remove Ads IAP were submitted together on 29 October 2026. Release remains manual, production preFree/live ads off. [Submission evidence](APP_REVIEW_27_2026-10-29.md).
 
 Application source: `3952d80e210ab0b07fdfbb34520c094438799aa4`. IPA: 41,699,353 bytes, SHA256 `95c875bd311e801cbec3026496fbf999b2bfb1e225246d8715844abd56393814`. Delivery/build: `e1970e5e-1646-4cf1-af84-b1d900a0df89`. Stable Xcode 27.1 (27A9275), iOS SDK 27.1 and watchOS SDK 27.0. Google Mobile Ads 13.11.0 / UMP 3.1.0 are pinned, iOS only. The generated default project was restored to SDK-free configuration after archiving.
 
@@ -18,8 +18,8 @@ Application source: `3952d80e210ab0b07fdfbb34520c094438799aa4`. IPA: 41,699,353 
 | Watch result | PASS visual inspection: title below system clock, Crown hint readable |
 | Physical TestFlight purchase | Build 24 PASS in device journal; cancellation and restore also completed by owner, restore PASS_USER_REPORTED |
 | Original paid-owner reinstall / other device, physical iPad/Watch, regional consent traffic | NOT RUN |
-| First IAP metadata | Review screenshot UPLOAD_COMPLETE; product READY_TO_SUBMIT; fixture provenance explicit |
-| App Review / free-price cutover / live advertising | Review BLOCKED on App Store Connect web authentication; price and live advertising NOT CHANGED |
+| First IAP metadata | Review screenshot COMPLETE; IAP version WAITING_FOR_REVIEW; fixture provenance explicit |
+| App Review / free-price cutover / live advertising | Review PASS: WAITING_FOR_REVIEW; price and live advertising NOT CHANGED |
 
 The initial node-label View implementation failed during native UI tests and was replaced before delivery. Its failed result bundle remains `/tmp/echo-russian27-tests.xcresult`; it is not a passing run. The current source uses an ordinary Text with measured, balanced lines and passed `/tmp/echo-russian27-fixed-tests.xcresult`. An automatic global diagnostic collector was interrupted after the earlier 53 cases had completed; that run finalized successfully with exit 0. Raw system diagnostics are not published.
 

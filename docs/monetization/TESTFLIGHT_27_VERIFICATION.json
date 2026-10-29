@@ -51,7 +51,8 @@
   "physicalPurchase24": "PASS independently corroborated",
   "physicalRestore24": "PASS_USER_REPORTED",
   "legacyReinstall": "NOT RUN",
-  "reviewSubmission": "BLOCKED: Chrome authResult=FAILED/empty login after reload; first non-consumable requires website submission with app version",
+  "reviewSubmission": "PASS: application and first Remove Ads submitted together; WAITING_FOR_REVIEW; release MANUAL",
   "failedTrial": "Earlier node-label View crashed in native UI tests. Replaced with a font-measurement helper and ordinary Text. Current 11-test run passed. Failed trial archive was not uploaded.",
-  "editorialReview": "../lore/EDITORIAL_RIGHTS_AUDIT_2026-10-29.md"
+  "editorialReview": "../lore/EDITORIAL_RIGHTS_AUDIT_2026-10-29.md",
+  "reviewEvidence": "APP_REVIEW_27_2026-10-29.json"
 }

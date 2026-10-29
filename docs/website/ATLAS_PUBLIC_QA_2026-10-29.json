@@ -1,0 +1,90 @@
+[
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-trace",
+    "src": "/assets/regions/trace.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-drift",
+    "src": "/assets/regions/drift.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-fracture",
+    "src": "/assets/regions/fracture.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-debris",
+    "src": "/assets/regions/debris.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-paradox",
+    "src": "/assets/regions/paradox.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-singularity",
+    "src": "/assets/regions/singularity.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-rift",
+    "src": "/assets/regions/rift.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-gravity",
+    "src": "/assets/regions/gravity.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-mirage",
+    "src": "/assets/regions/mirage.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-confection",
+    "src": "/assets/regions/confection.jpg"
+  },
+  {
+    "complete": true,
+    "locale": "en",
+    "naturalWidth": 1536,
+    "overflow": false,
+    "region": "region-eternity",
+    "src": "/assets/regions/eternity.jpg"
+  }
+]
