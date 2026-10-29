@@ -1,6 +1,8 @@
-> **29 October 2026 — latest candidate:** [1.1.0 (27)](TESTFLIGHT_27.md) is VALID / IN_BETA_TESTING for Keepers, with sourced lore, Russian UI fixes and an updated marketing package. Production remains preFree with live ads off. App Review and the first Remove Ads IAP were submitted together and are WAITING_FOR_REVIEW; see [the dated submission evidence](APP_REVIEW_27_2026-10-29.md). The dated findings below remain the R1 implementation history.
+> **29 October 2026 — latest candidate:** [1.1.0 (27)](TESTFLIGHT_27.md) is VALID / IN_BETA_TESTING for Keepers, with sourced lore, Russian UI fixes and an updated marketing package. Production remains preFree with live ads off. App Review is COMPLETE: application PENDING_DEVELOPER_RELEASE and first Remove Ads APPROVED; see [the dated submission evidence](APP_REVIEW_27_2026-10-29.md). The dated findings below remain the R1 implementation history.
 
 # ECHO R1 — отчёт реализации
+
+> **Аппаратная проверка сборки 27, 29 октября:** установленная 1.1.0 (27) подтверждена на iPhone 13 mini / iOS 26.5. Все 16 прежних ключей прогресса и настроек сохранены; прежние записи не удалены и не снижены, прогресс вырос с 4 карт / 11 звёзд до 15 / 42. Инвентарь, исследования, оснащение и язык совпадают с предыдущей копией. Журнал подтверждает `monetization.adFree` и переходы без рекламы. Запуск для визуального прогона отклонён с `Locked`; Device Hub требует iOS 27+ для просмотра экрана. UI-прогон **BLOCKED**, повторная покупка/восстановление **NOT RUN**. Приложение не заменялось и не сбрасывалось. [Датированные доказательства](PHYSICAL_27_VERIFICATION.json). Исторические статусы ниже не заменяют последнюю сводку сборки 27.
 
 > Дополнительная проверка SDK: реальный UMP → официальный тестовый interstitial → отмена готовности, **PASS: 1, 0 failures/skips**, изолированный Simulator. [Доказательства](AD_NETWORK_VERIFICATION.json). Полный список файлов ветки — [CHANGED_FILES.txt](CHANGED_FILES.txt).
 >

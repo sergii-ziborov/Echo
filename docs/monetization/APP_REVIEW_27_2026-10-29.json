@@ -3,15 +3,15 @@
   "version": "1.1.0",
   "build": 27,
   "submissionID": "71d3b261-3808-4e35-97a9-2e2cb8d7ce8d",
-  "submissionState": "WAITING_FOR_REVIEW",
+  "submissionState": "COMPLETE",
   "submittedDate": "2026-10-29T06:06:10.343Z",
-  "versionState": "WAITING_FOR_REVIEW",
+  "versionState": "PENDING_DEVELOPER_RELEASE",
   "releaseType": "MANUAL",
   "buildID": "e1970e5e-1646-4cf1-af84-b1d900a0df89",
   "items": [
     {
       "id": "NzFkM2IyNjEtMzgwOC00ZTM1LTk3YTktMmUyY2I4ZDdjZThkfDZ8ODk0MTExMjQy",
-      "state": "READY_FOR_REVIEW",
+      "state": "APPROVED",
       "relationships": {
         "appStoreVersion": {
           "data": {
@@ -26,7 +26,7 @@
     },
     {
       "id": "NzFkM2IyNjEtMzgwOC00ZTM1LTk3YTktMmUyY2I4ZDdjZThkfDE3fDZjYmY4ZGJhLTk1MzgtNGNjYi05ZTU0LTY5MjQ1MDIyMzRlZQ",
-      "state": "READY_FOR_REVIEW",
+      "state": "APPROVED",
       "relationships": {
         "appStoreVersion": {
           "data": null
@@ -40,7 +40,7 @@
       }
     }
   ],
-  "iapVersionState": "WAITING_FOR_REVIEW",
+  "iapVersionState": "APPROVED",
   "beta": {
     "autoNotifyEnabled": true,
     "internalBuildState": "IN_BETA_TESTING",
@@ -50,5 +50,15 @@
   "productionPhase": "preFree",
   "liveAds": false,
   "appPriceChanged": false,
-  "checkedUTC": "2026-10-29T06:32:59.871488+00:00"
+  "checkedUTC": "2026-10-29T09:28:57.932942+00:00",
+  "submissionHistory": [
+    {
+      "checkedUTC": "2026-10-29T06:32:59.871488+00:00",
+      "submissionState": "WAITING_FOR_REVIEW",
+      "versionState": "WAITING_FOR_REVIEW",
+      "iapVersionState": "WAITING_FOR_REVIEW"
+    }
+  ],
+  "iapProductState": "APPROVED",
+  "approvalReadBackUTC": "2026-10-29T09:30:46.078796+00:00"
 }

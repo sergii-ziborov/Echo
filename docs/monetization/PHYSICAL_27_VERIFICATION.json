@@ -1,0 +1,69 @@
+{
+  "checkedUTC": "2026-10-29T09:29:26.424667+00:00",
+  "device": "iPhone 13 mini",
+  "os": "26.5",
+  "isHardware": true,
+  "installedVersion": "1.1.0",
+  "installedBuild": "27",
+  "installationQuery": "PASS",
+  "appInstalledDeletedOrResetByAgent": false,
+  "purchaseOrRestoreRepeated": false,
+  "backup": {
+    "status": "PASS",
+    "privateOutsideRepository": true,
+    "permissions": "0600",
+    "bytes": 9222,
+    "sha256": "25e499ce782d8d364df7e6d0c1f903e75a72ab71e1d934e985580c9dd42db15f"
+  },
+  "progressComparison": {
+    "status": "PASS",
+    "baseline": "Private post-purchase build-24 snapshot",
+    "priorProtectedKeyCount": 16,
+    "missingPriorProtectedKeys": [],
+    "priorCampaignRecordCount": 4,
+    "currentCampaignRecordCount": 15,
+    "priorStars": 11,
+    "currentStars": 42,
+    "missingPriorCampaignRecords": 0,
+    "decreasedPriorStarRecords": 0,
+    "inventoryUpgradesEquippedAndLanguageUnchanged": true,
+    "allKeysUnchanged": false,
+    "scope": "Existing device save preserved and advanced through normal play; not a reinstall, second-device or full 77-map migration test."
+  },
+  "entitlement": {
+    "status": "PASS",
+    "source": "Copied device diagnostic journal, no raw receipt/JWS exported",
+    "latestResult": "monetization.adFree",
+    "latestUTC": "2026-10-29T06:22:20.335258+00:00",
+    "retainedEntitlementProtectedOpportunities": 9,
+    "retainedTransitionsWithoutAd": 13,
+    "scope": "Ad-free state and protected transitions observed in retained local diagnostics; not an independent network-traffic or fresh StoreKit restore test."
+  },
+  "launch": {
+    "status": "BLOCKED",
+    "domain": "com.apple.dt.CoreDeviceError",
+    "code": 10002,
+    "reason": "SBMainWorkspace denied launch: Locked",
+    "visualRenderProven": false
+  },
+  "screenView": {
+    "status": "BLOCKED",
+    "reason": "Native Device Hub reports iOS 27+ required; device is iOS 26.5. QuickTime Open panel did not respond to semantic/keyboard/coordinate input; no phone image obtained."
+  },
+  "hardwareUITests": "NOT RUN",
+  "legacyReinstall": "NOT RUN",
+  "physicalIPadWatch": "NOT RUN",
+  "pendingRefund": "NOT RUN",
+  "historicalPreparedTestAttempts": {
+    "status": "FAIL_BUILD",
+    "buildCandidate": 25,
+    "resultBundle": "/tmp/echo-physical25-final-tests.xcresult",
+    "reason": "MarketingCaptureTests WritableKeyPath compilation failure in that historical attempt; no physical test case executed; not counted among current simulator passes."
+  },
+  "preservedRelease": {
+    "build": 27,
+    "productionPhase": "preFree",
+    "liveAds": false,
+    "reviewSubmissionUnchanged": true
+  }
+}
