@@ -1,0 +1,55 @@
+{
+  "requestedUTC": "2026-10-29T17:02:35.327163+00:00",
+  "authorization": "Owner explicitly changed the previous timing decision: enable live now, keep normal automatic publication of 28 after review. No background monitoring requested.",
+  "targetPhase": "freeLive",
+  "targetPolicyVersion": 3,
+  "limits": {
+    "cacheMaxAge": 3000,
+    "maxPer24Hours": 2,
+    "minimumActiveSeconds": 240,
+    "minimumEligibleWins": 3
+  },
+  "cutoverUnchanged": true,
+  "iapState": "APPROVED",
+  "released27State": "READY_FOR_SALE",
+  "corrected28State": "WAITING_FOR_REVIEW",
+  "formalAdvertisingDeclarationApproval": "PENDING with version 28; not represented as completed",
+  "audienceReviewBasis": "Existing 9+ non-Kids Game metadata, all-user child-restricted request treatment, General creatives, personalization/publisher first-party ID disabled, no ECHO ATT/IDFA request; App Privacy already published for seven SDK categories",
+  "configurationTests": {
+    "checks": 38,
+    "liveAdRequested": false,
+    "phase": "freeLive",
+    "policyVersion": 3,
+    "result": "PASS",
+    "scope": "Domain fixtures, not StoreKit transactions or SDK impressions",
+    "source": "Actual Swift policy, eligibility, budget and entitlement model definitions; exact signed envelope; shipped build-27 public key"
+  },
+  "actualProductionImpression": "NOT RUN \u2014 no live ad requested/clicked by the agent",
+  "deploymentID": "appgdep_6ae37d726f7c8191a78beb97c96cbc06",
+  "siteVersion": 16,
+  "sourceCommit": "6bfc93284282cc596b5c9626068b7fab144931dd",
+  "savedVersionID": "appgprj_6acab88564fc8191a8012e434dabb194~appgver_fdc00df8aa248191a08e67dcf3787d39",
+  "deploymentStatus": "succeeded",
+  "policyURL": "https://echo-survive-your-past.serhiiright.chatgpt.site/monetization-policy.json",
+  "httpStatus": 200,
+  "servedCheckedUTC": "2026-10-29T17:09:35.201435+00:00",
+  "deployedConfigurationTests": {
+    "checks": 38,
+    "liveAdRequested": false,
+    "phase": "freeLive",
+    "policyVersion": 3,
+    "result": "PASS",
+    "scope": "Domain fixtures, not StoreKit transactions or SDK impressions",
+    "source": "Actual Swift policy, eligibility, budget and entitlement model definitions; exact signed envelope; shipped build-27 public key"
+  },
+  "liveAdsEnabled": true,
+  "actualPhase": "freeLive",
+  "actualPolicyVersion": 3,
+  "reviewNotesUpdate": {
+    "checkedUTC": "2026-10-29T17:09:39.375251+00:00",
+    "result": "PASS",
+    "noteChars": 3417,
+    "reviewState": "WAITING_FOR_REVIEW",
+    "versionNotWithdrawn": true
+  }
+}

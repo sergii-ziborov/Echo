@@ -274,6 +274,9 @@ docs/monetization/FREE_PRICE_2026-10-29.json
 docs/monetization/FREE_PUBLIC_STOREFRONTS_2026-10-29.json
 docs/monetization/FREE_QUIET_DEPLOYMENT_2026-10-29.json
 docs/monetization/FREE_TRANSITION_2026-10-29.md
+docs/monetization/LIVE_ACTIVATION_2026-10-29.json
+docs/monetization/LIVE_ACTIVATION_2026-10-29.md
+docs/monetization/LIVE_POLICY_CHECKS_2026-10-29.json
 docs/monetization/PHYSICAL_24_VERIFICATION.json
 docs/monetization/PHYSICAL_27_VERIFICATION.json
 docs/monetization/PRIVACY_AUDIT.md

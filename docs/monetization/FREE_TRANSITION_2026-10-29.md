@@ -1,3 +1,5 @@
+> **Latest owner instruction, 29 October 2026:** live policy v3 is now published and independently verified; 38 domain checks PASS. This supersedes the earlier manual-after-review hold. Approved 27 remains published; corrected 28 is still WAITING_FOR_REVIEW and was not cancelled. Review Notes were updated to disclose activation now. Rights, 48-hour protected acquisition window and ad limits are unchanged. [Activation evidence](LIVE_ACTIVATION_2026-10-29.md).
+
 # ECHO free transition — 29 October 2026
 
 **Download price: zero in all 175 configured territories. Approved 1.1.0 (27) remains released. Production advertising: OFF, signed freeQuiet v2. Corrected 1.1.1 (28): WAITING_FOR_REVIEW, available in Keepers TestFlight.**

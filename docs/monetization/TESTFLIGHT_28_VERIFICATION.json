@@ -33,12 +33,15 @@
   "keepersContainsBuild": true,
   "priorApproved27NotWithdrawn": true,
   "processing": "VALID",
-  "followUp": "MANUAL after review per owner; no automation and no live-policy publication",
+  "followUp": "Owner subsequently authorized immediate live policy v3; review and automatic after-approval app release remain unchanged; no background automation",
   "marketing": {
     "screenshots": 64,
     "previews": 2,
     "headerAssets": 2,
     "searchAssets": 2,
     "readBack": "PASS active placements cloned from approved 27"
-  }
+  },
+  "currentProductionPhase": "freeLive",
+  "currentLiveAdsEnabled": true,
+  "activationEvidence": "LIVE_ACTIVATION_2026-10-29.json"
 }

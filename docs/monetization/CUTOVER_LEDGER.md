@@ -1,6 +1,8 @@
+> **Latest owner instruction, 29 October 2026:** live policy v3 is now published and independently verified; 38 domain checks PASS. This supersedes the earlier manual-after-review hold. Approved 27 remains published; corrected 28 is still WAITING_FOR_REVIEW and was not cancelled. Review Notes were updated to disclose activation now. Rights, 48-hour protected acquisition window and ad limits are unchanged. [Activation evidence](LIVE_ACTIVATION_2026-10-29.md).
+
 # ECHO paid-to-free acquisition ledger
 
-Status: **AUTHORIZED AND APPLIED — freeQuiet rollout**. Updated 29 October 2026.
+Status: **AUTHORIZED AND APPLIED — freeLive rollout**. Updated 29 October 2026.
 
 The owner explicitly requested completing the free + rare ads + one-time Remove Ads transition, and reported that there had been no paid customers. That sales statement is **OWNER_REPORTED**, not independently established by a sales-report export. Protection is retained regardless.
 
@@ -19,8 +21,8 @@ The owner explicitly requested completing the free + rare ads + one-time Remove 
 | Goodwill decision | Explicitly overgrant ad-free access to valid acquisitions of protected builds during 48 hours after the actual price-change request. This is a conservative implementation choice under the owner's instruction to preserve prior access, not proof of payment |
 | Protected free build | 28, prepared 1.1.1, uses the separate `goodwillBuilds` field; it is not misreported as historically paid |
 | Policy ID | echo-free-2026-10-29-v1 |
-| Signed policy | v2 freeQuiet: purchases/legacy resolution enabled, no production ad requests; signature verified against the public key compiled into build 27 |
-| Ads activation | Pending approval of the corrected advertising age declaration in 1.1.1 and the live-policy rollout; no false live claim |
+| Signed policy | v3 freeLive: enabled under entitlement/privacy/context/cadence rules; signature verified against the public key compiled into build 27. Earlier v2 was freeQuiet |
+| Ads activation | Live v3 published 29 October on the owner’s updated immediate instruction; corrected 1.1.1 advertising declaration remains in review and is not claimed approved |
 
 Before the boundary, matching production acquisitions receive retained legacy evidence. Unknown/conflicting builds stay unresolved and ad-free. Sandbox/Xcode dates never generate production legacy. After the boundary, verified new free acquisitions without IAP are eligible only under all ad-policy rules; protected early acquisitions stay ad-free permanently. No local install date or current clock is substituted for StoreKit acquisition evidence. A later policy cannot revoke granted legacy rights.
 
