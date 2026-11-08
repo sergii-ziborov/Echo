@@ -29,6 +29,7 @@ final class ProgressStore {
     let wristTrailKey = "echo.settings.wristTrail.v1"
     let endlessKey = "echo.progress.endless.v1"
     let archiveAnnouncementsKey = "echo.progress.archive.announced.v1"
+    let shopRetiredKey = "echo.progress.shopRetired.v1"
 
     var starsByLevel: [String: LevelProgress]
     var shards: Int
@@ -118,6 +119,10 @@ final class ProgressStore {
 #if os(iOS)
         seedArchiveCollectionIfNeeded()
 #endif
+        if !defaults.bool(forKey: shopRetiredKey) {
+            defaults.set(true, forKey: shopRetiredKey)
+            retireShopStock()
+        }
     }
 
     var difficulty: DifficultyProfile { DifficultyProfile(cycle: difficultyCycle) }

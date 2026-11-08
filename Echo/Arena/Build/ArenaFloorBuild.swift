@@ -29,15 +29,6 @@ extension GameScene {
         grid.zPosition = 0
         addChild(grid)
 
-        let border = SKShapeNode(rectOf: CGSize(width: w - 10, height: h - 10), cornerRadius: 8)
-        border.position = CGPoint(x: w / 2, y: h / 2)
-        border.strokeColor = theme.wallStroke.uiColor.withAlphaComponent(0.40)
-        border.lineWidth = 2
-        border.glowWidth = 0
-        border.fillColor = .clear
-        border.zPosition = 1
-        addChild(border)
-
         if !session.level.walls.isEmpty {
             let fillPath = CGMutablePath()
             for wall in session.level.walls {

@@ -3046,6 +3046,40 @@
         }
       }
     },
+    "branch.passives.summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shields and the bonuses picked up on the road."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Щиты и бонусы, которые собираются на дороге."
+          }
+        }
+      }
+    },
+    "branch.passives.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PASSIVES"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ПАССИВКИ"
+          }
+        }
+      }
+    },
     "branch.temporal.summary": {
       "extractionState": "manual",
       "localizations": {
@@ -3076,6 +3110,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "СИНХРОНИЗАЦИЯ"
+          }
+        }
+      }
+    },
+    "branch.traits.summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speed, reach, dash and the clocks the Signal keeps."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скорость, радиус сбора, рывок и часы Сигнала."
+          }
+        }
+      }
+    },
+    "branch.traits.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CHARACTERISTICS"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ХАРАКТЕРИСТИКИ"
           }
         }
       }
@@ -7592,13 +7660,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a branch. Only fully unlocked nodes can be opened."
+            "value": "Tap a row to read it. The button on the right buys the next rank."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выбери ветвь. Открываются только узлы, у которых выполнены все условия."
+            "value": "Нажми строку, чтобы прочитать. Кнопка справа берёт следующий ранг."
           }
         }
       }
@@ -8172,13 +8240,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "CALIBRATE THE SIGNAL · KEEP WHAT YOU LEARN"
+            "value": "PASSIVES & CHARACTERISTICS"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "НАСТРОЙ СИГНАЛ · СОХРАНИ ОПЫТ"
+            "value": "ПАССИВКИ И ХАРАКТЕРИСТИКИ"
           }
         }
       }
@@ -22906,13 +22974,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Every listed prerequisite is required. Spend points in the Signal Lab."
+            "value": "Passives and characteristics. Spend points in the Signal Lab."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нужны все указанные условия. Очки тратятся в Лаборатории Сигнала."
+            "value": "Пассивки и характеристики. Очки тратятся в Лаборатории Сигнала."
           }
         }
       }

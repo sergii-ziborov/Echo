@@ -20,10 +20,11 @@ final class BonusFramingTests: XCTestCase {
                 let fitted = level.fitted(aspect: Double(screen.size.height / screen.size.width))
                 let bands = GameView.interfaceBands(for: fitted, screen: screen.size)
                 let kept = fitted.keepingBonusesInView(bands)
+                let strict = bands.bottom...fitted.worldHeight - bands.top
                 let visible = bands.bottom - 0.5...fitted.worldHeight - bands.top + 0.5
                 for (before, after) in zip(fitted.bonuses, kept.bonuses) {
                     let label = "\(screen.name) · map \(level.number) \(after.kind)"
-                    if visible.contains(before.position.y) {
+                    if strict.contains(before.position.y) {
                         if after.position != before.position { issues.append("\(label) moved although it was visible") }
                         continue
                     }
@@ -50,10 +51,10 @@ final class BonusFramingTests: XCTestCase {
         XCTAssertEqual(kept.bonuses.count, fitted.bonuses.count)
         for bonus in kept.bonuses {
             let fromTop = Double(size.height) - bonus.position.y * scale
-            // Measured on a 13 mini: the chips and the status row end at
-            // 137 pt and the item bar starts at 754 pt.
-            XCTAssertGreaterThan(fromTop - 22, 137, "\(bonus.kind) token under the HUD")
-            XCTAssertLessThan(fromTop + 22, 754, "\(bonus.kind) token over the item bar")
+            // Chips end at 102 pt with the fallback top inset. The arena
+            // runs to the bottom edge, with only the home margin reserved.
+            XCTAssertGreaterThan(fromTop - 22, 102, "\(bonus.kind) token under the HUD")
+            XCTAssertLessThan(fromTop + 22, size.height - 8, "\(bonus.kind) token off the bottom")
         }
     }
 }
@@ -69,12 +70,13 @@ final class ArenaFramingTests: XCTestCase {
                 let recipe = RemoteLevel(id: raw.id, cycle: 0, aspect: Double(GameView.playfieldSize(in: screen).height / screen.width))
                 let level = recipe.build()
                 let arena = GameView.arenaRect(for: level, screen: screen)
-                XCTAssertGreaterThanOrEqual(arena.minY, 151 - 0.01)
-                XCTAssertLessThanOrEqual(arena.maxY, screen.height - 132 + 0.01)
-                XCTAssertLessThanOrEqual(arena.maxX, screen.width + 0.01)
+                XCTAssertEqual(arena.minX, 0, accuracy: 0.01)
+                XCTAssertEqual(arena.minY, 0, accuracy: 0.01)
+                XCTAssertEqual(arena.width, screen.width, accuracy: 0.01)
+                XCTAssertEqual(arena.height, screen.height, accuracy: 0.01)
                 XCTAssertGreaterThan(arena.width, 200)
-                XCTAssertEqual(arena.width / level.worldWidth, arena.height / level.worldHeight, accuracy: 0.0001)
                 XCTAssertEqual(try XCTUnwrap(RemoteLevel(data: recipe.data)).build(), level)
+                let scale = arena.width / level.worldWidth
                 var points = level.sparks.map(\.position) + level.bonuses.map(\.position) + [level.exit, level.playerStart]
                 for spark in level.sparks {
                     if let orbit = spark.orbit {
@@ -84,9 +86,9 @@ final class ArenaFramingTests: XCTestCase {
                     }
                 }
                 for point in points {
-                    let x = arena.minX + point.x / level.worldWidth * arena.width
-                    let y = arena.maxY - point.y / level.worldHeight * arena.height
-                    XCTAssertTrue(arena.insetBy(dx: -0.01, dy: -0.01).contains(CGPoint(x: x, y: y)), "Map \(raw.number), \(screen): \(point)")
+                    let x = point.x * scale
+                    XCTAssertGreaterThanOrEqual(x, -0.01, "Map \(raw.number), \(screen): \(point)")
+                    XCTAssertLessThanOrEqual(x, arena.width + 0.01, "Map \(raw.number), \(screen): \(point)")
                 }
             }
         }

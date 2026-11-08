@@ -33,18 +33,20 @@ struct GameView: View {
     ) {
         self.request = request
         let bounds = viewport ?? UIScreen.main.bounds.size
-        let recipe = RemoteLevel(
+        var recipe = RemoteLevel(
             id: request.levelID,
             daily: request.daily ? Date() : nil,
             cycle: request.difficultyCycle,
-            aspect: Double(Self.playfieldSize(in: bounds).height / max(bounds.width, 1)),
+            aspect: Double(bounds.height / max(bounds.width, 1)),
             endless: request.endless
         )
+        let fitted = recipe.fitted()
+        recipe.bands = Self.interfaceBands(for: fitted, screen: bounds)
         remoteLevel = recipe
         let level = recipe.build()
         let session = GameSession(level: level, daily: request.daily)
         _session = State(initialValue: session)
-        _scene = State(initialValue: GameScene(session: session, size: Self.arenaRect(for: level, screen: bounds).size))
+        _scene = State(initialValue: GameScene(session: session, size: bounds))
         _overlay = State(initialValue: overlay)
     }
 
@@ -52,42 +54,30 @@ struct GameView: View {
         insets.top > 20 ? insets.top : 62
     }
 
-    /// The complete arena fits between the interface strips. Reserving space
-    /// for temporary effects and banners keeps every spark, orbit, exit and
-    /// ability visible without relocating the authored route.
+    /// The arena is the whole screen. Callers that still ask for a playfield
+    /// get that full size; the HUD floats over it.
     static func playfieldSize(in screen: CGSize, insets: EdgeInsets = EdgeInsets()) -> CGSize {
-        let top = interfaceTopInset(insets) + 4 + 36 + 7 + 28 + 14
-        let bottom = max(insets.bottom, 10) + 48 + 26 + 36 + 12
-        return CGSize(width: screen.width, height: max(1, screen.height - top - bottom))
+        _ = insets
+        return screen
     }
 
     static func arenaRect(for level: LevelDefinition, screen: CGSize, insets: EdgeInsets = EdgeInsets()) -> CGRect {
-        let space = playfieldSize(in: screen, insets: insets)
-        let scale = min(space.width / max(CGFloat(level.worldWidth), 1), space.height / max(CGFloat(level.worldHeight), 1))
-        let size = CGSize(width: CGFloat(level.worldWidth) * scale, height: CGFloat(level.worldHeight) * scale)
-        let top = interfaceTopInset(insets) + 4 + 36 + 7 + 28 + 14
-        return CGRect(x: (screen.width - size.width) / 2, y: top + (space.height - size.height) / 2, width: size.width, height: size.height)
+        _ = (level, insets)
+        return CGRect(origin: .zero, size: screen)
     }
 
-    /// The strips the HUD and the item bar cover, mirroring the layout in
-    /// `body`, in world units so no ability token is parked underneath. The
-    /// GeometryReader there ignores the safe area and reports zero insets.
+    /// The strip the HUD covers, in world units, so a bonus token is not
+    /// parked under the chips. The arena itself runs to the screen edges.
     static func interfaceBands(for level: LevelDefinition, screen: CGSize, insets: EdgeInsets = EdgeInsets()) -> InterfaceBands {
         let scale = screen.width / max(CGFloat(level.worldWidth), 1)
         let pickup = GameScene.pickupScale(worldScale: scale)
-        // HUD padding, then the 36 pt chip row.
         let chipsBottom = interfaceTopInset(insets) + 4 + 36
-        // The 28 pt status row under the chips only shows while an effect
-        // runs, so it may cover a caption for a while but never the gem.
-        let statusBottom = chipsBottom + 7 + 28
-        let barTop = max(insets.bottom, 10) + 48
-        // On screens squarer than the fitted aspect the world runs past the top edge.
         let overflow = max(0, CGFloat(level.worldHeight) * scale - screen.height)
-        // A token is a 44 pt gem with its caption pill reaching 44 pt above the centre.
-        let top = max(chipsBottom + 46 * pickup, statusBottom + 24 * pickup)
+        let top = chipsBottom + 28 * pickup
+        let home = max(insets.bottom, 8)
         return InterfaceBands(
             top: Double((overflow + top) / scale),
-            bottom: Double((barTop + 30 * pickup) / scale),
+            bottom: Double((home + 16 * pickup) / scale),
             token: Double(30 * pickup / scale)
         )
     }
@@ -95,15 +85,13 @@ struct GameView: View {
     var body: some View {
         GeometryReader { geo in
             let interfaceTopInset = Self.interfaceTopInset(geo.safeAreaInsets)
-            let arena = Self.arenaRect(for: session.level, screen: geo.size, insets: geo.safeAreaInsets)
 
             ZStack {
                 Color(uiColor: session.level.theme.sky.uiColor).ignoresSafeArea()
                 SpriteView(scene: scene, options: [.ignoresSiblingOrder])
-                    .frame(width: arena.width, height: arena.height)
-                    .position(x: arena.midX, y: arena.midY)
-                    .onAppear { scene.resize(to: arena.size) }
-                    .onChange(of: arena.size) { _, size in scene.resize(to: size) }
+                    .ignoresSafeArea()
+                    .onAppear { scene.resize(to: geo.size) }
+                    .onChange(of: geo.size) { _, size in scene.resize(to: size) }
 
                 VStack(spacing: 0) {
                     HUDBar(session: session) {
@@ -138,14 +126,6 @@ struct GameView: View {
                             .allowsHitTesting(false)
                             .padding(.bottom, 8)
                     }
-
-                    HStack(alignment: .bottom) {
-                        InventoryBar(session: session) { kind in
-                            useItem(kind)
-                        }
-                        Spacer(minLength: 0)
-                    }
-                    .padding(.horizontal, 12)
 
                     if !session.hasStarted {
                         Text(Copy.text("play.dragToMove"))

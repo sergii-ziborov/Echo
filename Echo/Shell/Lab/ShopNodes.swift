@@ -81,12 +81,10 @@ struct ResearchTreeLayout {
 extension ShopView {
     func researchOrder(for branch: UpgradeBranch) -> [UpgradeKind] {
         switch branch {
-        case .motion:
-            [.velocity, .sparkSense, .dashCapacitor, .surgeMastery, .dashImpulse, .magnetism, .repulseResearch, .blinkResearch]
-        case .loadout:
-            [.slots, .reserves, .aegis, .fabricator, .shieldLattice, .phaseResearch, .prismResearch, .fieldAmplifier]
-        case .temporal:
-            [.recharge, .beamForecast, .cryostasis, .echoForecast, .crystalMemory, .anchorResearch, .chronoResearch, .rewind]
+        case .traits:
+            [.velocity, .sparkSense, .dashCapacitor, .crystalMemory, .beamForecast, .dashImpulse, .echoForecast, .rewind]
+        case .passives:
+            [.aegis, .fieldAmplifier, .phaseResearch, .shieldLattice, .cryostasis, .surgeMastery, .magnetism, .chronoResearch, .anchorResearch, .repulseResearch, .prismResearch, .blinkResearch]
         }
     }
 

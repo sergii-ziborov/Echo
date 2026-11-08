@@ -29,8 +29,8 @@ final class MarketingCaptureTests: XCTestCase {
                 let views: [(String, AnyView)] = [
                     ("home", AnyView(HomeView())),
                     ("atlas", AnyView(WorldsView(act: .debris, levelNumber: 28))),
-                    ("research", AnyView(ShopView(section: .research, researchBranch: .motion))),
-                    ("loadout", AnyView(ShopView(section: .loadout))),
+                    ("research", AnyView(ShopView(section: .research, researchBranch: .traits))),
+                    ("loadout", AnyView(ShopView(section: .research, researchBranch: .passives))),
                     ("archive", AnyView(WikiView(section: .story, focusID: "wiki.story.philosophy"))),
                     ("regions", AnyView(WikiView(section: .acts, focusID: "region.trace"))),
                 ]
@@ -65,7 +65,7 @@ final class MarketingCaptureTests: XCTestCase {
                 ("duo-outer", CGSize(width: 466, height: 678), 2.0),
                 ("duo-inner", CGSize(width: 669, height: 951), 2.0),
             ] {
-                try await capture(ShopView(section: .loadout).environment(model), size: size, scale: scale,
+                try await capture(ShopView(section: .research, researchBranch: .passives).environment(model), size: size, scale: scale,
                                   name: "equipped-\(language.rawValue)-\(device)-loadout")
             }
         }

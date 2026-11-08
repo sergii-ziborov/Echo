@@ -32,7 +32,6 @@ struct WatchRunView: View {
     @State private var touchBegan: Date?
     @State private var lastTap = Date.distantPast
     @State private var anchor: CGPoint?
-    @State private var knob: CGPoint?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
 
@@ -48,7 +47,6 @@ struct WatchRunView: View {
                 if let run, let scene {
                     SpriteView(scene: scene, preferredFramesPerSecond: 60)
                         .frame(width: arena.width, height: arena.height)
-                        .overlay(alignment: .topLeading) { stickRing }
                         .gesture(steering(run: run))
                         .padding(.top, Self.band)
                     WatchRunHUD(run: run, onFreeze: { run.freeze() }, onPause: { run.togglePause() })
@@ -91,7 +89,6 @@ struct WatchRunView: View {
                     dx *= Self.travel / length
                     dy *= Self.travel / length
                 }
-                knob = CGPoint(x: anchor.x + dx, y: anchor.y + dy)
                 guard run.isLive else { return }
                 // Screen y grows downward; the arena's grows upward.
                 run.stick = Vec2(x: Double(dx / Self.travel), y: Double(-dy / Self.travel))
@@ -100,7 +97,6 @@ struct WatchRunView: View {
                 let quick = value.time.timeIntervalSince(touchBegan ?? value.time) < 0.25
                 let still = hypot(value.translation.width, value.translation.height) < 10
                 anchor = nil
-                knob = nil
                 touchBegan = nil
                 run.stick = nil
                 guard quick, still else { return }
@@ -111,24 +107,6 @@ struct WatchRunView: View {
                     lastTap = value.time
                 }
             }
-    }
-
-    /// Where the finger landed and how far it leans, drawn faintly so the
-    /// stick is felt without hiding the arena.
-    @ViewBuilder
-    private var stickRing: some View {
-        if let anchor {
-            Circle()
-                .stroke(Color.cyan.opacity(0.35), lineWidth: 1.2)
-                .frame(width: Self.travel * 2, height: Self.travel * 2)
-                .position(anchor)
-                .allowsHitTesting(false)
-            Circle()
-                .fill(Color.cyan.opacity(0.55))
-                .frame(width: 14, height: 14)
-                .position(knob ?? anchor)
-                .allowsHitTesting(false)
-        }
     }
 
     /// A deliberate backward turn of the crown rewinds; forward turns reset it.

@@ -11,7 +11,6 @@ struct WatchRemoteView: View {
     @State private var link = WatchLink.shared
     @State private var scene: RemoteScopeScene?
     @State private var anchor: CGPoint?
-    @State private var knob: CGPoint?
     @State private var stick: Vec2?
     @State private var touchBegan: Date?
     @State private var lastTap = Date.distantPast
@@ -33,7 +32,6 @@ struct WatchRemoteView: View {
                         .frame(width: arena.width, height: arena.height)
                         .padding(.top, WatchRunView.band)
                         .allowsHitTesting(false)
-                    stickRing
                     RemoteHUD(frame: frame, level: scene.level, lag: link.lag, onBack: { dismiss() }, onPause: { link.send(.pause) })
                     card(for: frame)
                 } else {
@@ -98,23 +96,6 @@ struct WatchRemoteView: View {
     }
 
     @ViewBuilder
-    private var stickRing: some View {
-        if let anchor {
-            Circle()
-                .stroke(Color.cyan.opacity(0.45), lineWidth: 1.5)
-                .frame(width: travel * 2, height: travel * 2)
-                .position(anchor)
-                .allowsHitTesting(false)
-            Circle()
-                .fill(Color.cyan.opacity(0.85))
-                .frame(width: 22, height: 22)
-                .shadow(color: .cyan, radius: 6)
-                .position(knob ?? anchor)
-                .allowsHitTesting(false)
-        }
-    }
-
-    @ViewBuilder
     private func card(for frame: RemoteFrame) -> some View {
         switch frame.state {
         case .paused:
@@ -157,7 +138,6 @@ struct WatchRemoteView: View {
                     dx *= travel / length
                     dy *= travel / length
                 }
-                knob = CGPoint(x: anchor.x + dx, y: anchor.y + dy)
                 // Screen y grows downward; the arena's grows upward.
                 let vector = Vec2(x: Double(dx / travel), y: Double(-dy / travel))
                 stick = vector
@@ -167,7 +147,6 @@ struct WatchRemoteView: View {
                 let quick = value.time.timeIntervalSince(touchBegan ?? value.time) < 0.25
                 let still = hypot(value.translation.width, value.translation.height) < 10
                 anchor = nil
-                knob = nil
                 stick = nil
                 touchBegan = nil
                 link.send(.release)

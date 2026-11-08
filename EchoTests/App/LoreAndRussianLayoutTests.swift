@@ -59,7 +59,7 @@ final class LoreAndRussianLayoutTests: XCTestCase {
         let model = CoverageFixtures.model(rich: false)
         model.progress.debugLabShowcase()
         let view = CoverageHost.render(
-            ShopView(section: .research, researchBranch: .motion).environment(model),
+            ShopView(section: .research, researchBranch: .traits).environment(model),
             size: CGSize(width: 320, height: 852))
         try await Task.sleep(for: .milliseconds(450))
         let format = UIGraphicsImageRendererFormat(); format.scale = 3

@@ -16,9 +16,8 @@ struct TechnologyPreviewView: View {
 
     var plateName: String {
         switch kind.branch {
-        case .motion: "TechMotionPlate"
-        case .loadout: "TechLoadoutPlate"
-        case .temporal: "TechTemporalPlate"
+        case .traits: "TechMotionPlate"
+        case .passives: "TechLoadoutPlate"
         }
     }
 

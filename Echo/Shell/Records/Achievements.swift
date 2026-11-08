@@ -72,8 +72,8 @@ enum Achievement: String, CaseIterable, Sendable {
             }.count
             return Self.ratio(fast, Self.roomsUnderPar)
         case .signalMatrix:
-            let researched = UpgradeKind.allCases.filter { progress.upgradeLevel($0) > 0 }.count
-            return Self.ratio(researched, UpgradeKind.allCases.count)
+            let researched = UpgradeKind.shown.filter { progress.upgradeLevel($0) > 0 }.count
+            return Self.ratio(researched, UpgradeKind.shown.count)
         }
     }
 
