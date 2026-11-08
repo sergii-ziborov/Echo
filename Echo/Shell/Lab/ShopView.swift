@@ -15,16 +15,12 @@ struct ShopView: View {
     var onBack: (() -> Void)? = nil
     var hostTopInset: CGFloat = 0
 
-    @State var section: LabSection = ProcessInfo.processInfo.arguments.contains("-shot-research")
-        || ProcessInfo.processInfo.arguments.contains("-shot-research-loadout")
-        || ProcessInfo.processInfo.arguments.contains("-shot-research-time")
-        || ProcessInfo.processInfo.arguments.contains("-shot-research-detail")
-        ? .research
-        : .loadout
+    @State var section: LabSection = .research
     @State var flash: String?
     @State var researchBranch: UpgradeBranch = ProcessInfo.processInfo.arguments.contains("-shot-research-loadout")
-        ? .loadout
-        : (ProcessInfo.processInfo.arguments.contains("-shot-research-time") ? .temporal : .motion)
+        || ProcessInfo.processInfo.arguments.contains("-shot-research-time")
+        ? .passives
+        : .traits
     @State var inspectedUpgrade: UpgradeKind? = ProcessInfo.processInfo.arguments.contains("-shot-research-detail")
         || ProcessInfo.processInfo.arguments.contains("-shot-tech-surge")
         || ProcessInfo.processInfo.arguments.contains("-shot-tech-magnet")
@@ -48,19 +44,13 @@ struct ShopView: View {
         self.onBack = onBack
         self.hostTopInset = hostTopInset
         let arguments = ProcessInfo.processInfo.arguments
-        _section = State(initialValue: section ?? (
-            arguments.contains("-shot-research")
-                || arguments.contains("-shot-research-loadout")
-                || arguments.contains("-shot-research-time")
-                || arguments.contains("-shot-research-detail")
-                ? .research
-                : .loadout
-        ))
+        _section = State(initialValue: section ?? .research)
         _flash = State(initialValue: flash)
         _researchBranch = State(initialValue: researchBranch ?? (
             arguments.contains("-shot-research-loadout")
-                ? .loadout
-                : (arguments.contains("-shot-research-time") ? .temporal : .motion)
+                || arguments.contains("-shot-research-time")
+                ? .passives
+                : .traits
         ))
         _inspectedUpgrade = State(initialValue: inspectedUpgrade ?? (
             arguments.contains("-shot-research-detail")
@@ -82,18 +72,10 @@ struct ShopView: View {
             VStack(spacing: 12) {
                 header
                 balanceCard
-                sectionPicker
 
                 ScrollView(showsIndicators: false) {
-                    Group {
-                        switch section {
-                        case .loadout:
-                            loadoutSection
-                        case .research:
-                            researchSection
-                        }
-                    }
-                    .padding(.bottom, 28)
+                    researchSection
+                        .padding(.bottom, 28)
                 }
             }
             .padding(.horizontal, 18)
@@ -102,13 +84,6 @@ struct ShopView: View {
         .sheet(item: $inspectedUpgrade) { kind in
             researchInspector(kind)
                 .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-                .presentationCornerRadius(30)
-                .presentationBackground(EchoTheme.navyDeep)
-        }
-        .sheet(item: $inspectedSkill) { kind in
-            abilityInspector(kind)
-                .presentationDetents([.height(570)])
                 .presentationDragIndicator(.hidden)
                 .presentationCornerRadius(30)
                 .presentationBackground(EchoTheme.navyDeep)
@@ -159,14 +134,6 @@ struct ShopView: View {
                     .foregroundStyle(EchoTheme.muted)
             }
             Spacer()
-            VStack(alignment: .trailing, spacing: 3) {
-                Text(Copy.format("lab.slots", model.progress.skillSlotCount))
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(EchoTheme.cyan)
-                Text(Copy.format("lab.capacity", model.progress.inventoryCapacity))
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(EchoTheme.muted)
-            }
         }
         .padding(13)
         .background(
@@ -179,93 +146,12 @@ struct ShopView: View {
         )
     }
 
-    var sectionPicker: some View {
-        HStack(spacing: 4) {
-            ForEach(LabSection.allCases, id: \.rawValue) { item in
-                Button {
-                    model.audio.play(.select)
-                    withAnimation(.easeOut(duration: 0.18)) { section = item }
-                } label: {
-                    Label(item.title, systemImage: item.icon)
-                        .font(.system(size: 11, weight: .bold))
-                        .tracking(1.1)
-                        .foregroundStyle(section == item ? .white : EchoTheme.muted)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 40)
-                        .background(
-                            RoundedRectangle(cornerRadius: 13, style: .continuous)
-                                .fill(section == item ? EchoTheme.primaryBlue.opacity(0.82) : Color.clear)
-                        )
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(4)
-        .background(Color.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 17, style: .continuous))
-    }
-
-    var loadoutSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text(Copy.text("lab.loadout.title"))
-                        .font(.system(size: 11, weight: .bold))
-                        .tracking(1.5)
-                    Spacer()
-                    Text("\(model.progress.equippedSkills.count)/\(model.progress.skillSlotCount)")
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
-                        .foregroundStyle(EchoTheme.cyan)
-                }
-
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(0..<model.progress.skillSlotCount, id: \.self) { index in
-                            loadoutSlot(index)
-                                .frame(width: 58)
-                        }
-                    }
-                }
-
-                Text(Copy.text("lab.loadout.note"))
-                    .font(.system(size: 11))
-                    .foregroundStyle(EchoTheme.muted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(14)
-            .background(Color.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(Color.white.opacity(0.09), lineWidth: 1)
-            )
-
-            Text(Copy.text("lab.arsenal"))
-                .font(.system(size: 11, weight: .bold))
-                .tracking(1.6)
-                .foregroundStyle(EchoTheme.muted)
-
-            ForEach(BonusKind.allCases.filter(\.canBuy), id: \.self) { kind in
-                skillRow(kind)
-            }
-        }
-        .padding(.top, 2)
-    }
 }
 
 enum LabSection: String, CaseIterable {
-    case loadout = "SKILLS"
     case research = "UPGRADES"
 
-    var title: String {
-        switch self {
-        case .loadout: Copy.text("lab.section.loadout")
-        case .research: Copy.text("lab.section.research")
-        }
-    }
+    var title: String { Copy.text("lab.section.research") }
 
-    var icon: String {
-        switch self {
-        case .loadout: "square.grid.2x2"
-        case .research: "point.3.connected.trianglepath.dotted"
-        }
-    }
+    var icon: String { "point.3.connected.trianglepath.dotted" }
 }

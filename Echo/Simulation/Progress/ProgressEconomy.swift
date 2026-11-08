@@ -215,6 +215,29 @@ extension ProgressStore {
         return true
     }
 
+    /// The loadout shop is gone. Points spent on its nodes and on stored
+    /// charges come back once, and the charges themselves are cleared.
+    func retireShopStock() {
+        let retired: [UpgradeKind] = [.slots, .reserves, .fabricator, .recharge]
+        var returned = 0
+        for kind in retired {
+            let ranks = min(kind.maxLevel, max(0, upgrades[kind.rawValue] ?? 0))
+            guard ranks > 0 else { continue }
+            returned += (0..<ranks).reduce(0) { $0 + kind.cost(after: $1) }
+            upgrades.removeValue(forKey: kind.rawValue)
+        }
+        for (raw, count) in inventory where count > 0 {
+            guard let kind = BonusKind(rawValue: raw) else { continue }
+            returned += kind.price * count
+        }
+        let hadStock = !inventory.isEmpty || !equippedSkillIDs.isEmpty
+        inventory = [:]
+        equippedSkillIDs = []
+        guard returned > 0 || hadStock else { return }
+        shards += returned
+        persist()
+    }
+
     @discardableResult
     func buyLife() -> Bool {
         guard canBuyLife else { return false }

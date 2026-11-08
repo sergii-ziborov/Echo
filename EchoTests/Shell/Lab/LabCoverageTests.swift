@@ -5,11 +5,11 @@ import XCTest
 final class LabCoverageTests: XCTestCase {
     func testLoadoutAndResearchBranches() {
         let model = CoverageFixtures.model()
-        CoverageHost.render(ShopView(section: .loadout, flash: "TEMPORAL FABRICATOR READY").environment(model))
+        CoverageHost.render(ShopView(section: .research, flash: "TEMPORAL FABRICATOR READY").environment(model))
         for branch in UpgradeBranch.allCases {
             CoverageHost.render(ShopView(section: .research, researchBranch: branch).environment(model))
         }
-        CoverageHost.render(ShopView(onBack: {}, hostTopInset: 48, section: .loadout).environment(model))
+        CoverageHost.render(ShopView(onBack: {}, hostTopInset: 48, section: .research).environment(model))
     }
 
     func testInspectorsForEveryUpgradeAndSkill() {
@@ -21,7 +21,7 @@ final class LabCoverageTests: XCTestCase {
             )
         }
         for kind in BonusKind.allCases {
-            CoverageHost.render(ShopView(section: .loadout, inspectedSkill: kind).environment(model))
+            CoverageHost.render(ShopView(section: .research, inspectedSkill: kind).environment(model))
         }
         _ = ShopView.screenshotUpgrade
         XCTAssertFalse(UpgradeKind.allCases.isEmpty)
@@ -29,8 +29,8 @@ final class LabCoverageTests: XCTestCase {
 
     func testResearchIconsAndEmptyLab() {
         let empty = CoverageFixtures.model(rich: false)
-        CoverageHost.render(ShopView(section: .loadout).environment(empty))
-        CoverageHost.render(ShopView(section: .research, researchBranch: .temporal).environment(empty))
+        CoverageHost.render(ShopView(section: .research).environment(empty))
+        CoverageHost.render(ShopView(section: .research, researchBranch: .passives).environment(empty))
         for kind in UpgradeKind.allCases {
             CoverageHost.render(ResearchIconView(kind: kind, size: 28))
         }

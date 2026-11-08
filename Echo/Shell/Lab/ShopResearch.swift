@@ -105,9 +105,8 @@ extension ShopView {
     }
 
     var researchSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 14) {
             researchSummary
-            researchGuide
             researchBranchPicker
             researchRoute
         }
@@ -115,8 +114,8 @@ extension ShopView {
     }
 
     var researchSummary: some View {
-        let earned = UpgradeKind.allCases.reduce(0) { $0 + model.progress.upgradeLevel($1) }
-        let total = UpgradeKind.allCases.reduce(0) { $0 + $1.maxLevel }
+        let earned = UpgradeKind.shown.reduce(0) { $0 + model.progress.upgradeLevel($1) }
+        let total = UpgradeKind.shown.reduce(0) { $0 + $1.maxLevel }
         let progress = total == 0 ? 0 : Double(earned) / Double(total)
 
         return HStack(spacing: 13) {

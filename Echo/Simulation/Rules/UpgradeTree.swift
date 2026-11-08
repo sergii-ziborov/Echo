@@ -1,9 +1,8 @@
 import Foundation
 
 enum UpgradeBranch: String, CaseIterable, Sendable {
-    case motion
-    case loadout
-    case temporal
+    case traits
+    case passives
 
     var title: String { Copy.text("branch.\(rawValue).title") }
 
@@ -12,9 +11,8 @@ enum UpgradeBranch: String, CaseIterable, Sendable {
 
     var tint: RGB {
         switch self {
-        case .motion: RGB(0.35, 0.82, 1.0)
-        case .loadout: RGB(0.75, 0.42, 1.0)
-        case .temporal: RGB(1.0, 0.78, 0.32)
+        case .traits: RGB(0.35, 0.82, 1.0)
+        case .passives: RGB(0.75, 0.42, 1.0)
         }
     }
 }
@@ -47,14 +45,24 @@ enum UpgradeKind: String, CaseIterable, Codable, Sendable, Identifiable {
 
     var id: String { rawValue }
 
+    /// The old shop nodes. Bought ranks are refunded; the tree does not list them.
+    var isShown: Bool {
+        switch self {
+        case .slots, .reserves, .fabricator, .recharge: false
+        default: true
+        }
+    }
+
+    static var shown: [UpgradeKind] { allCases.filter(\.isShown) }
+
     var branch: UpgradeBranch {
         switch self {
-        case .velocity, .sparkSense, .dashCapacitor, .surgeMastery, .dashImpulse,
-             .magnetism, .repulseResearch, .blinkResearch: .motion
-        case .slots, .reserves, .fabricator, .aegis, .shieldLattice,
-             .fieldAmplifier, .phaseResearch, .prismResearch: .loadout
-        case .recharge, .beamForecast, .cryostasis, .echoForecast, .crystalMemory,
-             .chronoResearch, .rewind, .anchorResearch: .temporal
+        case .velocity, .sparkSense, .dashCapacitor, .dashImpulse,
+             .beamForecast, .echoForecast, .crystalMemory, .rewind: .traits
+        case .aegis, .shieldLattice, .fieldAmplifier, .surgeMastery, .cryostasis,
+             .magnetism, .phaseResearch, .chronoResearch, .anchorResearch,
+             .repulseResearch, .prismResearch, .blinkResearch,
+             .slots, .reserves, .fabricator, .recharge: .passives
         }
     }
 
@@ -179,29 +187,29 @@ enum UpgradeKind: String, CaseIterable, Codable, Sendable, Identifiable {
     var prerequisites: [(kind: UpgradeKind, level: Int)] {
         switch self {
         case .velocity: []
-        case .sparkSense: [(.velocity, 2)]
+        case .sparkSense: [(.velocity, 1)]
         case .dashCapacitor: [(.velocity, 1)]
-        case .surgeMastery: [(.velocity, 4), (.sparkSense, 2)]
-        case .dashImpulse: [(.dashCapacitor, 3)]
+        case .dashImpulse: [(.dashCapacitor, 2)]
+        case .beamForecast: [(.velocity, 2)]
+        case .echoForecast: [(.beamForecast, 1)]
+        case .crystalMemory: [(.sparkSense, 1)]
+        case .rewind: [(.echoForecast, 1)]
+        case .aegis: [(.velocity, 1)]
+        case .shieldLattice: [(.aegis, 2)]
+        case .fieldAmplifier: [(.aegis, 1)]
+        case .surgeMastery: [(.velocity, 2)]
+        case .cryostasis: [(.fieldAmplifier, 1)]
+        case .magnetism: [(.sparkSense, 1)]
+        case .phaseResearch: [(.aegis, 1)]
+        case .chronoResearch: [(.echoForecast, 1)]
+        case .anchorResearch: [(.cryostasis, 1)]
+        case .repulseResearch: [(.magnetism, 1)]
+        case .prismResearch: [(.shieldLattice, 1)]
+        case .blinkResearch: [(.dashImpulse, 1)]
         case .slots: [(.velocity, 1)]
         case .reserves: [(.slots, 1)]
         case .fabricator: [(.reserves, 2)]
-        case .aegis: [(.reserves, 1)]
-        case .shieldLattice: [(.aegis, 3)]
-        case .fieldAmplifier: [(.phaseResearch, 2), (.recharge, 2)]
         case .recharge: [(.velocity, 2)]
-        case .beamForecast: [(.recharge, 1)]
-        case .cryostasis: [(.recharge, 1)]
-        case .echoForecast: [(.beamForecast, 2)]
-        case .crystalMemory: [(.cryostasis, 2)]
-        case .magnetism: [(.velocity, 2), (.dashCapacitor, 1)]
-        case .phaseResearch: [(.slots, 2), (.aegis, 1)]
-        case .chronoResearch: [(.phaseResearch, 1), (.beamForecast, 2)]
-        case .rewind: [(.chronoResearch, 1)]
-        case .repulseResearch: [(.magnetism, 2)]
-        case .blinkResearch: [(.dashCapacitor, 3), (.repulseResearch, 1)]
-        case .prismResearch: [(.aegis, 2), (.beamForecast, 2)]
-        case .anchorResearch: [(.cryostasis, 2), (.recharge, 3)]
         }
     }
 

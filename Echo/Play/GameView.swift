@@ -56,25 +56,19 @@ struct GameView: View {
         insets.top > 20 ? insets.top : 62
     }
 
-    /// The strips the HUD and the item bar cover, mirroring the layout in
-    /// `body`, in world units so no ability token is parked underneath. The
-    /// GeometryReader there ignores the safe area and reports zero insets.
+    /// The strip the HUD covers, in world units, so a bonus token is not
+    /// parked under the chips. The arena itself runs to the screen edges.
     static func interfaceBands(for level: LevelDefinition, screen: CGSize, insets: EdgeInsets = EdgeInsets()) -> InterfaceBands {
         let scale = screen.width / max(CGFloat(level.worldWidth), 1)
         let pickup = GameScene.pickupScale(worldScale: scale)
-        // HUD padding, then the 36 pt chip row.
+        // The chip row floats over the arena. Tokens stay under it.
         let chipsBottom = interfaceTopInset(insets) + 4 + 36
-        // The 28 pt status row under the chips only shows while an effect
-        // runs, so it may cover a caption for a while but never the gem.
-        let statusBottom = chipsBottom + 7 + 28
-        let barTop = max(insets.bottom, 10) + 48
-        // On screens squarer than the fitted aspect the world runs past the top edge.
         let overflow = max(0, CGFloat(level.worldHeight) * scale - screen.height)
-        // A token is a 44 pt gem with its caption pill reaching 44 pt above the centre.
-        let top = max(chipsBottom + 46 * pickup, statusBottom + 24 * pickup)
+        let top = chipsBottom + 28 * pickup
+        let home = max(insets.bottom, 8)
         return InterfaceBands(
             top: Double((overflow + top) / scale),
-            bottom: Double((barTop + 30 * pickup) / scale),
+            bottom: Double((home + 16 * pickup) / scale),
             token: Double(30 * pickup / scale)
         )
     }
@@ -122,14 +116,6 @@ struct GameView: View {
                             .allowsHitTesting(false)
                             .padding(.bottom, 8)
                     }
-
-                    HStack(alignment: .bottom) {
-                        InventoryBar(session: session) { kind in
-                            useItem(kind)
-                        }
-                        Spacer(minLength: 0)
-                    }
-                    .padding(.horizontal, 12)
 
                     if !session.hasStarted {
                         Text(Copy.text("play.dragToMove"))

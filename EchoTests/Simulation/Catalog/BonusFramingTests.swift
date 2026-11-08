@@ -19,10 +19,11 @@ final class BonusFramingTests: XCTestCase {
                 let fitted = level.fitted(aspect: Double(screen.size.height / screen.size.width))
                 let bands = GameView.interfaceBands(for: fitted, screen: screen.size)
                 let kept = fitted.keepingBonusesInView(bands)
+                let strict = bands.bottom...fitted.worldHeight - bands.top
                 let visible = bands.bottom - 0.5...fitted.worldHeight - bands.top + 0.5
                 for (before, after) in zip(fitted.bonuses, kept.bonuses) {
                     let label = "\(screen.name) · map \(level.number) \(after.kind)"
-                    if visible.contains(before.position.y) {
+                    if strict.contains(before.position.y) {
                         if after.position != before.position { issues.append("\(label) moved although it was visible") }
                         continue
                     }
@@ -49,10 +50,10 @@ final class BonusFramingTests: XCTestCase {
         XCTAssertEqual(kept.bonuses.count, fitted.bonuses.count)
         for bonus in kept.bonuses {
             let fromTop = Double(size.height) - bonus.position.y * scale
-            // Measured on a 13 mini: the chips and the status row end at
-            // 137 pt and the item bar starts at 754 pt.
-            XCTAssertGreaterThan(fromTop - 22, 137, "\(bonus.kind) token under the HUD")
-            XCTAssertLessThan(fromTop + 22, 754, "\(bonus.kind) token over the item bar")
+            // Chips end at 102 pt with the fallback top inset. The arena
+            // runs to the bottom edge, with only the home margin reserved.
+            XCTAssertGreaterThan(fromTop - 22, 102, "\(bonus.kind) token under the HUD")
+            XCTAssertLessThan(fromTop + 22, size.height - 8, "\(bonus.kind) token off the bottom")
         }
     }
 }

@@ -28,6 +28,7 @@ final class ProgressStore {
     let wristKey = "echo.progress.wrist.v1"
     let wristTrailKey = "echo.settings.wristTrail.v1"
     let endlessKey = "echo.progress.endless.v1"
+    let shopRetiredKey = "echo.progress.shopRetired.v1"
 
     var starsByLevel: [String: LevelProgress]
     var shards: Int
@@ -112,6 +113,10 @@ final class ProgressStore {
             endless = EndlessRecord()
         }
         sanitizeEquippedSkills()
+        if !defaults.bool(forKey: shopRetiredKey) {
+            defaults.set(true, forKey: shopRetiredKey)
+            retireShopStock()
+        }
     }
 
     var difficulty: DifficultyProfile { DifficultyProfile(cycle: difficultyCycle) }

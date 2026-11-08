@@ -5,130 +5,96 @@ extension ShopView {
     func researchRouteNode(_ kind: UpgradeKind, index: Int) -> some View {
         let level = model.progress.upgradeLevel(kind)
         let available = model.progress.prerequisitesMet(for: kind)
-        let revealed = available || level > 0
         let complete = level >= kind.maxLevel
         let cost = model.progress.upgradeCost(kind)
         let affordable = model.progress.canUpgrade(kind)
         let tint = color(kind.branch.tint)
+        let line = available
+            ? kind.effect(atRank: level)
+            : (model.progress.upgradeRequirement(kind) ?? Copy.text("lab.locked"))
 
-        return Button {
-            guard available else {
-                model.audio.play(.denied)
-                show(model.progress.upgradeRequirement(kind) ?? Copy.text("lab.node.prerequisites"))
-                return
-            }
-            inspectedUpgrade = kind
-            model.audio.play(.select)
-        } label: {
-            VStack(alignment: .leading, spacing: 10) {
+        return HStack(spacing: 10) {
+            Button {
+                guard available else {
+                    model.audio.play(.denied)
+                    show(line)
+                    return
+                }
+                inspectedUpgrade = kind
+                model.audio.play(.select)
+            } label: {
                 HStack(spacing: 10) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 13, style: .continuous)
-                            .fill(tint.opacity(revealed ? 0.14 : 0.04))
-                        ResearchIconView(kind: kind, size: 54)
-                            .saturation(revealed ? 1 : 0)
-                            .opacity(revealed ? 1 : 0.13)
-                        if !revealed {
-                            Image(systemName: "lock.fill")
-                                .font(.system(size: 17, weight: .bold))
-                                .foregroundStyle(.white.opacity(0.70))
-                        }
-                    }
-                    .frame(width: 60, height: 60)
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(Copy.format("lab.node.index", String(format: "%02d", index + 1), kind.branch.title))
-                            .font(.system(size: 8, weight: .black, design: .rounded))
-                            .tracking(1)
-                            .foregroundStyle(tint)
-                        Text(revealed ? kind.title : Copy.text("lab.node.hidden"))
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
-                            .foregroundStyle(revealed ? .white : EchoTheme.muted)
+                    ResearchIconView(kind: kind, size: 36)
+                        .frame(width: 42, height: 42)
+                        .background(tint.opacity(available ? 0.16 : 0.05), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .opacity(available ? 1 : 0.45)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(kind.title)
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundStyle(available ? .white : EchoTheme.muted)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.78)
-                        Text(revealed ? Copy.format("lab.node.rank", level, kind.maxLevel) : Copy.text("lab.node.reveal"))
+                            .minimumScaleFactor(0.8)
+                        Text(line)
                             .font(.system(size: 10, weight: .medium, design: .rounded))
-                            .foregroundStyle(EchoTheme.muted)
-                    }
-                    Spacer(minLength: 0)
-                    Image(systemName: revealed ? "play.rectangle.fill" : "lock.fill")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(revealed ? tint : EchoTheme.muted.opacity(0.45))
-                }
-
-                if revealed {
-                    Text(kind.detail)
-                        .font(.system(size: 10, weight: .medium, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.73))
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                if !kind.prerequisites.isEmpty {
-                    Text(Copy.text("lab.node.requiresAll"))
-                        .font(.system(size: 8, weight: .black, design: .rounded))
-                        .tracking(1.0)
-                        .foregroundStyle(EchoTheme.muted)
-                    VStack(alignment: .leading, spacing: 5) {
-                        ForEach(0..<kind.prerequisites.count, id: \.self) { item in
-                            let requirement = kind.prerequisites[item]
-                            let met = model.progress.upgradeLevel(requirement.kind) >= requirement.level
-                            HStack(spacing: 6) {
-                                Image(systemName: met ? "checkmark.circle.fill" : "lock.circle.fill")
-                                    .foregroundStyle(met ? .green : EchoTheme.gold)
-                                Text(Copy.format("lab.node.requirement", requirement.kind.branch.title.uppercased(), requirement.kind.title, requirement.level))
-                                    .foregroundStyle(met ? .white.opacity(0.82) : EchoTheme.muted)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.78)
-                                Spacer(minLength: 0)
-                                Text(Copy.text(met ? "lab.node.done" : "lab.node.missing"))
-                                    .foregroundStyle(met ? .green : EchoTheme.gold)
+                            .foregroundStyle(available ? .white.opacity(0.72) : EchoTheme.muted)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
+                        HStack(spacing: 3) {
+                            ForEach(0..<kind.maxLevel, id: \.self) { rank in
+                                Capsule()
+                                    .fill(rank < level ? tint : Color.white.opacity(0.12))
+                                    .frame(width: 9, height: 4)
                             }
-                            .font(.system(size: 9, weight: .semibold, design: .rounded))
                         }
-                    }
-                } else {
-                    Label(Copy.text("lab.node.start"), systemImage: "sparkle")
-                        .font(.system(size: 9, weight: .bold, design: .rounded))
-                        .foregroundStyle(tint)
-                }
-
-                HStack {
-                    Text(Copy.text(complete ? "lab.node.complete" : revealed ? affordable ? "lab.node.watchUpgrade" : "lab.node.watch" : "lab.locked"))
-                        .font(.system(size: 8, weight: .black, design: .rounded))
-                        .tracking(0.5)
-                        .foregroundStyle(revealed ? tint : EchoTheme.muted)
-                    Spacer()
-                    if let cost, revealed {
-                        Label("\(cost)", systemImage: "diamond.fill")
-                            .font(.system(size: 9, weight: .bold, design: .rounded))
-                            .foregroundStyle(affordable ? EchoTheme.gold : EchoTheme.muted)
                     }
                 }
             }
-            .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                revealed ? tint.opacity(0.075) : Color.white.opacity(0.018),
-                in: RoundedRectangle(cornerRadius: 17, style: .continuous)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 17, style: .continuous)
-                    .stroke(revealed ? tint.opacity(affordable ? 0.44 : 0.19) : Color.white.opacity(0.055), lineWidth: 1)
-            )
+            .buttonStyle(.plain)
+            .accessibilityLabel(Copy.format("lab.node.a11y", kind.title, level, kind.maxLevel))
+
+            Spacer(minLength: 4)
+
+            if complete {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(tint)
+                    .accessibilityLabel(Copy.text("lab.node.complete"))
+            } else if available, let cost {
+                Button {
+                    upgrade(kind)
+                } label: {
+                    Label("\(cost)", systemImage: "diamond.fill")
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                        .foregroundStyle(affordable ? .white : EchoTheme.muted)
+                        .padding(.horizontal, 10)
+                        .frame(height: 32)
+                        .background(affordable ? tint.opacity(0.9) : Color.white.opacity(0.06), in: Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Copy.format("lab.node.a11y", kind.title, level, kind.maxLevel))
+            } else {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(EchoTheme.muted)
+                    .frame(width: 32, height: 32)
+            }
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(revealed ? Copy.format("lab.node.a11y", kind.title, level, kind.maxLevel) : Copy.text("lab.node.hidden"))
-        .accessibilityHint(revealed ? Copy.text("lab.node.a11yHint") : model.progress.upgradeRequirement(kind) ?? Copy.text("lab.locked"))
+        .padding(10)
+        .background(tint.opacity(available ? 0.07 : 0.02), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(available ? tint.opacity(affordable ? 0.4 : 0.16) : Color.white.opacity(0.05), lineWidth: 1)
+        )
+        .accessibilityHint(available ? Copy.text("lab.node.a11yHint") : line)
+        .id(index)
     }
 
     func researchOrder(for branch: UpgradeBranch) -> [UpgradeKind] {
         switch branch {
-        case .motion:
-            [.velocity, .sparkSense, .dashCapacitor, .surgeMastery, .dashImpulse, .magnetism, .repulseResearch, .blinkResearch]
-        case .loadout:
-            [.slots, .reserves, .aegis, .fabricator, .shieldLattice, .phaseResearch, .prismResearch, .fieldAmplifier]
-        case .temporal:
-            [.recharge, .beamForecast, .cryostasis, .echoForecast, .crystalMemory, .anchorResearch, .chronoResearch, .rewind]
+        case .traits:
+            [.velocity, .sparkSense, .dashCapacitor, .dashImpulse, .beamForecast, .echoForecast, .crystalMemory, .rewind]
+        case .passives:
+            [.aegis, .shieldLattice, .fieldAmplifier, .surgeMastery, .cryostasis, .magnetism, .phaseResearch, .chronoResearch, .anchorResearch, .repulseResearch, .prismResearch, .blinkResearch]
         }
     }
 

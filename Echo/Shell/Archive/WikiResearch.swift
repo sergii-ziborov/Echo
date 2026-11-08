@@ -12,7 +12,7 @@ struct WikiResearchContent: View {
                 Image(systemName: "point.3.connected.trianglepath.dotted")
                     .foregroundStyle(EchoTheme.violet)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(Copy.format("wiki.research.header", UpgradeKind.allCases.count, UpgradeBranch.allCases.count))
+                    Text(Copy.format("wiki.research.header", UpgradeKind.shown.count, UpgradeBranch.allCases.count))
                         .font(.system(size: 10, weight: .black, design: .rounded))
                         .foregroundStyle(.white)
                     Text(Copy.text("wiki.research.note"))
@@ -43,7 +43,7 @@ struct WikiResearchContent: View {
     }
 
     private func branchCard(_ branch: UpgradeBranch) -> some View {
-        let upgrades = UpgradeKind.allCases.filter { $0.branch == branch }
+        let upgrades = UpgradeKind.shown.filter { $0.branch == branch }
         return VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 10) {
                 ResearchIconView(kind: upgrades[0], size: 29)

@@ -95,7 +95,8 @@ final class ProgressStoreTests: XCTestCase {
         XCTAssertTrue(store.buyUpgrade(.velocity))
         XCTAssertTrue(store.buyUpgrade(.recharge))
         XCTAssertLessThan(store.playerTuning.cooldownMultiplier, 1)
-        XCTAssertTrue(store.prerequisitesMet(for: .cryostasis))
+        XCTAssertTrue(store.prerequisitesMet(for: .beamForecast))
+        XCTAssertFalse(store.prerequisitesMet(for: .cryostasis))
     }
 
     func testResearchRequiresEveryParentBeforeOpening() {
@@ -103,13 +104,12 @@ final class ProgressStoreTests: XCTestCase {
         store.addShards(10_000)
 
         XCTAssertTrue(store.buyUpgrade(.velocity))
-        XCTAssertTrue(store.buyUpgrade(.velocity))
         XCTAssertFalse(store.prerequisitesMet(for: .magnetism))
         XCTAssertFalse(store.canUpgrade(.magnetism))
         XCTAssertFalse(store.buyUpgrade(.magnetism))
         XCTAssertEqual(store.upgradeLevel(.magnetism), 0)
 
-        XCTAssertTrue(store.buyUpgrade(.dashCapacitor))
+        XCTAssertTrue(store.buyUpgrade(.sparkSense))
         XCTAssertTrue(store.prerequisitesMet(for: .magnetism))
         XCTAssertTrue(store.buyUpgrade(.magnetism))
     }
@@ -118,9 +118,9 @@ final class ProgressStoreTests: XCTestCase {
         let store = makeStore()
         store.addShards(10_000)
         XCTAssertEqual(UpgradeKind.allCases.count, 24)
-        XCTAssertEqual(UpgradeKind.allCases.filter { $0.branch == .motion }.count, 8)
-        XCTAssertEqual(UpgradeKind.allCases.filter { $0.branch == .loadout }.count, 8)
-        XCTAssertEqual(UpgradeKind.allCases.filter { $0.branch == .temporal }.count, 8)
+        XCTAssertEqual(UpgradeKind.shown.count, 20)
+        XCTAssertEqual(UpgradeKind.shown.filter { $0.branch == .traits }.count, 8)
+        XCTAssertEqual(UpgradeKind.shown.filter { $0.branch == .passives }.count, 12)
         XCTAssertEqual(UpgradeKind.allCases.reduce(0) { $0 + $1.maxLevel }, 117)
 
         XCTAssertTrue(store.buyUpgrade(.velocity))
@@ -164,13 +164,13 @@ final class ProgressStoreTests: XCTestCase {
         raise(.fabricator, to: 1)
         raise(.aegis, to: 3)
         raise(.shieldLattice, to: 1)
+        raise(.fieldAmplifier, to: 1)
         raise(.recharge, to: 2)
         raise(.beamForecast, to: 2)
         raise(.cryostasis, to: 2)
         raise(.echoForecast, to: 1)
         raise(.crystalMemory, to: 1)
         raise(.phaseResearch, to: 2)
-        raise(.fieldAmplifier, to: 1)
 
         let tuning = store.playerTuning
         XCTAssertGreaterThan(tuning.pickupRadiusBonus, 0)
@@ -193,12 +193,12 @@ final class ProgressStoreTests: XCTestCase {
         }
 
         raise(.velocity, to: 2)
-        raise(.dashCapacitor, to: 3)
-        raise(.slots, to: 2)
-        raise(.reserves, to: 1)
+        raise(.sparkSense, to: 1)
+        raise(.dashCapacitor, to: 2)
+        raise(.dashImpulse, to: 1)
         raise(.aegis, to: 2)
-        raise(.recharge, to: 3)
-        raise(.beamForecast, to: 2)
+        raise(.shieldLattice, to: 1)
+        raise(.fieldAmplifier, to: 1)
         raise(.cryostasis, to: 2)
         raise(.magnetism, to: 2)
         raise(.repulseResearch, to: 1)
@@ -283,6 +283,26 @@ final class ProgressStoreTests: XCTestCase {
         _ = store.spendLife()
         while store.spendLife() {}
         XCTAssertFalse(store.spendLife())
+    }
+
+    func testRetiredShopNodesRefundOnce() {
+        let name = "echo.test.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: name)!
+        defaults.removePersistentDomain(forName: name)
+        let upgrades = ["slots": 2, "velocity": 1]
+        defaults.set(try? JSONEncoder().encode(upgrades), forKey: "echo.progress.upgrades.v1")
+        defaults.set(try? JSONEncoder().encode(["freeze": 2]), forKey: "echo.progress.inventory")
+        defaults.set(50, forKey: "echo.progress.shards")
+
+        let store = ProgressStore(defaults: defaults)
+        XCTAssertEqual(store.upgradeLevel(.slots), 0)
+        XCTAssertEqual(store.upgradeLevel(.velocity), 1)
+        XCTAssertEqual(store.count(.freeze), 0)
+        XCTAssertEqual(store.equippedSkills, [])
+        XCTAssertEqual(store.points, 50 + 180 + 320 + BonusKind.freeze.price * 2)
+
+        store.addShards(10)
+        XCTAssertEqual(ProgressStore(defaults: defaults).points, store.points)
     }
 
     private func makeStore() -> ProgressStore {
